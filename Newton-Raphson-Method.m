@@ -10,7 +10,7 @@ f=@(x) 3*x + sin(x) - e.^x;
 df=@(x) 3 - cos(x) - e.^x;
 
 
-#Change lower limit 'a' and upper limit 'b'
+#your initial guess is
 x = 0.05;
 x1 = 1000;
 w = [];
