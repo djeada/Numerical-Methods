@@ -21,6 +21,6 @@ else
      end
     end   
   printf("wynik to %f ", wartosc);
-  plot (y,fun1(y), w, fun1(w), "or")
+  plot (y,f(y), w, f(w), "or")
 end
 
