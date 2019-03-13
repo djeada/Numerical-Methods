@@ -1,7 +1,7 @@
 clear
 
 #the Newton-Raphson Method for finding the roots of 
-#an algebraic/transcendental equation.
+#an algebraic/transcendental equation
 
 #define the function, for the given equation
 f=@(x) 3*x + sin(x) - e.^x;
