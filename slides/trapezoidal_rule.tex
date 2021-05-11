@@ -1,0 +1,78 @@
+\documentclass{article}
+
+\usepackage{pgfplots} %http://www.ctan.org/pkg/pgfplots
+\pgfplotsset{compat=newest, set layers=standard}
+
+\begin{document}
+
+\begin{figure}
+
+\pgfplotsset{
+    integral axis/.style={
+        axis lines=middle,
+        enlarge y limits=upper,
+        axis equal image, width=12cm,
+        xlabel=$x$, ylabel=$y$,
+        ytick=\empty,
+        xticklabel style={font=\small, text height=1.5ex, anchor=north},
+        samples=100
+    },
+    integral/.style={
+            domain=2:10,
+            samples=9
+    },
+    integral fill/.style={
+            integral,
+            draw=none, fill=#1,
+            on layer=axis background
+        },
+        integral fill/.default=cyan!10,
+        integral line/.style={
+            integral,
+            very thick,
+            draw=#1
+        },
+        integral line/.default=black
+}
+
+
+\begin{tikzpicture}[
+    % The function that is used for all the plots
+    declare function={f=x/5-cos(deg(x*1.85))/2+2;}
+]
+\begin{axis}[
+    integral axis,
+    ymin=0,
+    xmin=0.75, xmax=11.25,
+    domain=1.5:10.5,
+    xtick={2,...,10},
+    xticklabels={$a=x_0$, $x_1$,,,$x_{j-1}$,$x_j$,,$x_{n-1}$,$b=x_n$},
+]
+% The function
+\addplot [very thick, cyan!75!blue] {f} node [anchor=south] {$y=f(x)$};
+
+% The filled area under the approximate integral
+\addplot [integral fill=cyan!15] {f} \closedcycle;
+
+% The approximate integral
+\addplot [integral line=black] {f};
+
+% The vertical lines between the segments
+\addplot [integral, ycomb] {f};
+
+% The highlighted segment
+\addplot [integral fill=cyan!35, domain=6:7, samples=2] {f} \closedcycle;
+\end{axis}
+\end{tikzpicture}
+
+$h = \frac{b-a}{N -1}$
+
+N - number of points
+
+Total area (integral)
+
+$$\int_a^b f(x)dx \approx h\sum_{k=1}^{N} \frac{f(x_{k-1})+f(x_k)}{2}$$
+
+\end{figure}
+
+\end{document}
