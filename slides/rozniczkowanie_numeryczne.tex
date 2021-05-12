@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage{graphicx}
+
+\title{Różniczkowanie numeryczne}
+\begin{document}
+  \pagenumbering{gobble}
+  \maketitle
+  \newpage
+  \pagenumbering{arabic}
+
+Forward difference:
+$$\frac{df}{dx} = \lim_{h \rightarrow 0} \frac{f(x+h)-f(x)}{h}$$
+
+Backward difference:
+$$\frac{df}{dx} = \lim_{h \rightarrow 0} \frac{f(x)-f(x-h)}{h}$$
+
+Taylor expansion of f(x+h) about x
+
+$$f(x+h) = f(x) + (x+h-x)f'(x) + \frac{1}{2}(x+h-x)^2f''(x) + ...$$
+$$f(x+h) = f(x) + hf'(x) + \frac{1}{2}h^2f''(x) + ...$$
+
+$$f'(x) = [\frac{f(x+h)-f(x)}{h}] + \frac{h}{2}f''(x)$$
+
+what is the ideal h?
+small, but can't be 0
+
+-rounding error is bad if h is too small
+
+\newpage
+
+Central difference
+
+$$\frac{df}{dx} = \lim_{h \rightarrow 0} \frac{f(x+h/2)-f(x-h/2)}{h}$$
+
+
+\end{document}

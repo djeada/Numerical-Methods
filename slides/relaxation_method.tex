@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{graphicx}
+
+\title{Relaxation method}
+\begin{document}
+  \pagenumbering{gobble}
+  \maketitle
+  \newpage
+  \pagenumbering{arabic}
+
+We are trying to figure out the solutions to the equation:
+
+$$x=f(x)$$
+
+where f(x) is a nonlinear function.
+
+We call the solutions $x_0$
+
+Iterations i:
+
+$$x_i = f(x_{i-1}) $$
+$$= f(x_0) + (x_{i-1}-x_0)f'(x_0) + ...$$
+
+In each iteration $f(x_0) = x_0$
+
+$$x_i - x_0 = (x_{i-1}-x_0)f'(x_0) + ... $$
+
+$$\Delta x_i \approx \Delta x_{i-1} f'(x_0)$$
+
+Does $\Delta x_i $ shrink?
+
+Yes, only if $|f'(x_0)| < 1$
+
+\newpage
+
+Ex.
+
+$$x = f(x) = 1 - e^{-2x}$$
+$$f'(x) = -2e^{-2x}$$
+
+OK:
+$$f'(0.797) = -0.406$$
+
+NOT OK:
+$$f'(0) = -2$$
+
+\end{document}
