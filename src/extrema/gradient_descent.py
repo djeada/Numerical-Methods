@@ -46,14 +46,19 @@ def gradient_descent(f, x1=0.1, x2=-0.1, gamma=1, num_iter=100, epsilon=1e-8):
             x, y = x0[0], x0[1]
             print("x = {}, y = {} after {} iterations".format(x, y, i + 1))
             plt.figure(figsize=(8, 6))
-            a, b = np.meshgrid(np.linspace(-np.pi, np.pi, 101), np.linspace(-np.pi, np.pi, 101))
+            a, b = np.meshgrid(
+                np.linspace(-np.pi, np.pi, 101), np.linspace(-np.pi, np.pi, 101)
+            )
             plt.imshow(
-                f(a, b), origin="lower", extent=(-np.pi, np.pi, -np.pi, np.pi), cmap="coolwarm"
+                f(a, b),
+                origin="lower",
+                extent=(-np.pi, np.pi, -np.pi, np.pi),
+                cmap="coolwarm",
             )
             plt.colorbar()
             plt.quiver(x, y, dfdx(x, y), dfdy(x, y), pivot="middle")
             values = np.array(values)
-            plt.plot(values[:,0], values[:,1], "yo")
+            plt.plot(values[:, 0], values[:, 1], "yo")
             plt.show()
             return x, y
 
@@ -61,5 +66,3 @@ def gradient_descent(f, x1=0.1, x2=-0.1, gamma=1, num_iter=100, epsilon=1e-8):
 
 
 print(gradient_descent(f))
-
-

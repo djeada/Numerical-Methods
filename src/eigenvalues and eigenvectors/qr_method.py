@@ -7,7 +7,6 @@ def qr_method(a, num_iter=10):
     """
 
     def qr_decomposition(a):
-
         def householder_transformation(a):
             v = a / (a[0] + np.copysign(np.linalg.norm(a), a[0]))
             v[0] = 1
@@ -35,4 +34,3 @@ def qr_method(a, num_iter=10):
         a = np.dot(r, q)
 
     return np.diagonal(a)
-
