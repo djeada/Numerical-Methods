@@ -58,7 +58,6 @@ def cubic_spline(x, y):
         C = coeffs[idx]
         return (((C[0] * z) + C[1]) * z + C[2]) * z + C[3]
 
-    
     h = [x[i + 1] - x[i] for i in range(len(x) - 1)]
     A, B, C = create_tri_diag_matrix(n, h)
     D = compute_D(n, h, y)
