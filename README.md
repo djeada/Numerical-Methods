@@ -4,4 +4,5 @@ Numerical Methods in Python.
 Implementations, example usage, comparison with library functions.
 
 Bibliography:
-https://en.wikiversity.org/wiki/Cubic_Spline_Interpolation
+* https://en.wikiversity.org/wiki/Cubic_Spline_Interpolation
+* https://faculty.chass.ncsu.edu/garson/PA765/statnote.htm
