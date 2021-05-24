@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def least_squares(x, y):
+def multiple_linear_regression(x, y):
     a = np.append(x, np.ones((len(x), 1)), axis=-1)
     y = y[:, np.newaxis]
 
@@ -10,4 +10,3 @@ def least_squares(x, y):
     result = np.dot(result, y)
 
     return result[-1][0], result[:-1]
-
