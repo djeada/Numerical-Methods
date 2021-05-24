@@ -1,17 +1,32 @@
 \documentclass{article}
 \usepackage{graphicx}
 \usepackage{amsmath} 
+\usepackage{pgfplots}
+\usepackage{adjustbox}
+\usepackage{subcaption}
 
-\title{Least Squares Regression}
+\title{Linear Regression}
 \begin{document}
   \pagenumbering{gobble}
   \maketitle
   \newpage
   \pagenumbering{arabic}
 
+\section*{Linear Regression}
 We have to arrays of numbers $X$ and $Y$. Array $X$ contains independent data points. Array $Y$ contains dependent data points $y_i,i=1,…,m$.
 
 We want to find $\hat{y}(x)$, that accurately represents given data.\\
+
+\section*{Assumptions}
+
+\begin{itemize}
+\item Linear relationship
+\item Little or no multi-collinearity
+\item Little or no auto-correlation
+\item Homoscedasticity
+\end{itemize}
+
+\section*{Least Squares Regression}
 
 Total squared error is defined as: 
 $$E = \sum_{i=1}^m (\hat{y} - y_i)^2$$. 
