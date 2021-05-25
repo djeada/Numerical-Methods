@@ -22,7 +22,7 @@ Implementations, example usage, comparison with library functions.
 
 <h1>Numerical diffrentiation</h1>
 
-<h1>Numeical integration</h1>
+<h1>Numerical integration</h1>
 
 <h1>Ordinary differential equations</h1>
 
