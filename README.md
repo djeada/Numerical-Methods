@@ -3,28 +3,52 @@ Numerical Methods in Python.
 
 Implementations, example usage, comparison with library functions.
 
-## Root finding
+## Requirements
+
+* Python 3.10+
+* Whatever library is mentioned in the project's requirements.txt file.
+
+## Installation
+
+To run *.py* scripts the recommended approach is to use virtualenv:
+
+    $ virtualenv env
+    $ source env/bin/activate
+    $ pip install -r requirements.txt
+    $ python path/to/main.py
+
+For *.ipynb* notebooks you do not need to install anything locally on your PC. You may run all of the examples on the official website of Jupyter Notebooks using a demo version:
+
+https://jupyter.org/try
+
+To run the notebooks locally, use the following command:
+
+   $ jupyter notebook path/to/notebook.ipynb
+
+## Topics
+
+### Root finding
 
 * Bisection method
 * Newton-Raphson method
 
-## Extrema finding
+### Extrema finding
 
-## Systems of linear equations
+### Systems of linear equations
 
-## Matrix operations
+### Matrix operations
 
-## Eigenvalues and eigenvectors
+### Eigenvalues and eigenvectors
 
-## Interpolation
+### Interpolation
 
-## Regression
+### Regression
 
-## Numerical diffrentiation
+### Numerical diffrentiation
 
-## Numerical integration
+### Numerical integration
 
-## Ordinary differential equations
+### Ordinary differential equations
 
 ## Refrences
 
