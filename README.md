@@ -23,7 +23,7 @@ https://jupyter.org/try
 
 To run the notebooks locally, use the following command:
 
-   $ jupyter notebook path/to/notebook.ipynb
+    $ jupyter notebook path/to/notebook.ipynb
 
 ## Topics
 
