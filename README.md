@@ -1,7 +1,7 @@
 # Numerical Methods
-Numerical Methods in Python.
+Collection of numerical methods in Python.
 
-Implementations, example usage, comparison with library functions.
+Implementations, use examples, and comparisons with scikit-learn library functions.
 
 ## Requirements
 
