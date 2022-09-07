@@ -27,28 +27,47 @@ To run the notebooks locally, use the following command:
 
 ## Topics
 
-### Root finding
+### Root And Extrema Finding
 
-* Bisection method
-* Newton-Raphson method
+Method | Notes | Implementation | Examples
+------ | ----- | -------------- | --------
+| - | - | - | - |
 
-### Extrema finding
+### Systems Of Equations
 
-### Systems of linear equations
+Method | Notes | Implementation | Examples
+------ | ----- | -------------- | --------
+| - | - | - | - |
 
-### Matrix operations
+### Differentiation
 
-### Eigenvalues and eigenvectors
+Method | Notes | Implementation | Examples
+------ | ----- | -------------- | --------
+| - | - | - | - |
 
-### Interpolation
+### Integration
+
+Method | Notes | Implementation | Examples
+------ | ----- | -------------- | --------
+| - | - | - | - |
+
+### Matrices
+
+Method | Notes | Implementation | Examples
+------ | ----- | -------------- | --------
+| - | - | - | - |
 
 ### Regression
 
-### Numerical diffrentiation
+Method | Notes | Implementation | Examples
+------ | ----- | -------------- | --------
+| - | - | - | - |
 
-### Numerical integration
+### Ordinary Differential Equations
 
-### Ordinary differential equations
+Method | Notes | Implementation | Examples
+------ | ----- | -------------- | --------
+| - | - | - | - |
 
 ## Refrences
 
