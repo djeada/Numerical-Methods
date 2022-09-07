@@ -81,23 +81,15 @@ $$A_k = R_kQ_k = Q^{-1}_kA_kQ_k$$
 
 $$A_{k-1}=Q_kR_k$$
 
-```math
-U = \left[ {\begin{array}{cc}
-    1 & 0 & 0 \\
-    1 & 1 & 0 \\
-    0 & 1 & 1 \\
-    0 & 0 & 1
-  \end{array} } \right]
-```
-
 We will finally converge to an upper triangular matrix form as the iteration progresses:
 
 
-```math
+$$
  A_k = R_kQ_k = \left[ {\begin{array}{ccc}
 \lambda_1 & X & \dots & X\\
 0 & \lambda_2 & \dots & X\\
-& &\dots &\\
+\vdots & \vdots & \ddots &\vdots\\
 0 & 0 & \dots & \lambda_n\\
   \end{array} } \right]
-```
+$$
+
