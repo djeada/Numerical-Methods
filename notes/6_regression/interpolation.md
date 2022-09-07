@@ -1,11 +1,10 @@
-\section*{Introduction}
+## Introduction
 
 We have to arrays of numbers $X$ and $Y$. Array $X$ contains independent data points. Array $Y$ contains dependent data points $y_i,i=1,…,m$.
 
 We want to find a function $\hat{y}(x)$, which gets the exact same value with given points.\\
 
-
-\section*{Linear Interpolation}
+## Linear Interpolation
 
 Linear interpolation is achieved by connecting two data points with a straight line.
 
@@ -13,8 +12,8 @@ For $x_i < x < x_{i+1}$:
 
 $$\hat{y}(x) = y_i + \frac{(y_{i+1} - y_{i})(x - x_{i})}{(x_{i+1} - x_{i})}.$$
 
-\section*{Derivation}
 
+### Derivation
  
 ![Screenshot from 2022-09-07 21-23-10](https://user-images.githubusercontent.com/37275728/188960726-ac99ac89-f1b8-4b82-9761-5093cb91d4db.png)
 
@@ -27,9 +26,9 @@ $$y = y_1 + h$$
 
 $$y = y_1 + (x - x_1) \cdot \frac{y_2 - y_1}{x_2 - x_1}$$
 
-\section*{Example}
+### Example
 
-We are given two points A(-2, 0) and B (2, 2).\\
+We are given two points A(-2, 0) and B (2, 2).
 
 
 ![Screenshot from 2022-09-07 21-23-32](https://user-images.githubusercontent.com/37275728/188960814-569c5a91-82b4-415c-9840-f5ebd4cc421d.png)
@@ -38,49 +37,53 @@ Let's try to evaluate the value of the function at $x=1$
 
 $$\hat{y}(x) = y_i + \frac{(y_{i+1} - y_{i})(x - x_{i})}{(x_{i+1} - x_{i})} = 0 + \frac{(2 - 0)(1 - (-2))}{(2 - (-2))} = 1.5$$
 
-\newpage
-\section*{Cubic Spline}
+## Cubic Spline
 
-The interpolating function in cubic spline interpolation is a set of piecewise cubic functions.\\
+The interpolating function in cubic spline interpolation is a set of piecewise cubic functions.
 
-For $x_i < x < x_{i+1}$:\\
+For $x_i < x < x_{i+1}$:
 
 We have two points $(x_i, y_i)$ and $(x_{i+1}, y_{i+1})$  joined with a cubic polynomial:
 
 $$S_i(x) = a_i x^3 + b_i x^2 + c_i x + d_i$$
 
-For $n$ points, there are $n-1$ cubic functions to find, and each cubic function requires four coefficients ($a_i, b_i, c_i, d_i$).
+For $n$ points, there are $n-1$ cubic functions to find, and each cubic function requires four coefficients $(a_i, b_i, c_i, d_i)$.
 
-There are $4(n-1)$ unknowns to find.\\
+There are $4(n-1)$ unknowns to find.
 
 ![Screenshot from 2022-09-07 21-24-04](https://user-images.githubusercontent.com/37275728/188960890-781f5947-1d8c-40bc-aba7-91728024eabe.png)
 
-\section*{Derivation}
+### Derivation
 
 We are trying to find a function $S_i(x) = a_i x^3 + b_i x^2 + c_i x + d_i$ going trough both points: $(x_i, y_i)$ and $x_{i+1}, y_{i+1}$.
 
-\begin{align}
-S_i(x_i) &= y_i,\quad i = 1,\ldots,n-1,
-\end{align}
-\begin{align}
-S_i(x_{i+1}) &= y_{i+1},\quad i = 1,\ldots,n-1,
-\end{align}
+$$
+S_i(x_i) = y_i,\quad i = 1,\ldots,n-1,
+$$
+
+$$
+S_i(x_{i+1}) = y_{i+1},\quad i = 1,\ldots,n-1,
+$$
 
 Smoothness condition:
-\begin{align}
-S'_i(x_{i+1}) &= S^{\prime}_{i+1}(x_{i+1}),\quad i = 1,\ldots,n-2,
-\end{align}
-\begin{align}
-S''_i(x_{i+1}) &= S''_{i+1}(x_{i+1}),\quad i = 1,\ldots,n-2,
-\end{align}
+
+$$
+S'_i(x_{i+1}) = S^{\prime}_{i+1}(x_{i+1}),\quad i = 1,\ldots,n-2,
+$$
+
+$$
+S''_i(x_{i+1}) = S''_{i+1}(x_{i+1}),\quad i = 1,\ldots,n-2,
+$$
 
 Boundry condition: The curve is a “straight line” at the end points:
-\begin{align}
-S''_1(x_1) &= 0
-\end{align}
-\begin{align}
-S''_{n-1}(x_n) &= 0
-\end{align}
+
+$$
+S''_1(x_1) = 0
+$$
+
+$$
+S''_{n-1}(x_n) = 0
+$$
 
 Let $h_{i}=x_{i}-x_{i-1}$
 
@@ -97,18 +100,20 @@ $$S''_{i}(x)=M_{i-1}{\frac {x_{i}-x}{h_{i}}}+M_{i}{\frac {x-x_{i-1}}{h_{i}}} \qu
 Integrating the above equation twice and using the condition that $C_{i}(x_{i-1})=y_{i-1}$ and $ C_{i}(x_{i})=y_{i}$ to determine the constants of integration, we have.
 
 $$ S_{i}(x)=M_{i-1}{\frac {(x_{i}-x)^{3}}{6h_{i}}}+M_{i}{\frac {(x-x_{i-1})^{3}}{6h_{i}}}+\left(y_{i-1}-{\frac {M_{i-1}h_{i}^{2}}{6}}\right){\frac {x_{i}-x}{h_{i}}}+\left(y_{i}-{\frac {M_{i}h_{i}^{2}}{6}}\right){\frac {x-x_{i-1}}{h_{i}}}$$
-$${\text{for}}\quad x\in [x_{i-1},x_{i}] $$\\
 
-This expression gives us the cubic spline S(x) if $ M_{i},i=0,1,\cdots ,n$ can be determined.
+$${\text{for}}\quad x\in [x_{i-1},x_{i}] $$
+
+This expression gives us the cubic spline $S(x)$ if $$ M_{i},i=0,1,\cdots ,n$$ can be determined.
+
 $$S'_{i+1}(x)=-M_{i}{\frac {(x_{i+1}-x)^{2}}{2h_{i+1}}}+M_{i+1}{\frac {(x-x_{i})^{2}}{2h_{i+1}}}+{\frac {y_{i+1}-y_{i}}{h_{i+1}}}-{\frac {M_{i+1}-M_{i}}{6}}h_{i+1}$$
 
 $$S'_{i+1}(x_{i})=-M_{i}{\frac {h_{i+1}}{2}}+{\frac {y_{i+1}-y_{i}}{h_{i+1}}}-{\frac {M_{i+1}-M_{i}}{6}}h_{i+1}$$
 
 Similarly, when $x\in [x_{i-1},x_{i}]$, we can shift the index to obtain
 
-\begin{align}
-S'_{i}(x) &=-M_{i-1}{\frac {(x_{i}-x)^{2}}{2h_{i}}}+M_{i}{\frac {(x-x_{i-1})^{2}}{2h_{i}}}+{\frac {y_{i}-y_{i-1}}{h_{i}}}-{\frac {M_{i}-M_{i-1}}{6}}h_{i}
-\end{align}
+$$
+S'_{i}(x) =-M_{i-1}{\frac {(x_{i}-x)^{2}}{2h_{i}}}+M_{i}{\frac {(x-x_{i-1})^{2}}{2h_{i}}}+{\frac {y_{i}-y_{i-1}}{h_{i}}}-{\frac {M_{i}-M_{i-1}}{6}}h_{i}
+$$
 
  
 $$ S'_{i}(x_{i})=M_{i}{\frac {h_{i}}{2}}+{\frac {y_{i}-y_{i-1}}{h_{i}}}-{\frac {M_{i}-M_{i-1}}{6}}h_{i}$$
@@ -126,7 +131,9 @@ According to different boundary conditions, we can solve the system of equations
 $S'_{1}(x_{0})=f'_{0}$ and $S'_{n}(x_{n})=f'_{n}$. According to equation (7), we can obtain:
 
 $$S'_{1}(x_{0})=-M_{0}{\frac {(x_{1}-x_{0})^{2}}{2h_{1}}}+M_{1}{\frac {(x_{0}-x_{0})^{2}}{2h_{1}}}+{\frac {y_{1}-y_{0}}{h_{1}}}-{\frac {M_{1}-M_{0}}{6}}h_{1}$$
+
 $$\Rightarrow f'_{0}=-M_{0}{\frac {h_{1}}{2}}+f[x_{0},x_{1}]-{\frac {M_{1}-M_{0}}{6}}h_{1}$$
+
 $$\Rightarrow 2M_{0}+M_{1}={\frac {6}{h_{1}}}(f[x_{0},x_{1}]-f'_{0})=6f[x_{0},x_{0},x_{1}]$$
 
 Analogously:
@@ -135,13 +142,14 @@ $$ S'_{n}(x_{n})=-M_{n-1}{\frac {(x_{n}-x_{n})^{2}}{2h_{n}}}+M_{n}{\frac {(x_{n}
 
 $$M_{n-1}+2M_{n}={\frac {6}{h_{n}}}(f'_{n}-f[x_{n-1},x_{n}])=6f[x_{n-1},x_{n},x_{n+1}]$$
 
-Let:\\
-$\lambda _{0}=\mu _{n}=1,$\\
-$d_{0}=6f[x_{0},x_{0},x_{1}]$ and\\ 
+Let:
+
+$\lambda _{0}=\mu _{n}=1,$
+$d_{0}=6f[x_{0},x_{0},x_{1}]$ and 
 $d_{n}=6f[x_{n-1},x_{n},x_{n}]$
 
  
-\begin{equation*}
+$$
   \begin{bmatrix}
     2 & \lambda_0 \\ 
     \mu_1 & 2 & \lambda_1 \\ 
@@ -151,8 +159,10 @@ $d_{n}=6f[x_{n-1},x_{n},x_{n}]$
 	&&&& \mu_{n-1} & 2 & \lambda_{n-1} \\ 
 	&&&&& \mu_{n} & 2 \\ 
   \end{bmatrix}
-  %
-   \begin{bmatrix}
+$$
+
+$$
+  \begin{bmatrix}
     M_0 \\
     M_1 \\
     \vdots \\
@@ -160,9 +170,12 @@ $d_{n}=6f[x_{n-1},x_{n},x_{n}]$
     \vdots \\
     M_{n-1} \\
     M_n \\
-  \end{bmatrix} 
+  \end{bmatrix}
+$$
+
   =
-   %
+
+$$
   \begin{bmatrix}
     d_0 \\
     d_1 \\
@@ -171,11 +184,10 @@ $d_{n}=6f[x_{n-1},x_{n},x_{n}]$
     \vdots \\
     d_{n-1} \\
     d_n \\
-  \end{bmatrix} 
-\end{equation*}
+  \end{bmatrix}
+$$
 
- \newpage
-\section*{Lagrange Polynomial Interpolation}
+### Lagrange Polynomial Interpolation
 
 Lagrange polynomial interpolation gives us a single polynomial that connects all of the data points.
 
@@ -187,8 +199,7 @@ Each polynomial appearing in the sum is called a Lagrange basis polynomials, $P_
 
 $$P_i(x) = \prod_{j = 1, j\ne i}^n\frac{x - x_j}{x_i - x_j},$$
 
-
-\section*{Example}
+### Example
 
 We are given three points A(-1, 1), B(2, 3) and C(3,5).\\
 
