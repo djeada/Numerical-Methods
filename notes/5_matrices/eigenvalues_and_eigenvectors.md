@@ -1,8 +1,11 @@
 ## The power method
 
-Let us have a square matrix A. It's size is $nxn$. \\
-It has a number of independet real eigenvalues: $\lambda_1, \lambda_2, \dots, \lambda_n$. \\
-Eigenvectors corresponding to the eigenvalues are: $v_1, v_2, \dots, v_n$. \\
+Let us have a square matrix A. It's size is $nxn$.
+
+It has a number of independet real eigenvalues: $\lambda_1, \lambda_2, \dots, \lambda_n$.
+
+Eigenvectors corresponding to the eigenvalues are: $v_1, v_2, \dots, v_n$.
+
 One condition: $|\lambda_1| > |\lambda_2|$.
 
 The eigenvectors are independent, which means that they are as well basis vectors. This implies that any vector in the same space can be written as a linear combination of the eigenvectors.
@@ -53,17 +56,15 @@ Two square matrices A and B are similar if:
 
 $$A = C^{-1}BC$$
 
-where C is an invertible matrix.\\
+where C is an invertible matrix.
 
 2. You can present any matrix as a product of two other matrices. 
 
-\begin{align}
-A &= QR
-\end{align}
+$$A = QR (1)$$
 
-Here we want to get an orthogonal matrix Q and an upper triangular matrix R.\\
+Here we want to get an orthogonal matrix Q and an upper triangular matrix R.
 
-A matrix M is an orthogonal matrix if: $M^{-1} = M^T$. Thus $M^*M = I$. \\
+A matrix M is an orthogonal matrix if: $M^{-1} = M^T$. Thus $M^*M = I$.
 
 Let us rewrite equation (1):
 
@@ -71,7 +72,7 @@ $$RQ = Q^*AQ$$
 
 $$RQ = Q^{-1}AQ$$ 
 
-RQ has the same eigenvalues as A.\\
+RQ has the same eigenvalues as A.
 
 Compute a QR factorization and reverse the order of multiplcation of Q and R.
 
@@ -83,7 +84,6 @@ $$A_{k-1}=Q_kR_k$$
 
 We will finally converge to an upper triangular matrix form as the iteration progresses:
 
-
 $$
  A_k = R_kQ_k = \left[ {\begin{array}{ccc}
 \lambda_1 & X & \dots & X\\
@@ -92,4 +92,3 @@ $$
 0 & 0 & \dots & \lambda_n\\
   \end{array} } \right]
 $$
-
