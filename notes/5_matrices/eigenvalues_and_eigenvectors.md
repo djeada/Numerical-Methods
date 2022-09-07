@@ -1,6 +1,6 @@
 ## The power method
 
-Let us have a square matrix A. It's size is $nxn$.
+Let us have a square matrix A. It's size is $n \thinspace x \thinspace	n$.
 
 It has a number of independet real eigenvalues: $\lambda_1, \lambda_2, \dots, \lambda_n$.
 
@@ -42,8 +42,10 @@ We have now the largest eigenvalue and its corresponding eigenvector:
 $$Ax_{k-1} = {\lambda_1}v_1$$
 
 ## The inverse power method
-The reciprocals of the eigenvalues of A are the eigenvalues of it's inverse matrix  $A^{-1}$. \\
-This will help us to find the smallest eigenvalue of A. \\
+The reciprocals of the eigenvalues of A are the eigenvalues of it's inverse matrix  $A^{-1}$.
+
+This will help us to find the smallest eigenvalue of A.
+
 Instead of multiplying A as in power method, we multiply it's inverse to find it's largest value.
 
 ## QR method
@@ -60,7 +62,7 @@ where C is an invertible matrix.
 
 2. You can present any matrix as a product of two other matrices. 
 
-$$A = QR (1)$$
+$$A = QR \quad (1)$$
 
 Here we want to get an orthogonal matrix Q and an upper triangular matrix R.
 
