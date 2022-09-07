@@ -93,7 +93,7 @@ $S_1^{''}(x_1)= M_0 = 0$ and $S_n^{''}(x_n) = M_n = 0$
 
 Other $M_i$ are unknown.
 
-By Lagrange interpolation, we can interpolate each $S''_{i}$ on  $[x_{i-1},x_{i}]$:
+By Lagrange interpolation, we can interpolate each $S_{i}^{''}$ on  $[x_{i-1},x_{i}]$ :
 
 $$S''_{i}(x)=M_{i-1}{\frac {x_{i}-x}{h_{i}}}+M_{i}{\frac {x-x_{i-1}}{h_{i}}} \quad for \quad x\in [x_{i-1},x_{i}]$$
 
@@ -118,17 +118,27 @@ $$
  
 $$ S'_{i}(x_{i})=M_{i}{\frac {h_{i}}{2}}+{\frac {y_{i}-y_{i-1}}{h_{i}}}-{\frac {M_{i}-M_{i-1}}{6}}h_{i}$$
 
-Since $ S'_{i+1}(x_{i})=S'_{i}(x_{i})$, we can derive:
+Since 
+
+$$ S_{i+1}^{'}(x_{i}) = S_{i}^{'}(x_{i})$$ 
+
+, we can derive:
 
 $$\mu _{i}M_{i-1}+2M_{i}+\lambda _{i}M_{i+1}=d_{i}\quad {\text{for}}\quad i=1,2,\cdots ,n-1,$$
  
 $$\mu _{i}={\frac {h_{i}}{h_{i}+h_{i+1}}},\quad \lambda _{i}=1-\mu _{i}={\frac {h_{i+1}}{h_{i}+h_{i+1}}},\quad {\text{and}}\quad d_{i}=6f[x_{i-1},x_{i},x_{i+1}]$$
 
-and $f[x_{i-1},x_{i},x_{i+1}]$ is a divided difference.\\
+and $f[x_{i-1},x_{i},x_{i+1}]$ is a divided difference.
 
-According to different boundary conditions, we can solve the system of equations above to obtain the values of $M_{i}$'s.\\
+According to different boundary conditions, we can solve the system of equations above to obtain the values of $M_{i}$'s.
 
-$S'_{1}(x_{0})=f'_{0}$ and $S'_{n}(x_{n})=f'_{n}$. According to equation (7), we can obtain:
+$$S_{1}^{'}(x_{0})=f_{0}^{'}$$ 
+
+and 
+
+$$S_{n}^{'}(x_{n})=f_{n}^{'}$$
+
+According to equation (7), we can obtain:
 
 $$S'_{1}(x_{0})=-M_{0}{\frac {(x_{1}-x_{0})^{2}}{2h_{1}}}+M_{1}{\frac {(x_{0}-x_{0})^{2}}{2h_{1}}}+{\frac {y_{1}-y_{0}}{h_{1}}}-{\frac {M_{1}-M_{0}}{6}}h_{1}$$
 
@@ -144,9 +154,11 @@ $$M_{n-1}+2M_{n}={\frac {6}{h_{n}}}(f'_{n}-f[x_{n-1},x_{n}])=6f[x_{n-1},x_{n},x_
 
 Let:
 
-$\lambda _{0}=\mu _{n}=1,$
-$d_{0}=6f[x_{0},x_{0},x_{1}]$ and 
-$d_{n}=6f[x_{n-1},x_{n},x_{n}]$
+$$\lambda _{0}=\mu _{n}=1,$$
+
+$$d_{0}=6f[x_{0},x_{0},x_{1}]$$
+
+$$d_{n}=6f[x_{n-1},x_{n},x_{n}]$$
 
  
 $$
@@ -159,9 +171,6 @@ $$
 	&&&& \mu_{n-1} & 2 & \lambda_{n-1} \\ 
 	&&&&& \mu_{n} & 2 \\ 
   \end{bmatrix}
-$$
-
-$$
   \begin{bmatrix}
     M_0 \\
     M_1 \\
@@ -171,11 +180,7 @@ $$
     M_{n-1} \\
     M_n \\
   \end{bmatrix}
-$$
-
-  =
-
-$$
+  	=
   \begin{bmatrix}
     d_0 \\
     d_1 \\
