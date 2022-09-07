@@ -1,4 +1,4 @@
-\section*{The power method}
+## The power method
 
 Let us have a square matrix A. It's size is $nxn$. \\
 It has a number of independet real eigenvalues: $\lambda_1, \lambda_2, \dots, \lambda_n$. \\
@@ -38,12 +38,12 @@ We have now the largest eigenvalue and its corresponding eigenvector:
 
 $$Ax_{k-1} = {\lambda_1}v_1$$
 
-\section*{The inverse power method}
+## The inverse power method
 The reciprocals of the eigenvalues of A are the eigenvalues of it's inverse matrix  $A^{-1}$. \\
 This will help us to find the smallest eigenvalue of A. \\
 Instead of multiplying A as in power method, we multiply it's inverse to find it's largest value.
 
-\section*{QR method}
+## QR method
 
 The QR method is used to find all eigenvalues of a matrix, without finding the eigenvectors at the same time.\\
 
@@ -81,13 +81,23 @@ $$A_k = R_kQ_k = Q^{-1}_kA_kQ_k$$
 
 $$A_{k-1}=Q_kR_k$$
 
+```math
+U = \left[ {\begin{array}{cc}
+    1 & 0 & 0 \\
+    1 & 1 & 0 \\
+    0 & 1 & 1 \\
+    0 & 0 & 1
+  \end{array} } \right]
+```
+
 We will finally converge to an upper triangular matrix form as the iteration progresses:
 
-\begin{align*}
-\begin{split} A_k = R_kQ_k = \begin{bmatrix}
+
+```math
+ A_k = R_kQ_k = \left[ {\begin{array}{ccc}
 \lambda_1 & X & \dots & X\\
 0 & \lambda_2 & \dots & X\\
 & &\dots &\\
 0 & 0 & \dots & \lambda_n\\
-\end{bmatrix}\end{split}
-\end{align*}
+  \end{array} } \right]
+```
