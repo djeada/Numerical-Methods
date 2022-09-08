@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{nicefrac}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\pgfplotsset{every axis legend/.append style={
+at={(0,0)},
+anchor=north east}}
+\usetikzlibrary{shapes,positioning,intersections,quotes}
+
+\definecolor{darkgreen}{rgb}{0.0, 0.6, 0.0}
+\definecolor{darkred}{rgb}{0.7, 0.0, 0.0}
+
+\title{Simpson's Method}
+\begin{document}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        axis x line=middle,
+        axis y line=middle,
+        width=8cm,
+        height=8cm,
+        xmin=-5,   % start the diagram at this x-coordinate
+        xmax= 5,   % end   the diagram at this x-coordinate
+        ymin=-5,   % start the diagram at this y-coordinate
+        ymax= 5,   % end   the diagram at this y-coordinate
+        xlabel=$x$,
+        ylabel=$y$,
+        legend cell align=left,
+        legend pos=south east,
+        legend style={draw=none},
+        tick align=outside,
+        enlargelimits=false]
+      % plot the function
+      \addplot[domain=-5:5, blue, ultra thick,samples=500] {0.5*x + 1};
+      \fill[red] (700,700) circle (3pt);
+    	  \fill[red] (300, 500) circle (3pt);
+    	  \draw [dashed]  (500, 700) -- (680, 700);
+    	  \draw [dashed]  (700, 500) -- (700, 680);
+    	  \node[above right=0pt of {(255,510)}, outer sep=2pt,fill=none] {A};
+	  \node[above right=0pt of {(655,710)}, outer sep=2pt,fill=none] {B};
+	\legend{$\nicefrac{1}{2} \cdot x$ + 1}
+    \end{axis}
+\end{tikzpicture}
+
+
+\end{document}

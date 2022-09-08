@@ -1,0 +1,51 @@
+\documentclass{article}
+\usepackage{graphicx}
+
+\usepackage{pgfplots}
+\usepackage{tikz}
+\pgfplotsset{every axis legend/.append style={
+at={(0,0)},
+anchor=north east}}
+\usetikzlibrary{shapes,positioning,intersections,quotes}
+
+\definecolor{darkgreen}{rgb}{0.0, 0.6, 0.0}
+\definecolor{darkred}{rgb}{0.7, 0.0, 0.0}
+
+\title{Simpson's Method}
+\begin{document}
+\begin{tikzpicture}
+    \begin{axis}[
+        axis x line=middle,
+        axis y line=middle,
+        width=13cm, height=13cm,     % size of the image
+        grid = none,
+        grid style={dashed, gray!0},
+        %xmode=log,log basis x=10,
+        %ymode=log,log basis y=10,
+        xmin=-2,     % start the diagram at this x-coordinate
+        xmax= 4,    % end   the diagram at this x-coordinate
+        ymin=-7,     % start the diagram at this y-coordinate
+        ymax= 7,   % end   the diagram at this y-coordinate
+        %/pgfplots/xtick={0,1,...,60}, % make steps of length 5
+        %extra x ticks={23},
+        %extra y ticks={0.507297},
+        axis background/.style={fill=white},
+        ylabel=y,
+        xlabel=x,
+        %xticklabels={,,},
+        %yticklabels={,,},
+        tick align=outside,
+        tension=0.08]
+      % plot the stirling-formulae
+      \addplot[name path global=a, domain=-2:4, blue, thick,samples=500] {-x*x*x + 4*x*x-x-4};
+       \fill[red] (211, 39.3) circle (3pt);
+       \fill[red] (455, 108.8) circle (3pt);
+       \node[above right=0pt of {(211, 39.3)}, outer sep=2pt,fill=none] {$y_1$};
+    	  \node[above right=0pt of {(455, 108.8)}, outer sep=2pt,fill=none] {$y_2$};
+    	   \node[above right=0pt of {(250, 98.8)}, outer sep=2pt,fill=none] {$S_1(x)$};
+\draw [-stealth](280,98) -- (350,82
+);
+    \end{axis}
+\end{tikzpicture}
+
+\end{document}
