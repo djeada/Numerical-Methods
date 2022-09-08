@@ -1,25 +1,32 @@
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+import scipy.interpolate
 from lagrange_polynomial import lagrange_polynomial
 
+# Define the data
+x = np.array([-9, -5, -2.5, 4, 7])
+y = np.array([-2, 3, 0, 5, 11])
 
-def main():
-    x = np.array([-9, -5, -2.5, 4, 7])
-    y = np.array([-2, 3, 0, 5, 11])
+# Plot the raw data
+plt.scatter(x, y, s=200, marker="P", color="black", label="Raw data")
+plt.xlabel("x")
+plt.ylabel("y")
 
-    result_function = lagrange_polynomial(x, y)
+# Create the domain
+x_domain = numpy.linspace(1.1 * min(x), 1.1 * max(x), 100)
 
-    x_new = np.arange(-10, 10, 0.1)
-    y_new = np.array([result_function(i) for i in x_new])
+# Create the model and show the predictions for djeada implementation
+model = lagrange_polynomial(x, y)
+y_prediction = model(x_domain)
 
-    fig = plt.figure(figsize=(10, 8))
-    plt.plot(x_new, y_new, "b", x, y, "ro")
-    plt.title("Lagrange Polynomial")
-    plt.grid()
-    plt.xlabel("x")
-    plt.ylabel("y")
-    plt.show()
+plt.plot(x_domain, y_prediction, lw=4, label="Lagrange djeada")
 
+# reate the model and show the predictions for scipy implementation
+model = scipy.interpolate.lagrange(x, y)
+y_prediction = model(x_domain)
+plt.plot(x_domain, y_prediction, label="Lagrange scipy")
 
-if __name__ == "__main__":
-    main()
+# Add a legend and show the plot
+plt.legend(loc="best")
+plt.show()
+
