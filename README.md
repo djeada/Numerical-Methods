@@ -68,7 +68,11 @@ Method | Notes | Implementation | Examples
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| - | - | - | - |
+| Linear Interpolation | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/linear_interpolation/implementation/linear_interpolation.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
+| Multiple Linear Regression | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/multiple_linear_regression/implementation/multiple_linear_regression.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
+| Least Squares | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/least_squares/implementation/least_squares.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
+| cubic_spline | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/cubic_spline/implementation/cubic_spline.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
+| Lagrange Polynomial | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/lagrange_polynomial/implementation/lagrange_polynomial.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
 
 ### Ordinary Differential Equations
 
