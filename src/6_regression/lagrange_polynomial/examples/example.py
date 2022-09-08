@@ -23,7 +23,7 @@ plt.xlabel("x")
 plt.ylabel("y")
 
 # Create the domain
-x_domain = numpy.linspace(1.1 * min(x), 1.1 * max(x), 100)
+x_domain = np.linspace(1.1 * min(x), 1.1 * max(x), 100)
 
 # Create the model and show the predictions for djeada implementation
 model = lagrange_polynomial(x, y)
