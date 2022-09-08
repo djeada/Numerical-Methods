@@ -1,6 +1,5 @@
 """
-
-Calculate the Lagrange polynomial for the following points:
+Fit a third order polynomial to fit a curve to the given data point:
 
 A(-9, -2)
 B(-5, 3)
@@ -11,7 +10,7 @@ F(7, 11)
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.interpolate
-from lagrange_polynomial import lagrange_polynomial
+
 
 # Define the data
 x = np.array([-9, -5, -2.5, 4, 7])
@@ -23,18 +22,14 @@ plt.xlabel("x")
 plt.ylabel("y")
 
 # Create the domain
-x_domain = numpy.linspace(1.1 * min(x), 1.1 * max(x), 100)
+x_domain = np.linspace(1.1 * min(x), 1.1 * max(x), 100)
 
 # Create the model and show the predictions for djeada implementation
-model = lagrange_polynomial(x, y)
-y_prediction = model(x_domain)
 
-plt.plot(x_domain, y_prediction, lw=4, label="Lagrange djeada")
-
-# reate the model and show the predictions for scipy implementation
-model = scipy.interpolate.lagrange(x, y)
+# Create the model and show the predictions for numpy implementation
+model = np.poly1d(np.polyfit(x, y, 3))
 y_prediction = model(x_domain)
-plt.plot(x_domain, y_prediction, label="Lagrange scipy")
+plt.plot(x_domain, y_prediction, label="Polynomial regression numpy")
 
 # Add a legend and show the plot
 plt.legend(loc="best")
