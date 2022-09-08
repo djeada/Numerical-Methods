@@ -29,57 +29,56 @@ To run the notebooks locally, use the following command:
 
 ### Root And Extrema Finding
 
-
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| Bisection Method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/bisection_method/implementation/bisection_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| Golden Ratio Search | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/golden_ratio_search/implementation/golden_ratio_search.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| Newton Raphson | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/newton_raphson/implementation/newton_raphson.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| Relaxation Method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/relaxation_method/implementation/relaxation_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| Gradient Descent | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/gradient_descent/implementation/gradient_descent.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Bisection Method | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/bisection_method/implementation/bisection_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Golden Ratio Search | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/golden_ratio_search/implementation/golden_ratio_search.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Newton Raphson | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/newton_raphson/implementation/newton_raphson.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Relaxation Method | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/relaxation_method/implementation/relaxation_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Gradient Descent | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/gradient_descent/implementation/gradient_descent.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
 
 ### Systems Of Equations
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| Gaussian Elimination | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/2_systems_of_equations/gaussian_elimination/implementation/gaussian_elimination.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Gaussian Elimination | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/2_systems_of_equations/gaussian_elimination/implementation/gaussian_elimination.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
 
 ### Differentiation
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| - | - | - | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| - | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | - | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
 
 ### Integration
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| Simpon's method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/4_integration/simpson/implementation/simpson.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Simpon's method | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/4_integration/simpson/implementation/simpson.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
 
 ### Matrices
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| Power Method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/5_matrices/power_method/implementation/power_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| Inverse Power Method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/5_matrices/inverse_power_method/implementation/inverse_power_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| QR Method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/5_matrices/qr_method/implementation/qr_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Power Method | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/5_matrices/power_method/implementation/power_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Inverse Power Method | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/5_matrices/inverse_power_method/implementation/inverse_power_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| QR Method | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/5_matrices/qr_method/implementation/qr_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
 
 ### Regression
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| Linear Interpolation | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/linear_interpolation/implementation/linear_interpolation.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| Multiple Linear Regression | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/multiple_linear_regression/implementation/multiple_linear_regression.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| Least Squares | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/least_squares/implementation/least_squares.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| cubic_spline | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/cubic_spline/implementation/cubic_spline.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| Lagrange Polynomial | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/lagrange_polynomial/implementation/lagrange_polynomial.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/lagrange_polynomial/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Linear Interpolation | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/linear_interpolation/implementation/linear_interpolation.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Multiple Linear Regression | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/multiple_linear_regression/implementation/multiple_linear_regression.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Least Squares | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/least_squares/implementation/least_squares.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| cubic_spline | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/cubic_spline/implementation/cubic_spline.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Lagrange Polynomial | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/lagrange_polynomial/implementation/lagrange_polynomial.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/6_regression/lagrange_polynomial/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
 
 ### Ordinary Differential Equations
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| Euler's Method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/euler/implementation/euler.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| Runge Kutta | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/runge_kutta/implementation/runge_kutta.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Euler's Method | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/euler/implementation/euler.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Runge Kutta | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/runge_kutta/implementation/runge_kutta.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
 
 ## Refrences
 
