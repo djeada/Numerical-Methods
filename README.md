@@ -42,7 +42,7 @@ Method | Notes | Implementation | Examples
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| - | - | - | - |
+| Gaussian Elimination | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/2_systems_of_equations/gaussian_elimination/implementation/gaussian_elimination.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
 
 ### Differentiation
 
@@ -54,13 +54,15 @@ Method | Notes | Implementation | Examples
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| - | - | - | - |
+| Simpon's method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/4_integration/simpson/implementation/simpson.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
 
 ### Matrices
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| - | - | - | - |
+| Power Method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/5_matrices/power_method/implementation/power_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
+| Inverse Power Method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/5_matrices/inverse_power_method/implementation/inverse_power_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
+| QR Method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/5_matrices/qr_method/implementation/qr_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
 
 ### Regression
 
@@ -72,7 +74,8 @@ Method | Notes | Implementation | Examples
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| - | - | - | - |
+| Euler's Method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/euler/implementation/euler.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
+| Runge Kutta | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/runge_kutta/implementation/runge_kutta.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
 
 ## Refrences
 
