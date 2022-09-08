@@ -29,9 +29,14 @@ To run the notebooks locally, use the following command:
 
 ### Root And Extrema Finding
 
+
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| - | - | - | - |
+| Bisection Method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/bisection_method/implementation/bisection_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
+| Golden Ratio Search | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/bisection_method/implementation/golden_ratio_search.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
+| Newton Raphson | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/bisection_method/implementation/bisection_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
+| Relaxation Method | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/bisection_method/implementation/bisection_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
+| Gradient Descent | - | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/1_root_and_extrema_finding/bisection_method/implementation/gradient_descent.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | - |
 
 ### Systems Of Equations
 
