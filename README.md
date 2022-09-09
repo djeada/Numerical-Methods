@@ -1,7 +1,9 @@
 # Numerical Methods
 A collection of numerical methods in Python.
 
-Implementations, use examples, and comparisons with scikit-learn library functions.
+Methods implemented in Python from scratch, theoretical basis behind the implementation, examples of how to use the functions, and benchmarking against official Python scientific stack libraries  (Numpy, Sickit-Learn, SciPy) can be found here.
+
+![Demo](https://user-images.githubusercontent.com/37275728/189313603-b409b2be-41b5-4de6-9d4f-2bd8f6e41565.png)
 
 ## Requirements
 
