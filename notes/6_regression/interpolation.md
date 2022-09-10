@@ -2,7 +2,22 @@
 
 We have to arrays of numbers $X$ and $Y$. Array $X$ contains independent data points. Array $Y$ contains dependent data points $y_i,i=1,…,m$.
 
-We want to find a function $\hat{y}(x)$, which gets the exact same value with given points.\\
+We want to find a function $\hat{y}(x)$, which gets the exact same value with given points.
+
+In this case the function $f$ is known as the *interpolating function*, or simply the *interpolant*.
+
+Interpolation assumes:
+
+* given data points are *exact* (e.g. no measurement errors) 
+* given data points are *distinct* $x$ locations, i.e. there is no ambiguity in a mapping from $x$ to $y$ (which there would be if we had multiple $y$ values for the same $x$). 
+* 
+$$x_0 < x_1 < \ldots < x_N,$$ 
+
+We can then use this function to find (or estimate) $y$ values at $x$ locations other than those provided by the data. 
+
+When these new $x$ locations are within the range of known data points (i.e. for $x\in[\min\{x_i\},\max\{x_i\}]$) this process is called *interpolation*. 
+
+In the case where we seek new $y$ values at $x$ locations that are outside the data range this is called [*extrapolation*](https://en.wikipedia.org/wiki/Extrapolation) 
 
 ## Linear Interpolation
 
