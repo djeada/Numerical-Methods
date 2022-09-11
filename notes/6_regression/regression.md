@@ -6,3 +6,16 @@ This is the most typical case for real world data which contains variability and
 
 To fit a polynomial that exactly goes through n points we need n unknowns, or free parameters, to choose in the polynomial. 
 So we need a polynomial of degree n-1, since such polynomial has n free parameters (all the powers up to n-1, including 0).
+
+## Squared error calculation</span>
+
+Least squares fitting minimises the sum of the squares of the differences between the data provided and the polynomial approximation, i.e. it minimises the expression
+
+$$E = \sum_{i=0}^{N} (P(x_i) - y_i)^2,$$
+
+where $P(x)$ is the polynomial that we are evaulating and $x_i , y_i$ are the data points.
+
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Linear_least_squares_example2.svg" >
+
+Why is the square distance and not just the distance used?
