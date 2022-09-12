@@ -89,3 +89,4 @@ Method | Notes | Implementation | Examples
 * https://faculty.chass.ncsu.edu/garson/PA765/statnote.htm
 * https://jmahaffy.sdsu.edu/courses/s18/math541/Lectures.html
 * https://engcourses-uofa.ca/books/numericalanalysis
+* https://johnfoster.pge.utexas.edu/numerical-methods-book
