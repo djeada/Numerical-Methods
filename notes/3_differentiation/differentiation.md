@@ -30,19 +30,17 @@ $$\frac{df}{dx} = \lim_{h \rightarrow 0} \frac{f(x)-f(x-h)}{h}$$
 
 Taylor series expansion about the point $x_0$:
 
-$$ f(x_0+h) == f(x_0) + hf'(x_0) + \frac{h^2}{2!}f''(x_0) + \frac{h^3}{3!}f'''(x_0) + \ldots $$
+$$ f(x_0+h) = f(x_0) + hf'(x_0) + \frac{h^2}{2!}f''(x_0) + \frac{h^3}{3!}f'''(x_0) + \ldots $$
 
-An equivalent way of writing this expansion for: $x = x_0 + h$
+Let's try to move $f'(x_0)$ on the left side of the equation:
 
-$$f(x) = f(x_0) + (x - x_0) f'(x_0) + \frac{(x - x_0)^2}{2!} f''(x_0) + \frac{(x - x_0)^3}{3!} f'''(x_0) + \mathcal{O}((x - x_0)^4).$$
+$$ -hf'(x_0) + f(x_0+h) = f(x_0) + \frac{h^2}{2!}f''(x_0) + \frac{h^3}{3!}f'''(x_0) + \ldots $$
 
-Let's try to move f'(x_0) on the left side of the equation:
+$$ -hf'(x_0) = -f(x_0+h) + f(x_0) +O(h^2)$$
 
-$$f(x) - (x - x_0) f'(x_0) = f(x_0) + \frac{(x - x_0)^2}{2!} f''(x_0) + \frac{(x - x_0)^3}{3!} f'''(x_0) + \mathcal{O}((x - x_0)^4).$$
-
-$$(x_0 - x) f'(x_0) + f(x) - f(x_0) = \frac{(x - x_0)^2}{2!} f''(x_0) + \frac{(x - x_0)^3}{3!} f'''(x_0) + \mathcal{O}((x - x_0)^4).$$
-
-$$ f'(x_0) = \frac{f(x_0) - f(x)}{x-x_0} + O(x)$$
+$$ hf'(x_0)=f(x_0+h)-f(x_0) +O(h^2) $$
+  
+ $$ f'(x_0)=\frac{f(x_0+h)-f(x_0)}{h}+O(h) $$
 
 Taylor expansion of f(x+h) about x
 
