@@ -1,6 +1,6 @@
 ## Trapeziod method
 
-$$I = \sum_{i=0}^{n-1}\,   \left(\frac{f(x_{i+1}) + f(x_{i})}{2}\right )\, (x_{i+1}-x_i)$$
+$$I = \sum_{i=0}^{n-1} \frac{f(x_{i+1}) + f(x_{i})}{2} h$$
 
 ![trapezoid](https://user-images.githubusercontent.com/37275728/188944637-3e912cfb-f8f2-40f4-b664-c4e5cf81a64f.png)
 
