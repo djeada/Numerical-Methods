@@ -14,11 +14,11 @@ Weighted sums of function evaluations at a number of locations can be used to ob
 
 ### Forward difference
 
-This method is called "forward difference method", beacuse it uses values of $x$ greater than $x_0$ ( $\Delta x>0$ ).
+This method is called "forward difference method", beacuse it uses values of $x$ greater than $x_0$ ( $h>0$ ).
 
-$$ f'(x_0)\approx \frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}, \quad \Delta x>0. $$
+$$ f'(x_0)\approx \frac{f(x_0+h)-f(x_0)}{h}, \quad h>0. $$
 
-The limit $h$ from the classical definition has been replaced by $\Delta x$  which is extremely small but still finite.
+The limit $h$ from the classical definition has been replaced by $h$  which is extremely small but still finite.
 
 Forward difference:
 $$\frac{df}{dx} = \lim_{h \rightarrow 0} \frac{f(x+h)-f(x)}{h}$$
@@ -42,18 +42,24 @@ $$ hf'(x_0)=f(x_0+h)-f(x_0) +O(h^2) $$
   
  $$ f'(x_0)=\frac{f(x_0+h)-f(x_0)}{h}+O(h) $$
 
-Taylor expansion of f(x+h) about x
-
-$$f(x+h) = f(x) + (x+h-x)f'(x) + \frac{1}{2}(x+h-x)^2f''(x) + ...$$
-$$f(x+h) = f(x) + hf'(x) + \frac{1}{2}h^2f''(x) + ...$$
-
-$$f'(x) = [\frac{f(x+h)-f(x)}{h}] + \frac{h}{2}f''(x)$$
-
-what is the ideal h?
-small, but can't be 0
-
--rounding error is bad if h is too small
-
 ## Central difference
 
-$$\frac{df}{dx} = \lim_{h \rightarrow 0} \frac{f(x+h/2)-f(x-h/2)}{h}$$
+Let's use our taylor expansion knowledge to get a better approximation of the derivatives:
+
+$$ f(x_0+ h) = f(x_0)+h f'(x_0)+\frac{h^2}{2}f''(x_0) + \mathcal{O}(h^3) $$
+
+$$ f(x_0- h) = f(x_0)- h f'(x_0)+\frac{(-h)^2}{2}f''(x_0) + \mathcal{O}((-h)^3) $$
+
+Now let's make use of one small tirck $(-h)^2=h^2$ and see what happens:
+
+$$ f(x_0+h) = f(x_0)+hf'(x_0)+\frac{h^2}{2}f''(x_0) + \mathcal{O}(h^3) $$
+
+$$ f(x_0-h) = f(x_0)-hf'(x_0)+\frac{h^2}{2}f''(x_0) + \mathcal{O}(h^3) $$
+
+We subtract the second equation from the first:
+
+$$ f(x_0+h)-f(x_0-h)=2hf'(x_0) + \mathcal{O}(h^3)$$
+
+Let' rearrange for $f'(x_0)$:
+
+$$ f'(x_0)=\frac{f(x_0+h)-f(x_0-h)}{2h} + O(h^2)$$
