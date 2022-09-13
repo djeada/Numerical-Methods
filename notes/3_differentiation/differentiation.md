@@ -14,14 +14,35 @@ Weighted sums of function evaluations at a number of locations can be used to ob
 
 ### Forward difference
 
-$$ f'(x_0)\approx \frac{f(x_0+\Delta x)-f(x_0)}{\Delta x},\;\;\;\; \Delta x>0. $$
+This method is called "forward difference method", beacuse it uses values of $x$ greater than $x_0$ ( $\Delta x>0$ ).
+
+$$ f'(x_0)\approx \frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}, \quad \Delta x>0. $$
 
 The limit $h$ from the classical definition has been replaced by $\Delta x$  which is extremely small but still finite.
 
+Forward difference:
 $$\frac{df}{dx} = \lim_{h \rightarrow 0} \frac{f(x+h)-f(x)}{h}$$
 
 Backward difference:
 $$\frac{df}{dx} = \lim_{h \rightarrow 0} \frac{f(x)-f(x-h)}{h}$$
+
+## Taylor expansion
+
+Taylor series expansion about the point $x_0$:
+
+$$ f(x_0+h) == f(x_0) + hf'(x_0) + \frac{h^2}{2!}f''(x_0) + \frac{h^3}{3!}f'''(x_0) + \ldots $$
+
+An equivalent way of writing this expansion for: $x = x_0 + h$
+
+$$f(x) = f(x_0) + (x - x_0) f'(x_0) + \frac{(x - x_0)^2}{2!} f''(x_0) + \frac{(x - x_0)^3}{3!} f'''(x_0) + \mathcal{O}((x - x_0)^4).$$
+
+Let's try to move f'(x_0) on the left side of the equation:
+
+$$f(x) - (x - x_0) f'(x_0) = f(x_0) + \frac{(x - x_0)^2}{2!} f''(x_0) + \frac{(x - x_0)^3}{3!} f'''(x_0) + \mathcal{O}((x - x_0)^4).$$
+
+$$(x_0 - x) f'(x_0) + f(x) - f(x_0) = \frac{(x - x_0)^2}{2!} f''(x_0) + \frac{(x - x_0)^3}{3!} f'''(x_0) + \mathcal{O}((x - x_0)^4).$$
+
+$$ f'(x_0) = \frac{f(x_0) - f(x)}{x-x_0} + O(x)$$
 
 Taylor expansion of f(x+h) about x
 
@@ -34,7 +55,6 @@ what is the ideal h?
 small, but can't be 0
 
 -rounding error is bad if h is too small
-
 
 ## Central difference
 
