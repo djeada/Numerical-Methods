@@ -49,7 +49,7 @@ Method | Notes | Implementation | Examples
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| - | <a href=""><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | - | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Forward difference | <a href="ttps://github.com/djeada/Numerical-Methods/blob/master/notes/"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/2_systems_of_equations/forward_difference/implementation/forward_difference.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href=""><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
 
 ### Integration
 
