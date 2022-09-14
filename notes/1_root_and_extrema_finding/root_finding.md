@@ -18,9 +18,9 @@ Nonlinear systems include at least one nonlinear element, that might one of the 
 
 - Powers: $x^2, x^3, \ldots $
 
-- Roots, radicals and other non-integer polynomials: $ \sqrt{x}, x^{1/3}, \ldots $
+- Roots, radicals and other non-integer polynomials: $ \sqrt{x}, x^{3/5}, x^{pi} \ldots $
 
-- Trigonometric and other special functions: $\tan(x), \sin(x), \log(x), \text{erf}(x), \ldot $
+- Trigonometric and other special functions: $\sin(x), \tan(x), \log(x), \ldots $
 
 We call the solutions $x_0$
 
