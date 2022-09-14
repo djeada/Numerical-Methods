@@ -20,11 +20,11 @@ $$ f'(x_0)\approx \frac{f(x_0+h)-f(x_0)}{h}, \quad h>0. $$
 
 The limit $h$ from the classical definition has been replaced by $h$  which is extremely small but still finite.
 
-Forward difference:
-$$\frac{df}{dx} = \lim_{h \rightarrow 0} \frac{f(x+h)-f(x)}{h}$$
+### Backward difference
 
-Backward difference:
-$$\frac{df}{dx} = \lim_{h \rightarrow 0} \frac{f(x)-f(x-h)}{h}$$
+Analogous to the forward difference:
+
+$$ f'(x_0)\approx \frac{f(x_0) - f(x_0 - h)}{h}, \quad h>0. $$
 
 ## Taylor expansion
 
