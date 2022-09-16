@@ -30,5 +30,5 @@ $$2 = g(2) = g(g(2)) = g(g(g(2))) = \ldots $$
 
 After calculting the fixed point of a function, finding roots becomes trivial.
 
-$$x = g(x) \equiv 0 = g(x) - x$$
+$$x = g(x) \Rightarrow 0 = g(x) - x$$
 
