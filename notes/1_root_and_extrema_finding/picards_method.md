@@ -23,6 +23,6 @@ $$2 = g(2) = g(g(2)) = g(g(g(2))) = \ldots $$
 
 1. start with an initial guess $x_{k+1}$.
 2. set $x_{k}$ to $x_{k+1}$.
-3. calculate a new value of function $g$ for argument $g(x_k)$ and saved it in $x_{k+1}$.
+3. calculate the value of function $g$ for argument $g(x_k)$ and store it in $x_{k+1}$.
 4. repeat steps 2-3 till $x_{k+1}$ is almost the same as $x_k$.
 
