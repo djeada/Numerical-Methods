@@ -56,3 +56,15 @@ $$
                    \end{array}
                  \right)
 $$
+
+## Properties of a solvable system
+
+Not every equation system has a unique solution. Those that have them have the following characteristics:
+
+* $\det(A)\ne 0$ i.e. $A$ is non-singular
+
+* $A$ is invertible
+
+* The columns of $A$ are linearly independent
+
+* The rows of $A$ are linearly independent
