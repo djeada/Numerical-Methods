@@ -26,3 +26,9 @@ $$2 = g(2) = g(g(2)) = g(g(g(2))) = \ldots $$
 3. calculate the value of function $g$ for argument $g(x_k)$ and store it in $x_{k+1}$.
 4. repeat steps 2-3 till $x_{k+1}$ is almost the same as $x_k$.
 
+## Root finding
+
+After calculting the fixed point of a function, finding roots becomes trivial.
+
+$$x = g(x) \equiv 0 = g(x) - x$$
+
