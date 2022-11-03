@@ -98,3 +98,11 @@ Method | Notes | Implementation | Examples
 * https://jmahaffy.sdsu.edu/courses/s18/math541/Lectures.html
 * https://engcourses-uofa.ca/books/numericalanalysis
 * https://johnfoster.pge.utexas.edu/numerical-methods-book
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
