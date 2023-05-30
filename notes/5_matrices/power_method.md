@@ -47,3 +47,39 @@ The reciprocals of the eigenvalues of A are the eigenvalues of it's inverse matr
 This will help us to find the smallest eigenvalue of A.
 
 Instead of multiplying A as in power method, we multiply it's inverse to find it's largest value.
+
+## Power Method
+
+The power method is an algorithm for finding the largest eigenvalue in magnitude and the corresponding eigenvector of a matrix. It is a simple and efficient method used when a matrix is large and sparse.
+
+## Key Concepts
+
+- The power method uses iterative multiplication to progressively shift a vector towards the dominant eigenvector direction.
+- It converges to the eigenvector corresponding to the largest eigenvalue in magnitude, given the largest eigenvalue is unique.
+
+## Mathematical Formulation
+
+Given a square matrix A and a vector x^(0), we perform repeated multiplication x^(k+1) = Ax^(k) / ||Ax^(k)||, where ||.|| denotes the norm. This is iterated until convergence, which occurs when the direction of x^(k) changes very little between iterations.
+
+## Algorithm Steps
+
+1. Initialize a vector x^(0) (often chosen randomly). 
+2. Compute a new vector y^(k) = Ax^(k). 
+3. Scale the vector to form x^(k+1) = y^(k) / ||y^(k)||. 
+4. Repeat steps 2-3 until convergence, which is usually defined by ||x^(k+1) - x^(k)|| < ε for a very small ε.
+
+## Example
+
+Consider a matrix A = [[2, 1], [1, 3]]. Starting with an initial vector x^(0) = [1, 1], after several iterations of the power method, it will converge to the eigenvector corresponding to the largest eigenvalue of the matrix.
+
+## Advantages
+
+- Simple and efficient, especially for large, sparse matrices.
+- Only requires matrix-vector multiplication, a relatively cheap operation for sparse matrices.
+
+## Limitations
+
+- Only finds the largest eigenvalue (in magnitude) and the corresponding eigenvector.
+- Convergence can be slow if the ratio of the largest to the second-largest eigenvalue is close to 1.
+- Does not work if the largest eigenvalue is not unique.
+
