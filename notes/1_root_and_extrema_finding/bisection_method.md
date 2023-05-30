@@ -1,4 +1,4 @@
-## Bisection Method in Numerical Methods
+## Bisection Method
 
 - The bisection method is a bracketing method used for finding a root of a function.
 - It is simple, reliable, but comparatively slow, especially for functions that are steep or nearly linear.
