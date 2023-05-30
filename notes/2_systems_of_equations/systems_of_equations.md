@@ -1,89 +1,96 @@
-##  Linear systems
+## Linear Systems of Equations
 
-Let's consider a following system of equations:
+Linear systems of equations can be represented in a matrix form, which enables the use of a variety of numerical methods for solving them. 
+
+## Mathematical Formulation
+
+A linear system can be written as a set of equations:
 
 $$
 \begin{eqnarray*}
-  -x + 5y &=& 12 \\
-   x - 7y &=& 35
+  A_{11}x_1 + A_{12}x_2 + \ldots + A_{1n}x_n &=& b_1 \\
+  A_{21}x_1 + A_{22}x_2 + \ldots + A_{2n}x_n &=& b_2 \\
+  \vdots \\
+  A_{n1}x_1 + A_{n2}x_2 + \ldots + A_{nn}x_n &=& b_n
 \end{eqnarray*} 
 $$
 
-Those equations can be also written in a matrix form:
+This system of equations can be rewritten in a compact matrix form as Ax = b, where:
 
 $$
-\left(
-  \begin{array}{rr}
-    -1 & 5 \\
-    1 & -7  \\
-  \end{array}
-\right)\left(
-  \begin{array}{c}
-    x \\
-    y \\
-  \end{array}
-\right) = \left(
-  \begin{array}{c}
-    12 \\
-    35 \\
-  \end{array}
-\right)
+A = \begin{bmatrix}
+  A_{11} & A_{12} & \ldots & A_{1n} \\
+  A_{21} & A_{22} & \ldots & A_{2n} \\
+  \vdots & \vdots & \ddots & \vdots \\
+  A_{n1} & A_{n2} & \ldots & A_{nn}
+\end{bmatrix},
+\quad
+x = \begin{bmatrix}
+  x_1 \\
+  x_2 \\
+  \vdots \\
+  x_n
+\end{bmatrix},
+\quad
+b = \begin{bmatrix}
+  b_1 \\
+  b_2 \\
+  \vdots \\
+  b_n
+\end{bmatrix}
 $$
 
-Generally we can have any number of variables:
+## Criteria for a Unique Solution
 
-$$
-\left(
-  \begin{array}{cccc}
-    A_{11} & A_{12} & \dots & A_{1n} \\
-    A_{21} & A_{22} & \dots & A_{2n} \\
-    \vdots & \vdots & \ddots & \vdots \\
-    A_{n1} & A_{n2} & \dots & A_{nn} \\
-  \end{array}
-\right)\left(
-         \begin{array}{c}
-           x_1 \\
-           x_2 \\
-           \vdots \\
-           x_n \\
-         \end{array}
-       \right)  = \left(
-                   \begin{array}{c}
-                     b_1 \\
-                     b_2 \\
-                     \vdots \\
-                     b_n \\
-                   \end{array}
-                 \right)
-$$
+A system of equations has a unique solution if and only if:
 
-## Properties of a solvable system
-
-Not every equation system has a unique solution. Those that have them have the following characteristics:
-
-* $\det(A)\ne 0$ i.e. $A$ is non-singular
-
-* $A$ is invertible
-
-* The columns of $A$ are linearly independent
-
-* The rows of $A$ are linearly independent
+- The determinant of A is not zero, i.e., det(A) ≠ 0, implying A is non-singular.
+- The matrix A is invertible.
+- The columns of A are linearly independent.
+- The rows of A are linearly independent.
 
 ## Example
 
 Consider the system of equations: 
-- 3x + 2y - z = 1 
-- 2x - 2y + 4z = -2 
-- -x + 0.5y - z = 0 
 
-This can be represented as a matrix equation: 
+$$
+\begin{eqnarray*}
+  3x + 2y - z &=& 1 \\
+  2x - 2y + 4z &=& -2 \\
+  -x + 0.5y - z &=& 0
+\end{eqnarray*}
+$$
 
-A*X = B
+This can be represented as a matrix equation: Ax = b, where A, x, and b are defined as follows:
 
-Where: 
-- A = [[3, 2, -1], [2, -2, 4], [-1, 0.5, -1]]
-- X = [x, y, z]
-- B = [1, -2, 0]
+$$
+A = \begin{bmatrix}
+  3 & 2 & -1 \\
+  2 & -2 & 4 \\
+  -1 & 0.5 & -1
+\end{bmatrix},
+\quad
+x = \begin{bmatrix}
+  x \\
+  y \\
+  z
+\end{bmatrix},
+\quad
+b = \begin{bmatrix}
+  1 \\
+  -2 \\
+  0
+\end{bmatrix}
+$$
 
-We can solve for X using one of the matrix methods. For example, Gaussian elimination involves converting matrix A to row echelon form and then solving for X.
+The system can be solved using various matrix methods such as the Gaussian elimination method, which involves transforming the matrix A into its row echelon form and then performing back substitution to solve for x.
 
+## Advantages
+
+- Matrix methods for solving systems of equations are systematic and can be easily implemented in computer programs.
+- Matrix representation is compact and insightful, especially when dealing with systems of many variables.
+
+## Limitations
+
+- If the matrix is singular or nearly singular (i.e., det(A) is zero or close to zero), the system may have no solution or infinitely many solutions.
+- Large systems of equations may be computationally expensive to solve using matrix methods.
