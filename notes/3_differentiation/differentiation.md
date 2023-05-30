@@ -1,4 +1,15 @@
-## The calssical definition
+## Differentiation in Calculus
+
+- Differentiation is a fundamental concept in calculus. It is used to determine the rate at which a quantity is changing at a given point.
+- The derivative of a function at a point represents the slope of the function at that point.
+- In many real-world applications, the exact mathematical function may not be known, or the function may be too complex to differentiate analytically.
+
+## Numerical Differentiation
+
+- Numerical differentiation is a method used to approximate the derivative of a function using finite differences.
+- It uses the function's values at a set of points to estimate the derivative's value at those points or at points between them.
+
+## The Classical Definition
 
 The classical definition of the derivative of a function $f(x)$ at a point $x_0$:
 
@@ -6,60 +17,27 @@ The classical definition of the derivative of a function $f(x)$ at a point $x_0$
 
 Where $h$ is an infinitesimally small increment to the $x$ coordinate.
 
-## Finite differences 
+## Numerical Methods for Differentiation
 
-Finite differences are numerical methods for calculating the derivatives.
+1. **Forward Difference Method:** This method approximates the derivative using the difference between the function's value at a point and the function's value at a point ahead. Mathematically, it is expressed as:
 
-Weighted sums of function evaluations at a number of locations can be used to obtain approximations to a function's derivatives.
+   $$f'(x) \approx \frac{f(x + h) - f(x)}{h}$$
 
-### Forward difference
+2. **Backward Difference Method:** This method approximates the derivative using the difference between the function's value at a point and the function's value at a point behind. It is represented as:
 
-This method is called "forward difference method", beacuse it uses values of $x$ greater than $x_0$ ( $h>0$ ).
+   $$f'(x) \approx \frac{f(x) - f(x - h)}{h}$$
 
-$$ f'(x_0)\approx \frac{f(x_0+h)-f(x_0)}{h}, \quad h>0. $$
+3. **Central Difference Method:** This method approximates the derivative using the average of the forward and backward differences. It provides a more accurate approximation compared to the forward and backward difference methods:
 
-The limit $h$ from the classical definition has been replaced by $h$  which is extremely small but still finite.
+   $$f'(x) \approx \frac{f(x + h) - f(x - h)}{2h}$$
 
-### Backward difference
+## Advantages of Numerical Differentiation
 
-Analogous to the forward difference:
+- Numerical methods can handle a wide range of functions, including ones where analytical differentiation is difficult or impossible.
+- These methods can also handle functions that are only known at certain discrete points, such as data obtained from experiments or observations.
 
-$$ f'(x_0)\approx \frac{f(x_0) - f(x_0 - h)}{h}, \quad h>0. $$
+## Limitations of Numerical Differentiation
 
-## Taylor expansion
-
-Taylor series expansion about the point $x_0$:
-
-$$ f(x_0+h) = f(x_0) + hf'(x_0) + \frac{h^2}{2!}f''(x_0) + \frac{h^3}{3!}f'''(x_0) + \ldots $$
-
-Let's try to move $f'(x_0)$ on the left side of the equation:
-
-$$ -hf'(x_0) + f(x_0+h) = f(x_0) + \frac{h^2}{2!}f''(x_0) + \frac{h^3}{3!}f'''(x_0) + \ldots $$
-
-$$ -hf'(x_0) = -f(x_0+h) + f(x_0) +O(h^2)$$
-
-$$ hf'(x_0)=f(x_0+h)-f(x_0) +O(h^2) $$
-  
- $$ f'(x_0)=\frac{f(x_0+h)-f(x_0)}{h}+O(h) $$
-
-## Central difference
-
-Let's use our taylor expansion knowledge to get a better approximation of the derivatives:
-
-$$ f(x_0+ h) = f(x_0)+h f'(x_0)+\frac{h^2}{2}f''(x_0) + \mathcal{O}(h^3) $$
-
-$$ f(x_0- h) = f(x_0)- h f'(x_0)+\frac{(-h)^2}{2}f''(x_0) + \mathcal{O}((-h)^3) $$
-
-Now let's make use of one small tirck $(-h)^2=h^2$ and see what happens:
-
-$$ f(x_0+h) = f(x_0)+hf'(x_0)+\frac{h^2}{2}f''(x_0) + \mathcal{O}(h^3) $$
-
-$$ f(x_0-h) = f(x_0)-hf'(x_0)+\frac{h^2}{2}f''(x_0) + \mathcal{O}(h^3) $$
-
-We subtract the second equation from the first:
-
-$$ f(x_0+h)-f(x_0-h)=2hf'(x_0) + \mathcal{O}(h^3)$$
-
-Let' rearrange for $f'(x_0)$:
-
-$$ f'(x_0)=\frac{f(x_0+h)-f(x_0-h)}{2h} + O(h^2)$$
+- Numerical differentiation is only an approximation and can introduce errors, particularly for small step sizes due to numerical instability.
+- The accuracy of the approximation also depends on the behavior of the function. If the function is rapidly changing, discontinuous, or noisy, the approximation may not be very accurate.
+- Numerical methods require the function to be known or evaluated at certain points. If the function is expensive to evaluate, or if it is only known at a few points, numerical differentiation may not be practical.
