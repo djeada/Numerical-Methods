@@ -1,96 +1,48 @@
-## The power method
+## Eigenvalues and Eigenvectors
 
-Let us have a square matrix A. It's size is $n \thinspace x \thinspace	n$.
+- Eigenvalues and eigenvectors are important concepts in linear algebra and have many applications in different fields such as physics, computer graphics, machine learning, and more.
+- They are used to decompose or simplify complex matrix transformations.
 
-It has a number of independet real eigenvalues: $\lambda_1, \lambda_2, \dots, \lambda_n$.
+## Definitions
 
-Eigenvectors corresponding to the eigenvalues are: $v_1, v_2, \dots, v_n$.
+- An **eigenvector** of a square matrix **A** is a non-zero vector **v** such that when **A** multiplies **v**, the output is a scaled version of **v**. The scaling factor is the eigenvalue associated with that eigenvector.
 
-One condition: $|\lambda_1| > |\lambda_2|$.
-
-The eigenvectors are independent, which means that they are as well basis vectors. This implies that any vector in the same space can be written as a linear combination of the eigenvectors.
-
-$$x_0 = c_1v_1+c_2v_2+\dots+c_nv_n$$
-
-where $c_1\ne0$
-
-After multypling both sides by matrix A:
-
-$$Ax_0 = c_1Av_1+c_2Av_2+\dots+c_nAv_n$$
-
-From the defintion $Av_i = \lambda{v_i}$, so:
-
-$$Ax_0 = c_1\lambda_1v_1+c_2\lambda_2v_2+\dots+c_n\lambda_nv_n$$
-
-$$Ax_0 = c_1\lambda_1[v_1+\frac{c_2}{c_1}\frac{\lambda_2}{\lambda_1}v_2+\dots+\frac{c_n}{c_1}\frac{\lambda_n}{\lambda_1}v_n]= c_1\lambda_1x_1$$
-
-This was the first iteration. To begin the second iteration, we multiply $A$ by $x_1$:
-
-$$Ax_1 = \lambda_1{v_1}+\frac{c_2}{c_1}\frac{\lambda_2^2}{\lambda_1}v_2+\dots+\frac{c_n}{c_1}\frac{\lambda_n^2}{\lambda_1}v_n$$
-
-$$Ax_1 = \lambda_1[v_1+\frac{c_2}{c_1}\frac{\lambda_2^2}{\lambda_1^2}v_2+\dots+\frac{c_n}{c_1}\frac{\lambda_n^2}{\lambda_1^2}v_n] = \lambda_1x_2$$
-
-After k iterations we have:
-
-$$Ax_{k-1} = \lambda_1[v_1+\frac{c_2}{c_1}\frac{\lambda_2^k}{\lambda_1^k}v_2+\dots+\frac{c_n}{c_1}\frac{\lambda_n^k}{\lambda_1^k}v_n] = \lambda_1x_k$$
-
-
-For large k, $(\frac{\lambda_n}{\lambda_1})^{k} = 0$
-
-We have now the largest eigenvalue and its corresponding eigenvector:
-
-$$Ax_{k-1} = {\lambda_1}v_1$$
-
-## The inverse power method
-The reciprocals of the eigenvalues of A are the eigenvalues of it's inverse matrix  $A^{-1}$.
-
-This will help us to find the smallest eigenvalue of A.
-
-Instead of multiplying A as in power method, we multiply it's inverse to find it's largest value.
-
-## QR method
-
-The QR method is used to find all eigenvalues of a matrix, without finding the eigenvectors at the same time.\\
-
-1. The eigenvalues and corresponding eigenvectors of similar matrices are the same.
-
-Two square matrices A and B are similar if:
-
-$$A = C^{-1}BC$$
-
-where C is an invertible matrix.
-
-2. You can present any matrix as a product of two other matrices. 
-
-$$A = QR \quad (1)$$
-
-Here we want to get an orthogonal matrix Q and an upper triangular matrix R.
-
-A matrix M is an orthogonal matrix if: $M^{-1} = M^T$. Thus $M^*M = I$.
-
-Let us rewrite equation (1):
-
-$$RQ = Q^*AQ$$
-
-$$RQ = Q^{-1}AQ$$ 
-
-RQ has the same eigenvalues as A.
-
-Compute a QR factorization and reverse the order of multiplcation of Q and R.
-
-$A_0 = A$
-
-$$A_k = R_kQ_k = Q^{-1}_kA_kQ_k$$
-
-$$A_{k-1}=Q_kR_k$$
-
-We will finally converge to an upper triangular matrix form as the iteration progresses:
+Mathematically,
 
 $$
- A_k = R_kQ_k = \left[ {\begin{array}{ccc}
-\lambda_1 & X & \dots & X\\
-0 & \lambda_2 & \dots & X\\
-\vdots & \vdots & \ddots &\vdots\\
-0 & 0 & \dots & \lambda_n\\
-  \end{array} } \right]
+A \mathbf{v} = \lambda \mathbf{v}
 $$
+
+where:
+- **A** is a square matrix,
+- **v** is an eigenvector of **A**,
+- $\lambda$ is the corresponding eigenvalue.
+
+## Procedure for Finding Eigenvalues and Eigenvectors
+
+1. **Eigenvalues**: Solve the characteristic equation, which is obtained by setting up and solving the equation $|A - \lambda I| = 0$, where **I** is the identity matrix of the same dimension as **A**, and $|\cdot|$ denotes the determinant. The roots of this equation give the eigenvalues.
+
+2. **Eigenvectors**: For each eigenvalue, find the corresponding eigenvectors by substituting the eigenvalue into the equation $(A - \lambda I)\mathbf{v} = 0$ and finding the null space. 
+
+## Example
+
+Consider a 2x2 matrix A = [[4, 1], [2, 3]]
+
+1. Solve the characteristic equation $|A - \lambda I| = 0$, which gives $\lambda^2 - 7\lambda + 10 = 0$. The roots of this equation are $\lambda_1 = 2$ and $\lambda_2 = 5$, the eigenvalues.
+
+2. To find the eigenvectors:
+    - For $\lambda_1 = 2$, solve $(A - 2I)\mathbf{v} = 0$ to get the eigenvector $\mathbf{v_1} = [1, -2]^T$.
+    - For $\lambda_2 = 5$, solve $(A - 5I)\mathbf{v} = 0$ to get the eigenvector $\mathbf{v_2} = [1, 1]^T$.
+
+## Applications
+
+- Used in Principal Component Analysis (PCA) for dimensionality reduction.
+- Used in solving systems of linear differential equations.
+- Used in quantum mechanics where eigenvalues and eigenvectors of operators represent measurable quantities.
+
+## Caveats
+
+- Not all matrices have eigenvalues and eigenvectors. For example, non-square matrices do not have them.
+- Computation of eigenvalues and eigenvectors can be computationally expensive for large matrices.
+
+
