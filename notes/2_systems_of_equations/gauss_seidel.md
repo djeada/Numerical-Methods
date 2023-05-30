@@ -1,45 +1,45 @@
 ## Gauss-Seidel Method
 
-The Gauss-Seidel method is an iterative technique for solving a square system of n linear equations with unknown x.
+The Gauss-Seidel method is an iterative technique utilized for solving a system of 'n' linear equations with unknown variables, represented as a square system.
 
 ## Key Concepts
 
-- The method is an improvement over the Jacobi method, as it uses updated values as soon as they are available.
-- It converges faster than the Jacobi method.
+- The Gauss-Seidel method represents an enhancement over the Jacobi method because it immediately applies updated values as they become available.
+- It offers a faster convergence rate compared to the Jacobi method.
 
 ## Mathematical Formulation
 
-For a given system of linear equations Ax = b, where A is the coefficient matrix and b is the constant vector, the Gauss-Seidel method seeks to solve for the vector x.
+Given a system of linear equations in the form Ax = b, where 'A' is the coefficient matrix and 'b' is the constant vector, the Gauss-Seidel method aims to find the solution vector 'x'.
 
-The system can be written as: 
+The system of equations can be rewritten as:
 
-x = Lx + b,
+$$x = Lx + b$$
 
-where L is the lower triangular part of A.
+where 'L' denotes the lower triangular part of matrix 'A'.
 
 ## Algorithm Steps
 
-1. Choose an initial approximation to the solution.
-2. For each row i, update x_i as follows:
+1. Begin by choosing an initial approximation for the solution.
+2. For each row 'i', update x_i in the following manner:
 
-x_i^(k+1) = (b_i - Σ(j ≠ i)A_ij*x_j^(k)) / A_ii
+$$ x_i^(k+1) = (b_i - Σ(j ≠ i)A_ij*x_j^(k)) / A_ii$$
 
-3. Repeat step 2 until convergence is achieved.
+3. Repeat step 2 until the solution converges to a certain acceptable level of accuracy.
 
 ## Example
 
-Consider the system of equations 5x - y = 6, 7x + 8y = 20.
+Consider a system of equations given by: 5x - y = 6, and 7x + 8y = 20.
 
-1. Choose an initial approximation, say x^(0) = 0, y^(0) = 0.
-2. Update x and y as per the formula.
-3. Repeat step 2 until the values of x and y do not change significantly.
+1. Select an initial approximation, for instance, x^(0) = 0, y^(0) = 0.
+2. Apply the Gauss-Seidel formula to update the values of 'x' and 'y'.
+3. Repeat step 2 until the values of 'x' and 'y' stabilize within an acceptable range.
 
 ## Advantages
 
-- Faster convergence than the Jacobi method.
-- Can be used when A is a sparse matrix or when memory is limited.
+- The Gauss-Seidel method offers faster convergence compared to the Jacobi method.
+- It's beneficial when 'A' is a sparse matrix or when memory resources are limited.
 
 ## Limitations
 
-- Only converges when the coefficient matrix A is either diagonally dominant, or symmetric and positive definite.
-- Convergence can be slow for certain types of matrices.
+- The method converges only if the coefficient matrix 'A' is either diagonally dominant, or symmetric and positive definite.
+- For certain types of matrices, convergence can be relatively slow.
