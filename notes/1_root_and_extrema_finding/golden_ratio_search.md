@@ -1,5 +1,4 @@
-
-## Golden Ratio Search in Numerical Methods
+## Golden Ratio Search 
 
 - The Golden Ratio Search method is a bracketing method used for finding the minimum or maximum of a function.
 - The method uses the properties of the golden ratio, a mathematical constant, to eliminate the need for derivative information.
