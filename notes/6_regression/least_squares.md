@@ -58,3 +58,47 @@ $$A^T Y - A^T A {\beta} = 0$$\\
 We arrive at the least squares regression formula:
 
 $${\beta} = (A^T A)^{-1} A^T Y$$
+
+## Least Squares Method
+
+The least squares method is a statistical procedure to find the best fit for a set of data points by minimizing the sum of the squares of the offsets or residuals of points from the plotted curve.
+
+## Key Concepts
+
+- Used in regression analysis to approximate the solution of overdetermined systems.
+- The method minimizes the sum of the square differences between the observed and predicted values.
+
+## Mathematical Formulation
+
+For a simple linear regression model `y = mx + b`, the least squares estimates of the parameters `m` and `b` are given by:
+
+$$
+m = (NΣxy - ΣxΣy) / (NΣx^2 - (Σx)^2)$$
+
+$$b = (Σy - mΣx) / N$$
+
+Where,
+N is the number of observations.
+Σxy is the sum of the product of x and y observations.
+Σx and Σy are the sums of x and y observations respectively.
+Σx^2 is the sum of the squares of x observations.
+Algorithm Steps
+
+    Establish the linear regression equation y = mx + b.
+    Substitute the observed values into the equation and calculate the estimated values.
+    Compute the residuals between the observed and estimated values.
+    Minimize the sum of the square residuals using calculus to find the least squares estimates of m and b.
+
+Example
+
+Suppose we have a set of points {(1,1), (2,2), (3,2)}. We can use the least squares method to find the best fitting line for these points.
+Advantages
+
+    Provides a simple and interpretable mathematical formula for predictions.
+    Finds the best fit line that minimizes the sum of the square differences, which is often a reasonable approach.
+
+Limitations
+
+    It assumes a linear relationship between variables.
+    It can be sensitive to outliers.
+    It can only handle a single dependent variable.
