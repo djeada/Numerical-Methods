@@ -1,4 +1,4 @@
-## Newton's Method in Numerical Methods
+## Newton's Method
 
 - Newton's method, also known as Newton-Raphson method, is used for finding successively better approximations to the roots of a real-valued function.
 - It's an open method that requires only a single initial approximation to the root.
