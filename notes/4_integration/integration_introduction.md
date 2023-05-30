@@ -13,11 +13,17 @@
 
 ## Numerical Methods for Integration
 
-1. **Rectangle Rule (or Midpoint Rule):** This method approximates the area under the curve as a series of rectangles. For example, if we have a function $f(x) = x^2$, and we want to approximate the integral over the interval $[1, 2]$ with a step size $h = 0.1$, using the rectangle rule, we get: $\int_{1}^{2} x^2 dx \approx \sum_{i=1}^{10} h \cdot f(1 + 0.1i)$
+1. **Rectangle Rule (or Midpoint Rule):** This method approximates the area under the curve as a series of rectangles. For example, if we have a function $f(x) = x^2$, and we want to approximate the integral over the interval $[1, 2]$ with a step size $h = 0.1$, using the rectangle rule, we get: 
 
-2. **Trapezoidal Rule:** This method approximates the area under the curve as a series of trapezoids, which provides a better approximation compared to the rectangle rule. An example application would be the same function $f(x) = x^2$, the integral can be approximated as: $\int_{1}^{2} x^2 dx \approx \sum_{i=1}^{10} \frac{h}{2} (f(1 + 0.1(i-1)) + f(1 + 0.1i))$
+$$\int_{1}^{2} x^2 dx \approx \sum_{i=1}^{10} h \cdot f(1 + 0.1i)$$
 
-3. **Simpson's Rule:** This method approximates the area under the curve as a series of parabolic segments. It is typically more accurate than both the rectangle and trapezoidal rules. Let's consider an example where we want to approximate the same integral, using Simpson's rule, it would look like: $\int_{1}^{2} x^2 dx \approx \frac{h}{3} (f(1) + 4\sum_{i=1}^{5} f(1 + 0.2(i-1)) + 2\sum_{i=1}^{4} f(1 + 0.2i) + f(2))$
+2. **Trapezoidal Rule:** This method approximates the area under the curve as a series of trapezoids, which provides a better approximation compared to the rectangle rule. An example application would be the same function $f(x) = x^2$, the integral can be approximated as: 
+
+$$\int_{1}^{2} x^2 dx \approx \sum_{i=1}^{10} \frac{h}{2} (f(1 + 0.1(i-1)) + f(1 + 0.1i))$$
+
+3. **Simpson's Rule:** This method approximates the area under the curve as a series of parabolic segments. It is typically more accurate than both the rectangle and trapezoidal rules. Let's consider an example where we want to approximate the same integral, using Simpson's rule, it would look like: 
+
+$$\int_{1}^{2} x^2 dx \approx \frac{h}{3} (f(1) + 4\sum_{i=1}^{5} f(1 + 0.2(i-1)) + 2\sum_{i=1}^{4} f(1 + 0.2i) + f(2))$$
 
 4. **Monte Carlo Integration:** This method uses random sampling to estimate the integral, which can be especially useful for higher-dimensional integrals. An example of this could be estimating the integral of a complex multi-variable function over a specific region.
 
