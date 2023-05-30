@@ -9,28 +9,28 @@ The Gauss-Seidel method is an iterative technique utilized for solving a system 
 
 ## Mathematical Formulation
 
-Given a system of linear equations in the form Ax = b, where 'A' is the coefficient matrix and 'b' is the constant vector, the Gauss-Seidel method aims to find the solution vector 'x'.
+Given a system of linear equations in the form $Ax = b$, where 'A' is the coefficient matrix and 'b' is the constant vector, the Gauss-Seidel method aims to find the solution vector 'x'.
 
 The system of equations can be rewritten as:
 
-$$x = Lx + b$$
+$$x = Lx + b,$$
 
 where 'L' denotes the lower triangular part of matrix 'A'.
 
 ## Algorithm Steps
 
 1. Begin by choosing an initial approximation for the solution.
-2. For each row 'i', update x_i in the following manner:
+2. For each row 'i', update $x_i$ in the following manner:
 
-$$ x_i^(k+1) = (b_i - Σ(j ≠ i)A_ij*x_j^(k)) / A_ii$$
+    $$x_i^{(k+1)} = \frac{{b_i - \sum_{j \neq i} A_{ij}x_j^{(k)}}}{A_{ii}}$$
 
 3. Repeat step 2 until the solution converges to a certain acceptable level of accuracy.
 
 ## Example
 
-Consider a system of equations given by: 5x - y = 6, and 7x + 8y = 20.
+Consider a system of equations given by: $5x - y = 6$, and $7x + 8y = 20$.
 
-1. Select an initial approximation, for instance, x^(0) = 0, y^(0) = 0.
+1. Select an initial approximation, for instance, $x^{(0)} = 0$, $y^{(0)} = 0$.
 2. Apply the Gauss-Seidel formula to update the values of 'x' and 'y'.
 3. Repeat step 2 until the values of 'x' and 'y' stabilize within an acceptable range.
 
