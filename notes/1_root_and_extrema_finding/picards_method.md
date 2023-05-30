@@ -1,34 +1,38 @@
+## Picard's Method
 
-## Fixed points
+- Picard's method, also known as the method of successive approximations, is used for solving first-order ordinary differential equations (ODEs).
+- This method involves an iterative process to find the solution of an ODE.
+- It's a simple and straightforward method but may converge slowly.
 
-We want to solve a following equation:
+## Mathematical Formulation
 
-$$ x = g(x) $$
+The basic principle of Picard's method is to express the solution of the ODE as an infinite series and then to approximate this solution by truncating the series after a finite number of terms. Given a first-order ODE of the form $y' = f(x, y)$ with initial condition $y(x_0) = y_0$, the iterative formula for Picard's method is $y_{n+1}(x) = y_0 + \int_{x_0}^{x} f(t, y_n(t)) dt$.
 
-If we continue to apply the function $g$ to the output, it will stay the same:
+## Algorithm Steps
 
-$$x = g(x) = g(g(x)) = g(g(g(x))) = \ldots $$
-
-A fixed point of the function $g$ is a $x$ that fulfills this equation.
+1. Start with an initial approximation $y_0(x)$.
+2. Calculate $y_{n+1}(x) = y_0 + \int_{x_0}^{x} f(t, y_n(t)) dt$.
+3. Repeat step 2 for a given number of iterations $n$ or until a satisfactory approximation for the solution is obtained.
 
 ## Example
 
-$$ g(x) = x^{2}-3x+4 $$
+Consider the ordinary differential equation $y' = x + y$ with the initial condition $y(0) = 1$.
 
-The above function has the fixed point 2, because:
+We start with an initial approximation $y_0(x) = 1$.
 
-$$2 = g(2) = g(g(2)) = g(g(g(2))) = \ldots $$
+1. Compute $y_1(x) = 1 + \int_0^x (t + y_0(t)) dt = 1 + \int_0^x (t + 1) dt = 1 + [\frac{1}{2}t^2 + t]_0^x = 1 + \frac{1}{2}x^2 + x$.
+2. Compute $y_2(x) = 1 + \int_0^x (t + y_1(t)) dt = 1 + \int_0^x (t + 1 + \frac{1}{2}t^2 + t) dt = 1 + [\frac{1}{6}t^3 + t^2 + t]_0^x = 1 + \frac{1}{6}x^3 + x^2 + x$.
+3. Continue this process until a satisfactory approximation of the solution is obtained or the maximum number of iterations is reached.
 
-## Algorithm
+In this case, we would find that $y(x) = 1 + \frac{1}{2}x^2 + x$ and $y(x) = 1 + \frac{1}{6}x^3 + x^2 + x$ are successive approximations to the solution of the ODE $y' = x + y$.
 
-1. start with an initial guess $x_{k+1}$.
-2. set $x_{k}$ to $x_{k+1}$.
-3. calculate the value of function $g$ for argument $g(x_k)$ and store it in $x_{k+1}$.
-4. repeat steps 2-3 till $x_{k+1}$ is almost the same as $x_k$.
+## Advantages
 
-## Root finding
+- Picard's method is simple and straightforward to apply.
+- It can provide a series solution to the ODE.
 
-After calculting the fixed point of a function, finding roots becomes trivial.
+## Limitations
 
-$$x = g(x) \Rightarrow 0 = g(x) - x$$
-
+- It requires the evaluation of an integral at each step, which may be computationally expensive.
+- There's no guarantee of convergence. The method may fail if the function $f(x, y)$ or its integral is not well-behaved.
+- It may converge slowly, especially for stiff or highly nonlinear ODEs.
