@@ -156,4 +156,44 @@ $$
 $$
 
 
+## Cubic Spline
 
+Cubic Spline is a type of interpolation method that is used to get an approximation of a function. It's a series of piecewise third-degree polynomials that pass through a set of control points.
+
+## Key Concepts
+
+- Cubic splines are used in interpolation to estimate values between two points in a dataset.
+- They offer a compromise between too simple (linear) and too complex (high-degree polynomial) approximations.
+
+## Mathematical Formulation
+
+A cubic spline S(x) on an interval [x[i], x[i+1]] is a cubic function of the form:
+
+$$
+S[i](x) = a[i] + b[i](x - x[i]) + c[i](x - x[i])^2 + d[i](x - x[i])^3
+$$
+
+Where,
+
+    a[i], b[i], c[i], and d[i] are the coefficients that we solve for.
+    x[i] and x[i+1] are the control points.
+
+The goal is to find the coefficients that make the spline pass through each point and have continuous first and second derivatives.
+Algorithm Steps
+
+    Given a set of control points, create a system of equations using the fact that at each point, the function and its first two derivatives are continuous.
+    Solve the system of equations to find the coefficients of the cubic polynomials.
+    Use the cubic spline function for interpolation.
+
+Example
+
+Suppose we have a set of points (0,0), (1,0.5), and (2,0). A cubic spline interpolation will provide a smoother curve to fit these points, compared to linear interpolation or a single polynomial.
+Advantages
+
+    Produces a smoother and more flexible curve than other methods.
+    Does not suffer from oscillatory artifacts as high-degree polynomial interpolation.
+
+Limitations
+
+    More computationally intensive than simpler methods.
+    Requires solving a system of equations, which can be complex for a large number of control points.
