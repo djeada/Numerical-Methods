@@ -68,3 +68,22 @@ Not every equation system has a unique solution. Those that have them have the f
 * The columns of $A$ are linearly independent
 
 * The rows of $A$ are linearly independent
+
+## Example
+
+Consider the system of equations: 
+- 3x + 2y - z = 1 
+- 2x - 2y + 4z = -2 
+- -x + 0.5y - z = 0 
+
+This can be represented as a matrix equation: 
+
+A*X = B
+
+Where: 
+- A = [[3, 2, -1], [2, -2, 4], [-1, 0.5, -1]]
+- X = [x, y, z]
+- B = [1, -2, 0]
+
+We can solve for X using one of the matrix methods. For example, Gaussian elimination involves converting matrix A to row echelon form and then solving for X.
+
