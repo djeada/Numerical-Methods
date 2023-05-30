@@ -70,3 +70,41 @@ but based on the expressions currently stored in $a_1$ and $a_2$ this is equal t
 $$ a_2 = \frac{ \frac{(y_2 - y_0)}{(x_2-x_0)} - \frac{(y_1 - y_0)}{(x_1-x_0)}}{x_2-x_1} $$
 
 and so on.
+
+
+## Newton's Polynomial
+
+Newton's Polynomial, also known as Newton's Interpolation Formula, is a method for polynomial interpolation. It estimates a value based on nearby points and uses divided differences.
+
+## Key Concepts
+
+- Used to interpolate a polynomial that passes through a given set of points.
+- The polynomial is in the form of a sum of terms based on the divided differences of the input points.
+
+## Mathematical Formulation
+
+The Newton's polynomial is expressed as:
+
+$$
+P(x) = f[x0] + f[x0,x1](x - x0) + f[x0,x1,x2](x - x0)(x - x1) + ...
+$$
+
+where f[x0,x1,...,xn] represents the nth divided difference based on the points x0, x1, ..., xn.
+Algorithm Steps
+
+    Given a set of points (x0, y0), (x1, y1), ..., (xn, yn), compute the divided differences table.
+    Construct the Newton's Polynomial using the divided differences and the input points.
+    Use the Newton's Polynomial for interpolation.
+
+Example
+
+If we want to interpolate a value at a point x using the points (1, 2), (2, 3), (3, 5), we would create a divided difference table, and then use the Newton's polynomial formula to estimate the value at x.
+Advantages
+
+    It's a flexible method as adding an extra point doesn't require recalculating the entire interpolating polynomial.
+    It gives a polynomial of minimum degree for a given dataset.
+
+Limitations
+
+    Divided differences can become computationally intensive for a large number of points.
+    Just like other interpolation methods, it might not give accurate results for extrapolation, or when the function is not well-behaved.
