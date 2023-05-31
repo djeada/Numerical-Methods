@@ -16,20 +16,6 @@ Here, the variables $a_i$, $b_i$, $c_i$, and $d_i$ are the coefficients that we 
 
 The goal of cubic spline interpolation is to find these coefficients that make the spline pass smoothly through each point and ensure that the first and second derivatives are continuous across the entire function.
 
-## Derivation of Cubic Spline Interpolation
-
-Cubic spline interpolation involves n+1 data points, denoted as $(x_0, y_0), (x_1, y_1), ..., (x_n, y_n)$, arranged in ascending order of x values.
-
-### Form of the Cubic Spline
-
-The cubic spline S(x) is a piecewise function comprised of n segments, each represented by a cubic polynomial. For the ith interval $[x_i, x_{i+1}]$, the cubic polynomial takes the form:
-
-$$
-S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3
-$$
-
-Where $a_i$, $b_i$, $c_i$, and $d_i$ are constants to be determined.
-
 ### Conditions for Cubic Spline Interpolation
 
 1. Each cubic polynomial $S_i(x)$ should pass through the data points in its interval. That is:
@@ -58,47 +44,145 @@ $$
 
 With these conditions, we can form a system of equations to find the constants $a_i$, $b_i$, $c_i$, and $d_i$. Solving this system gives us the coefficients of the cubic spline interpolating function.
 
-### Calculating the Coefficients
+## Derivation of Cubic Spline Interpolation
 
-Given the aforementioned conditions, we can express the coefficients as follows:
-
-1. **The coefficient $a_i$**: From the condition that the polynomial should pass through the data points, we get that $a_i = y_i$.
-
-2. **The coefficient $b_i$**: From the definition of the derivative, we get that $b_i = S^{'}_i(x_i)$.
-
-3. **The coefficient $c_i$**: From the definition of the second derivative, we get that $c_i = S^{''}_i(x_i)/2$.
-
-4. **The coefficient $d_i$**: From the definition of the third derivative, we get that $d_i = S^{'''}_i(x_i)/6$.
-
-With these coefficients, the cubic polynomial becomes:
+We are trying to find a function $S_i(x) = a_i x^3 + b_i x^2 + c_i x + d_i$ going trough both points: $(x_i, y_i)$ and $x_{i+1}, y_{i+1}$.
 
 $$
-S_i(x) = y_i + S^{'}_i(x_i)(x - x_i) + S^{''}_i(x_i)/2 (x - x_i)^2 + S^{'''}_i(x_i)/6 (x - x_i)^3
+S_i(x_i) = y_i,\quad i = 1,\ldots,n-1,
 $$
 
-Substituting $x_{i+1}$ into this equation and taking into account that $S_i(x_{i+1}) = y_{i+1}$, we get:
-
 $$
-y_{i+1} = y_i + S^{'}_i(x_i)h_i + S^{''}_i(x_i)/2 h_i^2 + S^{'''}_i(x_i)/6 h_i^3
+S_i(x_{i+1}) = y_{i+1},\quad i = 1,\ldots,n-1,
 $$
 
-Where $h_i = x_{i+1} - x_i$.
-
-This gives us an expression that links the coefficients of the polynomials on consecutive intervals. To calculate these coefficients, we use the conditions of continuity of the first and second derivatives at the points $x_i$:
+Smoothness condition:
 
 $$
-S^{'}_{i-1}(x_i) = S^{'}_i(x_i) \quad and \quad S^{''}_{i-1}(x_i) = S^{''}_i(x_i)
+S'_i(x_{i+1}) = S^{\prime}_{i+1}(x_{i+1}),\quad i = 1,\ldots,n-2,
 $$
 
-These conditions can be transformed into a system of linear equations, which can be solved to find the values of $S^{'}_i(x_i)$ and $S^{''}_i(x_i)$.
-
-Finally, using the boundary conditions for the second derivative, we get:
-
 $$
-S^{''}_0(x_0) = S^{''}_{n-1}(x_n) = 0
+S''_i(x_{i+1}) = S''_{i+1}(x_{i+1}),\quad i = 1,\ldots,n-2,
 $$
 
-Which completes the system of equations.
+Boundary condition: The curve is a “straight line” at the end points:
+
+$$
+S''_1(x_1) = 0
+$$
+
+$$
+S''_{n-1}(x_n) = 0
+$$
+
+Let $h_{i}=x_{i}-x_{i-1}$
+
+Let $S_i^{''}(x_i) = S_i^{''}(x_{i+1}) = M_i$
+
+$S_1^{''}(x_1)= M_0 = 0$ and $S_n^{''}(x_n) = M_n = 0$
+
+Other $M_i$ are unknown.
+
+By Lagrange interpolation, we can interpolate each $S_{i}^{''}$ on  $[x_{i-1},x_{i}]$ :
+
+$$S''_{i}(x)=M_{i-1}{\frac {x_{i}-x}{h_{i}}}+M_{i}{\frac {x-x_{i-1}}{h_{i}}} \quad for \quad x\in [x_{i-1},x_{i}]$$
+
+Integrating the above equation twice and using the condition that $C_{i}(x_{i-1})=y_{i-1}$ and $ C_{i}(x_{i})=y_{i}$ to determine the constants of integration, we have.
+
+$$ S_{i}(x)=M_{i-1}{\frac {(x_{i}-x)^{3}}{6h_{i}}}+M_{i}{\frac {(x-x_{i-1})^{3}}{6h_{i}}}+\left(y_{i-1}-{\frac {M_{i-1}h_{i}^{2}}{6}}\right){\frac {x_{i}-x}{h_{i}}}+\left(y_{i}-{\frac {M_{i}h_{i}^{2}}{6}}\right){\frac {x-x_{i-1}}{h_{i}}}$$
+
+$${\text{for}}\quad x\in [x_{i-1},x_{i}] $$
+
+This expression gives us the cubic spline $S(x)$ if $$ M_{i},i=0,1,\cdots ,n$$ can be determined.
+
+$$S'_{i+1}(x)=-M_{i}{\frac {(x_{i+1}-x)^{2}}{2h_{i+1}}}+M_{i+1}{\frac {(x-x_{i})^{2}}{2h_{i+1}}}+{\frac {y_{i+1}-y_{i}}{h_{i+1}}}-{\frac {M_{i+1}-M_{i}}{6}}h_{i+1}$$
+
+$$S'_{i+1}(x_{i})=-M_{i}{\frac {h_{i+1}}{2}}+{\frac {y_{i+1}-y_{i}}{h_{i+1}}}-{\frac {M_{i+1}-M_{i}}{6}}h_{i+1}$$
+
+Similarly, when $x\in [x_{i-1},x_{i}]$, we can shift the index to obtain
+
+$$
+S'_{i}(x) =-M_{i-1}{\frac {(x_{i}-x)^{2}}{2h_{i}}}+M_{i}{\frac {(x-x_{i-1})^{2}}{2h_{i}}}+{\frac {y_{i}-y_{i-1}}{h_{i}}}-{\frac {M_{i}-M_{i-1}}{6}}h_{i}
+$$
+
+ 
+$$ S'_{i}(x_{i})=M_{i}{\frac {h_{i}}{2}}+{\frac {y_{i}-y_{i-1}}{h_{i}}}-{\frac {M_{i}-M_{i-1}}{6}}h_{i}$$
+
+Since 
+
+$$ S_{i+1}^{'}(x_{i}) = S_{i}^{'}(x_{i})$$ 
+
+, we can derive:
+
+$$\mu _{i}M_{i-1}+2M_{i}+\lambda _{i}M_{i+1}=d_{i}\quad {\text{for}}\quad i=1,2,\cdots ,n-1,$$
+ 
+$$\mu _{i}={\frac {h_{i}}{h_{i}+h_{i+1}}},\quad \lambda _{i}=1-\mu _{i}={\frac {h_{i+1}}{h_{i}+h_{i+1}}},\quad {\text{and}}\quad d_{i}=6f[x_{i-1},x_{i},x_{i+1}]$$
+
+and $f[x_{i-1},x_{i},x_{i+1}]$ is a divided difference.
+
+According to different boundary conditions, we can solve the system of equations above to obtain the values of $M_{i}$'s.
+
+$$S_{1}^{'}(x_{0})=f_{0}^{'}$$ 
+
+and 
+
+$$S_{n}^{'}(x_{n})=f_{n}^{'}$$
+
+According to equation (7), we can obtain:
+
+$$S'_{1}(x_{0})=-M_{0}{\frac {(x_{1}-x_{0})^{2}}{2h_{1}}}+M_{1}{\frac {(x_{0}-x_{0})^{2}}{2h_{1}}}+{\frac {y_{1}-y_{0}}{h_{1}}}-{\frac {M_{1}-M_{0}}{6}}h_{1}$$
+
+$$\Rightarrow f'_{0}=-M_{0}{\frac {h_{1}}{2}}+f[x_{0},x_{1}]-{\frac {M_{1}-M_{0}}{6}}h_{1}$$
+
+$$\Rightarrow 2M_{0}+M_{1}={\frac {6}{h_{1}}}(f[x_{0},x_{1}]-f'_{0})=6f[x_{0},x_{0},x_{1}]$$
+
+Analogously:
+
+$$ S'_{n}(x_{n})=-M_{n-1}{\frac {(x_{n}-x_{n})^{2}}{2h_{n}}}+M_{n}{\frac {(x_{n}-x_{n-1})^{2}}{2h_{n}}}+{\frac {y_{n}-y_{n-1}}{h_{n}}}-{\frac {M_{n}-M_{n-1}}{6}}h_{n}$$
+
+$$M_{n-1}+2M_{n}={\frac {6}{h_{n}}}(f'_{n}-f[x_{n-1},x_{n}])=6f[x_{n-1},x_{n},x_{n+1}]$$
+
+Let:
+
+$$\lambda _{0}=\mu _{n}=1,$$
+
+$$d_{0}=6f[x_{0},x_{0},x_{1}]$$
+
+$$d_{n}=6f[x_{n-1},x_{n},x_{n}]$$
+
+ 
+$$
+  \begin{bmatrix}
+    2 & \lambda_0 \\ 
+    \mu_1 & 2 & \lambda_1 \\ 
+    & \ddots & \ddots & \ddots \\
+    && \ddots & \ddots & \ddots \\
+	&&& \ddots & \ddots & \ddots \\
+	&&&& \mu_{n-1} & 2 & \lambda_{n-1} \\ 
+	&&&&& \mu_{n} & 2 \\ 
+  \end{bmatrix}
+  \begin{bmatrix}
+    M_0 \\
+    M_1 \\
+    \vdots \\
+    \vdots \\
+    \vdots \\
+    M_{n-1} \\
+    M_n \\
+  \end{bmatrix}
+  	=
+  \begin{bmatrix}
+    d_0 \\
+    d_1 \\
+    \vdots \\
+    \vdots \\
+    \vdots \\
+    d_{n-1} \\
+    d_n \\
+  \end{bmatrix}
+$$
+
 
 ## Algorithm Steps
 
