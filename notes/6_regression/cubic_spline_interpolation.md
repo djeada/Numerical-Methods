@@ -6,7 +6,7 @@ Cubic spline interpolation is a refined mathematical tool frequently used within
 
 ![Screenshot from 2022-09-07 21-24-04](https://user-images.githubusercontent.com/37275728/188960890-781f5947-1d8c-40bc-aba7-91728024eabe.png)
 
-A cubic spline function S(x) is applied in cubic spline interpolation across an interval [x_i, x_{i+1}]. The function is represented as:
+A cubic spline function S(x) is applied in cubic spline interpolation across an interval $[x_i, x_{i+1}]$. The function is represented as:
 
 $$
 S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3
