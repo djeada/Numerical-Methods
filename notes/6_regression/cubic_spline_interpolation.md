@@ -2,7 +2,7 @@
 
 Cubic spline interpolation is a refined mathematical tool frequently used within numerical analysis. It's an approximation technique that employs piecewise cubic polynomials, collectively forming a cubic spline. These cubic polynomials are specifically engineered to pass through a defined set of data points, hence striking a balance between overly simple (like linear) and overly intricate (like high-degree polynomial) interpolations.
 
-## Key Elements of Cubic Spline Interpolation
+## Mathematical Formulation
 
 ![Screenshot from 2022-09-07 21-24-04](https://user-images.githubusercontent.com/37275728/188960890-781f5947-1d8c-40bc-aba7-91728024eabe.png)
 
