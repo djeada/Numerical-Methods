@@ -75,4 +75,4 @@ $$
 ### Limitations
 
 - The accuracy of the method diminishes as the function becomes more non-linear.
-- It does not take into account any known derivatives at the data points,
+- It doesn't account for any known derivatives at the data points, which can limit its accuracy.
