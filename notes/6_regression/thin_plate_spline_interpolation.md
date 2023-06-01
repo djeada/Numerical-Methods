@@ -33,21 +33,16 @@ The thin plate spline interpolation algorithm can be broken down into three main
 
 2. **Solve Linear System for Weights**: Solve a linear system to find the weights $w_i$ that minimize the bending energy of the surface. The bending energy of a thin plate spline is defined as the integral of the square of the second derivatives of the function $f$. The linear system that minimizes this energy is often represented as:
 
-$$
-\begin{{bmatrix}}
-R & X \\
+$$\begin{bmatrix}R & X \\
 X^T & 0 \\
-\end{{bmatrix}}
-\begin{{bmatrix}}
+\end{bmatrix}
+\begin{bmatrix}
 w \\
 v \\
-\end{{bmatrix}}
-=
-\begin{{bmatrix}}
+\end{bmatrix} = \begin{bmatrix}
 z \\
 0 \\
-\end{{bmatrix}}
-$$
+\end{bmatrix}$$
 
 Where $R$ is the matrix of radial basis function values between control points, $X$ is a matrix that contains the coordinates of the control points, $z$ are the function values at the control points, $w$ are the weights and $v$ contains the linear coefficients $a$, $b$, and $c$.
 
@@ -89,21 +84,16 @@ r_{31}^2 \log(r_{31}) & r_{32}^2 \log(r_{32}) & 0 \\
 
 We need to solve the following system of linear equations for the weights $w = [w_1, w_2, w_3]^T$:
 
-$$
-\left[ \begin{array}{cccc}
-K & P \\
+$$\begin{bmatrix}K & P \\
 P^T & 0 \\
-\end{array} \right]
-\left[ \begin{array}{c}
+\end{bmatrix}
+\begin{bmatrix}
 w \\
 a \\
-\end{array} \right]
-=
-\left[ \begin{array}{c}
+\end{bmatrix} = \begin{bmatrix}
 v \\
 0 \\
-\end{array} \right]
-$$
+\end{bmatrix}$$
 
 where $K$ is the matrix we computed in Step 2, $P = [[1, x_1, y_1], [1, x_2, y_2], [1, x_3, y_3]]$ is a matrix containing the coordinates of the control points and the value 1, $a$ are the coefficients of the polynomial part of the thin plate spline (which we want to find), and $v = [v_1, v_2, v_3]^T$ are the $y$-coordinates from the $P_2$ control points.
 
