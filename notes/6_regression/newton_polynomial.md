@@ -76,9 +76,9 @@ To construct the Newton's Polynomial, follow these steps:
 - Start with the given y-values as the first column of the table. This column corresponds to $f[x_i]$.
 - Compute the subsequent columns using the formula:
 
-  $$
-  f[x_i, x_{i+1}, ..., x_{j}] = \frac{f[x_{i+1}, x_{i+2}, ..., x_{j}] - f[x_i, x_{i+1}, ..., x_{j-1}]}{x_j - x_i}
-  $$
+$$
+f[x_i, x_{i+1}, ..., x_{j}] = \frac{f[x_{i+1}, x_{i+2}, ..., x_{j}] - f[x_i, x_{i+1}, ..., x_{j-1}]}{x_j - x_i}
+$$
 
 - The topmost entry of each column gives the coefficient for the corresponding term in the Newton's polynomial.
 
@@ -99,21 +99,21 @@ Let's illustrate this process with an example. Suppose we wish to interpolate a 
 
 2. **Compute the divided differences table**:
 
-    ```
-    | x | f   | f, f   |
-    |---|-----|--------|
-    | 1 | 2   |        |
-    | 2 | 3   | 1      |
-    | 3 | 5   | 2      |
-    ```
+```
+| x | f   | f, f   |
+|---|-----|--------|
+| 1 | 2   |        |
+| 2 | 3   | 1      |
+| 3 | 5   | 2      |
+```
 
-    Here, the first column represents the y-values, the second column is the first-order divided differences, and so forth.
+Here, the first column represents the y-values, the second column is the first-order divided differences, and so forth.
 
 3. **Construct the Newton's Polynomial**: Using the coefficients from the divided differences table, the polynomial becomes:
 
-    $$
-    P(x) = 2 + 1 \cdot (x - 1) + 2 \cdot (x - 1) \cdot (x - 2)
-    $$
+$$
+P(x) = 2 + 1 \cdot (x - 1) + 2 \cdot (x - 1) \cdot (x - 2)
+$$
 
 4. **Use the Newton's Polynomial for interpolation**: For example, to estimate the value at $x = 1.5$, we substitute $x = 1.5$ into the polynomial to get the estimate.
 
