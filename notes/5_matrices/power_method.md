@@ -1,4 +1,22 @@
-## The power method
+## Power Method
+
+The power method is an algorithm for finding the largest eigenvalue in magnitude and the corresponding eigenvector of a matrix. It is a simple and efficient method used when a matrix is large and sparse.
+
+- The power method uses iterative multiplication to progressively shift a vector towards the dominant eigenvector direction.
+- It converges to the eigenvector corresponding to the largest eigenvalue in magnitude, given the largest eigenvalue is unique.
+
+## Mathematical Formulation
+
+Given a square matrix A and a vector x^(0), we perform repeated multiplication x^(k+1) = Ax^(k) / ||Ax^(k)||, where ||.|| denotes the norm. This is iterated until convergence, which occurs when the direction of x^(k) changes very little between iterations.
+
+## The inverse power method
+The reciprocals of the eigenvalues of A are the eigenvalues of it's inverse matrix  $A^{-1}$.
+
+This will help us to find the smallest eigenvalue of A.
+
+Instead of multiplying A as in power method, we multiply it's inverse to find it's largest value.
+
+## Derivation
 
 Let us have a square matrix A. It's size is $n \thinspace x \thinspace	n$.
 
@@ -40,26 +58,6 @@ For large k, $(\frac{\lambda_n}{\lambda_1})^{k} = 0$
 We have now the largest eigenvalue and its corresponding eigenvector:
 
 $$Ax_{k-1} = {\lambda_1}v_1$$
-
-## The inverse power method
-The reciprocals of the eigenvalues of A are the eigenvalues of it's inverse matrix  $A^{-1}$.
-
-This will help us to find the smallest eigenvalue of A.
-
-Instead of multiplying A as in power method, we multiply it's inverse to find it's largest value.
-
-## Power Method
-
-The power method is an algorithm for finding the largest eigenvalue in magnitude and the corresponding eigenvector of a matrix. It is a simple and efficient method used when a matrix is large and sparse.
-
-## Key Concepts
-
-- The power method uses iterative multiplication to progressively shift a vector towards the dominant eigenvector direction.
-- It converges to the eigenvector corresponding to the largest eigenvalue in magnitude, given the largest eigenvalue is unique.
-
-## Mathematical Formulation
-
-Given a square matrix A and a vector x^(0), we perform repeated multiplication x^(k+1) = Ax^(k) / ||Ax^(k)||, where ||.|| denotes the norm. This is iterated until convergence, which occurs when the direction of x^(k) changes very little between iterations.
 
 ## Algorithm Steps
 
