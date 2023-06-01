@@ -1,4 +1,14 @@
-## LU decomposition
+
+## LU Decomposition
+
+LU Decomposition, also known as LU factorization, refers to the factorization of a square matrix into two matrices – a lower triangular matrix (L) and an upper triangular matrix (U). 
+
+## Key Concepts
+
+- The main idea of LU decomposition is to represent a matrix as the product of a lower triangular matrix and an upper triangular matrix.
+- In the decomposition, `A = LU`, where A is the square matrix to be factorized, L is the lower triangular matrix, and U is the upper triangular matrix.
+
+## Mathematical Formulation
 
 The goal is to *decompose* a matrix so that it is computationally cheaper to calculate the solution of the following equation:
 
@@ -26,23 +36,6 @@ Since $L$ is in lower-triangular form we can quickly solve the above eqaution.
 The last step is this equation:
 
 $$ U\boldsymbol{x} = \boldsymbol{c} $$
-## LU Decomposition
-
-LU Decomposition, also known as LU factorization, refers to the factorization of a square matrix into two matrices – a lower triangular matrix (L) and an upper triangular matrix (U). 
-
-## Key Concepts
-
-- The main idea of LU decomposition is to represent a matrix as the product of a lower triangular matrix and an upper triangular matrix.
-- In the decomposition, `A = LU`, where A is the square matrix to be factorized, L is the lower triangular matrix, and U is the upper triangular matrix.
-
-## Mathematical Formulation
-
-If A is a square matrix, an LU factorization refers to the factorization of A, with proper row and/or column permutations when necessary, into two factors – a lower triangular matrix L and an upper triangular matrix U:
-
-A = LU
-
-css
-
 
 ## Algorithm Steps
 
