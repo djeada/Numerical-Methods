@@ -6,7 +6,7 @@ It's used in both simple and multiple linear regression.
 
 ## Mathematical Formulation
 
-Given a matrix of features $X$, a vector of target variables $Y$, we're trying to find the coefficient vector $β$ that minimizes the residual sum of squares (RSS), i.e., the squared difference between the observed $Y$ and the predicted $Y$ (denoted $Ŷ$ or $Y_hat$).
+Given a matrix of features $X$, a vector of target variables $Y$, we're trying to find the coefficient vector $β$ that minimizes the residual sum of squares (RSS), i.e., the squared difference between the observed $Y$ and the predicted $Y$ (denoted $Ŷ$ or $\hat{Y}$).
 
 In mathematical form, the objective is to minimize:
 
