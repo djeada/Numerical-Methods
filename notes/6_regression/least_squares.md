@@ -24,8 +24,6 @@ This formula is known as the **Normal Equation** for least squares regression.
 
 ## Derivation
 
-## Derivation
-
 Given the observed data $x_i$ and the corresponding dependent variable $y_i$, we want to estimate $\hat{y}(x_i)$ that accurately represents the data. We assume a model of the form:
 
 $$\hat{y}(x_i) = {\alpha}_1 f_1(x_i) + {\alpha}_2 f_2(x_i) + \cdots + {\alpha}_n f_n(x_i)$$
