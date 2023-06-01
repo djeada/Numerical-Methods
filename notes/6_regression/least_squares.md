@@ -24,41 +24,40 @@ This formula is known as the **Normal Equation** for least squares regression.
 
 ## Derivation
 
-Estimation $\hat{y}(x_i)$ for each point $x_i$:
+## Derivation
 
-$$\hat{y}(x_1) = {\alpha}_1 f_1(x_1) + {\alpha}_2 f_2(x_1) + \cdots + {\alpha}_n f_n(x_1),$$
-$$\hat{y}(x_2) = {\alpha}_1 f_1(x_2) + {\alpha}_2 f_2(x_2) + \cdots + {\alpha}_n f_n(x_2),$$
-\begin{center}$ \cdots $ \end{center}
-$$\hat{y}(x_m) = {\alpha}_1 f_1(x_m) + {\alpha}_2 f_2(x_m) + \cdots + {\alpha}_n f_n(x_m)$$
+Given the observed data $x_i$ and the corresponding dependent variable $y_i$, we want to estimate $\hat{y}(x_i)$ that accurately represents the data. We assume a model of the form:
 
-We can write this system of equations in terms of column vectors $\hat{Y}$ and $\beta$:\\
+$$\hat{y}(x_i) = {\alpha}_1 f_1(x_i) + {\alpha}_2 f_2(x_i) + \cdots + {\alpha}_n f_n(x_i)$$
 
-$\hat{Y}_i = \hat{y}(x_i)$\\
-$\beta_i = {\alpha}_i$\\
+Here, $f_k(x)$ are a set of functions of the variable $x$ (which could be as simple as $x^k$ or even just $x$, depending on the model), and ${\alpha}_k$ are the coefficients that we need to determine. We can write this set of equations for all observations in matrix form as:
 
-and $m x n$ matrix $A$ such that it's i-th column equals $F_i(x)$.\\
+$$\hat{Y} = A{\beta}$$
 
-The system of equations becomes then: $\hat{Y} = A{\beta}$\\
+Where:
+- $\hat{Y}$ is the vector of estimated values $\hat{y}(x_i)$,
+- ${\beta}$ is the vector of coefficients ${\alpha}_i$, 
+- $A$ is the design matrix where each column $i$ is $f_i(x)$ evaluated at each data point.
 
-The total squared error is given by E:
+We want to minimize the total squared error defined as:
 
 $$E = \|{\hat{Y} - Y}\|_{2}^2$$
 
-$\hat{Y}$, that is closest to $Y$ is the one that can point perpendicularly to $Y$ .
+To find the $\hat{Y}$ that minimizes $E$, we need to find the point where the derivative of $E$ with respect to ${\alpha}_i$ is zero (since at a minimum point, the derivative is zero). 
 
-$${\text{dot}}(\hat{Y}, Y - \hat{Y}) = 0$$
+Taking the derivative and setting it to zero, we find that for the minimum, the residual (the difference between the observed and estimated values) is orthogonal to the estimated values:
 
 $$\hat{Y}^T (Y - \hat{Y}) = 0$$
 
-$$(A{\beta})^T(Y - A{\beta}) = 0$$
+Expanding $\hat{Y}$ using the equation $\hat{Y} = A{\beta}$ and simplifying gives us:
 
-$${\beta}^T A^T Y - {\beta}^T A^T A {\beta} = {\beta}^T(A^T Y - A^T A {\beta}) = 0$$
+$$A^T Y - A^T A {\beta} = 0$$
 
-$$A^T Y - A^T A {\beta} = 0$$\\
-
-We arrive at the least squares regression formula:
+Solving this equation for $\beta$ gives us the least squares regression formula:
 
 $${\beta} = (A^T A)^{-1} A^T Y$$
+
+This is the solution that minimizes the total squared error and gives us the best fit to our data.
 
 ## Algorithm Steps
 
