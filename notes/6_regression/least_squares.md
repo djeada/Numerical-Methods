@@ -1,49 +1,26 @@
-## Linear Regression
+## Least Squares Regression
 
-Linear regression is a statistical method that models the relationship between a dependent variable (denoted as $y$) and one or more independent variables (denoted as $X$). 
+Least Squares Regression is a statistical procedure used to find the best fit for a set of data points by minimizing the sum of the squares of the offsets or residuals of points from the plotted curve.
 
-Assuming the relationship between $X$ and $Y$ is linear, we aim to find an estimator $\hat{y}(x)$ that accurately represents the given data.
+It's used in both simple and multiple linear regression.
 
 ## Mathematical Formulation
 
-In simple linear regression, we assume a relationship between the dependent variable $y$ and the independent variable $x$ that takes the form $y = mx + b$, where $m$ is the slope of the line and $b$ is the y-intercept.
+Given a matrix of features $X$, a vector of target variables $Y$, we're trying to find the coefficient vector $β$ that minimizes the residual sum of squares (RSS), i.e., the squared difference between the observed $Y$ and the predicted $Y$ (denoted $Ŷ$ or $Y_hat$).
 
-The slope $m$ and y-intercept $b$ are determined by minimizing the sum of the squares of the vertical deviations from each data point to the line. Mathematically, this is expressed as follows:
+In mathematical form, the objective is to minimize:
 
-- Slope ($m$): $m = \frac{N \Sigma xy - \Sigma x \Sigma y}{N \Sigma x^2 - (\Sigma x)^2}$
+$$
+RSS = \| Y - Xβ \|_{2}^{2}
+$$
 
-- Intercept ($b$): $b = \frac{\Sigma y - m \Sigma x}{N}$
+Using calculus and linear algebra, it can be shown that the $β$ that minimizes the RSS is given by:
 
-Here, 
-- $N$ is the number of observations.
-- $\Sigma xy$ is the sum of the product of $x$ and $y$ observations.
-- $\Sigma x$ and $\Sigma y$ are the sums of $x$ and $y$ observations respectively.
-- $\Sigma x^2$ is the sum of the squares of $x$ observations.
+$$
+β = (X^{T}X)^{-1}X^{T}Y
+$$
 
-These formulas directly follow from the least squares criterion and the normal equation.
-
-In multiple linear regression, the mathematical formulation is generalized to more than one predictor. In this case, the predictors and the output are represented as vectors, and the relationship between them is expressed in matrix form:
-
-$Y = AX + \epsilon$
-
-Here, 
-- $Y$ is the vector of outputs.
-- $A$ is a matrix where each row represents an observation and each column represents a different feature or predictor. 
-- $X$ is a vector of parameters or coefficients. 
-- $\epsilon$ is a vector of errors or residuals.
-
-The least squares estimate of $X$ is given by:
-
-$X = (A^T A)^{-1} A^T Y$
-
-## Assumptions
-
-The following assumptions are often made in linear regression:
-
-- There exists a linear relationship between the dependent and independent variables.
-- There is little or no multicollinearity between the independent variables.
-- There is little or no autocorrelation in the data.
-- The variance of the residuals, or homoscedasticity, is constant.
+This formula is known as the **Normal Equation** for least squares regression.
 
 ## Derivation
 
@@ -85,32 +62,39 @@ $${\beta} = (A^T A)^{-1} A^T Y$$
 
 ## Algorithm Steps
 
-1. **Collect and prepare the data:** Make sure the data is in the correct format. You will need two arrays of numbers: an independent variable `x` and a dependent variable `y`. Each pair `(x_i, y_i)` represents one data point.
+The algorithm for performing a least squares regression is as follows:
 
-2. **Compute the sums:** Calculate the sums of `x`, `y`, `x*y`, and `x^2`. You will need these sums to compute the parameters of the regression line.
+1. **Step 1: Data Preparation**: Organize your data into a matrix of features $\mathbf{X}$ and a vector of target variables $\mathbf{Y}$. Each row in the matrix $\mathbf{X}$ corresponds to a single observation, and each column in $\mathbf{X}$ corresponds to a feature. $\mathbf{Y}$ contains the corresponding target values for each observation.
 
-3. **Calculate the parameters:** Use the following formulas to calculate the slope `m` and intercept `b` of the line:
+2. **Step 2: Calculate $\mathbf{X}^T \mathbf{X}$ and $\mathbf{X}^T \mathbf{Y}$**: Calculate the product of the transpose of $\mathbf{X}$ with itself, and the product of the transpose of $\mathbf{X}$ with $\mathbf{Y}$.
 
-    - Slope (`m`): `(N * Σxy - Σx * Σy) / (N * Σx^2 - (Σx)^2)`
-    - Intercept (`b`): `(Σy - m * Σx) / N`
+3. **Step 3: Invert $\mathbf{X}^T \mathbf{X}$**: Invert the matrix $\mathbf{X}^T \mathbf{X}$. This step requires that $\mathbf{X}^T \mathbf{X}$ is invertible (nonsingular). If $\mathbf{X}^T \mathbf{X}$ is not invertible, it means there is multicollinearity in your data, and you may need to remove redundant features or use regularization techniques.
 
-4. **Compute the residuals:** For each data point `(x_i, y_i)`, compute the residual `e_i = y_i - (m * x_i + b)`. This residual represents the difference between the observed and predicted `y` value for each `x`.
+4. **Step 4: Calculate $\boldsymbol{\beta}$**: Calculate $\boldsymbol{\beta}$ by multiplying the inverted $\mathbf{X}^T \mathbf{X}$ with $\mathbf{X}^T \mathbf{Y}$.
 
-5. **Check the quality of the fit:** Calculate the total squared error `E = Σ(e_i)^2`. This quantity measures the overall difference between the data and the regression line. A smaller total squared error indicates a better fit.
+5. **Step 5: Use $\boldsymbol{\beta}$ for Predictions**: Once you have $\boldsymbol{\beta}$, you can use it to make predictions for new data. To make a prediction for a new observation, simply multiply the features of the new observation by $\boldsymbol{\beta}$.
 
 ## Example
 
-Suppose we have a set of points {(1,1), (2,2), (3,2)}. We can use the least squares method to find the best fitting line for these points.
+Suppose we have three data points $(1, 1)$, $(2, 2)$, and $(3, 2)$. We wish to fit a linear regression model to this data.
 
-1. **Prepare the data:** In this case, the independent variable `x` is {1, 2, 3} and the dependent variable `y` is {1, 2, 2}.
+1. First, we arrange our data into $\mathbf{X}$ and $\mathbf{Y}$. In this case, $\mathbf{X}$ is a column vector of the x-coordinates, and $\mathbf{Y}$ is a column vector of the y-coordinates. We add a column of ones to $\mathbf{X}$ to account for the intercept term in $\boldsymbol{\beta}$.
 
-2. **Compute the sums:** We have `Σx = 6`, `Σy = 5`, `Σxy = 9`, `Σx^2 = 14`.
+$$\mathbf{X} = \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix}, \quad \mathbf{Y} = \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}$$
 
-3. **Calculate the parameters:** Using the formulas, we get `m = (3 * 9 - 6 * 5) / (3 * 14 - 6^2) = 0.5` and `b = (5 - 0.5 * 6) / 3 = 0.5`.
+2. We calculate $\mathbf{X}^T \mathbf{X}$ and $\mathbf{X}^T \mathbf{Y}$:
 
-4. **Compute the residuals:** For each data point, we have `e_1 = 1 - (0.5 * 1 + 0.5) = 0`, `e_2 = 2 - (0.5 * 2 + 0.5) = 0.5`, `e_3 = 2 - (0.5 * 3 + 0.5) = -0.5`.
+$$\mathbf{X}^T \mathbf{X} = \begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix}, \quad \mathbf{X}^T \mathbf{Y} = \begin{bmatrix} 5 \\ 12 \end{bmatrix}$$
 
-5. **Check the quality of the fit:** The total squared error is `E = 0^2 + 0.5^2 + (-0.5)^2 = 0.5`. So, the line `y = 0.5x + 0.5` is the best fitting line according to the least squares method for this data set.
+3. We then calculate the inverse of $\mathbf{X}^T \mathbf{X}$:
+
+$$(\mathbf{X}^T \mathbf{X})^{-1} = \begin{bmatrix} 2 & -1 \\ -1 & 0.5 \end{bmatrix}$$
+
+4. We then calculate $\boldsymbol{\beta}$:
+
+$$\boldsymbol{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{Y} = \begin{bmatrix} 0.5 \\ 0.5 \end{bmatrix}$$
+
+So, our linear regression model is $Y = 0.5 + 0.5X$.
 
 ## Advantages
 
@@ -119,6 +103,6 @@ Suppose we have a set of points {(1,1), (2,2), (3,2)}. We can use the least squa
 
 ## Limitations
 
-- Assumes a linear relationship between variables.
-- Can be sensitive to outliers.
-- Can only handle a single dependent variable.
+- It assumes a linear relationship between variables.
+- It can be sensitive to outliers.
+- While it can handle multiple dependent variables (multiple regression), the interpretation becomes more complex.
