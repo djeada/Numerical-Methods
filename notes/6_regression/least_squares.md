@@ -1,25 +1,49 @@
+## Linear Regression
 
-$$ Linear Regression
-We have to arrays of numbers $X$ and $Y$. Array $X$ contains independent data points. Array $Y$ contains dependent data points $y_i,i=1,…,m$.
+Linear regression is a statistical method that models the relationship between a dependent variable (denoted as $y$) and one or more independent variables (denoted as $X$). 
 
-We want to find $\hat{y}(x)$, that accurately represents given data.\\
+Assuming the relationship between $X$ and $Y$ is linear, we aim to find an estimator $\hat{y}(x)$ that accurately represents the given data.
 
-$$ Assumptions
+## Mathematical Formulation
 
-* Linear relationship
-* Little or no multi-collinearity
-* Little or no auto-correlation
-* Homoscedasticity
+In simple linear regression, we assume a relationship between the dependent variable $y$ and the independent variable $x$ that takes the form $y = mx + b$, where $m$ is the slope of the line and $b$ is the y-intercept.
 
-## Least Squares Regression
+The slope $m$ and y-intercept $b$ are determined by minimizing the sum of the squares of the vertical deviations from each data point to the line. Mathematically, this is expressed as follows:
 
-Total squared error is defined as: 
-$$E = \sum_{i=1}^m (\hat{y} - y_i)^2$$. 
+- Slope ($m$): $m = \frac{N \Sigma xy - \Sigma x \Sigma y}{N \Sigma x^2 - (\Sigma x)^2}$
 
-The individual errors or residuals are defined as: 
-$$e_i = (\hat{y} - y_i)$$.
+- Intercept ($b$): $b = \frac{\Sigma y - m \Sigma x}{N}$
 
-We try to minimize total squared error and $E = \|{e}\|_{2}^{2}$.
+Here, 
+- $N$ is the number of observations.
+- $\Sigma xy$ is the sum of the product of $x$ and $y$ observations.
+- $\Sigma x$ and $\Sigma y$ are the sums of $x$ and $y$ observations respectively.
+- $\Sigma x^2$ is the sum of the squares of $x$ observations.
+
+These formulas directly follow from the least squares criterion and the normal equation.
+
+In multiple linear regression, the mathematical formulation is generalized to more than one predictor. In this case, the predictors and the output are represented as vectors, and the relationship between them is expressed in matrix form:
+
+$Y = AX + \epsilon$
+
+Here, 
+- $Y$ is the vector of outputs.
+- $A$ is a matrix where each row represents an observation and each column represents a different feature or predictor. 
+- $X$ is a vector of parameters or coefficients. 
+- $\epsilon$ is a vector of errors or residuals.
+
+The least squares estimate of $X$ is given by:
+
+$X = (A^T A)^{-1} A^T Y$
+
+## Assumptions
+
+The following assumptions are often made in linear regression:
+
+- There exists a linear relationship between the dependent and independent variables.
+- There is little or no multicollinearity between the independent variables.
+- There is little or no autocorrelation in the data.
+- The variance of the residuals, or homoscedasticity, is constant.
 
 ## Derivation
 
@@ -59,46 +83,42 @@ We arrive at the least squares regression formula:
 
 $${\beta} = (A^T A)^{-1} A^T Y$$
 
-## Least Squares Method
+## Algorithm Steps
 
-The least squares method is a statistical procedure to find the best fit for a set of data points by minimizing the sum of the squares of the offsets or residuals of points from the plotted curve.
+1. **Collect and prepare the data:** Make sure the data is in the correct format. You will need two arrays of numbers: an independent variable `x` and a dependent variable `y`. Each pair `(x_i, y_i)` represents one data point.
 
-## Key Concepts
+2. **Compute the sums:** Calculate the sums of `x`, `y`, `x*y`, and `x^2`. You will need these sums to compute the parameters of the regression line.
 
-- Used in regression analysis to approximate the solution of overdetermined systems.
-- The method minimizes the sum of the square differences between the observed and predicted values.
+3. **Calculate the parameters:** Use the following formulas to calculate the slope `m` and intercept `b` of the line:
 
-## Mathematical Formulation
+    - Slope (`m`): `(N * Σxy - Σx * Σy) / (N * Σx^2 - (Σx)^2)`
+    - Intercept (`b`): `(Σy - m * Σx) / N`
 
-For a simple linear regression model `y = mx + b`, the least squares estimates of the parameters `m` and `b` are given by:
+4. **Compute the residuals:** For each data point `(x_i, y_i)`, compute the residual `e_i = y_i - (m * x_i + b)`. This residual represents the difference between the observed and predicted `y` value for each `x`.
 
-$$
-m = (NΣxy - ΣxΣy) / (NΣx^2 - (Σx)^2)$$
+5. **Check the quality of the fit:** Calculate the total squared error `E = Σ(e_i)^2`. This quantity measures the overall difference between the data and the regression line. A smaller total squared error indicates a better fit.
 
-$$b = (Σy - mΣx) / N$$
-
-Where,
-N is the number of observations.
-Σxy is the sum of the product of x and y observations.
-Σx and Σy are the sums of x and y observations respectively.
-Σx^2 is the sum of the squares of x observations.
-Algorithm Steps
-
-    Establish the linear regression equation y = mx + b.
-    Substitute the observed values into the equation and calculate the estimated values.
-    Compute the residuals between the observed and estimated values.
-    Minimize the sum of the square residuals using calculus to find the least squares estimates of m and b.
-
-Example
+## Example
 
 Suppose we have a set of points {(1,1), (2,2), (3,2)}. We can use the least squares method to find the best fitting line for these points.
-Advantages
 
-    Provides a simple and interpretable mathematical formula for predictions.
-    Finds the best fit line that minimizes the sum of the square differences, which is often a reasonable approach.
+1. **Prepare the data:** In this case, the independent variable `x` is {1, 2, 3} and the dependent variable `y` is {1, 2, 2}.
 
-Limitations
+2. **Compute the sums:** We have `Σx = 6`, `Σy = 5`, `Σxy = 9`, `Σx^2 = 14`.
 
-    It assumes a linear relationship between variables.
-    It can be sensitive to outliers.
-    It can only handle a single dependent variable.
+3. **Calculate the parameters:** Using the formulas, we get `m = (3 * 9 - 6 * 5) / (3 * 14 - 6^2) = 0.5` and `b = (5 - 0.5 * 6) / 3 = 0.5`.
+
+4. **Compute the residuals:** For each data point, we have `e_1 = 1 - (0.5 * 1 + 0.5) = 0`, `e_2 = 2 - (0.5 * 2 + 0.5) = 0.5`, `e_3 = 2 - (0.5 * 3 + 0.5) = -0.5`.
+
+5. **Check the quality of the fit:** The total squared error is `E = 0^2 + 0.5^2 + (-0.5)^2 = 0.5`. So, the line `y = 0.5x + 0.5` is the best fitting line according to the least squares method for this data set.
+
+## Advantages
+
+- Provides a simple and interpretable mathematical formula for predictions.
+- Finds the best fit line that minimizes the sum of the square differences, which is often a reasonable approach.
+
+## Limitations
+
+- Assumes a linear relationship between variables.
+- Can be sensitive to outliers.
+- Can only handle a single dependent variable.
