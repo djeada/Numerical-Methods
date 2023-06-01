@@ -1,110 +1,128 @@
-Interpolating with Netwon polynomial gives exactly the same results as with Lagrange polynomial.
+## Newton's Polynomial
+
+Newton's Polynomial, also known as Newton's Interpolation Formula, is a method used for polynomial interpolation. It estimates values based on nearby points using divided differences. Interpolating with the Newton Polynomial yields the same results as with the Lagrange Polynomial.
+
+## Mathematical Formulation
+
+The Newton's Polynomial is formulated as:
+
+$$
+P(x) = f[x_0] + f[x_0,x_1](x - x_0) + f[x_0,x_1,x_2](x - x_0)(x - x_1) + \ldots
+$$
+
+In this formula, `f[x_0,x_1,...,x_n]` represents the nth divided difference based on the points `x_0`, `x_1`, ..., `x_n`.
 
 ## Derivation
 
-We have to rewrite the polynomial in the following way:
+The polynomial is rewritten in the following form:
 
 $$ P_N(x) = a_0 +(x-x_0)a_1 + (x-x_0)(x-x_1)a_2 + \cdots + (x-x_0)(x-x_1)\ldots(x-x_N)a_N,$$
 
-For $N=3$:
+For `N=3`:
 
-$$P_3(x) = a_0 +(x-x_0)a_1 + (x-x_0)(x-x_1)a_2 + (x-x_0)(x-x_1)(x-x_2)a_3$$
+$$
+P_3(x) = a_0 +(x-x_0)a_1 + (x-x_0)(x-x_1)a_2 + (x-x_0)(x-x_1)(x-x_2)a_3
+$$
 
-$$P_3(x) = a_0 +(x-x_0)[a_1 + (x-x_1)[a_2 + (x-x_2)a_3]]$$
+We can further simplify this to:
 
-1. Substitute $x=x_0$: We have $P_3(x_0)=a_0$, and we know that our interpolant $P_3(x)$ evaluated at $x_0$ must return $y_0$. Hence we must conclude that 
+$$
+P_3(x) = a_0 +(x-x_0)[a_1 + (x-x_1)[a_2 + (x-x_2)a_3]]
+$$
 
-$$a_0 = y_0.$$
+1. Substitute `x=x_0`: We have `P_3(x_0)=a_0`, and our interpolant `P_3(x)` evaluated at `x_0` must return `y_0`. Hence we can deduce:
 
+$$a_0 = y_0$$
 
-2. Now substitute $x=x_1$: We have $P_3(x_1) = a_0 +(x_1-x_0)a_1 = y_0 +(x_1-x_0)a_1 $, the LHS of this must to  $y_1$, and we know everything on the RHS as we have already calculated that $a_0 = y_0$. We can thus trivially rearrange to yield
+2. Substitute `x=x_1`: We get `P_3(x_1) = a_0 +(x_1-x_0)a_1 = y_0 +(x_1-x_0)a_1`. The left hand side of this equals `y_1`, and we know everything on the right hand side since we've already calculated that `a_0 = y_0`. We can then rearrange to find:
 
-$$ a_1 = \frac{(y_1 - y_0)}{(x_1-x_0)}.$$
+$$ a_1 = \frac{(y_1 - y_0)}{(x_1-x_0)}$$
 
-
-3. Substituting $x=x_2$ yields 
+3. Substituting `x=x_2` gives:
 
 $$ y_2 = P_3(x_2) = a_0 +(x_2-x_0)[a_1 + (x_2-x_1)a_2] = y_0 + (x_2-x_0)\left[ \frac{(y_1 - y_0)}{(x_1-x_0)} + (x_2-x_1)a_2\right] $$
 
 $$ \implies a_2 = \frac{ \frac{(y_2 - y_0)}{(x_2-x_0)} - \frac{(y_1 - y_0)}{(x_1-x_0)}}{x_2-x_1} $$
 
-To define an algorithm for this method in general let's first introducing the following [*divided difference*](https://en.wikipedia.org/wiki/Divided_differences) notation
+For a general algorithm for this method, let's introduce the following [*divided difference*](https://en.wikipedia.org/wiki/Divided_differences) notation:
 
 $$ \Delta y_i = \frac{y_i-y_0}{x_i-x_0}, \quad i=1,2,\ldots, N $$
-
 $$ \Delta^2 y_i = \frac{\Delta y_i-\Delta y_1}{x_i-x_1}, \quad i=2, 3,\ldots, N $$
-
 $$ \vdots $$
-
 $$ \Delta^N y_N = \frac{\Delta^{N-1} y_N-\Delta^{N-1} y_{N-1}}{x_N-x_{N-1}} $$
 
-With a bit of thought we can hopefully see from the above example that the coefficients of the interpolating polynomial in the general case are given by
-
+The coefficients of the interpolating polynomial in the general case are given by:
 
 $$a_0=y_0, \quad a_1 = \Delta y_1, \quad a_2 = \Delta^2 y_2, \quad \ldots \quad a_N = \Delta^N y_N$$
 
-So an algorithm to evaluate the Newton Polynomial could follow this process:
+The Newton Polynomial evaluation process follows these steps:
 
-1. Initialise the unknown array $a$ with the data $y$, so that
+1. Initialize the unknown array `a` with the data `y`, so that:
+$$ a_0 = y_0, \quad a_1 = y_1, \quad a_2 = y_2, \ldots $$
 
-$$ a_0 = y_0, \quad a_1 = y_1, \quad a_2 = y_2, ...$$
+2. Update `a` values without touching `a_0`:
+$$ a_1 = \frac{(a_1 - a_0)}{(x_1-x_0)}, \quad a_2 = \frac{(a_2 - a_0)}{(x_2-x_0)}, \ldots $$
 
-Based on our derivation above we know that the first of these is correct, i.e. we want to preserve this value for $a_0$ as we move forward.
+3. For the next steps, don't touch `a_1` and set:
+$$ a_2 = \frac{(a_2 - a_1)}{(x_2-x_1)} $$
+## Algorithm Steps
 
-2. So in this step we don't want to touch $a_0$, but the other $a$ values can be updated. Let's set
+To construct the Newton's Polynomial, follow these steps:
 
-$$ a_1 = \frac{(a_1 - a_0)}{(x_1-x_0)}, \quad a_2 = \frac{(a_2 - a_0)}{(x_2-x_0)}, ... $$
+1. **Prepare the data**: Given a set of points $(x_0, y_0), (x_1, y_1), ..., (x_n, y_n)$, ensure the data is ordered such that the x-values are in increasing order.
 
-but note that due to the values that $a_0$ and $a_1$ take (before $a_1$) is over-written) this has the result of setting
+2. **Compute the divided differences table**: 
 
-$$ a_1 = \frac{(y_1 - y_0)}{(x_1-x_0)} $$ 
+- Start with the given y-values as the first column of the table. This column corresponds to $f[x_i]$.
+- Compute the subsequent columns using the formula:
 
-which is what we want, so in the next step we don't want to touch $a_1$ (in addition to not touching $a_0$).
+  $$
+  f[x_i, x_{i+1}, ..., x_{j}] = \frac{f[x_{i+1}, x_{i+2}, ..., x_{j}] - f[x_i, x_{i+1}, ..., x_{j-1}]}{x_j - x_i}
+  $$
 
-3. So now we set
+- The topmost entry of each column gives the coefficient for the corresponding term in the Newton's polynomial.
 
-$$ \quad a_2 = \frac{(a_2 - a_1)}{(x_2-x_1)} $$
+3. **Construct the Newton's Polynomial**: 
 
-but based on the expressions currently stored in $a_1$ and $a_2$ this is equal to
+- Start with the polynomial $P(x) = f[x_0]$.
+- For each subsequent coefficient $f[x_0, x_1, ..., x_i]$, add the term $f[x_0, x_1, ..., x_i] \cdot (x - x_0) \cdot ... \cdot (x - x_{i-1})$ to the polynomial.
 
-$$ a_2 = \frac{ \frac{(y_2 - y_0)}{(x_2-x_0)} - \frac{(y_1 - y_0)}{(x_1-x_0)}}{x_2-x_1} $$
+4. **Use the Newton's Polynomial for interpolation**: 
 
-and so on.
+- To estimate a value at a point $x$, substitute $x$ into the Newton's polynomial and compute the result.
 
+## Example
 
-## Newton's Polynomial
+Let's illustrate this process with an example. Suppose we wish to interpolate a value at a point $x$ using the points (1, 2), (2, 3), (3, 5).
 
-Newton's Polynomial, also known as Newton's Interpolation Formula, is a method for polynomial interpolation. It estimates a value based on nearby points and uses divided differences.
+1. **Prepare the data**: Our points are already in order, so no additional preparation is needed.
 
-## Key Concepts
+2. **Compute the divided differences table**:
 
-- Used to interpolate a polynomial that passes through a given set of points.
-- The polynomial is in the form of a sum of terms based on the divided differences of the input points.
+    ```
+    | x | f   | f, f   |
+    |---|-----|--------|
+    | 1 | 2   |        |
+    | 2 | 3   | 1      |
+    | 3 | 5   | 2      |
+    ```
 
-## Mathematical Formulation
+    Here, the first column represents the y-values, the second column is the first-order divided differences, and so forth.
 
-The Newton's polynomial is expressed as:
+3. **Construct the Newton's Polynomial**: Using the coefficients from the divided differences table, the polynomial becomes:
 
-$$
-P(x) = f[x0] + f[x0,x1](x - x0) + f[x0,x1,x2](x - x0)(x - x1) + ...
-$$
+    $$
+    P(x) = 2 + 1 \cdot (x - 1) + 2 \cdot (x - 1) \cdot (x - 2)
+    $$
 
-where f[x0,x1,...,xn] represents the nth divided difference based on the points x0, x1, ..., xn.
-Algorithm Steps
+4. **Use the Newton's Polynomial for interpolation**: For example, to estimate the value at $x = 1.5$, we substitute $x = 1.5$ into the polynomial to get the estimate.
 
-    Given a set of points (x0, y0), (x1, y1), ..., (xn, yn), compute the divided differences table.
-    Construct the Newton's Polynomial using the divided differences and the input points.
-    Use the Newton's Polynomial for interpolation.
+## Advantages
 
-Example
+- It's a flexible method: adding an extra point doesn't require recalculating the entire interpolating polynomial.
+- It yields a polynomial of minimum degree for a given dataset.
 
-If we want to interpolate a value at a point x using the points (1, 2), (2, 3), (3, 5), we would create a divided difference table, and then use the Newton's polynomial formula to estimate the value at x.
-Advantages
+## Limitations
 
-    It's a flexible method as adding an extra point doesn't require recalculating the entire interpolating polynomial.
-    It gives a polynomial of minimum degree for a given dataset.
-
-Limitations
-
-    Divided differences can become computationally intensive for a large number of points.
-    Just like other interpolation methods, it might not give accurate results for extrapolation, or when the function is not well-behaved.
+- Divided differences can become computationally intensive for a large number of points.
+- Just like other interpolation methods, it might not give accurate results for extrapolation, or when the function is not well-behaved.
