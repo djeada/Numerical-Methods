@@ -33,13 +33,13 @@ $$
 3. The first and second derivatives of S(x) should be continuous. This leads to:
 
 $$
-S^{'}_i(x_{i+1}) = S^{'}_{i+1}(x_{i+1}) \quad and \quad S^{''}_i(x_{i+1}) = S^{''}_{i+1}(x_{i+1})
+S_i'(x_{i+1}) = S_{i+1}'(x_{i+1}) \quad \text{and} \quad S_i''(x_{i+1}) = S_{i+1}''(x_{i+1})
 $$
 
 4. At the ends, the second derivatives are usually set to zero (natural cubic spline):
 
 $$
-S^{''}_0(x_0) = S^{''}_{n-1}(x_n) = 0
+S_0''(x_0) = S_{n-1}''(x_n) = 0
 $$
 
 With these conditions, we can form a system of equations to find the constants $a_i$, $b_i$, $c_i$, and $d_i$. Solving this system gives us the coefficients of the cubic spline interpolating function.
@@ -59,11 +59,11 @@ $$
 Smoothness condition:
 
 $$
-S'_i(x_{i+1}) = S^{\prime}_{i+1}(x_{i+1}),\quad i = 1,\ldots,n-2,
+S_i'(x_{i+1}) = S_{i+1}'(x_{i+1}), \quad i = 1, \ldots, n-2,
 $$
 
 $$
-S''_i(x_{i+1}) = S''_{i+1}(x_{i+1}),\quad i = 1,\ldots,n-2,
+S_i''(x_{i+1}) = S_{i+1}''(x_{i+1}), \quad i = 1, \ldots, n-2,
 $$
 
 Boundary condition: The curve is a “straight line” at the end points:
@@ -86,7 +86,9 @@ Other $M_i$ are unknown.
 
 By Lagrange interpolation, we can interpolate each $S_{i}^{''}$ on  $[x_{i-1},x_{i}]$ :
 
-$$S''_{i}(x)=M_{i-1}{\frac {x_{i}-x}{h_{i}}}+M_{i}{\frac {x-x_{i-1}}{h_{i}}} \quad for \quad x\in [x_{i-1},x_{i}]$$
+$$
+S_i''(x) = M_{i-1}\left(\frac{x_i - x}{h_i}\right) + M_i\left(\frac{x - x_{i-1}}{h_i}\right) \quad \text{for} \quad x \in [x_{i-1},x_i]
+$$
 
 Integrating the above equation twice and using the condition that $C_{i}(x_{i-1})=y_{i-1}$ and $ C_{i}(x_{i})=y_{i}$ to determine the constants of integration, we have.
 
