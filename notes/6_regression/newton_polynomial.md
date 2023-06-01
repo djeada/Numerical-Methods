@@ -99,13 +99,11 @@ Let's illustrate this process with an example. Suppose we wish to interpolate a 
 
 2. **Compute the divided differences table**:
 
-```
 | x | f   | f, f   |
 |---|-----|--------|
 | 1 | 2   |        |
 | 2 | 3   | 1      |
 | 3 | 5   | 2      |
-```
 
 Here, the first column represents the y-values, the second column is the first-order divided differences, and so forth.
 
