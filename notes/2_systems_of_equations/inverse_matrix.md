@@ -49,7 +49,8 @@ Finding the inverse of a matrix is a multi-step process:
 Let's take a 2x2 matrix A as an example:
 
 $$
-A = \begin{bmatrix} 4 & 7 \\ 2 & 6 \end{bmatrix}
+A = \begin{bmatrix} 4 & 7 \\ 
+2 & 6\\ \end{bmatrix}
 $$
 
 1. First, check if the matrix is invertible. The determinant of A is (4*6 - 7*2) = 10, which is not zero, so the matrix is invertible.
@@ -59,7 +60,9 @@ $$
 5. The inverse of A is the adjugate divided by the determinant, resulting in:
 
 $$
-A^{-1} = \frac{1}{10} \begin{bmatrix} 6 & -7 \\ -2 & 4 \end{bmatrix} = \begin{bmatrix} 0.6 & -0.7 \\ -0.2 & 0.4 \end{bmatrix}
+A^{-1} = \frac{1}{10} \begin{bmatrix} 6 & -7 \\ 
+-2 & 4\\ \end{bmatrix} = \begin{bmatrix} 0.6 & -0.7 \\ 
+-0.2 & 0.4\\ \end{bmatrix}
 $$
 
 ## Advantages
