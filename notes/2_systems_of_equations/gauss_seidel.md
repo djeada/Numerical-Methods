@@ -19,20 +19,50 @@ where 'L' denotes the lower triangular part of matrix 'A'.
 
 ## Algorithm Steps
 
-1. Begin by choosing an initial approximation for the solution.
-2. For each row 'i', update $x_i$ in the following manner:
+1. Begin with an initial approximation for the solution, typically a zero vector.
+2. For each row 'i', calculate $x_i$ in the following manner:
 
     $$x_i^{(k+1)} = \frac{{b_i - \sum_{j \neq i} A_{ij}x_j^{(k)}}}{A_{ii}}$$
 
-3. Repeat step 2 until the solution converges to a certain acceptable level of accuracy.
+3. Continue iterating until the difference between the old and the updated solution is less than a predetermined tolerance level.
 
 ## Example
 
-Consider a system of equations given by: $5x - y = 6$, and $7x + 8y = 20$.
+Consider the system of linear equations: 
 
-1. Select an initial approximation, for instance, $x^{(0)} = 0$, $y^{(0)} = 0$.
-2. Apply the Gauss-Seidel formula to update the values of 'x' and 'y'.
-3. Repeat step 2 until the values of 'x' and 'y' stabilize within an acceptable range.
+$$
+\begin{aligned}
+5x - y &= 6,\\
+7x + 8y &= 20.
+\end{aligned}
+$$
+
+This can be written in matrix form as $Ax = b$, where:
+
+$$
+A = 
+\begin{bmatrix}
+5 & -1 \\
+7 & 8 
+\end{bmatrix}
+, \quad
+x = 
+\begin{bmatrix}
+x \\
+y
+\end{bmatrix}
+, \quad
+b = 
+\begin{bmatrix}
+6 \\
+20
+\end{bmatrix}
+.
+$$
+
+1. Start with an initial approximation, say $x^{(0)} = 0$, $y^{(0)} = 0$.
+2. Apply the Gauss-Seidel formula for each equation. For the first equation, we update $x$ using $x^{(1)} = \frac{6+y^{(0)}}{5} = 1.2$. Then, for the second equation, we update $y$ using the newly computed $x^{(1)}$: $y^{(1)} = \frac{20 - 7x^{(1)}}{8} = 1.45$.
+3. Repeat step 2 until the values of 'x' and 'y' stabilize within an acceptable range. After a few iterations, the solution converges to $x \approx 1.04$ and $y \approx 1.60$.
 
 ## Advantages
 
