@@ -85,19 +85,21 @@ $$
 Start by taking the first column as $a_1$. Normalize it to get the first column of $Q$:
 
 $$
-q_1 = \frac{a_1}{\|a_1\|} = \frac{1}{\sqrt{20}}\begin{bmatrix}4\\2\end{bmatrix} = \begin{bmatrix}0.8944\\0.4472\end{bmatrix}
+q_1 = \frac{a_1}{\|a_1\|} = \frac{1}{\sqrt{20}}\begin{bmatrix}4\\ 2 \\ 
+\end{bmatrix} = \begin{bmatrix}0.8944\\ 0.4472 \\ 
+\end{bmatrix}
 $$
 
 Next, orthogonalize the second column of $A$ relative to $q_1$ to get $a_2'$:
 
 $$
-a_2' = a_2 - (q_1^Ta_2)q_1 = \begin{bmatrix}1\\3\end{bmatrix} - (\begin{bmatrix}0.8944 & 0.4472\end{bmatrix} \begin{bmatrix}1\\3\end{bmatrix})\begin{bmatrix}0.8944\\0.4472\end{bmatrix} = \begin{bmatrix}-0.8944\\2.2361\end{bmatrix}
+a_2' = a_2 - (q_1^Ta_2)q_1 = \begin{bmatrix}1\\ 3\end{bmatrix} - (\begin{bmatrix}0.8944 & 0.4472\end{bmatrix} \begin{bmatrix}1\\  3\end{bmatrix})\begin{bmatrix}0.8944\\ 0.4472\end{bmatrix} = \begin{bmatrix}-0.8944\\ 2.2361\end{bmatrix}
 $$
 
 Normalize $a_2'$ to get the second column of $Q$:
 
 $$
-q_2 = \frac{a_2'}{\|a_2'\|} = \frac{1}{\sqrt{6}}\begin{bmatrix}-0.8944\\2.2361\end{bmatrix} = \begin{bmatrix}-0.3651\\0.9309\end{bmatrix}
+q_2 = \frac{a_2'}{\|a_2'\|} = \frac{1}{\sqrt{6}}\begin{bmatrix}-0.8944\\ 2.2361\end{bmatrix} = \begin{bmatrix}-0.3651\\ 0.9309\end{bmatrix}
 $$
 
 This gives us matrix $Q$:
