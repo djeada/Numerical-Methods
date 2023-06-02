@@ -104,8 +104,8 @@ Then proceed to the second row:
 
 Finally, for the third row:
 
-- The diagonal of U is calculated as $u_{33}=a_{33}-l_{31}u_{13}-l_{32}u
-
+- The diagonal of U is calculated as $u_{33}=a_{33}-l_{31}u_{13}-l_{32}u_{23}=-1-(-1*(-4))-(-2*8)=1$.
+   
 This gives us:
 
 $$
