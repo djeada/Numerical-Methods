@@ -23,13 +23,16 @@ where:
 
 ## Example
 
-Consider a 2x2 matrix $A = \begin{bmatrix} 4 & 1 \\ 2 & 3 \end{bmatrix}$
+Consider a 2x2 matrix:
+
+$$A = \begin{bmatrix} 4 & 1 \\ 
+2 & 3 \\ \end{bmatrix}$$
 
 1. Solve the characteristic equation $det(A - \lambda I) = 0$, which gives $\lambda^2 - 7\lambda + 10 = 0$. The roots of this equation are $\lambda_1 = 2$ and $\lambda_2 = 5$, representing the eigenvalues.
 
 2. To find the corresponding eigenvectors:
-    - For $\lambda_1 = 2$, solve the equation $(A - 2I)v = 0$, which yields the eigenvector $v_1 = \begin{bmatrix} 1 \\ -2 \end{bmatrix}$.
-    - For $\lambda_2 = 5$, solve the equation $(A - 5I)v = 0$, which yields the eigenvector $v_2 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$.
+    - For $\lambda_1 = 2$, solve the equation $(A - 2I)v = 0$, which yields the eigenvector $v_1 = [1, -2]$.
+    - For $\lambda_2 = 5$, solve the equation $(A - 5I)v = 0$, which yields the eigenvector $v_2 = [1, 1]$.
 
 ## Applications
 
