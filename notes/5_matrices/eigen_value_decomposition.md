@@ -1,70 +1,61 @@
-## Singular Value Decomposition (SVD)
+## Eigenvalue Decomposition (EVD)
 
-Singular Value Decomposition, or SVD, is a method of factorizing matrices, which generalizes the Eigendecomposition to non-square matrices.
+Eigenvalue Decomposition, or Eigendecomposition, is a method of factorizing square matrices into their eigenvalues and eigenvectors.
 
 ## Key Concepts
 
-- SVD provides a way to break down a matrix into simpler, meaningful pieces. 
-- Every real matrix has a singular value decomposition, but the same is not true of the Eigenvalue Decomposition.
+- Eigendecomposition breaks down a matrix into a canonical form, representing the matrix in terms of its eigenvalues and eigenvectors.
+- Only diagonalizable matrices can undergo this form of factorization.
 
 ## Mathematical Formulation
 
-Given an $m \times n$ matrix $A$, it can be factorized as:
+Given a square matrix $A$, it can be factorized as:
 
-$$A = U\Sigma V^{T}$$
+$$A = PDP^{-1}$$
 
 where:
 
-- $U$ is an $m \times m$ matrix formed by the eigenvectors of $AA^{T}$. If $u_1, u_2, ..., u_m$ are the column vectors representing the eigenvectors of $AA^{T}$, then $U$ is of the form:
+- $D$ is a diagonal matrix containing the eigenvalues of $A$ on its diagonal. If $\lambda_1, \lambda_2, ..., \lambda_n$ are the eigenvalues of $A$, then $D$ is of the form:
 
 $$
-U = 
+D = 
 \begin{bmatrix}
-| & | & & | \\
-u_1 & u_2 & \cdots & u_m \\
-| & | & & |
+\lambda_1 & 0 & 0 & \cdots & 0 \\
+0 & \lambda_2 & 0 & \cdots & 0 \\
+0 & 0 & \lambda_3 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \cdots & \lambda_n
 \end{bmatrix}
 $$
 
-- $\Sigma$ is an $m \times n$ diagonal matrix formed by the square roots of the eigenvalues of $AA^{T}$ (or equivalently, $A^{T}A$), sorted in decreasing order. If $\sigma_1, \sigma_2, ..., \sigma_p$ are the square roots of these eigenvalues ($p$ is the rank of matrix $A$), then $\Sigma$ is of the form:
+- $P$ is a matrix composed of the corresponding eigenvectors of $A$ in its columns. If $v_1, v_2, ..., v_n$ are the column vectors representing the eigenvectors corresponding to the eigenvalues of $A$, then $P$ is of the form:
 
 $$
-\Sigma = 
+P = 
 \begin{bmatrix}
-\sigma_1 & 0 & \cdots & 0 & \cdots & 0 \\
-0 & \sigma_2 & \cdots & 0 & \cdots & 0 \\
-\vdots & \vdots & \ddots & \vdots & & \vdots \\
-0 & 0 & \cdots & \sigma_p & \cdots & 0 \\
-\vdots & \vdots & & \vdots & \ddots & \vdots \\
-0 & 0 & \cdots & 0 & \cdots & 0
+| & | & | & & | \\
+v_1 & v_2 & v_3 & \cdots & v_n \\
+| & | & | & & |
 \end{bmatrix}
 $$
 
-- $V^{T}$ is an $n \times n$ matrix formed by the eigenvectors of $A^{T}A$. If $v_1, v_2, ..., v_n$ are the column vectors representing the eigenvectors of $A^{T}A$, then $V^{T}$ is of the form:
+- $P^{-1}$ is the inverse of the matrix $P$.
 
-$$
-V^{T} = 
-\begin{bmatrix}
-... & v_1^{T} & ... \\
-... & v_2^{T} & ... \\
-& \vdots & \\
-... & v_n^{T} & ...
-\end{bmatrix}
-$$
+Eigenvalues $\lambda$ of a matrix $A$ are computed by solving the characteristic equation:
+
+$$det(A - \lambda I) = 0$$
+
+Here, $I$ denotes the identity matrix of the same dimension as $A$. The eigenvectors are then computed by solving the homogeneous system of linear equations:
+
+$$(A - \lambda I)v = 0$$
+
+for each eigenvalue $\lambda$, where $v$ is the corresponding eigenvector.
 
 ## Algorithm Steps
 
-1. Calculate $A^{T}A$ and $AA^{T}$.
-
-2. Compute the eigenvalues and the corresponding eigenvectors of $A^{T}A$ and $AA^{T}$. The eigenvalues of both these matrices are the same, and they correspond to the squares of the singular values of $A$.
-
-3. The eigenvectors corresponding to the non-zero eigenvalues of $A^{T}A$ form the columns of $V$ while the eigenvectors corresponding to the non-zero eigenvalues of $AA^{T}$ form the columns of $U$.
-
-4. The singular values $\sigma_i$ are calculated as the square root of the eigenvalues from either $A^{T}A$ or $AA^{T}$, arranged in decreasing order on the diagonal of an $m \times n$ matrix $\Sigma$.
-
-5. The matrix $V$ is obtained by arranging the eigenvectors corresponding to the eigenvalues of $A^{T}A$ as columns. 
-
-6. The matrix $U$ is formed by arranging the eigenvectors corresponding to the eigenvalues of $AA^{T}$ as columns.
+1. Compute the eigenvalues of the matrix $A$ by solving the characteristic equation.
+2. For each eigenvalue, compute the corresponding eigenvector by solving the associated homogeneous system of linear equations.
+3. Form the matrices $P$ and $D$ using the computed eigenvectors and eigenvalues.
 
 ## Example
 
@@ -73,71 +64,70 @@ Consider a 2x2 matrix $A$ given by:
 $$
 A = 
 \begin{bmatrix}
-3 & 4 \\
+4 & 1 \\
+2 & 3
+\end{bmatrix}
+$$
+
+1. Compute the eigenvalues of $A$:
+
+Solve the characteristic equation $det(A - \lambda I) = 0$:
+
+$$
+det\left(\begin{bmatrix}
+4-\lambda & 1 \\
+2 & 3-\lambda
+\end{bmatrix}\right) = 0
+$$
+
+which simplifies to $(4-\lambda)(3-\lambda) - 2 = 0$, giving the roots $\lambda_1 = 5$ and $\lambda_2 = 2$.
+
+2. Compute the corresponding eigenvectors:
+
+For $\lambda_1 = 5$, solve the system $(A - 5I)v = 0$:
+
+$$
+\begin{bmatrix}
+-1 & 1 \\
+2 & -2
+\end{bmatrix}v = 0
+$$
+
+This gives $v_1 = [1, 1]$.
+
+Similarly, for $\lambda_2 = 2$, solve the system $(A - 2I)v = 0$:
+
+$$
+\begin{bmatrix}
+2 & 1 \\
 2 & 1
-\end{bmatrix}
+\end{bmatrix}v = 0
 $$
 
-1. Compute the matrices $A^{T}A$ and $AA^{T}$:
+This gives $v_2 = [-1, 2]$.
+
+3. Form the matrices $P$ and $D$:
 
 $$
-A^{T}A = 
-\begin{bmatrix}
-13 & 14 \\
-14 & 17
-\end{bmatrix}
-, \quad
-AA^{T} = 
-\begin{bmatrix}
-25 & 10 \\
-10 & 5
-\end{bmatrix}
-$$
-
-2. Compute the eigenvalues and corresponding eigenvectors of both $A^{T}A$ and $AA^{T}$.
-
-For $A^{T}A$, the characteristic equation is $det(A^{T}A - \lambda I) = 0$, which gives:
-
-$$
-\begin{vmatrix}
-13-\lambda & 14 \\
-14 & 17-\lambda
-\end{vmatrix} = 0
-$$
-
-Solving this equation yields the eigenvalues $\lambda_1 = 30$ and $\lambda_2 = 0$.
-
-Next, compute the eigenvectors corresponding to these eigenvalues by solving $(A^{T}A - \lambda I)v = 0$. The corresponding eigenvectors are $v_1 = [\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}]$ for $\lambda_1$, and $v_2 = [-\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}]$ for $\lambda_2$.
-
-Similarly, for $AA^{T}$, solving the characteristic equation yields the eigenvalues $\lambda_1 = 30$ and $\lambda_2 = 0$, with corresponding eigenvectors $u_1 = [\frac{2}{\sqrt{5}}, \frac{1}{\sqrt{5}}]$ for $\lambda_1$, and $u_2 = [-\frac{1}{\sqrt{5}}, \frac{2}{\sqrt{5}}]$ for $\lambda_2$.
-
-3. Form the matrices $U$, $\Sigma$ and $V^{T}$:
-
-$$
-U = \begin{bmatrix}
-\frac{2}{\sqrt{5}} & -\frac{1}{\sqrt{5}} \\
-\frac{1}{\sqrt{5}} & \frac{2}{\sqrt{5}}
+P = \begin{bmatrix}
+1 & -1 \\
+1 & 2
 \end{bmatrix}
 , \quad
-\Sigma = \begin{bmatrix}
-\sqrt{30} & 0 \\
-0 & 0
-\end{bmatrix}
-, \quad
-V^{T} = \begin{bmatrix}
-\frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} \\
--\frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}}
+D = \begin{bmatrix}
+5 & 0 \\
+0 & 2
 \end{bmatrix}
 $$
 
-Thus, we have $A = U\Sigma V^{T}$.
+Thus, we have $A = PDP^{-1}$.
 
 ## Advantages
 
-- SVD exists for any type of matrix (m x n), whereas Eigendecomposition only exists for square (n x n) matrices.
-- SVD is used in a variety of applications such as signal processing, statistics, and solving linear equations.
+- The decomposed form simplifies many matrix computations and enhances numerical stability.
+- It aids in the development of certain matrix algorithms.
 
 ## Limitations
 
-- SVD computation is more complex than Eigendecomposition, especially for large matrices.
-- Since the calculation of SVD involves finding eigenvalues and eigenvectors of $AA^T$ and $A^TA$, which could be large matrices, the computation can be costly.
+- Not all matrices are diagonalizable, hence, not all matrices can be decomposed in this manner.
+- Computation of EVD can be computationally expensive for large matrices.
