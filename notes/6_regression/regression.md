@@ -6,7 +6,7 @@ Regression analysis and curve fitting are critical methods in statistical analys
 
 Curve fitting involves finding a function, often a polynomial, that "best fits" a series of data points. This process does not require the function to pass through every data point; instead, it seeks to provide a general shape or trend that aligns closely with the data. This is especially applicable when dealing with noisy data or when multiple $y$ values exist for a single $x$ value.
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Linear_least_squares_example2.svg" >
+![curve_fitting](https://github.com/djeada/Numerical-Methods/assets/37275728/03a26675-9baa-4557-92fb-2ab86c9d7b7c)
 
 ## Regression Analysis
 
