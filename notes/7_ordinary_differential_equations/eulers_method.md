@@ -6,37 +6,37 @@ Euler's Method is a numerical technique applied in the realm of initial value pr
 
 Consider an initial value problem (IVP) represented as:
 
-$$y' = f(t, y),$$
-$$y(t_0) = y_0.$$
+$$u' = f(t, u),$$
+$$u(t_0) = u_0.$$
 
 This IVP can be solved by Euler's method, where the method employs the following approximation:
 
-$$y_{n+1} = y_n + h*f(t_n, y_n),$$
+$$u_{n+1} = u_n + h*f(t_n, u_n),$$
 
 where:
-- $y_{n+1}$ is the approximate value of $y$ at $t = t_n + h$,
-- $y_n$ is the approximate value of $y$ at $t = t_n$,
+- $u_{n+1}$ is the approximate value of $u$ at $t = t_n + h$,
+- $u_n$ is the approximate value of $u$ at $t = t_n$,
 - $h$ is the step size,
-- $f(t_n, y_n)$ is the derivative of $y$ at $t = t_n$.
+- $f(t_n, u_n)$ is the derivative of $u$ at $t = t_n$.
 
 ## Derivation
 
 Let's start with the Taylor series:
 
-$$ u(t+\Delta t)=u(t)+\Delta t u'(t) + O(\Delta t^2) $$
+$$ u(t+h)=u(t)+h u'(t) + O(h^2) $$
 
 We may alternatively rewrite the above equation as follows:
 
-$$ u(t+\Delta t)=u(t)+ \Delta t f(u(t),t)+ O(\Delta t^2).$$
+$$ u(t+h)=u(t)+ h f(u(t),t)+ O(h^2).$$
 
 Which is roughly equivalent to:
 
-$$ u(t+\Delta t)=u(t)+ \Delta t f(u(t),t)$$
+$$ u(t+h)=u(t)+ h f(u(t),t)$$
 
 ## Algorithm Steps
 
-1. Start with initial conditions $t_0$ and $y_0$.
-2. Calculate $y_{n+1}$ using the formula: $y_{n+1} = y_n + h*f(t_n, y_n)$.
+1. Start with initial conditions $t_0$ and $u_0$.
+2. Calculate $u_{n+1}$ using the formula: $u_{n+1} = u_n + h*f(t_n, u_n)$.
 3. Repeat the above step for a given number of steps or until the final value of $t$ is reached.
 
 ## Example
@@ -47,7 +47,7 @@ $$ u(0)=1$$
 
 $$u(0.1)=?$$
 
-Let's choose the step value: $\Delta t = 0.05$
+Let's choose the step value: $h = 0.05$
 
 We start at $t=0$:
 
