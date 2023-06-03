@@ -1,10 +1,20 @@
-def midpoint_rule(a, b, f, n=10):
-    step = (b - a)/n
-    total = 0.0
-    mid = a + step/2
+def midpoint_rule(func, a, b, n):
+    """
+    Compute the approximate definite integral of a function using the midpoint rule.
 
-    while (mid < b):
-        total += step * f(mid)
-        mid += step
+    Args:
+        func (callable): The function to integrate.
+        a (float): The lower limit of integration.
+        b (float): The upper limit of integration.
+        n (int): The number of subintervals.
 
-    return total
+    Returns:
+        float: The approximate definite integral.
+    """
+    h = (b - a) / n
+    x = np.linspace(a + h/2, b - h/2, n)
+    y = func(x)
+
+    integral = h * np.sum(y)
+
+    return integral
