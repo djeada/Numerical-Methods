@@ -1,16 +1,16 @@
 ## Runge-Kutta Method
 
-The Runge-Kutta method is one of the most commonly used methods for numerical integration of ordinary differential equations (ODEs). It is a family of implicit and explicit iterative methods, which include the well-known routine called the Euler Method, and the 2nd-order (also known as Heun's method) and 4th-order Runge-Kutta methods.
+The Runge-Kutta method is part of a family of iterative methods, both implicit and explicit, which are frequently employed for the numerical integration of ordinary differential equations (ODEs). This family encompasses widely recognized methods like the Euler Method, Heun's method (a.k.a., the 2nd-order Runge-Kutta), and the 4th-order Runge-Kutta method.
 
 ## Mathematical Formulation
 
-The standard form of the first-order ODE used by the Runge-Kutta methods is:
+The first-order ODE that is typically used in the Runge-Kutta methods takes the following form:
 
 $$ \frac{du}{dt} = f(t, u), $$
 
-where $u$ is the unknown function of time $t$, and $f$ is a function of $t$ and $u$.
+In this equation, $u$ is the unknown function of time $t$ that we are aiming to solve for, and $f$ is a function of $t$ and $u$.
 
-The general form of the 4th order Runge-Kutta method is:
+The general formulation of the 4th order Runge-Kutta method is presented below:
 
 $$k_1 = \Delta t \cdot f(t, u),$$
 $$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right),$$
@@ -20,25 +20,23 @@ $$u(t + \Delta t) = u(t) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4).$$
 
 ## Derivation of Runge-Kutta Method
 
-The Runge-Kutta methods, particularly the 4th order Runge-Kutta method, is derived by taking an initial condition and trying to estimate the value of the solution after a small step $\Delta t$, by taking weighted averages of increments at the beginning, middle, and end of the interval. The method is designed to mimic a Taylor series expansion, but without requiring the computation of higher derivatives. Here's how it's derived.
+The derivation of the Runge-Kutta methods, especially the 4th order Runge-Kutta method, begins with an initial condition and attempts to estimate the solution value after a small step $\Delta t$. This is achieved by taking weighted averages of increments at the beginning, middle, and end of the interval. The purpose is to imitate a Taylor series expansion, but without the necessity of computing higher derivatives.
 
-Let's start with a Taylor series expansion:
+Starting with a Taylor series expansion, we get:
 
 $$u(t+\Delta t) = u(t) + \Delta t u'(t) + \frac{\Delta t^2}{2!} u''(t) + \frac{\Delta t^3}{3!} u'''(t) + \frac{\Delta t^4}{4!} u''''(t) + O(\Delta t^5).$$
 
-The first derivative $u'(t)$ is already given by the ODE:
+The first derivative $u'(t)$ is already provided by the ODE:
 
 $$u'(t) = f(t, u).$$
 
-The higher-order derivatives can also be expressed in terms of $f(t, u)$ and its derivatives:
+Higher-order derivatives can also be represented in terms of $f(t, u)$ and its derivatives:
 
 $$u''(t) = \frac{df}{dt} = \frac{\partial f}{\partial t} + \frac{\partial f}{\partial u} \frac{du}{dt} = \frac{\partial f}{\partial t} + \frac{\partial f}{\partial u} f,$$
 
-and similarly for $u'''(t)$ and $u''''(t)$.
+The Runge-Kutta method is designed to mimic the above Taylor series expansion by taking a suitable weighted average of increments at the start, middle, and end of the interval. It avoids explicitly calculating higher derivatives of $f(t, u)$, instead approximating these increments by evaluating $f(t, u)$ at several points within the interval.
 
-By taking an appropriate weighted average of increments at the start, middle and end of the interval, the Runge-Kutta method tries to mimic the above Taylor series expansion, but without explicitly calculating the higher derivatives of $f(t, u)$. Instead, it approximates the increments by evaluating $f(t, u)$ at several points within the interval.
-
-Hence we have the 4th order Runge-Kutta method:
+The 4th order Runge-Kutta method is thus given by:
 
 $$k_1 = \Delta t \cdot f(t, u),$$
 $$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right),$$
@@ -46,14 +44,14 @@ $$k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_2}{2}\right),$
 $$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3),$$
 $$u(t + \Delta t) = u(t) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4),$$
 
-where the weights of $k_1, k_2, k_3, k_4$ (1/6, 1/3, 1/3, 1/6) are chosen so that the error term is $O(\Delta t^5)$, which means the local truncation error at each step is proportional to the fifth power of the step size, and the global truncation error (after $N$ steps) is proportional to the fourth power of the step size.
+In this method, the weights of $k_1, k_2, k_3, k_4$ (1/6, 1/3, 1/3, 1/6) are chosen such that the error term is $O(\Delta t^5)$, indicating that the local truncation error at each step is proportional to the fifth power of the step size, and the global truncation error (after $N$ steps) is proportional to the fourth power of the step size.
 
 ## Algorithm Steps
 
-1. Initiate with the initial condition $u(t_0) = u_0$.
-2. At each step, calculate $k_1, k_2, k_3, k_4$ as stated above.
+1. Begin with the initial condition $u(t_0) = u_0$.
+2. For each step, compute $k_1, k_2, k_3, k_4$ as indicated above.
 3. Update $u(t + \Delta t) = u(t) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$.
-4. Repeat steps 2-3 for a specified number of iterations or until the solution approximation becomes satisfactory.
+4. Repeat steps 2 and 3 until a specified number of iterations is reached or the solution approximation is satisfactory.
 
 ## Example
 
@@ -72,25 +70,26 @@ $$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right) =
 $$k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_2}{2}\right) = 0.05 \cdot (1 + 0.05125/2) = 0.0515625,$$
 $$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3) = 0.05 \cdot (1 + 0.0515625) = 0.052578125.$$
 
-We then calculate the next value of $u$:
+Then, we calculate the next value of $u$:
 
-$$u(0.05) \approx u(0) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
-$$u(0.05) \approx 1 + \frac{1}{6}(0.05 + 2 \cdot 0.05125 + 2 \cdot 0.0515625 + 0.052578125)$$
-$$u(0.05) \approx 1.053125.$$
+$$u(0.05) = u(0) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
+$$u(0.05) = 1 + \frac{1}{6}(0.05 + 2 \cdot 0.05125 + 2 \cdot 0.0515625 + 0.052578125)$$
+$$u(0.05) = 1.05104166667.$$
 
 2. Now that we have $u(0.05)$, we move on to $t = 0.1$.
 
 Similarly, we first calculate the four increments:
 
-$$k_1 = \Delta t \cdot f(t, u) = 0.05 \cdot 1.053125 = 0.05265625,$$
-$$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right) = 0.05 \cdot (1.053125 + 0.05265625/2) = 0.0534833984375,$$
-$$k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_2}{2}\right) = 0.05 \cdot (1.053125 + 0.0534833984375/2) = 0.05373828125,$$
-$$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3) = 0.05 \cdot (1.053125 + 0.05373828125) = 0.055374267578125.$$
+$$k_1 = \Delta t \cdot f(t, u) = 0.05 \cdot 1.05104166667 = 0.0525520833335,$$
+$$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right) = 0.05 \cdot (1.05104166667 + 0.0525520833335/2) = 0.0531899049680,$$
+$$k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_2}{2}\right) = 0.05 \cdot (1.05104166667 + 0.0531899049680/2) = 0.0533905595735,$$
+$$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3) = 0.05 \cdot (1.05104166667 + 0.0533905595735) = 0.0552220602058.$$
 
 Then, we calculate the next value of $u$:
 
-$$u(0.1) \approx u(0.05) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
-$$u(0.1) \approx 1.053125 + \frac{1
+$$u(0.1) = u(0.05) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
+$$u(0.1) = 1.05104166667 + \frac{1}{6}(0.0525520833335 + 2 \cdot 0.0531899049680 + 2 \cdot 0.0533905595735 + 0.0552220602058)$$
+$$u(0.1) = 1.10517087727.$$
 
 ## Advantages
 
