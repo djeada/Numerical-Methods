@@ -65,11 +65,36 @@ $$ u(t + \Delta t) \approx u(t) + \frac{\Delta t}{2} [f(t, u(t)) + f(t + \Delta 
 
 ## Example
 
-Consider the ODE $y' = y + t$ with the initial condition $y(0) = 1$ and $h = 0.1$.
+Consider the differential equation
 
-1. Use the predictor step to compute $\tilde{y}_{n+1}$: $\tilde{y}_1 = y_0 + h*(y_0 + t_0) = 1 + 0.1*(1 + 0) = 1.1$
-2. Use the corrector step to compute $y_1$: $y_1 = y_0 + 0.1/2*[f(t_0, y_0) + f(t_0 + h, \tilde{y}_1)] = 1 + 0.1/2*[1 + 0 + (1.1 + 0.1)] = 1.115$
-3. Repeat these steps to compute $y_2, y_3, ..., y_n$.
+$$ u'(t)=u(t),$$
+
+with the initial condition $u(0)=1$. We want to estimate the value of $u$ at $t = 0.1$ using Heun's method with a step size of $\Delta t = 0.05$.
+
+1. We start at $t=0$ with $u(0) = 1$.
+
+First, we calculate the Euler's step (predictor):
+
+$$u_e = u(t) + \Delta t \cdot f(t, u(t)) = 1 + 0.05 \cdot 1 = 1.05.$$
+
+Then, we correct this estimation:
+
+$$u(0.05) \approx u(t) + \frac{\Delta t}{2} [f(t, u(t)) + f(t + \Delta t, u_e)]$$
+$$u(0.05) \approx 1 + \frac{0.05}{2} [1 + 1.05] = 1.05125.$$
+
+2. Now that we have $u(0.05)$, we move on to $t = 0.1$.
+
+Similarly, we calculate the Euler's step:
+
+$$u_e = u(0.05) + \Delta t \cdot f(t, u(0.05)) = 1.05125 + 0.05 \cdot 1.05125 = 1.1025625.$$
+
+Then, we correct this estimation:
+
+$$u(0.1) \approx u(0.05) + \frac{\Delta t}{2} [f(t, u(0.05)) + f(t + \Delta t, u_e)]$$
+$$u(0.1) \approx 1.05125 + \frac{0.05}{2} [1.05125 + 1.1025625] = 1.105158203125.$$
+
+So, the approximate solution to $u(0.1)$ with Heun's method is $1.105158203125$.
+
 
 ## Advantages
 
