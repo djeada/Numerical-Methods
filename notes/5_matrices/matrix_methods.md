@@ -1,41 +1,49 @@
 ## Matrices and Matrix Methods in Numerical Methods
 
-- Matrices are fundamental in the field of numerical methods for solving linear systems, performing transformations, and more.
-- Matrix methods involve algorithms for matrix manipulations and solve various computational problems.
+- Matrices serve as a foundation in the field of numerical methods, being instrumental in solving linear systems, performing transformations, among other computational tasks.
+- Matrix methods comprise algorithms tailored for matrix operations and problem-solving in computational mathematics.
 
 ## Key Concepts
 
-- A **matrix** is a two-dimensional data structure where numbers are arranged into rows and columns.
-- **Matrix multiplication** involves multiplying two matrices together to produce a third matrix.
-- **Matrix inversion** involves finding a matrix that, when multiplied with the original matrix, gives an identity matrix.
-- **Determinants** are a special number that can be calculated from a square matrix.
+- A **matrix** represents a two-dimensional data structure, wherein numbers are organized into rows and columns.
+- **Matrix multiplication** refers to the operation of multiplying two matrices to generate a new resultant matrix.
+- **Matrix inversion** refers to the process of finding a matrix that, when multiplied with the initial matrix, yields the identity matrix.
+- **Determinants** designate a unique number derived from a square matrix.
 
 ## Matrix Methods 
 
-- **LU Decomposition**: This method decomposes a matrix into a product of a lower triangular matrix (L) and an upper triangular matrix (U). It simplifies solving systems of linear equations.
+- **LU Decomposition**: This technique decomposes a matrix into the product of a lower triangular matrix (L) and an upper triangular matrix (U), thereby facilitating the resolution of systems of linear equations.
 
--  **Singular Value Decomposition (SVD)**: A powerful method that decomposes a matrix into the product of three matrices: U, Σ, and V^T. U and V are orthogonal matrices, and Σ is a diagonal matrix. SVD is used in a wide range of applications, including machine learning, image compression, and signal processing.
+    $$A = LU$$
 
-- **QR Decomposition**: It is another matrix factorization method where a matrix A is decomposed into a product of an orthogonal matrix Q and upper triangular matrix R. This method is widely used in the numerical solution of linear least squares problems.
+-  **Singular Value Decomposition (SVD)**: This potent technique decomposes a matrix into the product of three distinct matrices: U, Σ, and V^T. Here, U and V denote orthogonal matrices, and Σ signifies a diagonal matrix. SVD finds applications across a broad spectrum, encompassing machine learning, image compression, and signal processing.
 
-- **Power Method**: It is an iterative method that computes the largest eigenvalue and the corresponding eigenvector of a matrix. This method is commonly used in Google's PageRank algorithm and other applications involving network analysis.
+    $$A = UΣV^T$$
+
+- **QR Decomposition**: This is another matrix factorization method wherein a matrix A is decomposed into the product of an orthogonal matrix Q and an upper triangular matrix R. This technique is prevalently employed in the numerical solution of linear least squares problems.
+
+    $$A = QR$$
+
+- **Power Method**: This iterative method computes the greatest eigenvalue along with its corresponding eigenvector of a matrix. This method is frequently employed in Google's PageRank algorithm and various other applications that entail network analysis.
 
 ## Example
 
-- SVD Example: Consider a matrix A = [[4, 11], [2, 1]]. The singular value decomposition of A results in matrices U, Σ, and V such that A = U * Σ * V^T.
+- SVD Example: Given a matrix $A = [[4, 11], [2, 1]]$, the singular value decomposition of A would yield matrices U, Σ, and V such that A equals the product of U, Σ, and V^T.
 
-- QR Decomposition Example: For a square matrix A = [[12, -51, 4], [6, 167, -68], [-4, 24, -41]], the QR decomposition results in an orthogonal matrix Q and an upper triangular matrix R.
+- QR Decomposition Example: For a square matrix $A = [[12, -51, 4], [6, 167, -68], [-4, 24, -41]]$, the QR decomposition results in an orthogonal matrix Q and an upper triangular matrix R.
 
-- Power Method Example: Consider a square matrix A = [[2, 1], [1, 3]]. The power method will give the largest eigenvalue and its corresponding eigenvector.
+- Power Method Example: Given a square matrix $A = [[2, 1], [1, 3]]$, the power method would yield the largest eigenvalue and its corresponding eigenvector.
 
 ## Applications
 
-- Matrices are used in 3D graphics to perform transformations such as translation, scaling, rotation.
-- In physics, matrices are used in quantum mechanics, optics, and electrical circuitry.
-- In machine learning, matrices are used in various algorithms, including linear regression, PCA, and more.
+- Matrices are employed in 3D graphics to execute transformations like translation, scaling, and rotation.
+- In physics, matrices find utility in various fields such as quantum mechanics, optics, and electrical circuitry.
+- In machine learning, matrices find usage in various algorithms, including linear regression, Principal Component Analysis (PCA), and more.
 
-## Caveats
+## Limitations
 
-- Not all matrices have an inverse. Those that do not are called singular or degenerate.
-- The Gauss-Seidel method may not converge for all systems of linear equations.
-- LU decomposition does not work for all square matrices. The matrix must be square and not singular.
+- Not all matrices are invertible. Those that lack an inverse are termed as singular or degenerate matrices. This poses challenges in numerous matrix methods where the inverse of a matrix is required.
+- Many matrix decomposition methods like LU decomposition, Cholesky decomposition, or QR decomposition, require the matrix to fulfill certain conditions. For instance, the matrix must be square and non-singular for LU decomposition. Such requirements limit the applicability of these methods.
+- Matrix methods may not always be the most computationally efficient way to solve a given problem, especially for very large matrices. For such cases, iterative methods or approximation methods might be more suitable.
+- Some matrix methods are sensitive to the numerical stability of the problem. This means small changes in the input can result in large changes in the output, which can lead to significant errors.
+- Most matrix methods assume that the matrix elements are real or complex numbers. However, in some applications (like in computer graphics), the matrix elements can be more complex objects, which makes these methods less applicable.
