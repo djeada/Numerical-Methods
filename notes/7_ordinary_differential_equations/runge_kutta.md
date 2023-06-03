@@ -13,9 +13,13 @@ In this equation, $u$ is the unknown function of time $t$ that we are aiming to 
 The general formulation of the 4th order Runge-Kutta method is presented below:
 
 $$k_1 = \Delta t \cdot f(t, u),$$
+
 $$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right),$$
+
 $$k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_2}{2}\right),$$
+
 $$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3),$$
+
 $$u(t + \Delta t) = u(t) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4).$$
 
 ## Derivation of Runge-Kutta Method
@@ -39,9 +43,13 @@ The Runge-Kutta method is designed to mimic the above Taylor series expansion by
 The 4th order Runge-Kutta method is thus given by:
 
 $$k_1 = \Delta t \cdot f(t, u),$$
+
 $$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right),$$
+
 $$k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_2}{2}\right),$$
+
 $$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3),$$
+
 $$u(t + \Delta t) = u(t) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4),$$
 
 In this method, the weights of $k_1, k_2, k_3, k_4$ (1/6, 1/3, 1/3, 1/6) are chosen such that the error term is $O(\Delta t^5)$, indicating that the local truncation error at each step is proportional to the fifth power of the step size, and the global truncation error (after $N$ steps) is proportional to the fourth power of the step size.
@@ -66,14 +74,19 @@ with the initial condition $u(0)=1$. We want to estimate the value of $u$ at $t 
 First, we calculate the four increments:
 
 $$k_1 = \Delta t \cdot f(t, u) = 0.05 \cdot 1 = 0.05,$$
+
 $$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right) = 0.05 \cdot (1 + 0.05/2) = 0.05125,$$
+
 $$k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_2}{2}\right) = 0.05 \cdot (1 + 0.05125/2) = 0.0515625,$$
+
 $$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3) = 0.05 \cdot (1 + 0.0515625) = 0.052578125.$$
 
 Then, we calculate the next value of $u$:
 
 $$u(0.05) = u(0) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
+
 $$u(0.05) = 1 + \frac{1}{6}(0.05 + 2 \cdot 0.05125 + 2 \cdot 0.0515625 + 0.052578125)$$
+
 $$u(0.05) = 1.05104166667.$$
 
 2. Now that we have $u(0.05)$, we move on to $t = 0.1$.
@@ -81,14 +94,19 @@ $$u(0.05) = 1.05104166667.$$
 Similarly, we first calculate the four increments:
 
 $$k_1 = \Delta t \cdot f(t, u) = 0.05 \cdot 1.05104166667 = 0.0525520833335,$$
+
 $$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right) = 0.05 \cdot (1.05104166667 + 0.0525520833335/2) = 0.0531899049680,$$
+
 $$k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_2}{2}\right) = 0.05 \cdot (1.05104166667 + 0.0531899049680/2) = 0.0533905595735,$$
+
 $$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3) = 0.05 \cdot (1.05104166667 + 0.0533905595735) = 0.0552220602058.$$
 
 Then, we calculate the next value of $u$:
 
 $$u(0.1) = u(0.05) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
+
 $$u(0.1) = 1.05104166667 + \frac{1}{6}(0.0525520833335 + 2 \cdot 0.0531899049680 + 2 \cdot 0.0533905595735 + 0.0552220602058)$$
+
 $$u(0.1) = 1.10517087727.$$
 
 ## Advantages
