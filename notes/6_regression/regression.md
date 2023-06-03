@@ -16,7 +16,10 @@ Regression analysis establishes a relationship between a dependent variable (als
 
 - **Regression Models**: These models describe the relationship between a dependent variable and one or more independent variables.
 - **Parameter Estimation**: This involves calculating the coefficients of the variables in the regression model to best fit the observed data.
-- **Error Calculation**: Regression analysis typically utilizes the sum of squared differences between observed and predicted values for error calculation, ensuring discrepancies contribute positively to the error, with larger deviations weighted more heavily. $E = \sum_{i=0}^{N} (P(x_i) - y_i)^2$
+- **Error Calculation**: Regression analysis typically utilizes the sum of squared differences between observed and predicted values for error calculation, ensuring discrepancies contribute positively to the error, with larger deviations weighted more heavily. 
+
+$$E = \sum_{i=0}^{N} (P(x_i) - y_i)^2$$
+
 - **Goodness of Fit**: This is a measure of how well the selected model fits the observed data. Commonly, R-squared is used as the goodness of fit measure.
 
 ## Types of Regression Methods
