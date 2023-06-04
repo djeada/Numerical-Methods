@@ -1,50 +1,55 @@
-
-
-def lu_decomposition(A):
+def perform_lu_decomposition(matrix):
     """
-    LU decomposition of a square matrix A.
+    Conducts LU decomposition on a square matrix.
 
-    Args:
-        A (numpy.ndarray): The square matrix to decompose.
+    Parameters:
+        matrix (numpy.ndarray): A square matrix to decompose.
 
     Returns:
-        numpy.ndarray: The lower triangular matrix L.
-        numpy.ndarray: The upper triangular matrix U.
-        numpy.ndarray: The permutation matrix P.
+        L (numpy.ndarray): Lower triangular matrix.
+        U (numpy.ndarray): Upper triangular matrix.
+        P (numpy.ndarray): Permutation matrix.
     """
-    n = A.shape[0]
-    L = np.eye(n)
-    U = np.zeros_like(A)
-    P = np.eye(n)
+    size = matrix.shape[0]
+    L, U, P = np.eye(size), np.zeros_like(matrix), np.eye(size)
 
-    for k in range(n):
-        pivot_row = np.argmax(abs(A[k:, k])) + k
+    for index in range(size):
+        pivot_index = np.argmax(abs(matrix[index:, index])) + index
 
         # Swap rows
-        A[[k, pivot_row]] = A[[pivot_row, k]]
-        L[[k, pivot_row]] = L[[pivot_row, k]]
-        P[[k, pivot_row]] = P[[pivot_row, k]]
+        (
+            matrix[[index, pivot_index]],
+            L[[index, pivot_index]],
+            P[[index, pivot_index]],
+        ) = (
+            matrix[[pivot_index, index]],
+            L[[pivot_index, index]],
+            P[[pivot_index, index]],
+        )
 
-        U[k, k:] = A[k, k:]
-        L[k+1:, k] = A[k+1:, k] / U[k, k]
-        U[k+1:, k:] = A[k+1:, k:] - np.outer(L[k+1:, k], U[k, k:])
+        U[index, index:] = matrix[index, index:]
+        L[index + 1 :, index] = matrix[index + 1 :, index] / U[index, index]
+        U[index + 1 :, index:] = matrix[index + 1 :, index:] - np.outer(
+            L[index + 1 :, index], U[index, index:]
+        )
 
     return L, U, P
-  
-  def solve_lu(L, U, P, b):
-    """
-    Solve a system of equations Ax = b using LU decomposition.
 
-    Args:
-        L (numpy.ndarray): The lower triangular matrix.
-        U (numpy.ndarray): The upper triangular matrix.
-        P (numpy.ndarray): The permutation matrix.
-        b (numpy.ndarray): The constant vector.
+
+def solve_lu(L, U, P, b):
+    """
+    Solves the system of equations Ax = b using LU decomposition.
+
+    Parameters:
+        L (numpy.ndarray): Lower triangular matrix.
+        U (numpy.ndarray): Upper triangular matrix.
+        P (numpy.ndarray): Permutation matrix.
+        b (numpy.ndarray): Constant vector.
 
     Returns:
-        numpy.ndarray: The solution vector.
+        x (numpy.ndarray): Solution vector.
     """
-    y = np.linalg.solve(L, np.dot(P, b))
-    x = np.linalg.solve(U, y)
+    intermediate_solution = np.linalg.solve(L, np.dot(P, b))
+    solution = np.linalg.solve(U, intermediate_solution)
 
-    return x
+    return solution

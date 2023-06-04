@@ -3,7 +3,7 @@ import numpy as np
 
 def qr_method(a, num_iter=10):
     """
-    returns all eigenvalues    
+    returns all eigenvalues
     """
 
     def qr_decomposition(a):

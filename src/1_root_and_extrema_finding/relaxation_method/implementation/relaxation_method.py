@@ -1,31 +1,34 @@
+from typing import Callable
 import numpy as np
 
 
-def relaxation_method(func, x0, epsilon=1e-8, max_iter=100):
+def relaxation_method(func, initial_guess, omega=1.0, tol=1e-6, max_iterations=100000):
     """
-    Relaxation Method for finding the fixed point of a function.
+    Perform the relaxation method (Successive Over-Relaxation) to find a fixed point of a function.
 
-    Args:
-        func (callable): The function for which to find the fixed point.
-        x0 (float): The initial guess for the fixed point.
-        epsilon (float): The desired accuracy of the solution.
-        max_iter (int): The maximum number of iterations.
+    Arguments:
+    - func: The function for which to find the fixed point.
+    - initial_guess: The initial guess for the fixed point.
+    - omega: The relaxation factor (default: 1.0).
+    - tol: The tolerance for convergence.
+    - max_iterations: The maximum number of iterations.
 
     Returns:
-        float: The estimated fixed point of the function.
-
-    Raises:
-        ValueError: If the maximum number of iterations is reached without convergence.
+    - The estimated fixed point of the function.
     """
-    x = x0
+    x = initial_guess
 
-    for _ in range(max_iter):
+    for iteration in range(max_iterations):
+        previous_x = x
         x_new = func(x)
+        error = np.abs(x_new - x)
 
-        if abs(x_new - x) < epsilon:
-            return x_new
+        if error < tol:
+            return x
 
-        x = x_new
+        if iteration > 0:
+            omega = error / np.abs(x_new - previous_x)
 
-    raise ValueError("Relaxation method did not converge within the maximum number of iterations.")
+        x = (1 - omega) * x + omega * x_new
 
+    return x

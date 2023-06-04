@@ -3,7 +3,7 @@ import numpy as np
 
 def power_method(a, x, num_iter=10):
     """
-    return eigenvalue and coressponding eigenvector    
+    return eigenvalue and coressponding eigenvector
     """
 
     def normalize(vec):

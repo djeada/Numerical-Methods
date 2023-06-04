@@ -14,4 +14,3 @@ def forward_difference(func, x, h):
         float: The approximate derivative of the function at the given point.
     """
     return (func(x + h) - func(x)) / h
-

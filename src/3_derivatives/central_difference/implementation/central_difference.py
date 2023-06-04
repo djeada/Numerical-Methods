@@ -1,4 +1,3 @@
-
 def central_difference(func, x, h):
     """
     Compute the approximate derivative of a function using the central difference method.

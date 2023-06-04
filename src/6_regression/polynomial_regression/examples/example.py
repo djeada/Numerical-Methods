@@ -34,4 +34,3 @@ plt.plot(x_domain, y_prediction, label="Polynomial regression numpy")
 # Add a legend and show the plot
 plt.legend(loc="best")
 plt.show()
-

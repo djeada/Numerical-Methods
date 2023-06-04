@@ -35,4 +35,3 @@ for point in np.linspace(a, b - dx, n):
 
 plt.legend(["f(x) = x*sin(x)"])
 plt.show()
-

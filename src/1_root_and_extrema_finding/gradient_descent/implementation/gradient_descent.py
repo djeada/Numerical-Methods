@@ -1,11 +1,41 @@
 import numpy as np
+from typing import Callable, List, Tuple
 
-def gradient_descent(f, x1=0.1, x2=-0.1, gamma=1, num_iter=100, epsilon=1e-8):
-    values = []
-    x0 = np.array([x1, x2])
-    for i in range(num_iter):
-        values.append(x0)
-        x0 -= gamma * gradient_f(f, x0)
-        if np.linalg.norm(x0 - values[-1]) < epsilon:
-            return x0[0], x0[1]
-    raise ValueError("FAILURE")
+
+def gradient_descent(
+    f: Callable[[np.ndarray], float],
+    f_gradient: Callable[[np.ndarray], np.ndarray],
+    initial_point: np.ndarray,
+    learning_rate: float = 0.1,
+    epsilon: float = 1e-6,
+    max_iterations: int = 1000,
+) -> Tuple[np.ndarray, List[np.ndarray]]:
+    """
+    Perform gradient descent optimization to find the minimum of a function.
+
+    Arguments:
+    - f: The objective function.
+    - f_gradient: The gradient of the objective function.
+    - initial_point: The starting point for the optimization as a numpy array.
+    - learning_rate: The learning rate or step size.
+    - epsilon: The desired level of precision.
+    - max_iterations: The maximum number of iterations.
+
+    Returns:
+    - The estimated minimum point of the function as a numpy array.
+    - The list of all visited points during optimization.
+    """
+    current_point = initial_point.copy()
+    visited_points = [current_point.flatten().tolist()]
+
+    for _ in range(max_iterations):
+        gradient = f_gradient(current_point)
+        new_point = current_point - learning_rate * gradient
+
+        if np.linalg.norm(new_point - current_point) < epsilon:
+            break
+
+        current_point = new_point
+        visited_points.append(current_point.flatten().tolist())
+
+    return current_point.flatten(), visited_points

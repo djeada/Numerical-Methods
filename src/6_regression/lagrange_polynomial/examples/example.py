@@ -39,4 +39,3 @@ plt.plot(x_domain, y_prediction, label="Lagrange scipy")
 # Add a legend and show the plot
 plt.legend(loc="best")
 plt.show()
-

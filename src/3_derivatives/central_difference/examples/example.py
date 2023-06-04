@@ -45,4 +45,3 @@ plt.plot(np.linspace(0, error_history.size, error_history.size), error_history)
 plt.xlabel("Iteration")
 plt.ylabel("Absolute Error")
 plt.show()
-

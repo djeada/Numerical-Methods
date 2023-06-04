@@ -22,9 +22,15 @@ def jacobi_method(A, b, x0, epsilon=1e-8, max_iter=100):
         x_prev = x.copy()
 
         for i in range(n):
-            x[i] = (b[i] - np.dot(A[i, :i], x_prev[:i]) - np.dot(A[i, i + 1:], x_prev[i + 1:])) / A[i, i]
+            x[i] = (
+                b[i]
+                - np.dot(A[i, :i], x_prev[:i])
+                - np.dot(A[i, i + 1 :], x_prev[i + 1 :])
+            ) / A[i, i]
 
         if np.linalg.norm(x - x_prev) < epsilon:
             return x
 
-    raise ValueError("Jacobi method did not converge within the maximum number of iterations.")
+    raise ValueError(
+        "Jacobi method did not converge within the maximum number of iterations."
+    )

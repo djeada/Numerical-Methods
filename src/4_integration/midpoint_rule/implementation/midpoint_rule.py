@@ -12,7 +12,7 @@ def midpoint_rule(func, a, b, n):
         float: The approximate definite integral.
     """
     h = (b - a) / n
-    x = np.linspace(a + h/2, b - h/2, n)
+    x = np.linspace(a + h / 2, b - h / 2, n)
     y = func(x)
 
     integral = h * np.sum(y)

@@ -33,4 +33,6 @@ def secant_method(func, x0, x1, epsilon=1e-8, max_iter=100):
         x_prev = x_curr
         x_curr = x_next
 
-    raise ValueError("Secant method did not converge within the maximum number of iterations.")
+    raise ValueError(
+        "Secant method did not converge within the maximum number of iterations."
+    )

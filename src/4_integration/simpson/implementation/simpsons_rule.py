@@ -18,10 +18,9 @@ def simpsons_rule(func, a, b, n):
         raise ValueError("Number of subintervals must be even.")
 
     h = (b - a) / n
-    x = np.linspace(a, b, n+1)
+    x = np.linspace(a, b, n + 1)
     y = func(x)
 
-    integral = (h / 3) * np.sum(y[0:-1:2] + 4*y[1::2] + y[2::2])
+    integral = (h / 3) * np.sum(y[0:-1:2] + 4 * y[1::2] + y[2::2])
 
     return integral
-

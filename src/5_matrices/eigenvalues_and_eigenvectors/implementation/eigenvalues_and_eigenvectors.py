@@ -14,6 +14,7 @@ def find_eigenvalues(matrix):
     eigenvalues = np.roots(np.linalg.det(matrix - np.eye(matrix.shape[0])))
     return eigenvalues
 
+
 def find_eigenvectors(matrix):
     """
     Find the eigenvectors of a matrix.
@@ -28,7 +29,9 @@ def find_eigenvectors(matrix):
     eigenvectors = []
 
     for eigenvalue in eigenvalues:
-        eigenvector = np.linalg.solve(matrix - eigenvalue * np.eye(matrix.shape[0]), np.zeros(matrix.shape[0]))
+        eigenvector = np.linalg.solve(
+            matrix - eigenvalue * np.eye(matrix.shape[0]), np.zeros(matrix.shape[0])
+        )
         eigenvectors.append(eigenvector)
 
     return np.array(eigenvectors).T

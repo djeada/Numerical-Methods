@@ -42,5 +42,6 @@ def golden_ratio_search(func, a, b, epsilon=1e-8, max_iter=100):
         if abs(b - a) < epsilon:
             return (a + b) / 2
 
-    raise ValueError("Golden ratio search did not converge within the maximum number of iterations.")
-
+    raise ValueError(
+        "Golden ratio search did not converge within the maximum number of iterations."
+    )

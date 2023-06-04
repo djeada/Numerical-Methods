@@ -3,7 +3,7 @@ import numpy as np
 
 def inverse_power_method(a, x, num_iter=10):
     """
-    returns the smallest eigenvalue and coressponding eigenvector    
+    returns the smallest eigenvalue and coressponding eigenvector
     """
 
     def normalize(vec):

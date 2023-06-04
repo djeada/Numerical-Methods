@@ -15,7 +15,7 @@ def trapezoidal_rule(func, a, b, n):
         float: The approximate definite integral.
     """
     h = (b - a) / n
-    x = np.linspace(a, b, n+1)
+    x = np.linspace(a, b, n + 1)
     y = func(x)
 
     integral = (h / 2) * (np.sum(y[1:-1]) + y[0] + y[-1])

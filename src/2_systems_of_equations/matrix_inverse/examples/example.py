@@ -15,4 +15,3 @@ if np.isclose(np.linalg.det(A), 0):
 
 x = np.dot(np.linalg.inv(A), b)
 print(x)
-
