@@ -1,4 +1,7 @@
-def jacobi_method(A, b, x0, epsilon=1e-8, max_iter=100):
+import numpy as np
+
+
+def jacobi_method(A, b, x0=None, epsilon=1e-8, max_iter=100):
     """
     Jacobi method for solving a linear system of equations.
 
@@ -16,7 +19,11 @@ def jacobi_method(A, b, x0, epsilon=1e-8, max_iter=100):
         ValueError: If the maximum number of iterations is reached without convergence.
     """
     n = len(A)
-    x = x0.copy()
+
+    if x0 is None:
+        x = np.zeros_like(b, dtype=np.double)
+    else:
+        x = x0.astype(float)
 
     for _ in range(max_iter):
         x_prev = x.copy()

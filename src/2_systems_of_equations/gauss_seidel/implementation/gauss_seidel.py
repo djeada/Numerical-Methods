@@ -1,4 +1,7 @@
-def gauss_seidel(A, b, x0, epsilon=1e-8, max_iter=100):
+import numpy as np
+
+
+def gauss_seidel(A, b, x0=None, epsilon=1e-8, max_iter=100):
     """
     Gauss-Seidel method for solving a linear system of equations.
 
@@ -16,9 +19,14 @@ def gauss_seidel(A, b, x0, epsilon=1e-8, max_iter=100):
         ValueError: If the maximum number of iterations is reached without convergence.
     """
     n = len(A)
-    x = x0.copy()
 
-    for _ in range(max_iter):
+    # Initialize the solution
+    if x0 is None:
+        x = np.zeros_like(b, dtype=np.double)
+    else:
+        x = x0.astype(float)
+
+    for k in range(max_iter):
         x_prev = x.copy()
 
         for i in range(n):
@@ -27,7 +35,10 @@ def gauss_seidel(A, b, x0, epsilon=1e-8, max_iter=100):
             ) / A[i, i]
 
         if np.linalg.norm(x - x_prev) < epsilon:
+            print(f"Gauss-Seidel converged at iteration {k+1}")
             return x
+
+        print(f"Iteration {k+1}: x = {x}")
 
     raise ValueError(
         "Gauss-Seidel method did not converge within the maximum number of iterations."

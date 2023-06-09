@@ -1,4 +1,7 @@
-def perform_lu_decomposition(matrix):
+import numpy as np
+
+
+def lu_decomposition(matrix):
     """
     Conducts LU decomposition on a square matrix.
 
@@ -36,20 +39,36 @@ def perform_lu_decomposition(matrix):
     return L, U, P
 
 
-def solve_lu(L, U, P, b):
-    """
-    Solves the system of equations Ax = b using LU decomposition.
+def forward_substitution(L, Pb):
+    n = L.shape[0]
+    y = np.zeros_like(Pb, dtype=np.double)
 
-    Parameters:
-        L (numpy.ndarray): Lower triangular matrix.
-        U (numpy.ndarray): Upper triangular matrix.
-        P (numpy.ndarray): Permutation matrix.
-        b (numpy.ndarray): Constant vector.
+    y[0] = Pb[0] / L[0, 0]
 
-    Returns:
-        x (numpy.ndarray): Solution vector.
-    """
-    intermediate_solution = np.linalg.solve(L, np.dot(P, b))
-    solution = np.linalg.solve(U, intermediate_solution)
+    for i in range(1, n):
+        y[i] = (Pb[i] - np.dot(L[i, :i], y[:i])) / L[i, i]
 
-    return solution
+    return y
+
+
+def backward_substitution(U, y):
+    n = U.shape[0]
+    x = np.zeros_like(y, dtype=np.double)
+
+    x[-1] = y[-1] / U[-1, -1]
+
+    for i in range(n - 2, -1, -1):
+        x[i] = (y[i] - np.dot(U[i, i + 1 :], x[i + 1 :])) / U[i, i]
+
+    return x
+
+
+def solve_lu(A, b):
+    L, U, P = lu_decomposition(A)
+
+    Pb = np.dot(P, b)
+
+    y = forward_substitution(L, Pb)
+    x = backward_substitution(U, y)
+
+    return x
