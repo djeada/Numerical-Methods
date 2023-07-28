@@ -97,7 +97,7 @@ Method | Notes | Implementation | Examples
 | Runge Kutta | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/7_ordinary_differential_equations/runge_kutta.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/runge_kutta/implementation/runge_kutta.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/tree/master/src/7_ordinary_differential_equations/picard_method/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
 | Picard's Method | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/7_ordinary_differential_equations/picards_method.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/picard_method/implementation/picard_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/tree/master/src/7_ordinary_differential_equations/picard_method/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
 
-## Refrences
+## References
 
 * https://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/
 * https://en.wikiversity.org/wiki/Cubic_Spline_Interpolation
