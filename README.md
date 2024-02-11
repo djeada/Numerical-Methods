@@ -1,5 +1,5 @@
 # Numerical Methods
-Hello and welcome! This is a resource where you'll find numerical methods using Python, built from the ground up. Here, you'll find solutions to mathematical problems, explained theory for each method, simple examples, and comparisons with popular Python scientific libraries such as Numpy, Scikit-Learn, and SciPy. If you're a student wanting to learn more about numerical methods or a researcher looking for efficient algorithms, this resource is meant for you. Feel free to explore the available methods, use them, and modify the code as needed.
+This repository offers a comprehensive collection of numerical methods implemented in Python. It includes solutions to various mathematical problems, detailed explanations of each method, illustrative examples, and comparisons with prominent scientific libraries like Numpy, Scikit-Learn, and SciPy. Whether you're a student eager to delve into numerical methods or a researcher seeking efficient algorithms, this resource is tailored for you. You are encouraged to explore, utilize, and adapt the code according to your needs.
 
 ![Demo](https://user-images.githubusercontent.com/37275728/189313603-b409b2be-41b5-4de6-9d4f-2bd8f6e41565.png)
 
