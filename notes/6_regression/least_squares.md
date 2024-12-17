@@ -1,105 +1,164 @@
-## Least Squares Regression
+## Introduction
 
-Least Squares Regression is a statistical procedure used to find the best fit for a set of data points by minimizing the sum of the squares of the offsets or residuals of points from the plotted curve.
+Least Squares Regression is a fundamental technique in statistical modeling and data analysis used for fitting a model to observed data. The primary goal is to find a set of parameters that minimize the discrepancies (residuals) between the model’s predictions and the actual observed data. The "least squares" criterion is chosen because it leads to convenient mathematical properties and closed-form solutions, particularly for linear models.
 
-It's used in both simple and multiple linear regression.
+In its simplest form, least squares regression is applied to **linear regression**, where we assume a linear relationship between a set of input variables (features) \(X\) and an output variable \(Y\). More generally, it can be extended to polynomial regression and multiple linear regression with multiple input variables. Because of its simplicity, transparency, and relative mathematical convenience, least squares remains one of the most widely used techniques in data analysis.
+
 
 ## Mathematical Formulation
 
-Given a matrix of features $X$, a vector of target variables $Y$, we're trying to find the coefficient vector $β$ that minimizes the residual sum of squares (RSS), i.e., the squared difference between the observed $Y$ and the predicted $Y$ (denoted $Ŷ$ or $\hat{Y}$).
+Given a matrix of features \( X \in \mathbb{R}^{m \times n} \) (with \( m \) observations and \( n \) features), and a vector of target variables \( Y \in \mathbb{R}^m \), we seek a coefficient vector \(\beta \in \mathbb{R}^n\) that best fits the data in the sense of minimizing the sum of squared residuals. If we include a column of ones in \( X \) to represent the intercept term, \(\beta\) naturally includes the intercept as well.
 
-In mathematical form, the objective is to minimize:
+We model:
+\[
+\hat{Y} = X \beta.
+\]
 
-$$
-RSS = \| Y - Xβ \|_{2}^{2}
-$$
+**Objective**: Minimize the Residual Sum of Squares (RSS):
+\[
+RSS(\beta) = \| Y - X\beta \|_2^2 = (Y - X\beta)^\top (Y - X\beta).
+\]
 
-Using calculus and linear algebra, it can be shown that the $β$ that minimizes the RSS is given by:
+The goal is to find \(\beta\) that solves:
+\[
+\min_\beta \| Y - X\beta \|_2^2.
+\]
 
-$$
-β = (X^{T}X)^{-1}X^{T}Y
-$$
+By setting the gradient of this objective with respect to \(\beta\) to zero, we obtain the **Normal Equation**:
+\[
+X^\top X \beta = X^\top Y.
+\]
 
-This formula is known as the **Normal Equation** for least squares regression.
+Provided \( X^\top X \) is invertible, we have a closed-form solution:
+\[
+\beta = (X^\top X)^{-1} X^\top Y.
+\]
+
+This \(\beta\) is the least squares estimate of the coefficient vector, ensuring that the fitted line (or hyperplane, in the multi-dimensional case) is the best fit in the least squares sense.
+
 
 ## Derivation
 
-Given the observed data $x_i$ and the corresponding dependent variable $y_i$, we want to estimate $\hat{y}(x_i)$ that accurately represents the data. We assume a model of the form:
+1. **Set up the Problem**:
 
-$$\hat{y}(x_i) = {\alpha}_1 f_1(x_i) + {\alpha}_2 f_2(x_i) + \cdots + {\alpha}_n f_n(x_i)$$
+   Suppose we have observations \(\{ (x_i, y_i) \}_{i=1}^m\), where \( x_i \in \mathbb{R}^n \) is a vector of features for the \(i\)-th observation and \( y_i \) is the response. We assume a linear model:
+   \[
+   \hat{y}_i = \sum_{j=1}^n \beta_j x_{ij} = x_i^\top \beta,
+   \]
+   or in matrix form:
+   \[
+   \hat{Y} = X\beta,
+   \]
+   where \( X \) is the \( m \times n \) matrix with rows \( x_i^\top \), and \( Y \in \mathbb{R}^m \) is the vector of observed responses.
 
-Here, $f_k(x)$ are a set of functions of the variable $x$ (which could be as simple as $x^k$ or even just $x$, depending on the model), and ${\alpha}_k$ are the coefficients that we need to determine. We can write this set of equations for all observations in matrix form as:
+2. **Defining the Error to Minimize**:
 
-$$\hat{Y} = A{\beta}$$
+   We define the residuals as:
+   \[
+   r = Y - X\beta.
+   \]
 
-Where:
-- $\hat{Y}$ is the vector of estimated values $\hat{y}(x_i)$,
-- ${\beta}$ is the vector of coefficients ${\alpha}_i$, 
-- $A$ is the design matrix where each column $i$ is $f_i(x)$ evaluated at each data point.
+   The objective is to minimize:
+   \[
+   RSS(\beta) = r^\top r = (Y - X\beta)^\top (Y - X\beta).
+   \]
 
-We want to minimize the total squared error defined as:
+3. **Finding the Minimum**:
 
-$$E = \|{\hat{Y} - Y}\|_{2}^2$$
+   To minimize with respect to \(\beta\), take the gradient and set it to zero:
+   \[
+   \frac{\partial RSS}{\partial \beta} = -2X^\top(Y - X\beta) = 0.
+   \]
 
-To find the $\hat{Y}$ that minimizes $E$, we need to find the point where the derivative of $E$ with respect to ${\alpha}_i$ is zero (since at a minimum point, the derivative is zero). 
+   This implies:
+   \[
+   X^\top Y - X^\top X \beta = 0 \implies X^\top X \beta = X^\top Y.
+   \]
 
-Taking the derivative and setting it to zero, we find that for the minimum, the residual (the difference between the observed and estimated values) is orthogonal to the estimated values:
+4. **Solving the Normal Equation**:
 
-$$\hat{Y}^T (Y - \hat{Y}) = 0$$
+   If \( X^\top X \) is invertible:
+   \[
+   \beta = (X^\top X)^{-1} X^\top Y.
+   \]
 
-Expanding $\hat{Y}$ using the equation $\hat{Y} = A{\beta}$ and simplifying gives us:
+   This formula provides a closed-form solution for the ordinary least squares estimator \(\beta\).
 
-$$A^T Y - A^T A {\beta} = 0$$
-
-Solving this equation for $\beta$ gives us the least squares regression formula:
-
-$${\beta} = (A^T A)^{-1} A^T Y$$
-
-This is the solution that minimizes the total squared error and gives us the best fit to our data.
 
 ## Algorithm Steps
 
-The algorithm for performing a least squares regression is as follows:
+1. **Data Preparation**:
+   - Construct your design matrix \( X \) by stacking the observations row-wise.  
+   - Each row corresponds to one observation and each column corresponds to one feature.  
+   - Often, a column of ones is added to incorporate the intercept term.
+   - Construct the response vector \( Y \) from the observed target values.
 
-1. **Step 1: Data Preparation**: Organize your data into a matrix of features $\mathbf{X}$ and a vector of target variables $\mathbf{Y}$. Each row in the matrix $\mathbf{X}$ corresponds to a single observation, and each column in $\mathbf{X}$ corresponds to a feature. $\mathbf{Y}$ contains the corresponding target values for each observation.
+2. **Compute Matrices**:
+   - Compute \( X^\top X \) and \( X^\top Y \).
 
-2. **Step 2: Calculate $\mathbf{X}^T \mathbf{X}$ and $\mathbf{X}^T \mathbf{Y}$**: Calculate the product of the transpose of $\mathbf{X}$ with itself, and the product of the transpose of $\mathbf{X}$ with $\mathbf{Y}$.
+3. **Check Invertibility**:
+   - Ensure \( X^\top X \) is invertible (or use a pseudo-inverse if not).
+   - If \( X^\top X \) is not invertible, it may be due to multicollinearity. Consider removing or combining features, or use regularization methods (like Ridge or Lasso).
 
-3. **Step 3: Invert $\mathbf{X}^T \mathbf{X}$**: Invert the matrix $\mathbf{X}^T \mathbf{X}$. This step requires that $\mathbf{X}^T \mathbf{X}$ is invertible (nonsingular). If $\mathbf{X}^T \mathbf{X}$ is not invertible, it means there is multicollinearity in your data, and you may need to remove redundant features or use regularization techniques.
+4. **Solve for \(\beta\)**:
+   \[
+   \beta = (X^\top X)^{-1} X^\top Y.
+   \]
 
-4. **Step 4: Calculate $\boldsymbol{\beta}$**: Calculate $\boldsymbol{\beta}$ by multiplying the inverted $\mathbf{X}^T \mathbf{X}$ with $\mathbf{X}^T \mathbf{Y}$.
+5. **Use the Model for Prediction**:
+   - For a new input \( x_{\text{new}} \), predict:
+     \[
+     \hat{y}_{\text{new}} = x_{\text{new}}^\top \beta.
+     \]
 
-5. **Step 5: Use $\boldsymbol{\beta}$ for Predictions**: Once you have $\boldsymbol{\beta}$, you can use it to make predictions for new data. To make a prediction for a new observation, simply multiply the features of the new observation by $\boldsymbol{\beta}$.
 
 ## Example
 
-Suppose we have three data points $(1, 1)$, $(2, 2)$, and $(3, 2)$. We wish to fit a linear regression model to this data.
+**Given Data Points**: \((x,y)\) = \((1,1), (2,2), (3,2)\).
 
-1. First, we arrange our data into $\mathbf{X}$ and $\mathbf{Y}$. In this case, $\mathbf{X}$ is a column vector of the x-coordinates, and $\mathbf{Y}$ is a column vector of the y-coordinates. We add a column of ones to $\mathbf{X}$ to account for the intercept term in $\boldsymbol{\beta}$.
+**Step-by-step**:
 
-$$\mathbf{X} = \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix}, \quad \mathbf{Y} = \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}$$
+1. Add an intercept term:
+   \[
+   X = \begin{bmatrix}
+   1 & 1 \\
+   1 & 2 \\
+   1 & 3 \\
+   \end{bmatrix}, \quad Y=\begin{bmatrix}1 \\ 2 \\ 2\end{bmatrix}.
+   \]
 
-2. We calculate $\mathbf{X}^T \mathbf{X}$ and $\mathbf{X}^T \mathbf{Y}$:
+2. Compute:
+   \[
+   X^\top X = \begin{bmatrix} 3 & 6 \\ 6 &14 \end{bmatrix}, \quad
+   X^\top Y = \begin{bmatrix} 5 \\ 12 \end{bmatrix}.
+   \]
 
-$$\mathbf{X}^T \mathbf{X} = \begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix}, \quad \mathbf{X}^T \mathbf{Y} = \begin{bmatrix} 5 \\ 12 \end{bmatrix}$$
+3. Invert \( X^\top X \):
+   \[
+   (X^\top X)^{-1} = \begin{bmatrix} 2 & -1 \\ -1 & 0.5 \end{bmatrix}.
+   \]
 
-3. We then calculate the inverse of $\mathbf{X}^T \mathbf{X}$:
+4. Compute \(\beta\):
+   \[
+   \beta = (X^\top X)^{-1}X^\top Y = \begin{bmatrix} 0.5 \\ 0.5 \end{bmatrix}.
+   \]
 
-$$(\mathbf{X}^T \mathbf{X})^{-1} = \begin{bmatrix} 2 & -1 \\ -1 & 0.5 \end{bmatrix}$$
+Thus, the fitted line is:
+\[
+\hat{y} = 0.5 + 0.5x.
+\]
 
-4. We then calculate $\boldsymbol{\beta}$:
-
-$$\boldsymbol{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{Y} = \begin{bmatrix} 0.5 \\ 0.5 \end{bmatrix}$$
-
-So, our linear regression model is $Y = 0.5 + 0.5X$.
 
 ## Advantages
 
-- Provides a simple and interpretable mathematical formula for predictions.
-- Finds the best fit line that minimizes the sum of the square differences, which is often a reasonable approach.
+- **Closed-Form Solution**: Provides an explicit formula for the optimal parameters, enabling direct interpretation.
+- **Efficient for Small Problems**: Works well with relatively small datasets and few features.
+- **Foundational Method**: Forms the basis for many advanced regression techniques and regularized models.
 
 ## Limitations
 
-- It assumes a linear relationship between variables.
-- It can be sensitive to outliers.
-- While it can handle multiple dependent variables (multiple regression), the interpretation becomes more complex.
+- **Assumes Linearity**: The method presupposes a linear relationship between features and output.
+- **Sensitive to Outliers**: Squared errors emphasize large errors more heavily, making the model sensitive to outliers.
+- **Invertibility Issues**: If \( X^\top X \) is not invertible, the standard formula fails. Issues like multicollinearity require either dropping features, transformations, or using regularized regression variants.
+
+Despite these limitations, least squares regression is a cornerstone technique in data analysis, widely used due to its conceptual simplicity, interpretability, and strong theoretical foundations. It serves as the primary stepping stone to more sophisticated modeling approaches in statistics and machine learning.
