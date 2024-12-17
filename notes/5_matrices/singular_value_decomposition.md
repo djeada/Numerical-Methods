@@ -1,143 +1,165 @@
-## Singular Value Decomposition (SVD)
+## Introduction
 
-Singular Value Decomposition, or SVD, is a method of factorizing matrices, which generalizes the Eigendecomposition to non-square matrices.
+Singular Value Decomposition (SVD) is a fundamental matrix decomposition technique widely used in numerous areas of science, engineering, and data analysis. Unlike the Eigenvalue Decomposition (EVD), which is restricted to square and diagonalizable matrices, SVD applies to any rectangular matrix. It provides a way of expressing a given $m \times n$ matrix as the product of three simpler matrices, revealing critical insights into the structure and properties of the original matrix. These properties are useful in tasks such as dimensionality reduction, noise filtering, image compression, and solving ill-conditioned systems of linear equations.
 
-## Key Concepts
-
-- SVD provides a way to break down a matrix into simpler, meaningful pieces. 
-- Every real matrix has a singular value decomposition, but the same is not true of the Eigenvalue Decomposition.
+*(PLOT 1: A conceptual illustration showing a transformation $A$ mapping a unit sphere into an ellipsoid. The singular values correspond to the lengths of the principal semi-axes of this ellipsoid, and the columns of $U$ and $V$ define the orientations.)*
 
 ## Mathematical Formulation
 
-Given an $m \times n$ matrix $A$, it can be factorized as:
+Given any $m \times n$ matrix $A$, the SVD factorizes $A$ into:
 
-$$A = U\Sigma V^{T}$$
-
+$$A = U \Sigma V^{T},$$
 where:
 
-- $U$ is an $m \times m$ matrix formed by the eigenvectors of $AA^{T}$. If $u_1, u_2, ..., u_m$ are the column vectors representing the eigenvectors of $AA^{T}$, then $U$ is of the form:
+I. **$U$** is an $m \times m$ orthogonal matrix (i.e., $U^{T}U = I$). Its columns are called the left singular vectors of $A$.
 
-$$
-U = 
-\begin{bmatrix}
-| & | & & | \\
-u_1 & u_2 & \cdots & u_m \\
-| & | & & |
-\end{bmatrix}
-$$
+II. **$\Sigma$** (Sigma) is an $m \times n$ diagonal matrix with non-negative real numbers on the diagonal. These numbers $\sigma_1 \geq \sigma_2 \geq \cdots \geq \sigma_p \geq 0$ (where $p = \min(m,n)$) are called the singular values of $A$.
 
-- $\Sigma$ is an $m \times n$ diagonal matrix formed by the square roots of the eigenvalues of $AA^{T}$ (or equivalently, $A^{T}A$), sorted in decreasing order. If $\sigma_1, \sigma_2, ..., \sigma_p$ are the square roots of these eigenvalues ($p$ is the rank of matrix $A$), then $\Sigma$ is of the form:
+III. **$V$** is an $n \times n$ orthogonal matrix (i.e., $V^{T}V = I$). Its columns are called the right singular vectors of $A$.
 
-$$
-\Sigma = 
-\begin{bmatrix}
-\sigma_1 & 0 & \cdots & 0 & \cdots & 0 \\
-0 & \sigma_2 & \cdots & 0 & \cdots & 0 \\
-\vdots & \vdots & \ddots & \vdots & & \vdots \\
-0 & 0 & \cdots & \sigma_p & \cdots & 0 \\
-\vdots & \vdots & & \vdots & \ddots & \vdots \\
-0 & 0 & \cdots & 0 & \cdots & 0
-\end{bmatrix}
-$$
+Putting it together:
 
-- $V^{T}$ is an $n \times n$ matrix formed by the eigenvectors of $A^{T}A$. If $v_1, v_2, ..., v_n$ are the column vectors representing the eigenvectors of $A^{T}A$, then $V^{T}$ is of the form:
+$$A = U \begin{bmatrix}
 
-$$
-V^{T} = 
-\begin{bmatrix}
-... & v_1^{T} & ... \\
-... & v_2^{T} & ... \\
-& \vdots & \\
-... & v_n^{T} & ...
-\end{bmatrix}
-$$
+\sigma_1 & 0 & \cdots & 0 \\
+
+0 & \sigma_2 & \cdots & 0 \\
+
+\vdots & \vdots & \ddots & \vdots \\
+
+0 & 0 & \cdots & \sigma_p \\
+
+\vdots & \vdots & & \vdots \\
+
+0 & 0 & \cdots & 0
+
+\end{bmatrix} V^{T}.$$
+
+Here, $\Sigma$ is "diagonal" in the sense that all non-zero elements are on the main diagonal. The rank of $A$ is equal to the number of non-zero singular values.
+
+*(PLOT 2: A block matrix illustration of $U \Sigma V^{T}$, highlighting the diagonal structure of $\Sigma$.)*
+
+## Derivation
+
+The SVD is closely related to the eigenvalue decompositions of the matrices $A^{T}A$ and $AA^{T}$. Both $A^{T}A$ and $AA^{T}$ are symmetric, positive semi-definite matrices, and thus have non-negative real eigenvalues.
+
+I. Compute the eigenvalues of $A^{T}A$. These eigenvalues $\lambda_i$ are non-negative.
+
+II. The singular values of $A$ are defined as $\sigma_i = \sqrt{\lambda_i}$.
+
+III. The eigenvectors of $A^{T}A$ form the columns of $V$, and the eigenvectors of $AA^{T}$ form the columns of $U$.
+
+Since every real matrix $A$ gives rise to a non-negative, symmetric matrix $A^{T}A$, and since such matrices are always diagonalizable, SVD is guaranteed to exist for any matrix $A$.
+
+*(PLOT 3: A flow diagram showing how $\sigma_i$ are obtained from $\lambda_i$ of $A^{T}A$ and how $U, V$ are derived from eigenvectors of $AA^{T}$ and $A^{T}A$.)*
 
 ## Algorithm Steps
 
-1. Calculate $A^{T}A$ and $AA^{T}$.
+I. **Form $A^{T}A$**:  
 
-2. Compute the eigenvalues and the corresponding eigenvectors of $A^{T}A$ and $AA^{T}$. The eigenvalues of both these matrices are the same, and they correspond to the squares of the singular values of $A$.
+Compute the $n \times n$ matrix $A^{T}A$.
 
-3. The eigenvectors corresponding to the non-zero eigenvalues of $A^{T}A$ form the columns of $V$ while the eigenvectors corresponding to the non-zero eigenvalues of $AA^{T}$ form the columns of $U$.
+II. **Compute Eigenvalues and Eigenvectors of $A^{T}A$**:  
 
-4. The singular values $\sigma_i$ are calculated as the square root of the eigenvalues from either $A^{T}A$ or $AA^{T}$, arranged in decreasing order on the diagonal of an $m \times n$ matrix $\Sigma$.
+Solve $(A^{T}A) v = \lambda v$ to find all eigenvalues $\lambda_i \ge 0$ and corresponding eigenvectors $v_i$.
 
-5. The matrix $V$ is obtained by arranging the eigenvectors corresponding to the eigenvalues of $A^{T}A$ as columns. 
+III. **Obtain Singular Values**:  
 
-6. The matrix $U$ is formed by arranging the eigenvectors corresponding to the eigenvalues of $AA^{T}$ as columns.
+Sort the eigenvalues in decreasing order and take $\sigma_i = \sqrt{\lambda_i}$. These form the diagonal entries of $\Sigma$.
+
+IV. **Form $V$**:  
+
+The eigenvectors $v_i$ of $A^{T}A$ are arranged as columns to form the matrix $V$.
+
+V. **Form $U$**:  
+
+Similarly, find the eigenvectors of $AA^{T}$ or directly use the relation $U = A V \Sigma^{-1}$ (for non-zero singular values) to obtain $U$.
+
+VI. **Assemble the SVD**:  
+
+With $U, \Sigma, V$ computed, $A = U \Sigma V^{T}$.
+
+*(PLOT 4: A step-by-step algorithmic flowchart for computing SVD from scratch.)*
 
 ## Example
 
-Consider a 2x2 matrix $A$ given by:
+Consider the $2 \times 2$ matrix:
 
-$$
-A = 
-\begin{bmatrix}
-3 & 4 \\
-2 & 1
-\end{bmatrix}
-$$
+$$A = \begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix}.$$
 
-1. Compute the matrices $A^{T}A$ and $AA^{T}$:
+I. Compute $A^{T}A$:
 
-$$
-A^{T}A = 
-\begin{bmatrix}
-13 & 14 \\
-14 & 17
-\end{bmatrix}
-, \quad
-AA^{T} = 
-\begin{bmatrix}
-25 & 10 \\
-10 & 5
-\end{bmatrix}
-$$
+$$A^{T}A = \begin{bmatrix} 3 & 2 \\ 4 & 1 \end{bmatrix}^{T}\begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix} = \begin{bmatrix} 3 & 4 \\ 2 & 1 \end{bmatrix}^{T}\begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix} = \begin{bmatrix}13 & 14 \\ 14 & 17\end{bmatrix}.$$
 
-2. Compute the eigenvalues and corresponding eigenvectors of both $A^{T}A$ and $AA^{T}$.
+II. Find the eigenvalues of $A^{T}A$:
 
-For $A^{T}A$, the characteristic equation is $det(A^{T}A - \lambda I) = 0$, which gives:
+Solve $\det(A^{T}A - \lambda I) = 0$:
 
-$$
-\begin{vmatrix}
-13-\lambda & 14 \\
-14 & 17-\lambda
-\end{vmatrix} = 0
-$$
+$$(13-\lambda)(17-\lambda) - 14^2 = 0.$$
 
-Solving this equation yields the eigenvalues $\lambda_1 = 30$ and $\lambda_2 = 0$.
+Solving yields $\lambda_1 = 30$ and $\lambda_2 = 0$.
 
-Next, compute the eigenvectors corresponding to these eigenvalues by solving $(A^{T}A - \lambda I)v = 0$. The corresponding eigenvectors are $v_1 = [\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}]$ for $\lambda_1$, and $v_2 = [-\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}]$ for $\lambda_2$.
+III. Singular values:
 
-Similarly, for $AA^{T}$, solving the characteristic equation yields the eigenvalues $\lambda_1 = 30$ and $\lambda_2 = 0$, with corresponding eigenvectors $u_1 = [\frac{2}{\sqrt{5}}, \frac{1}{\sqrt{5}}]$ for $\lambda_1$, and $u_2 = [-\frac{1}{\sqrt{5}}, \frac{2}{\sqrt{5}}]$ for $\lambda_2$.
+$$\sigma_1 = \sqrt{30}, \quad \sigma_2 = \sqrt{0} = 0.$$
 
-3. Form the matrices $U$, $\Sigma$ and $V^{T}$:
+IV. Eigenvectors of $A^{T}A$ for $\lambda_1=30$:
 
-$$
-U = \begin{bmatrix}
-\frac{2}{\sqrt{5}} & -\frac{1}{\sqrt{5}} \\
-\frac{1}{\sqrt{5}} & \frac{2}{\sqrt{5}}
-\end{bmatrix}
-, \quad
-\Sigma = \begin{bmatrix}
-\sqrt{30} & 0 \\
-0 & 0
-\end{bmatrix}
-, \quad
-V^{T} = \begin{bmatrix}
-\frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} \\
--\frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}}
-\end{bmatrix}
-$$
+One such eigenvector (normalized) is:
 
-Thus, we have $A = U\Sigma V^{T}$.
+$$v_1 = \frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ 1\end{bmatrix}.$$
+
+For $\lambda_2=0$, a corresponding eigenvector is:
+
+$$v_2 = \frac{1}{\sqrt{2}}\begin{bmatrix}-1 \\ 1\end{bmatrix}.$$
+
+Hence:
+
+$$V = \begin{bmatrix}\frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}}\end{bmatrix}.$$
+
+V. To find $U$, use $U = A V \Sigma^{-1}$ for the non-zero singular values:
+
+$$U = \begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix}\begin{bmatrix}\frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}\end{bmatrix}\frac{1}{\sqrt{30}}$$
+yields
+
+$$U = \begin{bmatrix}\frac{2}{\sqrt{5}} & -\frac{1}{\sqrt{5}} \\ \frac{1}{\sqrt{5}} & \frac{2}{\sqrt{5}}\end{bmatrix}.$$
+
+VI. Assemble SVD:
+
+$$\Sigma = \begin{bmatrix}\sqrt{30} & 0 \\ 0 & 0\end{bmatrix}, \quad
+
+A = U \Sigma V^{T}.$$
+
+*(PLOT 5: A geometric interpretation showing how $A$ transforms a vector space and how SVD reflects that transformation into simpler scalings along orthogonal directions.)*
 
 ## Advantages
 
-- SVD exists for any type of matrix (m x n), whereas Eigendecomposition only exists for square (n x n) matrices.
-- SVD is used in a variety of applications such as signal processing, statistics, and solving linear equations.
+I. **Universality**:  
+
+SVD exists for any $m \times n$ matrix $A$, regardless of its rank, making it more broadly applicable than EVD.
+
+II. **Noise Reduction and Compression**:  
+
+By truncating small singular values, one can achieve low-rank approximations of $A$ that are close to the original but simpler, useful in data compression and de-noising.
+
+III. **Numerical Stability**:  
+
+SVD is numerically stable and widely used in robust numerical methods, e.g., pseudo-inverse computations and solving least-squares problems.
+
+*(PLOT 6: A bar chart comparing approximation errors of $A$ by truncating the SVD vs. other methods.)*
 
 ## Limitations
 
-- SVD computation is more complex than Eigendecomposition, especially for large matrices.
-- Since the calculation of SVD involves finding eigenvalues and eigenvectors of $AA^T$ and $A^TA$, which could be large matrices, the computation can be costly.
+I. **Computational Complexity**:  
+
+Computing an SVD is often more computationally expensive than eigenvalue decomposition for large square matrices. Efficient algorithms exist, but the cost can still be significant for very large datasets.
+
+II. **Interpretation of Factors**:  
+
+While the decomposition yields orthogonal factors and non-negative singular values, interpreting the physical or application-specific meaning of these components may require additional insight.
+
+III. **No Direct Eigenvalue Information of Original A**:  
+
+The singular values are related to the eigenvalues of $A^{T}A$ (or $AA^{T}$), not directly to the eigenvalues of $A$ itself. Thus, SVD does not directly provide the eigenvalues of $A$ unless $A$ is also diagonalizable in the usual sense.
+
+*(PLOT 7: A plot illustrating computational time vs. matrix size for various decomposition methods, showing the scalability issues with SVD.)*
