@@ -4,20 +4,11 @@ The Secant Method is a root-finding algorithm used in numerical analysis to appr
 
 Conceptually, the Secant Method constructs a secant line between two points $(x_{n-1}, f(x_{n-1}))$ and $(x_n, f(x_n))$ on the graph of $f(x)$. The root approximation is then taken as the $x$-intercept of this secant line. By iteratively updating these points, the method “zeroes in” on a root.
 
-**Conceptual Illustration (Not Removing the Plots)**:
+**Conceptual Illustration**:
 
 Imagine plotting the function $f(x)$:
-```
-     f(x)
-      |
-  f(x_n)   * (x_n, f(x_n))
-      |      /
-      |     /  secant line
-      |    /
-      |   /
-      *--/-------------> x
-  (x_{n-1}, f(x_{n-1}))     
-```
+
+![output(18)](https://github.com/user-attachments/assets/5e904eb0-1c4f-499a-9937-39fcdb210fde)
 
 The intersection of the secant line with the x-axis gives the next approximation $x_{n+1}$. Repeating this procedure leads to progressively better approximations of the root, assuming the method converges.
 
