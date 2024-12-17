@@ -2,13 +2,14 @@
 
 Singular Value Decomposition (SVD) is a fundamental matrix decomposition technique widely used in numerous areas of science, engineering, and data analysis. Unlike the Eigenvalue Decomposition (EVD), which is restricted to square and diagonalizable matrices, SVD applies to any rectangular matrix. It provides a way of expressing a given $m \times n$ matrix as the product of three simpler matrices, revealing critical insights into the structure and properties of the original matrix. These properties are useful in tasks such as dimensionality reduction, noise filtering, image compression, and solving ill-conditioned systems of linear equations.
 
-*(PLOT 1: A conceptual illustration showing a transformation $A$ mapping a unit sphere into an ellipsoid. The singular values correspond to the lengths of the principal semi-axes of this ellipsoid, and the columns of $U$ and $V$ define the orientations.)*
+![output(21)](https://github.com/user-attachments/assets/1479f467-1d30-4f80-84e2-4c996d4b09fc)
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 Given any $m \times n$ matrix $A$, the SVD factorizes $A$ into:
 
-$$A = U \Sigma V^{T},$$
+$$A = U \Sigma V^{T}$$
+
 where:
 
 I. **$U$** is an $m \times m$ orthogonal matrix (i.e., $U^{T}U = I$). Its columns are called the left singular vectors of $A$.
@@ -20,26 +21,17 @@ III. **$V$** is an $n \times n$ orthogonal matrix (i.e., $V^{T}V = I$). Its colu
 Putting it together:
 
 $$A = U \begin{bmatrix}
-
 \sigma_1 & 0 & \cdots & 0 \\
-
 0 & \sigma_2 & \cdots & 0 \\
-
 \vdots & \vdots & \ddots & \vdots \\
-
 0 & 0 & \cdots & \sigma_p \\
-
 \vdots & \vdots & & \vdots \\
-
 0 & 0 & \cdots & 0
-
-\end{bmatrix} V^{T}.$$
+\end{bmatrix} V^{T}$$
 
 Here, $\Sigma$ is "diagonal" in the sense that all non-zero elements are on the main diagonal. The rank of $A$ is equal to the number of non-zero singular values.
 
-*(PLOT 2: A block matrix illustration of $U \Sigma V^{T}$, highlighting the diagonal structure of $\Sigma$.)*
-
-## Derivation
+### Derivation
 
 The SVD is closely related to the eigenvalue decompositions of the matrices $A^{T}A$ and $AA^{T}$. Both $A^{T}A$ and $AA^{T}$ are symmetric, positive semi-definite matrices, and thus have non-negative real eigenvalues.
 
@@ -51,9 +43,7 @@ III. The eigenvectors of $A^{T}A$ form the columns of $V$, and the eigenvectors 
 
 Since every real matrix $A$ gives rise to a non-negative, symmetric matrix $A^{T}A$, and since such matrices are always diagonalizable, SVD is guaranteed to exist for any matrix $A$.
 
-*(PLOT 3: A flow diagram showing how $\sigma_i$ are obtained from $\lambda_i$ of $A^{T}A$ and how $U, V$ are derived from eigenvectors of $AA^{T}$ and $A^{T}A$.)*
-
-## Algorithm Steps
+### Algorithm Steps
 
 I. **Form $A^{T}A$**:  
 
@@ -79,9 +69,7 @@ VI. **Assemble the SVD**:
 
 With $U, \Sigma, V$ computed, $A = U \Sigma V^{T}$.
 
-*(PLOT 4: A step-by-step algorithmic flowchart for computing SVD from scratch.)*
-
-## Example
+### Example
 
 Consider the $2 \times 2$ matrix:
 
@@ -120,19 +108,18 @@ $$V = \begin{bmatrix}\frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{
 V. To find $U$, use $U = A V \Sigma^{-1}$ for the non-zero singular values:
 
 $$U = \begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix}\begin{bmatrix}\frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}\end{bmatrix}\frac{1}{\sqrt{30}}$$
+
 yields
 
 $$U = \begin{bmatrix}\frac{2}{\sqrt{5}} & -\frac{1}{\sqrt{5}} \\ \frac{1}{\sqrt{5}} & \frac{2}{\sqrt{5}}\end{bmatrix}.$$
 
 VI. Assemble SVD:
 
-$$\Sigma = \begin{bmatrix}\sqrt{30} & 0 \\ 0 & 0\end{bmatrix}, \quad
+$$\Sigma = \begin{bmatrix}\sqrt{30} & 0 \\ 0 & 0\end{bmatrix}$$
 
-A = U \Sigma V^{T}.$$
+$$A = U \Sigma V^{T}.$$
 
-*(PLOT 5: A geometric interpretation showing how $A$ transforms a vector space and how SVD reflects that transformation into simpler scalings along orthogonal directions.)*
-
-## Advantages
+### Advantages
 
 I. **Universality**:  
 
@@ -146,9 +133,7 @@ III. **Numerical Stability**:
 
 SVD is numerically stable and widely used in robust numerical methods, e.g., pseudo-inverse computations and solving least-squares problems.
 
-*(PLOT 6: A bar chart comparing approximation errors of $A$ by truncating the SVD vs. other methods.)*
-
-## Limitations
+### Limitations
 
 I. **Computational Complexity**:  
 
@@ -161,5 +146,3 @@ While the decomposition yields orthogonal factors and non-negative singular valu
 III. **No Direct Eigenvalue Information of Original A**:  
 
 The singular values are related to the eigenvalues of $A^{T}A$ (or $AA^{T}$), not directly to the eigenvalues of $A$ itself. Thus, SVD does not directly provide the eigenvalues of $A$ unless $A$ is also diagonalizable in the usual sense.
-
-*(PLOT 7: A plot illustrating computational time vs. matrix size for various decomposition methods, showing the scalability issues with SVD.)*
