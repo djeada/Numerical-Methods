@@ -129,7 +129,7 @@ Compute midpoint:
 
 $$c_1 = \frac{0+5}{2} = 2.5.$$
 
-- Evaluate $f(c_1) = f(2.5) = (2.5)^2 - 4 = 6.25 - 4 = 2.25$.
+Evaluate $f(c_1) = f(2.5) = (2.5)^2 - 4 = 6.25 - 4 = 2.25$.
 
 Check signs:
 
