@@ -4,20 +4,11 @@ Gradient Descent is a fundamental first-order optimization algorithm widely used
 
 Because it only requires the gradient of the function rather than its Hessian or other higher-order derivatives, gradient descent is often the method of choice for large-scale optimization problems. For instance, in machine learning, gradient descent is the backbone of training many models, from linear regression to deep neural networks.
 
-**Conceptual Illustration (Not Removing the Plot)**:
+**Conceptual Illustration**:
 
 Imagine the function $f(x)$ as a landscape of hills and valleys. Gradient descent resembles a blindfolded hiker who can feel the slope of the ground beneath their feet. The hiker takes small steps in the direction of the steepest downward slope to eventually reach a valley (a minimum of $f$).
 
-```
- f(x)
-  |
-  |        *    <-- Starting point
-  |       /
-  |      /   <-- The slope (gradient) guides steps
-  |     /
------+----x-----------x----> x
-       min
-```
+![output(14)](https://github.com/user-attachments/assets/d3695e4a-b711-45ad-afff-ac91a71b0a11)
 
 In higher dimensions (e.g., $x \in \mathbb{R}^n$), this idea generalizes similarly, just with gradients represented as vectors.
 
