@@ -1,12 +1,12 @@
-## Introduction
+## Gauss-Seidel Method
 
 The Gauss-Seidel method is a classical iterative method for solving systems of linear equations of the form $A\mathbf{x} = \mathbf{b}$, where $A$ is an $n \times n$ matrix, $\mathbf{x}$ is the vector of unknowns $(x_1, x_2, \ldots, x_n)$, and $\mathbf{b}$ is a known vector. Unlike direct methods such as Gaussian elimination, iterative methods build successively better approximations to the solution. The Gauss-Seidel method specifically uses previously computed (and more up-to-date) components of the solution vector within the same iteration, resulting in typically faster convergence than the Jacobi method.
 
 Physically and numerically, the idea behind the Gauss-Seidel method can be interpreted as performing a sequence of "relaxations": starting from some initial guess, the method progressively reduces the residual (the discrepancy $A\mathbf{x}-\mathbf{b}$) by adjusting one variable at a time, immediately using the most recent updates. The algorithm is simple to implement and is widely used for large and sparse systems, such as those arising in discretized partial differential equations, engineering simulations, and large-scale scientific computations.
 
-*(PLOT 1: A schematic convergence plot of error vs. iteration count, comparing Jacobi and Gauss-Seidel methods. We would expect the Gauss-Seidel curve to decline more rapidly.)*
+![output(24)](https://github.com/user-attachments/assets/eb1338bd-5923-4e76-a837-4e3dd684678f)
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 Consider a system of $n$ linear equations with $n$ unknowns:
 
@@ -35,8 +35,10 @@ If $A$ is nonsingular (invertible), there exists a unique solution $\mathbf{x}^*
 
 The Gauss-Seidel method arises from decomposing the matrix $A$ into a lower-triangular part, a strict upper-triangular part, and possibly a diagonal part. One common decomposition is:
 
-$$A = L + D + U,$$
+$$A = L + D + U$$
+
 where:
+
 - $D$ is the diagonal part of $A$ (i.e., $D = \text{diag}(A_{11}, A_{22}, \ldots, A_{nn})$),
 - $L$ is the strictly lower-triangular part (elements below the diagonal),
 - $U$ is the strictly upper-triangular part (elements above the diagonal).
@@ -48,7 +50,7 @@ for $i = 1, 2, \ldots, n$.
 
 In other words, when computing $x_i^{(k+1)}$, all the updated values $x_1^{(k+1)}, \ldots, x_{i-1}^{(k+1)}$ are already used, while $x_{i+1}^{(k)}, \ldots, x_n^{(k)}$ remain from the previous iteration.
 
-## Derivation
+### Derivation
 
 Starting from the linear system $A\mathbf{x} = \mathbf{b}$, write the $i$-th equation explicitly:
 
@@ -66,18 +68,17 @@ The essence of the Gauss-Seidel method is to "sweep" through the equations in a 
 
 The process is essentially a fixed-point iteration. Under certain conditions, such as $A$ being strictly diagonally dominant or symmetric positive definite, this iteration converges to the true solution $\mathbf{x}^*$.
 
-*(PLOT 2: Potentially, a contour plot of the solution space or a geometric interpretation of the Gauss-Seidel updates as successive intersections approaching the solution.)*
-
-## Algorithm Steps
+### Algorithm Steps
 
 **Step-by-step procedure:**
 
 I. **Initialization**: Start with an initial guess $\mathbf{x}^{(0)} = (x_1^{(0)}, x_2^{(0)}, \ldots, x_n^{(0)})^\top$. A common choice is $\mathbf{x}^{(0)} = \mathbf{0}$ or a vector of small random values.
 
 II. **Iterative Update**: For iteration $k = 0, 1, 2, \ldots$ until convergence:
-- For $i = 1$ to $n$:
 
- $$x_i^{(k+1)} = \frac{b_i - \sum_{j=1}^{i-1} A_{ij} x_j^{(k+1)} - \sum_{j=i+1}^{n} A_{ij} x_j^{(k)}}{A_{ii}}.$$
+For $i = 1$ to $n$:
+
+$$x_i^{(k+1)} = \frac{b_i - \sum_{j=1}^{i-1} A_{ij} x_j^{(k+1)} - \sum_{j=i+1}^{n} A_{ij} x_j^{(k)}}{A_{ii}}.$$
 
 III. **Convergence Check**: After completing the update for all $i$, check if the solution has converged. A common convergence criterion is to check the norm of the residual $\|A\mathbf{x}^{(k+1)} - \mathbf{b}\|$ or the difference between successive iterates $\|\mathbf{x}^{(k+1)} - \mathbf{x}^{(k)}\|$. If this measure is less than a prescribed tolerance $\varepsilon$, stop; otherwise, proceed to the next iteration.
 
@@ -88,20 +89,15 @@ IV. **Output**: Once the loop terminates, $\mathbf{x}^{(k+1)}$ is considered the
 **Given System:**
 
 $$\begin{aligned}
-
 5x - y &= 6, \\
-
 7x + 8y &= 20.
-
 \end{aligned}$$
 
 This can be expressed in matrix form as:
 
 $$A = \begin{bmatrix} 5 & -1 \\ 7 & 8 \end{bmatrix}, \quad
-
 \mathbf{x} = \begin{bmatrix} x \\ y \end{bmatrix}, \quad
-
-\mathbf{b} = \begin{bmatrix} 6 \\ 20 \end{bmatrix}.$$
+\mathbf{b} = \begin{bmatrix} 6 \\ 20 \end{bmatrix}$$
 
 We have two equations:
 
@@ -128,7 +124,7 @@ After first iteration:
 
 $$x^{(1)} = 1.2, \quad y^{(1)} = 1.45.$$
 
-- **Iteration 2** ($k=1$ to $k=2$):
+**Iteration 2** ($k=1$ to $k=2$):
 
 Using $x^{(1)} = 1.2$ and $y^{(1)} = 1.45$:
 
@@ -146,7 +142,7 @@ After second iteration:
 
 $$x^{(2)} = 1.49, \quad y^{(2)} = 1.19625.$$
 
-- **Iteration 3** ($k=2$ to $k=3$):
+**Iteration 3** ($k=2$ to $k=3$):
 
 Using $x^{(2)} = 1.49$ and $y^{(2)} = 1.19625$:
 
@@ -162,9 +158,7 @@ If we continue iterating until the changes in $x$ and $y$ are negligible (for ex
 
 $$x \approx 1.04, \quad y \approx 1.60.$$
 
-*(PLOT 3: A plot of the iterative sequence of $(x^{(k)}, y^{(k)})$ values approaching the final solution, possibly shown on the xy-plane.)*
-
-## Advantages
+### Advantages
 
 I. **Faster Convergence than Jacobi**: By using the most recently updated values of the variables in the same iteration, the Gauss-Seidel method often converges in fewer iterations than the Jacobi method, especially for well-conditioned or diagonally dominant systems.
 
@@ -172,14 +166,10 @@ II. **Memory Efficiency**: The method only requires storage for the matrix $A$, 
 
 III. **Ease of Implementation**: The Gauss-Seidel update formulas are straightforward and do not require complex factorization steps. It’s a purely iterative approach that can be easily implemented and parallelized (with some caution).
 
-*(PLOT 4: A bar chart comparing the number of iterations to convergence for Gauss-Seidel vs. Jacobi on a sample problem.)*
-
-## Limitations
+### Limitations
 
 I. **Convergence Requirements**: The method does not always converge. Convergence is guaranteed if $A$ is strictly diagonally dominant or if $A$ is symmetric positive definite. For other cases, it may fail to converge or may converge very slowly.
 
 II. **Serial Nature of Updates**: In contrast to the Jacobi method, Gauss-Seidel updates are inherently sequential since each new value depends on previously updated values in the same iteration. This can limit straightforward parallelization.
 
 III. **Potential Slowdown for Certain Matrices**: Even when it does converge, convergence can be slow if the system is ill-conditioned or not sufficiently diagonal dominant. In such cases, more sophisticated methods or preconditioners might be required.
-
-*(PLOT 5: A plot of residual norm vs. iteration number, illustrating slow convergence for a poorly conditioned matrix.)*
