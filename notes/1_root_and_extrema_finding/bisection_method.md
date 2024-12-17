@@ -4,9 +4,7 @@ The bisection method is a classical root-finding technique used extensively in n
 
 Physically and mathematically, the idea is that if a function $f(x)$ crosses the $x$-axis, then there exists a point $x = \alpha$ such that $f(\alpha) = 0$. If the function is continuous and changes sign over an interval $[a,b]$ (that is, $f(a)f(b) < 0$), then by the Intermediate Value Theorem, there must be at least one root in that interval. The bisection method exploits this fact by repeatedly halving the interval until the resulting interval is sufficiently small to approximate the root.
 
-**Conceptual Illustration (Not Removing the Plot)**:
-
-Below is a conceptual plot (not an actual numerical figure here, but imagine a continuous curve of $f(x)$ intersecting the x-axis):
+**Conceptual Illustration**:
 
 ![output(12)](https://github.com/user-attachments/assets/12b2d9fa-054b-4e09-ad80-22dc0785c5f0)
 
