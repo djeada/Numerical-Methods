@@ -1,70 +1,159 @@
-## Lagrange Polynomial Interpolation
+## Introduction
 
-Lagrange Polynomial Interpolation is a form of interpolation which uses the Lagrange basis polynomials, denoted as $P_i(x)$, to form an interpolating polynomial, $L(x)$, which passes through all the given points $(x_i, y_i)$.
+Lagrange Polynomial Interpolation is a widely used technique for determining a polynomial that passes exactly through a given set of data points. Suppose we have a set of $(n+1)$ data points $(x_0, y_0), (x_1, y_1), \ldots, (x_n, y_n)$ where all $x_i$ are distinct. The aim is to find a polynomial $L(x)$ of degree at most $n$ such that:
 
-## Mathematical Formulation
+$$L(x_i) = y_i, \quad \text{for} \; i=0,1,\ldots,n.$$
 
-Given $n+1$ distinct points $(x_0, y_0), (x_1, y_1), ..., (x_n, y_n)$, the goal of Lagrange interpolation is to find a polynomial $L(x)$ of degree $n$, such that $L(x_i) = y_i$.
+Instead of solving a system of linear equations (as would be required if we used a general polynomial form), Lagrange interpolation provides a direct formula for the interpolating polynomial in terms of **Lagrange basis polynomials**. This approach is conceptually straightforward and does not require forming and solving large linear systems.
 
-The polynomial $L(x)$ is given by:
+**Conceptual Illustration (Not Removing the Plot)**:
 
-$$L(x) = \sum_{i=0}^{n} y_i P_i(x)$$
-
-Here $P_i(x)$ is the $i$-th Lagrange basis polynomial given by:
-
-$$P_i(x) = \prod_{j=0, j\neq i}^{n} \frac{x - x_j}{x_i - x_j}$$
-
-## Derivation
-
-Given $n+1$ points $(x_0, y_0), (x_1, y_1), ..., (x_n, y_n)$, we want to find an $n$-th degree polynomial $L(x)$ such that $L(x_i) = y_i$ for all $i=0,1,2,...,n$.
-
-We can express $L(x)$ as:
-
-$$L(x) = \sum_{i=0}^{n} y_i P_i(x)$$
-
-Where $P_i(x)$ is the $i$-th Lagrange basis polynomial given by:
-
-$$P_i(x) = \prod_{j=0, j\neq i}^{n} \frac{x - x_j}{x_i - x_j}$$
-
-For a specific $i$, all terms in the product $P_i(x)$ will be zero at $x=x_j$ for all $j\neq i$. Hence $L(x_j) = y_j$ for all $j$.
-
-## Algorithm Steps
-
-1. Given a set of $(x_i, y_i)$ points, initialize $L(x) = 0$.
-
-2. For each point $x_i$, calculate the Lagrange basis polynomial $P_i(x)$:
-
-    - Initialize $P_i(x) = 1$.
-    - For each $x_j$ where $j \neq i$, calculate the term $\frac{x - x_j}{x_i - x_j}$ and multiply it with the current value of $P_i(x)$.
-
-3. Calculate $L(x)$ by adding the product of $y_i$ and $P_i(x)$ to the current value of $L(x)$ for each point $x_i$.
-
-4. The final $L(x)$ is the Lagrange interpolating polynomial.
-
-## Example
-
-Given three points A(-1, 1), B(2, 3), and C(3,5), we want to interpolate a polynomial using the Lagrange method.
-
-The Lagrange basis polynomials are calculated as:
-
-$$P_1(x) = \frac{(x - x_2)(x - x_3)}{(x_1-x_2)(x_1-x_3)} = \frac{(x - 2)(x - 3)}{(-1-2)(-1-3)} = \frac{1}{12}(x^2 - 5x + 6)$$
-
-$$P_2(x) = \frac{(x - x_1)(x - x_3)}{(x_2-x_1)(x_2-x_3)} = \frac{(x + 1)(x - 3)}{(2 + 1)(2-3)} = -\frac{1}{3}(x^2 - 2x - 3)$$
-
-$$P_3(x) = \frac{(x - x_1)(x - x_2)}{(x_3-x_1)(x_3-x_2)} = \frac{(x + 1)(x - 2)}{(3 + 1)(3-2)} =\frac{1}{4}(x^2 -x - 2)$$
-
-The Lagrange interpolating polynomial is then:
-
-$$L(x) = 1 \cdot P_1(x) + 3 \cdot P_2(x) + 5 \cdot P_3(x)$$
+Imagine that you have three points $(x_0, y_0), (x_1, y_1), (x_2, y_2)$. The Lagrange form builds a polynomial that goes exactly through these points. Each Lagrange basis polynomial $P_i(x)$ is constructed to be zero at all $x_j$ except $x_i$. By taking a suitable linear combination of these basis polynomials with weights given by $y_i$, we get an interpolating polynomial $L(x)$.
 
 ![Lagrange Polynomial Plot](https://user-images.githubusercontent.com/37275728/188961030-379f428f-a0c4-403a-a6bd-e4a5393f38e0.png)
 
+The Lagrange polynomial passing through all these points is unique and matches every given data point exactly.
+
+## Mathematical Formulation
+
+Given $(n+1)$ distinct points $(x_0, y_0), (x_1, y_1), \ldots, (x_n, y_n)$, the Lagrange interpolation polynomial is constructed as follows:
+
+I. **Lagrange Basis Polynomials:**
+
+For each $i$ in $\{0,1,\ldots,n\}$, define the $i$-th Lagrange basis polynomial $P_i(x)$ by:
+
+$$P_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n} \frac{x - x_j}{x_i - x_j}.$$
+
+Notice that $P_i(x_k) = \delta_{ik}$, where $\delta_{ik}$ is the Kronecker delta. In other words:
+
+$$P_i(x_k) =
+
+\begin{cases}
+
+1 & \text{if } i=k,\\[6pt]
+
+0 & \text{if } i \neq k.
+
+\end{cases}$$
+
+II. **Lagrange Interpolating Polynomial:**
+
+Once we have the $P_i(x)$, the interpolating polynomial $L(x)$ is given by:
+
+$$L(x) = \sum_{i=0}^{n} y_i P_i(x).$$
+
+By construction, $L(x_j) = y_j$ for all $j$. The degree of $L(x)$ is at most $n$.
+
+## Derivation
+
+Starting from the requirement that $L(x)$ matches all data points:
+
+$$L(x_i) = y_i \quad \text{for } i=0,1,\ldots,n.$$
+
+Consider polynomials $P_i(x)$ defined as:
+
+$$P_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n} \frac{x - x_j}{x_i - x_j}.$$
+
+This construction ensures that for each fixed $i$:
+- When $x = x_i$, the numerator in $P_i(x)$ contains all factors $(x_i - x_j)$ for $j \neq i$, which exactly cancel with the denominator $(x_i - x_j)$. Thus, $P_i(x_i)=1$.
+- For $x = x_k$ with $k \neq i$, the factor $(x_k - x_k)$ in the numerator makes $P_i(x_k)=0$.
+
+Hence $P_i(x)$ acts like a "selector" polynomial that equals 1 at $x_i$ and 0 at every other $x_j$.
+
+To construct $L(x)$ that passes through all points, we form:
+
+$$L(x) = \sum_{i=0}^{n} y_i P_i(x).$$
+
+Evaluating at $x = x_k$:
+
+$$L(x_k) = \sum_{i=0}^{n} y_i P_i(x_k) = y_k,$$
+since $P_k(x_k)=1$ and $P_i(x_k)=0$ for $i \neq k$.
+
+## Algorithm Steps
+
+I. **Input**: A set of $(n+1)$ points $(x_i,y_i)$ with all $x_i$ distinct.
+
+II. **Initialization**:
+
+Set $L(x)=0$.
+
+III. **Compute Lagrange Basis Polynomials**:
+For each $i=0,1,\ldots,n$:
+- Initialize $P_i(x)=1$.
+- For each $j=0,1,\ldots,n$ with $j \neq i$:
+
+ $$P_i(x) = P_i(x) \cdot \frac{x - x_j}{x_i - x_j}.$$
+
+IV. **Form the Interpolating Polynomial**:
+
+Compute:
+
+$$L(x) = \sum_{i=0}^{n} y_i P_i(x).$$
+
+V. **Result**:
+
+The polynomial $L(x)$ is the desired Lagrange interpolating polynomial. To interpolate at any $x$, just evaluate $L(x)$.
+
+## Example
+
+**Given Points**:
+
+Let’s consider three points:
+
+$$A(-1,1), \quad B(2,3), \quad C(3,5).$$
+
+We have $n=2$ (since there are 3 points), and thus the polynomial $L(x)$ will be of degree at most 2.
+
+- **Compute $P_0(x)$** for the point $A(-1, 1)$:
+
+$$P_0(x) = \frac{(x - x_1)(x - x_2)}{(x_0-x_1)(x_0-x_2)} = \frac{(x - 2)(x - 3)}{(-1 -2)(-1 -3)} = \frac{(x - 2)(x - 3)}{(-3)(-4)} = \frac{(x - 2)(x - 3)}{12}.$$
+
+- **Compute $P_1(x)$** for the point $B(2,3)$:
+
+$$P_1(x) = \frac{(x - x_0)(x - x_2)}{(x_1 - x_0)(x_1 - x_2)} = \frac{(x +1)(x - 3)}{(2 + 1)(2 - 3)} = \frac{(x+1)(x - 3)}{3 \cdot (-1)} = -\frac{(x+1)(x-3)}{3}.$$
+
+- **Compute $P_2(x)$** for the point $C(3,5)$:
+
+$$P_2(x) = \frac{(x - x_0)(x - x_1)}{(x_2 - x_0)(x_2 - x_1)} = \frac{(x +1)(x - 2)}{(3 + 1)(3 - 2)} = \frac{(x+1)(x - 2)}{4}.$$
+
+Now, plug these into $L(x)$:
+
+$$L(x) = y_0 P_0(x) + y_1 P_1(x) + y_2 P_2(x).$$
+
+Substitute $(y_0, y_1, y_2) = (1,3,5)$:
+
+$$L(x) = 1 \cdot \frac{(x - 2)(x - 3)}{12} + 3 \cdot \left(-\frac{(x+1)(x - 3)}{3}\right) + 5 \cdot \frac{(x+1)(x-2)}{4}.$$
+
+This polynomial will exactly fit the three given points.
+
 ## Advantages
 
-1. **Exact Fit**: The Lagrange interpolation polynomial fits exactly to the given data points.
-2. **Ease of Use**: The formulation of the Lagrange interpolation polynomial is straightforward and requires no solution of linear equations unlike other interpolation methods.
+I. **Exact Fit:**  
+
+The Lagrange interpolation polynomial passes through all given data points exactly. There is no approximation error at these nodes.
+
+II. **No Linear System Needed:**  
+
+Unlike other polynomial interpolation techniques that require solving a system of equations, Lagrange interpolation provides a direct formula.
+
+III. **Simplicity of Form:**  
+
+The formula for the interpolating polynomial is explicit and easy to implement.
+
+IV. **Flexibility:**  
+
+Works for any set of points with distinct $x_i$.
 
 ## Limitations
 
-1. **Runge's Phenomenon**: Lagrange interpolation can suffer from oscillations between points, especially for high degree polynomials.
-2. **Inefficiency**: If a new data point is added, the entire polynomial needs to be recalculated.
+I. **Runge’s Phenomenon:**  
+
+For a large number of interpolation points, Lagrange interpolation may cause oscillations between the points, especially if the points are unevenly spaced.
+
+II. **Recalculation for Added Points:**  
+
+If a new point is added, the entire polynomial must be recomputed from scratch, unlike some other forms (e.g., Newton’s divided differences) that allow incremental updates more easily.
+
+III. **Computational Cost:**  
+
+Evaluating Lagrange polynomials directly can be computationally intensive for large $n$ due to the product terms, though this can be mitigated with more efficient evaluation strategies.
