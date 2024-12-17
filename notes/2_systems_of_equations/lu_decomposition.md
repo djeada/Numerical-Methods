@@ -238,21 +238,19 @@ U = \begin{bmatrix}
 
 **Forward Substitution ($L\mathbf{c} = \mathbf{b}$)**:
 
-$$\begin{aligned}
-c_1 &= b_1 = 1, \\
-c_2 &= b_2 - l_{21} c_1 = -2 - (1.5)(1) = -3.5, \\
-c_3 &= b_3 - l_{31}c_1 - l_{32}c_2 = 3 - (-1)(1) - (-1.2)(-3.5) = 3 + 1 - 4.2 = -0.2.
+$$c_1 = b_1 = 1$$
 
-\end{aligned}$$
+$$c_2 = b_2 - l_{21} c_1 = -2 - (1.5)(1) = -3.5$$
+
+$$c_3 = b_3 - l_{31}c_1 - l_{32}c_2 = 3 - (-1)(1) - (-1.2)(-3.5) = 3 + 1 - 4.2 = -0.2$$
 
 **Backward Substitution ($U\mathbf{x} = \mathbf{c}$)**:
 
-$$\begin{aligned}
-x_3 &= \frac{c_3}{u_{33}} = \frac{-0.2}{4.6} \approx -0.0434783, \\
-x_2 &= \frac{c_2 - u_{23}x_3}{u_{22}} = \frac{-3.5 - (8)(-0.0434783)}{-7.5} = \frac{-3.5 + 0.3478264}{-7.5} = \frac{-3.1521736}{-7.5} \approx 0.42029, \\
-x_1 &= \frac{c_1 - u_{12}x_2 - u_{13}x_3}{u_{11}} = \frac{1 - 3(0.42029) - (-4)(-0.0434783)}{2} = \frac{1 - 1.26087 - 0.1739132}{2} = \frac{-0.4347832}{2} = -0.2173916.
+$$x_3 = \frac{c_3}{u_{33}} = \frac{-0.2}{4.6} \approx -0.0434783$$
 
-\end{aligned}$$
+$$x_2 = \frac{c_2 - u_{23}x_3}{u_{22}} = \frac{-3.5 - (8)(-0.0434783)}{-7.5} = \frac{-3.5 + 0.3478264}{-7.5} = \frac{-3.1521736}{-7.5} \approx 0.42029$$
+
+$$x_1 = \frac{c_1 - u_{12}x_2 - u_{13}x_3}{u_{11}} = \frac{1 - 3(0.42029) - (-4)(-0.0434783)}{2} = \frac{1 - 1.26087 - 0.1739132}{2} = \frac{-0.4347832}{2} = -0.2173916$$
 
 (To maintain consistency with the original example’s final solution, one may verify arithmetic carefully or consider a simpler rounding. If re-checking is done, the end result can be made consistent. With perfect arithmetic, one obtains a neat solution. The small discrepancies here are due to rounding steps shown explicitly. In a precise calculation, the final solution should be very close to $(x,y,z) = (1, -1, 1)$.)
 
