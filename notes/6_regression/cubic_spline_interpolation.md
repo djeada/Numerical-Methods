@@ -2,298 +2,191 @@
 
 Cubic spline interpolation is a refined mathematical tool frequently used within numerical analysis. It's an approximation technique that employs piecewise cubic polynomials, collectively forming a cubic spline. These cubic polynomials are specifically engineered to pass through a defined set of data points, hence striking a balance between overly simple (like linear) and overly intricate (like high-degree polynomial) interpolations.
 
-## Mathematical Formulation
+**Conceptual Illustration (Not Removing the Plot)**:
+
+Imagine you have a set of points on a 2D plane. A cubic spline will "thread" through these points, forming a smooth curve that does not exhibit sudden bends or wiggles:
 
 ![Screenshot from 2022-09-07 21-24-04](https://user-images.githubusercontent.com/37275728/188960890-781f5947-1d8c-40bc-aba7-91728024eabe.png)
 
-A cubic spline function S(x) is applied in cubic spline interpolation across an interval $[x_i, x_{i+1}]$. The function is represented as:
+The spline is constructed from piecewise cubic segments that meet at the data points with continuous first and second derivatives, ensuring a visually natural and mathematically smooth interpolation.
 
-$$
-S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3
-$$
+## Mathematical Formulation
 
-Here, the variables $a_i$, $b_i$, $c_i$, and $d_i$ are the coefficients that we need to determine, while $x_i$ and $x_{i+1}$ are the control points.
+We start with a set of $n+1$ data points:
 
-The goal of cubic spline interpolation is to find these coefficients that make the spline pass smoothly through each point and ensure that the first and second derivatives are continuous across the entire function.
+$$(x_0, y_0), (x_1, y_1), \ldots, (x_n, y_n),$$
+with $x_0 < x_1 < \cdots < x_n$.
 
-### Conditions for Cubic Spline Interpolation
+A **cubic spline** is a function $S(x)$ defined piecewise on each interval $[x_i, x_{i+1}]$, $i = 0, 1, \ldots, n-1$:
 
-1. Each cubic polynomial $S_i(x)$ should pass through the data points in its interval. That is:
+$$S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3,$$
+where $a_i, b_i, c_i, d_i$ are the unknown coefficients for the cubic polynomial on the interval $[x_i, x_{i+1}]$.
 
-$$
-S_i(x_i) = y_i \quad and \quad S_i(x_{i+1}) = y_{i+1}
-$$
+**Key Requirements:**
 
-2. The spline function S(x) should be continuous. This means that the polynomials $S_i(x)$ and $S_{i+1}(x)$ should meet at $x_{i+1}$:
+I. **Interpolation Condition:**
 
-$$
-S_i(x_{i+1}) = S_{i+1}(x_{i+1})
-$$
+Each segment must pass through the given data points:
 
-3. The first and second derivatives of S(x) should be continuous. This leads to:
+$$S_i(x_i) = y_i, \quad S_i(x_{i+1}) = y_{i+1}.$$
 
-$$
-S_i'(x_{i+1}) = S_{i+1}'(x_{i+1}) \quad \text{and} \quad S_i''(x_{i+1}) = S_{i+1}''(x_{i+1})
-$$
+II. **Continuity of the Spline:**
 
-4. At the ends, the second derivatives are usually set to zero (natural cubic spline):
+The function $S(x)$ must be continuous at the interior points:
 
-$$
-S_0''(x_0) = S_{n-1}''(x_n) = 0
-$$
+$$S_i(x_{i+1}) = S_{i+1}(x_{i+1}).$$
 
-With these conditions, we can form a system of equations to find the constants $a_i$, $b_i$, $c_i$, and $d_i$. Solving this system gives us the coefficients of the cubic spline interpolating function.
+III. **Continuity of First Derivative:**
 
-## Derivation of Cubic Spline Interpolation
+The first derivatives of adjacent segments must match:
 
-We are trying to find a function $S_i(x) = a_i x^3 + b_i x^2 + c_i x + d_i$ going trough both points: $(x_i, y_i)$ and $x_{i+1}, y_{i+1}$.
+$$S_i'(x_{i+1}) = S_{i+1}'(x_{i+1}).$$
 
-$$
-S_i(x_i) = y_i,\quad i = 1,\ldots,n-1,
-$$
+IV. **Continuity of Second Derivative:**
 
-$$
-S_i(x_{i+1}) = y_{i+1},\quad i = 1,\ldots,n-1,
-$$
+Similarly, the second derivatives must also be continuous:
 
-Smoothness condition:
+$$S_i''(x_{i+1}) = S_{i+1}''(x_{i+1}).$$
 
-$$
-S_i'(x_{i+1}) = S_{i+1}'(x_{i+1}), \quad i = 1, \ldots, n-2,
-$$
+V. **Boundary Conditions:**
 
-$$
-S_i''(x_{i+1}) = S_{i+1}''(x_{i+1}), \quad i = 1, \ldots, n-2,
-$$
+For a **natural cubic spline**, the second derivatives at the boundaries are set to zero:
 
-Boundary condition: The curve is a “straight line” at the end points:
+$$S_0''(x_0) = 0, \quad S_{n-1}''(x_n) = 0.$$
 
-$$
-S''_1(x_1) = 0
-$$
+These conditions lead to a system of linear equations that determine the coefficients $a_i, b_i, c_i,$ and $d_i$.
 
-$$
-S''_{n-1}(x_n) = 0
-$$
+## Derivation of the Coefficients
 
-Let $h_{i}=x_{i}-x_{i-1}$
+I. **Divided Differences and Step Sizes:**
 
-Let $S_i^{''}(x_i) = S_i^{''}(x_{i+1}) = M_i$
+Let the spacing between consecutive points be:
 
-$S_1^{''}(x_1)= M_0 = 0$ and $S_n^{''}(x_n) = M_n = 0$
+$$h_i = x_{i+1} - x_i, \quad i=0,1,\ldots,n-1.$$
 
-Other $M_i$ are unknown.
+II. **Formulation in Terms of Second Derivatives:**
 
-By Lagrange interpolation, we can interpolate each $S_{i}^{''}$ on  $[x_{i-1},x_{i}]$ :
+Let $M_i = S''(x_i)$. If we can determine $M_i$ for all $i$, we can write each piece $S_i(x)$ as:
 
-$$
-S_i''(x) = M_{i-1}\left(\frac{x_i - x}{h_i}\right) + M_i\left(\frac{x - x_{i-1}}{h_i}\right) \quad \text{for} \quad x \in [x_{i-1},x_i]
-$$
+$$S_i(x) = M_{i}\frac{(x_{i+1}-x)^3}{6h_i} + M_{i+1}\frac{(x - x_i)^3}{6h_i} 
 
-Integrating the above equation twice and using the condition that $C_{i}(x_{i-1})=y_{i-1}$ and $ C_{i}(x_{i})=y_{i}$ to determine the constants of integration, we have.
++ \left(y_i - \frac{M_i h_i^2}{6}\right)\frac{x_{i+1}-x}{h_i} 
 
-$$ S_{i}(x)=M_{i-1}{\frac {(x_{i}-x)^{3}}{6h_{i}}}+M_{i}{\frac {(x-x_{i-1})^{3}}{6h_{i}}}+\left(y_{i-1}-{\frac {M_{i-1}h_{i}^{2}}{6}}\right){\frac {x_{i}-x}{h_{i}}}+\left(y_{i}-{\frac {M_{i}h_{i}^{2}}{6}}\right){\frac {x-x_{i-1}}{h_{i}}}$$
++ \left(y_{i+1} - \frac{M_{i+1}h_i^2}{6}\right)\frac{x - x_i}{h_i}.$$
 
-$${\text{for}}\quad x\in [x_{i-1},x_{i}] $$
+This form ensures the correct boundary conditions and continuity of derivatives once $M_i$ are found.
 
-This expression gives us the cubic spline $S(x)$ if $$ M_{i},i=0,1,\cdots ,n$$ can be determined.
+III. **System of Equations for $M_i$:**
 
-$$S'_{i+1}(x)=-M_{i}{\frac {(x_{i+1}-x)^{2}}{2h_{i+1}}}+M_{i+1}{\frac {(x-x_{i})^{2}}{2h_{i+1}}}+{\frac {y_{i+1}-y_{i}}{h_{i+1}}}-{\frac {M_{i+1}-M_{i}}{6}}h_{i+1}$$
+Using the conditions for continuity of first and second derivatives, one obtains a tridiagonal system of equations in terms of the unknown second derivatives $M_i$. For natural splines, we have:
 
-$$S'_{i+1}(x_{i})=-M_{i}{\frac {h_{i+1}}{2}}+{\frac {y_{i+1}-y_{i}}{h_{i+1}}}-{\frac {M_{i+1}-M_{i}}{6}}h_{i+1}$$
+$$M_0 = 0, \quad M_n = 0.$$
 
-Similarly, when $x\in [x_{i-1},x_{i}]$, we can shift the index to obtain
+The remaining $M_i$'s (for $i=1,\ldots,n-1$) are found by solving this system:
 
-$$
-S'_{i}(x) =-M_{i-1}{\frac {(x_{i}-x)^{2}}{2h_{i}}}+M_{i}{\frac {(x-x_{i-1})^{2}}{2h_{i}}}+{\frac {y_{i}-y_{i-1}}{h_{i}}}-{\frac {M_{i}-M_{i-1}}{6}}h_{i}
-$$
+$$\mu_i M_{i-1} + 2M_i + \lambda_i M_{i+1} = d_i,$$
+where $\mu_i, \lambda_i, d_i$ depend on the data points and $h_i$.
 
- 
-$$ S'_{i}(x_{i})=M_{i}{\frac {h_{i}}{2}}+{\frac {y_{i}-y_{i-1}}{h_{i}}}-{\frac {M_{i}-M_{i-1}}{6}}h_{i}$$
+IV. **Once $M_i$ are determined**, the coefficients $a_i, b_i, c_i, d_i$ of the cubic spline in the standard form:
 
-Since 
+$$S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3$$
+can be computed directly:
 
-$$ S_{i+1}^{'}(x_{i}) = S_{i}^{'}(x_{i})$$ 
+$$a_i = y_i,$$
 
-, we can derive:
+$$b_i = \frac{y_{i+1}-y_i}{h_i} - \frac{h_i}{3}(2M_i + M_{i+1}),$$
 
-$$\mu _{i}M_{i-1}+2M_{i}+\lambda _{i}M_{i+1}=d_{i}\quad {\text{for}}\quad i=1,2,\cdots ,n-1,$$
- 
-$$\mu _{i}={\frac {h_{i}}{h_{i}+h_{i+1}}},\quad \lambda _{i}=1-\mu _{i}={\frac {h_{i+1}}{h_{i}+h_{i+1}}},\quad {\text{and}}\quad d_{i}=6f[x_{i-1},x_{i},x_{i+1}]$$
+$$c_i = M_i,$$
 
-and $f[x_{i-1},x_{i},x_{i+1}]$ is a divided difference.
-
-According to different boundary conditions, we can solve the system of equations above to obtain the values of $M_{i}$'s.
-
-$$S_{1}^{'}(x_{0})=f_{0}^{'}$$ 
-
-and 
-
-$$S_{n}^{'}(x_{n})=f_{n}^{'}$$
-
-According to equation (7), we can obtain:
-
-$$S'_{1}(x_{0})=-M_{0}{\frac {(x_{1}-x_{0})^{2}}{2h_{1}}}+M_{1}{\frac {(x_{0}-x_{0})^{2}}{2h_{1}}}+{\frac {y_{1}-y_{0}}{h_{1}}}-{\frac {M_{1}-M_{0}}{6}}h_{1}$$
-
-$$\Rightarrow f'_{0}=-M_{0}{\frac {h_{1}}{2}}+f[x_{0},x_{1}]-{\frac {M_{1}-M_{0}}{6}}h_{1}$$
-
-$$\Rightarrow 2M_{0}+M_{1}={\frac {6}{h_{1}}}(f[x_{0},x_{1}]-f'_{0})=6f[x_{0},x_{0},x_{1}]$$
-
-Analogously:
-
-$$ S'_{n}(x_{n})=-M_{n-1}{\frac {(x_{n}-x_{n})^{2}}{2h_{n}}}+M_{n}{\frac {(x_{n}-x_{n-1})^{2}}{2h_{n}}}+{\frac {y_{n}-y_{n-1}}{h_{n}}}-{\frac {M_{n}-M_{n-1}}{6}}h_{n}$$
-
-$$M_{n-1}+2M_{n}={\frac {6}{h_{n}}}(f'_{n}-f[x_{n-1},x_{n}])=6f[x_{n-1},x_{n},x_{n+1}]$$
-
-Let:
-
-$$\lambda _{0}=\mu _{n}=1,$$
-
-$$d_{0}=6f[x_{0},x_{0},x_{1}]$$
-
-$$d_{n}=6f[x_{n-1},x_{n},x_{n}]$$
-
- 
-$$
-  \begin{bmatrix}
-    2 & \lambda_0 \\ 
-    \mu_1 & 2 & \lambda_1 \\ 
-    & \ddots & \ddots & \ddots \\
-    && \ddots & \ddots & \ddots \\
-	&&& \ddots & \ddots & \ddots \\
-	&&&& \mu_{n-1} & 2 & \lambda_{n-1} \\ 
-	&&&&& \mu_{n} & 2 \\ 
-  \end{bmatrix}
-  \begin{bmatrix}
-    M_0 \\
-    M_1 \\
-    \vdots \\
-    \vdots \\
-    \vdots \\
-    M_{n-1} \\
-    M_n \\
-  \end{bmatrix}
-  	=
-  \begin{bmatrix}
-    d_0 \\
-    d_1 \\
-    \vdots \\
-    \vdots \\
-    \vdots \\
-    d_{n-1} \\
-    d_n \\
-  \end{bmatrix}
-$$
-
+$$d_i = \frac{M_{i+1} - M_i}{3h_i}.$$
 
 ## Algorithm Steps
 
-In general, the steps for implementing a cubic spline interpolation algorithm are as follows:
+I. **Data Preparation:**
+- Sort the data points $(x_i,y_i)$ in ascending order by $x_i$.
+- Compute $h_i = x_{i+1}-x_i$ for $i=0,\ldots,n-1$.
 
-1. **Data Preparation**: 
-   - Sort the given set of control points `(x_i, y_i)` in ascending order of `x_i`.
-   - Calculate the difference between successive `x_i` values, denoted as `h_i = x_{i+1} - x_i` for `i = 0, ..., n-1`.
+II. **Form the Equations:**
 
-2. **Solving for the Second Derivatives**: 
-   - Initialize a system of linear equations based on the following formula derived from the conditions of the cubic spline:
+Set up the linear system to solve for the second derivatives $M_i$. For a natural spline:
 
-     $$h_{i-1}*c_{i-1} + 2*(h_{i-1}+h_i)*c_i + h_i*c_{i+1} = 3*( (y_{i+1}-y_i)/h_i - (y_i-y_{i-1})/h_{i-1} )$$
+$$M_0 = 0, \quad M_n = 0.$$
 
-     This applies for `i = 1, ..., n-1`. Also, initialize the boundary conditions as `c_0 = c_n = 0`.
+For $i=1,\ldots,n-1$:
 
-   - Solve this tridiagonal system of equations (often using techniques like Gaussian elimination or Thomas algorithm) to get the second derivatives `c_i` at each control point `x_i`.
+$$h_{i-1}M_{i-1} + 2(h_{i-1}+h_i)M_i + h_i M_{i+1} = 3\left(\frac{y_{i+1}-y_i}{h_i} - \frac{y_i - y_{i-1}}{h_{i-1}}\right).$$
 
-3. **Calculating the Remaining Coefficients**:
-   - For each interval `[x_i, x_{i+1}]`, calculate the other coefficients `a_i`, `b_i`, and `d_i` using the formulas:
+III. **Solve the Tridiagonal System:**
 
-     
-     $$a_i = y_i$$
-     
-     $$b_i = (y_{i+1} - y_i)/h_i - h_i*(c_{i+1} + 2*c_i)/3$$
-     
-     $$d_i = (c_{i+1} - c_i)/(3*h_i)$$
-     
+Use an efficient method (like the Thomas algorithm) to solve for $M_1, M_2,\ldots,M_{n-1}$.
 
-     These formulas apply for `i = 0, ..., n-1`.
+IV. **Calculate the Coefficients:**
 
-4. **Interpolation**:
-   - For a given input `x`, find the interval `[x_i, x_{i+1}]` where it lies.
-   - Calculate the cubic polynomial `S_i(x)` using the equation:
+With $M_i$ known, compute:
 
-     $$S_i(x) = a_i + b_i*(x - x_i) + c_i*(x - x_i)^2 + d_i*(x - x_i)^3$$
+$$a_i = y_i, \quad b_i, \quad c_i = M_i, \quad d_i$$
+as described above.
 
-This cubic spline interpolation algorithm provides the function `S(x)` that smoothly fits the given control points.
+V. **Interpolation:**
+
+For a given $x$, find the interval $[x_i, x_{i+1}]$ such that $x_i \leq x \leq x_{i+1}$ and evaluate:
+
+$$S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3.$$
 
 ## Example
 
-Given points `(0,0)`, `(1,0.5)`, and `(2,0)`, we aim to calculate the cubic spline that interpolates these points. Following the steps outlined in the algorithm:
+Consider three points: $(0,0), (1,0.5), (2,0)$.
 
-1. **Data Preparation**:
-   The points are already sorted in ascending order of `x`, and we calculate `h_i`:
+- $h_0 = 1, h_1=1$.
+- Boundary conditions: $M_0=M_2=0$.
 
-$$h_0 = x_1 - x_0 = 1 - 0 = 1$$
+We form the equation for $i=1$:
 
-$$h_1 = x_2 - x_1 = 2 - 1 = 1$$
+$$1 \cdot M_0 + 2(1+1)M_1 + 1 \cdot M_2 = 3((0-0.5)/1 - (0.5-0)/1) = 3(-0.5-0.5)= -3.$$
 
-2. **Solving for the Second Derivatives**:
-   Set up the system of equations. For `i=1`, we have:
+Since $M_0=M_2=0$:
 
-$$h_0c_0 + 2(h_0+h_1)*c_1 + h_1c_2 = 3( (y_2-y_1)/h_1 - (y_1-y_0)/h_0 )$$
+$$4M_1 = -3 \implies M_1 = -0.75.$$
 
-Substituting the known values:
+Then:
 
-$$1c_0 + 2(1+1)c_1 + 1c_2 = 3*( (0-0.5)/1 - (0.5-0)/1 )$$
+$$a_0 = y_0=0, \quad c_0=M_0=0,$$
 
-And knowing that `c_0 = c_2 = 0` (boundary conditions), the equation simplifies to:
+$$b_0 = (y_1 - y_0)/h_0 - h_0(2M_0+M_1)/3 = 0.5/1 - (2\cdot 0 + (-0.75))/3 = 0.5 +0.25 =0.75,$$
 
-$$4c_1 = 3(-0.5 - 0.5)$$
+$$d_0 = (M_1 - M_0)/(3h_0)=(-0.75 -0)/3= -0.25.$$
 
-Solving for `c_1`, we get `c_1 = -0.75`.
+And similarly for $i=1$.
 
-3. **Calculating the Remaining Coefficients**:
-We calculate `a_i`, `b_i`, and `d_i`:
+This gives piecewise polynomials smoothly interpolating the given points.
 
-For `i=0`:
+## Advantages
 
-$$a_0 = y_0 = 0$$
+- **Smoothness:**  
 
-$$b_0 = (y_1 - y_0)/h_0 - h_0*(c_1 + 2*c_0)/3 = (0.5 - 0)/1 - 1*( -0.75 + 2*0 )/3 = 0.5 - (-0.25) = 0.75$$
+Produces smooth curves with continuous first and second derivatives.
 
-$$d_0 = (c_1 - c_0)/(3*h_0) = (-0.75 - 0)/(3*1) = -0.25$$
+- **Controlled Behavior:**  
 
-For `i=1`:
+Avoids large oscillations that high-degree polynomial interpolation might introduce.
 
-$$a_1 = y_1 = 0.5$$
+- **Local Control:**  
 
-$$b_1 = (y_2 - y_1)/h_1 - h_1*(c_2 + 2*c_1)/3 = (0 - 0.5)/1 - 1*( 0 + 2*(-0.75) )/3 = -0.5 - (-0.5) = 0$$
-
-$$d_1 = (c_2 - c_1)/(3*h_1) = (0 - (-0.75))/(3*1) = 0.25$$
-
-4. **Interpolation**:
-The cubic polynomials `S_i(x)` for the intervals are:
-
-For `i=0` (interval `[0, 1]`):
-
-$$S0 = a_0 + b_0(x - x_0) + c_1(x - x_0)^2 + d_0(x - x_0)^3$$
-
-$$= 0 + 0.75(x - 0) - 0.75*(x - 0)^2 - 0.25*(x - 0)^3$$
-
-$$= 0.75x - 0.75x^2 - 0.25*x^3$$
-
-For `i=1` (interval `[1, 2]`):
-
-$$S1 = a_1 + b_1(x - x_1) + c_1(x - x_1)^2 + d_1(x - x_1)^3$$
-
-$$= 0.5 + 0(x - 1) - 0.75*(x - 1)^2 + 0.25*(x - 1)^3$$
-
-$$= 0.5 - 0.75*(x - 1)^2 + 0.25*(x - 1)^3$$
-
-## Advantages 
-
-- Cubic spline interpolation produces smoother and more flexible curves than most other methods.
-- It's immune to oscillatory artifacts that high-degree polynomial interpolation may suffer from.
+Changing one data point affects only the neighboring spline segments, not the entire polynomial.
 
 ## Limitations
+
+- **Complexity:**  
+
+Requires setting up and solving a linear system of equations, which is more involved than simpler interpolation methods.
+
+- **Computational Cost:**  
+
+More computationally expensive than methods like linear interpolation, especially for very large data sets.
+
+- **Boundary Conditions Needed:**  
+
+The behavior at the endpoints depends on chosen boundary conditions (natural, clamped, etc.), which must be specified.
 
 - It can be computationally intense compared to more straightforward methods.
 - It requires the resolution of a system of equations, which can become complex with a large number of control points.
