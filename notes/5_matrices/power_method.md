@@ -110,7 +110,3 @@ I. **Single Dominant Eigenvalue Only**: It finds only the largest eigenvalue in 
 II. **Slow Convergence if Eigenvalues Are Close**: If $|\lambda_1|$ and $|\lambda_2|$ are close, convergence can be slow.
 
 III. **Requires a Unique Largest Eigenvalue**: If the largest eigenvalue is not unique, the method may fail to converge to a single eigenvector.
-
-*(PLOT 6: A plot showing convergence speed as a function of the eigenvalue ratio $|\lambda_2/\lambda_1|$.)*
-
-In summary, the power method is a valuable and simple tool for approximating the dominant eigenvalue and eigenvector of large, sparse matrices, albeit with certain constraints on convergence and uniqueness.
