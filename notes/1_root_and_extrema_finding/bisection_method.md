@@ -8,16 +8,7 @@ Physically and mathematically, the idea is that if a function $f(x)$ crosses the
 
 Below is a conceptual plot (not an actual numerical figure here, but imagine a continuous curve of $f(x)$ intersecting the x-axis):
 
-```
- f(x)
-  |
-  |         *
-  |        / \
-  |       /   \
-  |      /     \   * root approx.
-------+-----x------\-----------> x
-  a      c       b
-```
+![output(12)](https://github.com/user-attachments/assets/12b2d9fa-054b-4e09-ad80-22dc0785c5f0)
 
 In the above conceptual plot, the function $f(x)$ crosses the x-axis somewhere between $a$ and $b$. The bisection step chooses the midpoint $c = \frac{a+b}{2}$ to test the sign of $f(c)$. Depending on the sign, the algorithm halves the interval, guaranteeing that the root remains within the new interval. This halving process is repeated iteratively.
 
