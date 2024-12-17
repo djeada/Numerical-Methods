@@ -4,22 +4,11 @@ Newton's method (or the Newton-Raphson method) is a powerful root-finding algori
 
 Physically and geometrically, Newton's method can be viewed as follows: starting from an initial guess $x_0$, you draw the tangent line to the curve $y = f(x)$ at the point $(x_0, f(x_0))$. The intersection of this tangent line with the $x$-axis provides a better approximation to the root than $x_0$, assuming certain conditions on the function and the initial guess. Repeating this procedure iteratively refines the approximation.
 
-**Conceptual Illustration (Not Removing the Plot)**:
+**Conceptual Illustration**:
 
 Imagine the curve $f(x) = x^2 -4$:
 
-```
-f(x)
-|
-|      
-|      * (x0=3)
-|     / \       Tangent line at x0
-|    /   \   * (new approximation)
-|   /     \   x*
-|  /       \
----+----2------\------------> x
-      root (x=2)
-```
+![output(15)](https://github.com/user-attachments/assets/b815fac6-f9ab-454a-87f7-ceecc4446543)
 
 At $x_0 = 3$, the tangent line is drawn. Its intersection with the x-axis is the next approximation $x_1$. Repeating this yields even better approximations rapidly converging to the exact root $x=2$.
 
