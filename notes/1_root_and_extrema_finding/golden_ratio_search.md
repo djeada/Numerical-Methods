@@ -4,20 +4,11 @@ The Golden Ratio Search is a technique employed for locating the extremum (minim
 
 For a unimodal function $f(x)$ defined on an interval $[a,b]$, the Golden Ratio Search progressively narrows down the search interval by evaluating the function at two strategically chosen internal points. By leveraging the intrinsic ratio $\phi$, each iteration reduces the size of the interval while ensuring that no potential minima are prematurely excluded. This process continues until the interval is sufficiently small, providing an approximation to the function’s minimum (or maximum, if desired by adjusting the comparison conditions).
 
-**Conceptual Illustration (Not Removing the Plots)**:
+**Conceptual Illustration**:
 
 Imagine the graph of a unimodal function $f(x)$. The goal is to isolate the minimum within a progressively smaller bracket. Initially, we have the interval $[a,b]$:
 
-```
-f(x)   
-|         *     
-|       /   \   
-|     /       \   
-|   /           \  
-|  /             * 
---+----------------+----> x
-a                 b
-```
+![output(13)](https://github.com/user-attachments/assets/805e7e1d-4f17-457f-88e9-3e26753d5f50)
 
 We pick two points $x_1$ and $x_2$ inside $[a,b]$ using the golden ratio partitioning. Based on the function values at these points, we eliminate a portion of the interval that cannot contain the minimum. This procedure repeats, each time reducing the interval size while maintaining the guarantee of containing the minimum.
 
