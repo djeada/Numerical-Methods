@@ -1,16 +1,16 @@
-## Introduction
+## Power Method
 
 The power method is a fundamental iterative algorithm for estimating the eigenvalue of largest magnitude and its associated eigenvector for a given matrix. This technique is particularly appealing when dealing with large and sparse matrices, where direct eigenvalue computations (e.g., via the characteristic polynomial) are computationally expensive or numerically unstable. The power method capitalizes on the property that repeated multiplication by a matrix $A$ will cause any initial vector to align with the direction of the eigenvector associated with the dominant eigenvalue, assuming this eigenvalue is well-separated from the others in magnitude.
 
-*(PLOT 1: A conceptual illustration showing how repeated multiplications by $A$ "stretch" a vector in the direction of the dominant eigenvector.)*
+![output(20)](https://github.com/user-attachments/assets/e48ec2b5-fd18-4886-a4b9-497c73aae0de)
 
-## Key Concepts
+### Key Concepts
 
 - **Dominant Eigenvalue and Eigenvector**: The power method iteratively refines a vector that converges to the eigenvector associated with the eigenvalue of greatest magnitude (the dominant eigenvalue).
 - **Sparse and Large Matrices**: The method requires only matrix-vector multiplications, making it efficient for large and sparse problems.
 - **Uniqueness of the Largest Eigenvalue**: Convergence is guaranteed if the largest eigenvalue in magnitude is unique and separated from the second-largest in magnitude.
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 Given an $n \times n$ matrix $A$ and an initial guess $x^{(0)}$, the power method iterates as follows:
 
@@ -24,13 +24,11 @@ $$x^{(k+1)} = \frac{y^{(k)}}{\|y^{(k)}\|}$$
 
 These steps are repeated until convergence. Convergence occurs when the vector $x^{(k)}$ no longer changes significantly between iterations or equivalently, when successive eigenvalue approximations stabilize.
 
-*(PLOT 2: A flowchart of the iteration steps of the power method.)*
-
 ### Inverse Power Method for the Smallest Eigenvalue
 
 If we are interested in finding the smallest eigenvalue of $A$, we can use the inverse power method. The eigenvalues of $A^{-1}$ are the reciprocals of the eigenvalues of $A$. Thus, applying the power method to $A^{-1}$ instead of $A$ will yield the eigenvector associated with the smallest eigenvalue of $A$, and the inverse of the dominant eigenvalue of $A^{-1}$ will give us the smallest eigenvalue of $A$.
 
-## Derivation
+### Derivation
 
 Suppose $A$ has distinct eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_n$ arranged so that:
 
@@ -50,16 +48,18 @@ $$A^k x^{(0)} = c_1 \lambda_1^k v_1 + c_2 \lambda_2^k v_2 + \cdots + c_n \lambda
 
 As $k \to \infty$, because $|\lambda_1| > |\lambda_j|$ for $j > 1$, the terms involving $\lambda_j^k$ vanish in comparison to $\lambda_1^k$. Therefore:
 
-$$\frac{A^k x^{(0)}}{\|A^k x^{(0)}\|} \to v_1,$$
-and the Rayleigh quotient $\frac{x^{(k)T} A x^{(k)}}{x^{(k)T} x^{(k)}}$ tends to $\lambda_1$. Thus, the power method converges to the dominant eigenvector $v_1$ and eigenvalue $\lambda_1$.
+$$\frac{A^k x^{(0)}}{\|A^k x^{(0)}\|} \to v_1$$
 
-*(PLOT 3: A graphical representation showing how the vector iterates align with the dominant eigenvector as $k$ grows.)*
+and the Rayleigh quotient $\frac{x^{(k)T} A x^{(k)}}{x^{(k)T} x^{(k)}}$ tends to $\lambda_1$. 
 
-## Algorithm Steps
+Thus, the power method converges to the dominant eigenvector $v_1$ and eigenvalue $\lambda_1$.
+
+### Algorithm Steps
 
 I. **Initialize**: Choose an initial vector $x^{(0)}$ (random or based on domain knowledge).
 
 II. **Iterative Step**: For $k=0,1,2,\dots$:
+
 - Compute $y^{(k)} = A x^{(k)}$.
 - Normalize $x^{(k+1)} = \frac{y^{(k)}}{\|y^{(k)}\|}$.
 
@@ -69,15 +69,13 @@ IV. **Eigenvalue Approximation**: Once converged, estimate the dominant eigenval
 
 $$\lambda_{\text{max}} \approx \frac{x^{(k)T} A x^{(k)}}{x^{(k)T} x^{(k)}}.$$
 
-*(PLOT 4: A flowchart of the power method steps including initialization, iteration, and convergence check.)*
-
-## Example
+### Example
 
 Consider:
 
 $$A = \begin{bmatrix}2 & 1 \\ 1 & 3\end{bmatrix}, \quad x^{(0)} = \begin{bmatrix}1 \\ 1\end{bmatrix}.$$
 
-- First iteration:
+**First iteration**:
 
 $$y^{(0)} = A x^{(0)} = \begin{bmatrix}2 & 1 \\ 1 & 3\end{bmatrix}\begin{bmatrix}1 \\ 1\end{bmatrix} = \begin{bmatrix}3 \\ 4\end{bmatrix}.$$
 
@@ -85,7 +83,7 @@ Normalize:
 
 $$x^{(1)} = \frac{1}{5}\begin{bmatrix}3 \\ 4\end{bmatrix} = \begin{bmatrix}0.6 \\ 0.8\end{bmatrix}.$$
 
-- Second iteration:
+**Second iteration**:
 
 $$y^{(1)} = A x^{(1)} = \begin{bmatrix}2 & 1 \\ 1 & 3\end{bmatrix}\begin{bmatrix}0.6 \\ 0.8\end{bmatrix} = \begin{bmatrix}2.0 \\ 3.0\end{bmatrix}.$$
 
@@ -93,11 +91,11 @@ Normalize:
 
 $$x^{(2)} = \frac{1}{\sqrt{2^2 + 3^2}}\begin{bmatrix}2 \\ 3\end{bmatrix} = \begin{bmatrix}0.5547 \\ 0.8321\end{bmatrix}.$$
 
-Repeating these steps, $x^{(k)}$ converges to the eigenvector associated with the largest eigenvalue, which in this case is approximately 3.5616. The corresponding eigenvector stabilizes around $\begin{bmatrix}0.55 \\ 0.83\end{bmatrix}$.
+Repeating these steps, $x^{(k)}$ converges to the eigenvector associated with the largest eigenvalue, which in this case is approximately 3.5616. The corresponding eigenvector stabilizes around:
 
-*(PLOT 5: A table showing the first few iterations of the power method for the given example.)*
+$$\begin{bmatrix}0.55 \\ 0.83\end{bmatrix}$$
 
-## Advantages
+### Advantages
 
 I. **Simplicity**: The algorithm is straightforward to implement.
 
@@ -105,7 +103,7 @@ II. **Efficiency for Large Sparse Matrices**: Requires only matrix-vector multip
 
 III. **Low Memory Footprint**: No need to store large amounts of data; only the current vector and its transform are needed.
 
-## Limitations
+### Limitations
 
 I. **Single Dominant Eigenvalue Only**: It finds only the largest eigenvalue in magnitude, not all eigenvalues.
 
