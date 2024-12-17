@@ -1,8 +1,10 @@
-## Introduction
+## LU Decomposition
 
 LU Decomposition (or LU Factorization) is a powerful and widely used technique in numerical linear algebra for solving systems of linear equations, computing inverses, and determining determinants. The core idea is to factorize a given square matrix $A$ into the product of a lower-triangular matrix $L$ and an upper-triangular matrix $U$. This approach is particularly useful as it reduces complex operations such as solving $A \mathbf{x} = \mathbf{b}$ into simpler, more structured subproblems. Once the decomposition $A = LU$ is found, solving the system becomes a matter of performing forward and backward substitutions, which are both computationally inexpensive compared to other direct methods like Gaussian elimination performed from scratch for each right-hand-side vector $\mathbf{b}$.
 
-## Mathematical Formulation
+![output(27)](https://github.com/user-attachments/assets/bff6e465-54b0-49b6-b53e-c8061217bf9b)
+
+### Mathematical Formulation
 
 Consider a square $n \times n$ matrix $A$:
 
@@ -39,20 +41,21 @@ u_{11} & u_{12} & u_{13} & \cdots & u_{1n} \\
 
 Here, $L$ is lower-triangular with ones on the diagonal, and $U$ is upper-triangular. The factorization is not always guaranteed to exist unless certain conditions are met (e.g., no zero pivots without partial pivoting, or $A$ being nonsingular and well-conditioned).
 
-## Derivation
+### Derivation
 
 The derivation of the LU decomposition closely follows the steps of Gaussian elimination. Gaussian elimination transforms the matrix $A$ into an upper-triangular matrix by adding multiples of one row to another. These multipliers can be stored in the entries of a lower-triangular matrix $L$.
 
 Starting from:
 
-$$A\mathbf{x} = \mathbf{b},$$
+$$A\mathbf{x} = \mathbf{b}$$
+
 we write $A = LU$. Substitute to get:
 
-$$(LU)\mathbf{x} = \mathbf{b}.$$
+$$(LU)\mathbf{x} = \mathbf{b}$$
 
 Introducing an intermediate vector $\mathbf{c}$:
 
-$$U\mathbf{x} = \mathbf{c} \implies L\mathbf{c} = \mathbf{b}.$$
+$$U\mathbf{x} = \mathbf{c} \implies L\mathbf{c} = \mathbf{b}$$
 
 Since $L$ is lower-triangular and nonsingular (with ones on its diagonal), we can quickly solve for $\mathbf{c}$ using forward substitution. Once $\mathbf{c}$ is known, we solve the upper-triangular system $U\mathbf{x} = \mathbf{c}$ via backward substitution.
 
@@ -66,9 +69,7 @@ III. After the first column is dealt with, the submatrix of $A$ (excluding the f
 
 IV. This process continues recursively until $A$ is fully decomposed into $L$ and $U$.
 
-*(PLOT 2: A step-by-step illustration of Gaussian elimination and how the multipliers form the $L$ matrix, while the final upper-triangular form is the $U$ matrix.)*
-
-## Algorithm Steps
+### Algorithm Steps
 
 Given an $n \times n$ matrix $A$, the LU decomposition algorithm without pivoting can be described as follows:
 
@@ -76,37 +77,37 @@ I. **Initialization**:
 
 Set $L = I$ (the $n \times n$ identity matrix) and $U = 0$ (the $n \times n$ zero matrix).
 
-II. **Main Loop** (for $i = 1$ to $n$):  
-- Compute the diagonal and upper elements of $U$:  
+II. **Main Loop** (for $i = 1$ to $n$):
 
- For $j = i$ to $n$:
+Compute the diagonal and upper elements of $U$:  
 
- $$u_{ij} = a_{ij} - \sum_{k=1}^{i-1} l_{ik} u_{kj}.$$
+For $j = i$ to $n$:
 
-- Compute the lower elements of $L$:  
+$$u_{ij} = a_{ij} - \sum_{k=1}^{i-1} l_{ik} u_{kj}.$$
 
- For $j = i+1$ to $n$:
+Compute the lower elements of $L$:  
 
- $$l_{j i} = \frac{1}{u_{ii}}\left(a_{j i} - \sum_{k=1}^{i-1} l_{jk} u_{k i}\right).$$
+For $j = i+1$ to $n$:
+
+$$l_{j i} = \frac{1}{u_{ii}}\left(a_{j i} - \sum_{k=1}^{i-1} l_{jk} u_{k i}\right).$$
 
 III. After these loops complete, $A = LU$ is obtained.
 
 IV. **Solving $A\mathbf{x} = \mathbf{b}$**:
-- Forward substitution for $L\mathbf{c} = \mathbf{b}$:
 
- For $i = 1$ to $n$:
+Forward substitution for $L\mathbf{c} = \mathbf{b}$:
 
- $$c_i = b_i - \sum_{k=1}^{i-1} l_{ik} c_{k}.$$
+For $i = 1$ to $n$:
 
-- Backward substitution for $U\mathbf{x} = \mathbf{c}$:
+$$c_i = b_i - \sum_{k=1}^{i-1} l_{ik} c_{k}.$$
 
- For $i = n$ down to $1$:
+Backward substitution for $U\mathbf{x} = \mathbf{c}$:
 
- $$x_i = \frac{c_i - \sum_{k=i+1}^{n} u_{ik}x_{k}}{u_{ii}}.$$
+For $i = n$ down to $1$:
 
-*(PLOT 3: A flowchart describing the LU factorization algorithm and the subsequent forward/backward substitution steps.)*
+$$x_i = \frac{c_i - \sum_{k=i+1}^{n} u_{ik}x_{k}}{u_{ii}}.$$
 
-## Example
+### Example
 
 Consider the system of equations:
 
@@ -125,7 +126,7 @@ $$A = \begin{bmatrix}
 \end{bmatrix}$$
 
 $$
-\mathbf{b} = \begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}.$$
+\mathbf{b} = \begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}$$
 
 **Step-by-Step LU Decomposition**
 
@@ -263,7 +264,7 @@ $$x = 1, \quad y = -1, \quad z = 1.$$
 
 This slight discrepancy arose due to rounding at intermediate steps in this demonstration. In exact arithmetic, the final solution is indeed $\mathbf{x} = (1, -1, 1)^\top.$
 
-## Advantages
+### Advantages
 
 I. **Efficiency for Multiple Right-Hand Sides**: Once $A = LU$ is computed, any system $A\mathbf{x} = \mathbf{b}$ can be solved efficiently by forward and backward substitution. This is particularly valuable when solving multiple systems with the same coefficient matrix but different right-hand-side vectors.
 
@@ -271,7 +272,7 @@ II. **Stable and Systematic**: LU decomposition organizes the elimination steps 
 
 III. **Facilitates Other Computations**: LU decomposition can be used to quickly compute determinants ($\det(A) = \prod u_{ii}$) and inverses of matrices, as well as to assist in more advanced factorizations and decompositions.
 
-## Limitations
+### Limitations
 
 I. **Pivoting Sometimes Required**: Not all matrices are conveniently LU decomposable without row interchanges. For many practical cases, partial pivoting is performed, leading to $PA = LU$ instead of $A = LU$.
 
