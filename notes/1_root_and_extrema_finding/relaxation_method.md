@@ -10,19 +10,11 @@ This approach transforms a root-finding problem into a fixed-point problem. If t
 $$x_{n+1} = g(x_n)$$
 converges, it will do so to the fixed point $\alpha$, which is also the root of the original equation. Relaxation methods can sometimes converge faster than bracket-based methods (like bisection), but they do not come with guaranteed convergence from any starting point. Convergence depends on the properties of the chosen $g(x)$ and the initial guess $x_0$.
 
-**Conceptual Illustration (Not Removing the Plot)**:
+**Conceptual Illustration**:
 
 Imagine the line $y = x$ and the curve $y = g(x)$. A fixed point $\alpha$ is a point where the two curves intersect:
-```
-     f(x),g(x)
-      |
-y=g(x)    |          * intersection (x=α)
-      |         /|
-      |        / |
-      |       /  |
-----------+------x---+-------------> x
-      y=x   
-```
+
+![output(17)](https://github.com/user-attachments/assets/6160870c-a9b5-495b-9ba6-ecfa661790b2)
 
 The iteration takes a guess $x_n$, and then maps it to $x_{n+1}=g(x_n)$. If these iterations hone in on the intersection, the sequence converges to the root $\alpha$.
 
