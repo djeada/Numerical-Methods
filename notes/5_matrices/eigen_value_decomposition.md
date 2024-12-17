@@ -1,133 +1,173 @@
-## Eigenvalue Decomposition (EVD)
+## Introduction
 
-Eigenvalue Decomposition, or Eigendecomposition, is a method of factorizing square matrices into their eigenvalues and eigenvectors.
+Eigenvalue Decomposition (EVD), also known as Eigendecomposition, is a fundamental operation in linear algebra that breaks down a square matrix into a simpler form defined by its eigenvalues and eigenvectors. This decomposition provides deep insights into the properties and structure of a matrix, enabling simplifications in numerous computations such as matrix powers, transformations, and the solution of systems of linear equations. In many applications — from vibration analysis in engineering to principal component analysis in data science — EVD plays a critical role.
 
-## Key Concepts
+The key idea is that certain square matrices can be represented as a product of a matrix of their eigenvectors and a diagonal matrix of their eigenvalues. This diagonalization separates the scaling factors (eigenvalues) from the directions of transformations (eigenvectors) encoded by the original matrix.
 
-- Eigendecomposition breaks down a matrix into a canonical form, representing the matrix in terms of its eigenvalues and eigenvectors.
-- Only diagonalizable matrices can undergo this form of factorization.
+*(PLOT 1: A conceptual plot illustrating how an original linear transformation represented by $A$ can be decomposed into simpler operations based on eigen-directions and eigen-scales.)*
 
 ## Mathematical Formulation
 
-Given a square matrix $A$, it can be factorized as:
+Consider an $n \times n$ matrix $A$. The Eigenvalue Decomposition of $A$ is given by:
 
-$$A = PDP^{-1}$$
-
+$$A = P D P^{-1},$$
 where:
 
-- $D$ is a diagonal matrix containing the eigenvalues of $A$ on its diagonal. If $\lambda_1, \lambda_2, ..., \lambda_n$ are the eigenvalues of $A$, then $D$ is of the form:
+I. **Eigenvalues ($\lambda_i$)**:  
 
-$$
-D = 
-\begin{bmatrix}
-\lambda_1 & 0 & 0 & \cdots & 0 \\
-0 & \lambda_2 & 0 & \cdots & 0 \\
-0 & 0 & \lambda_3 & \cdots & 0 \\
-\vdots & \vdots & \vdots & \ddots & \vdots \\
-0 & 0 & 0 & \cdots & \lambda_n
-\end{bmatrix}
-$$
+The eigenvalues of $A$ are the roots of the characteristic polynomial:
 
-- $P$ is a matrix composed of the corresponding eigenvectors of $A$ in its columns. If $v_1, v_2, ..., v_n$ are the column vectors representing the eigenvectors corresponding to the eigenvalues of $A$, then $P$ is of the form:
+$$\det(A - \lambda I) = 0.$$
 
-$$
-P = 
-\begin{bmatrix}
-| & | & | & & | \\
-v_1 & v_2 & v_3 & \cdots & v_n \\
-| & | & | & & |
-\end{bmatrix}
-$$
+If we solve this polynomial equation and find $n$ eigenvalues (not necessarily distinct), we denote them as $\lambda_1, \lambda_2, \ldots, \lambda_n$.
 
-- $P^{-1}$ is the inverse of the matrix $P$.
+II. **Eigenvectors ($v_i$)**:  
 
-Eigenvalues $\lambda$ of a matrix $A$ are computed by solving the characteristic equation:
+For each eigenvalue $\lambda_i$, we find the corresponding eigenvector $v_i$ by solving:
 
-$$det(A - \lambda I) = 0$$
+$$(A - \lambda_i I) v_i = 0.$$
 
-Here, $I$ denotes the identity matrix of the same dimension as $A$. The eigenvectors are then computed by solving the homogeneous system of linear equations:
+Each eigenvector $v_i$ is a nonzero vector associated with the eigenvalue $\lambda_i$.
 
-$$(A - \lambda I)v = 0$$
+III. **Eigenvector Matrix ($P$) and Eigenvalue Matrix ($D$)**:
+Once we have the set of eigenvalues and eigenvectors:
+- Construct $D$ as a diagonal matrix whose diagonal entries are the eigenvalues:
 
-for each eigenvalue $\lambda$, where $v$ is the corresponding eigenvector.
+ $$D = \begin{bmatrix}
+
+ \lambda_1 & 0 & \cdots & 0 \\
+
+ 0 & \lambda_2 & \cdots & 0 \\
+
+ \vdots & \vdots & \ddots & \vdots \\
+
+ 0 & 0 & \cdots & \lambda_n
+
+ \end{bmatrix}.$$
+- Construct $P$ such that its columns are the eigenvectors $v_1, v_2, \ldots, v_n$:
+
+ $$P = \begin{bmatrix}
+
+ | & | &  & | \\
+ v_1 & v_2 & \cdots & v_n \\
+ | & | &  & |
+ \end{bmatrix}.$$
+
+If $A$ is diagonalizable, and if the $v_i$ are chosen to be linearly independent, then $P$ is invertible and $A = P D P^{-1}$.
+
+*(PLOT 2: A schematic showing how eigenvectors form the columns of $P$ and how $D$ is a simple diagonal matrix with eigenvalues.)*
+
+## Derivation
+
+The derivation of EVD follows naturally from the definition of eigenvalues and eigenvectors. For each eigenvalue $\lambda_i$, we have:
+
+$$A v_i = \lambda_i v_i.$$
+
+If we gather all eigenvectors into the matrix $P$ and consider how $A$ acts on the columns of $P$:
+
+$$A [v_1 \, v_2 \, \cdots \, v_n] = [A v_1 \, A v_2 \, \cdots \, A v_n] = [\lambda_1 v_1 \, \lambda_2 v_2 \, \cdots \, \lambda_n v_n] = P D.$$
+
+If $P$ is invertible, we can write:
+
+$$A = P D P^{-1}.$$
+
+Not every matrix is guaranteed to have a full set of $n$ linearly independent eigenvectors. If it does, the matrix is said to be diagonalizable, and the above decomposition is possible. If not, the matrix cannot be decomposed purely into this form.
+
+*(PLOT 3: A flow diagram showing the steps from defining eigenvalues and eigenvectors to assembling $P$ and $D$ and confirming $A = PDP^{-1}$.)*
 
 ## Algorithm Steps
 
-1. Compute the eigenvalues of the matrix $A$ by solving the characteristic equation.
-2. For each eigenvalue, compute the corresponding eigenvector by solving the associated homogeneous system of linear equations.
-3. Form the matrices $P$ and $D$ using the computed eigenvectors and eigenvalues.
+I. **Find Eigenvalues**:
+- Form the characteristic polynomial $\det(A - \lambda I) = 0$.
+- Solve for $\lambda$. This may be done analytically for small matrices or numerically for larger matrices.
+II. **Find Eigenvectors**:
+- For each eigenvalue $\lambda_i$, solve $(A - \lambda_i I)v_i = 0$.
+- Ensure each eigenvector $v_i$ is normalized or scaled consistently.
+III. **Form $P$ and $D$**:
+- Construct $D$ as the diagonal matrix with eigenvalues on the diagonal.
+- Construct $P$ with eigenvectors as columns.
+IV. **Verify Invertibility of $P$**:
+- If $P$ is invertible, then $A = P D P^{-1}$.
+*(PLOT 4: A step-by-step illustration of computing eigenvalues, eigenvectors, and forming $P$ and $D$.)*
 
 ## Example
 
-Consider a 2x2 matrix $A$ given by:
+Let:
 
-$$
-A = 
-\begin{bmatrix}
+$$A = \begin{bmatrix}
+
 4 & 1 \\
+
 2 & 3
-\end{bmatrix}
-$$
 
-1. Compute the eigenvalues of $A$:
+\end{bmatrix}.$$
 
-Solve the characteristic equation $det(A - \lambda I) = 0$:
+I. **Find Eigenvalues**:  
 
-$$
-det\left(\begin{bmatrix}
-4-\lambda & 1 \\
-2 & 3-\lambda
-\end{bmatrix}\right) = 0
-$$
+The characteristic polynomial:
 
-which simplifies to $(4-\lambda)(3-\lambda) - 2 = 0$, giving the roots $\lambda_1 = 5$ and $\lambda_2 = 2$.
+$$\det(A - \lambda I) = \det\begin{bmatrix}4 - \lambda & 1 \\ 2 & 3 - \lambda\end{bmatrix} = (4-\lambda)(3-\lambda) - 2 = 0.$$
 
-2. Compute the corresponding eigenvectors:
+Expanding:
 
-For $\lambda_1 = 5$, solve the system $(A - 5I)v = 0$:
+$$(4-\lambda)(3-\lambda) - 2 = (12 -7\lambda + \lambda^2) - 2 = \lambda^2 -7\lambda +10=0.$$
 
-$$
-\begin{bmatrix}
--1 & 1 \\
-2 & -2
-\end{bmatrix}v = 0
-$$
+Solve $\lambda^2 -7\lambda +10=0$:
 
-This gives $v_1 = [1, 1]$.
+The roots are $\lambda_1=5$ and $\lambda_2=2$.
 
-Similarly, for $\lambda_2 = 2$, solve the system $(A - 2I)v = 0$:
+II. **Find Eigenvectors**:
 
-$$
-\begin{bmatrix}
-2 & 1 \\
-2 & 1
-\end{bmatrix}v = 0
-$$
+For $\lambda_1 = 5$:
 
-This gives $v_2 = [-1, 2]$.
+$$(A - 5I)=\begin{bmatrix}-1 & 1 \\ 2 & -2\end{bmatrix}.$$
 
-3. Form the matrices $P$ and $D$:
+Solve $(A-5I)v=0$ leads to $v_1 = [1,1]^T$.
 
-$$
-P = \begin{bmatrix}
-1 & -1 \\
-1 & 2
-\end{bmatrix}
-, \quad
-D = \begin{bmatrix}
-5 & 0 \\
-0 & 2
-\end{bmatrix}
-$$
+For $\lambda_2 = 2$:
 
-Thus, we have $A = PDP^{-1}$.
+$$(A - 2I)=\begin{bmatrix}2 & 1 \\ 2 & 1\end{bmatrix}.$$
+
+Solve $(A-2I)v=0$ leads to $v_2 = [-1,2]^T$.
+
+III. **Form $P$ and $D$**:
+
+$$P = \begin{bmatrix}1 & -1 \\ 1 & 2\end{bmatrix}, \quad D = \begin{bmatrix}5 & 0 \\ 0 & 2\end{bmatrix}.$$
+
+Thus:
+
+$$A = P D P^{-1}.$$
+
+*(PLOT 5: A geometric interpretation showing the directions defined by eigenvectors and scalings by eigenvalues for the given $A$.)*
 
 ## Advantages
 
-- The decomposed form simplifies many matrix computations and enhances numerical stability.
-- It aids in the development of certain matrix algorithms.
+I. **Simplification of Computations**:  
+
+Once in the form $A = P D P^{-1}$, computing powers of $A$ or applying certain transformations becomes much simpler. For example, $A^k = P D^k P^{-1}$, and since $D$ is diagonal, raising it to a power is straightforward.
+
+II. **Insights into Matrix Structure**:  
+
+The eigendecomposition reveals the intrinsic "modes" of the linear transformation represented by $A$. Eigenvalues show how the transformation scales each eigen-direction, and eigenvectors show the directions of these fundamental modes.
+
+III. **Numerical Stability in Some Computations**:  
+
+Working with $D$ instead of $A$ can improve numerical stability and make some algorithms more efficient, particularly in areas like principal component analysis, spectral clustering, and other advanced data analysis tasks.
+
+*(PLOT 6: A bar chart comparing computational effort for various matrix operations with and without using EVD.)*
 
 ## Limitations
 
-- Not all matrices are diagonalizable, hence, not all matrices can be decomposed in this manner.
-- Computation of EVD can be computationally expensive for large matrices.
+I. **Not All Matrices Are Diagonalizable**:  
+
+Some matrices cannot be broken down into a pure eigen decomposition if they do not have enough linearly independent eigenvectors. For such matrices, more generalized decompositions like the Jordan normal form are required.
+
+II. **Computational Cost for Large Matrices**:  
+
+Finding eigenvalues and eigenvectors for large matrices can be computationally expensive. Efficient numerical algorithms and approximations exist, but they may still be costly for very large systems.
+
+III. **Complex Eigenvalues**:  
+
+For real matrices, eigenvalues can be complex. While this is not a fundamental limitation, it means we must consider complex arithmetic when performing the decomposition, which may not be desired in some real-world applications.
+
+*(PLOT 7: A plot illustrating eigenvalues in the complex plane, showing that real matrices can have complex eigenvalues and still be decomposed over the complex field.)*
