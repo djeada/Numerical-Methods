@@ -1,14 +1,15 @@
-## Introduction
+## QR method
 
 The QR method is a widely used algorithm in numerical linear algebra for determining the eigenvalues of a given square matrix. Unlike direct methods such as solving the characteristic polynomial, which can be complicated and unstable numerically for large matrices, the QR method leverages iterative transformations that preserve eigenvalues. Over repeated iterations, these transformations lead the matrix closer to a quasi-upper-triangular or upper-triangular form, from which the eigenvalues can be read directly.
 
-*(PLOT 1: A conceptual illustration showing how iterative QR transformations gradually push a general matrix towards an upper-triangular form.)*
+![output(23)](https://github.com/user-attachments/assets/d89e3cc0-b1e8-4fe4-8b85-b862ff00ded0)
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 Consider an $n \times n$ matrix $A$. The QR decomposition (factorization) of $A$ is given by:
 
-$$A = QR,$$
+$$A = QR$$
+
 where $Q$ is an orthogonal matrix ($Q^T Q = I$) and $R$ is an upper-triangular matrix.
 
 The QR method applies the following iterative scheme:
@@ -16,12 +17,14 @@ The QR method applies the following iterative scheme:
 I. **Initialization**: Set $A_0 = A$.
 
 II. **Iteration**: For each iteration $k \geq 1$:
-- Compute the QR factorization of $A_{k-1}$:
 
- $$A_{k-1} = Q_k R_k.$$
-- Form a new matrix:
+Compute the QR factorization of $A_{k-1}$:
 
- $$A_k = R_k Q_k.$$
+$$A_{k-1} = Q_k R_k.$$
+
+Form a new matrix:
+
+$$A_k = R_k Q_k.$$
 
 Notice that:
 
@@ -30,9 +33,7 @@ which means $A_k$ is similar to $A_{k-1}$. Since similarity transformations pres
 
 As $k$ increases, under certain conditions (e.g., a well-chosen shift strategy), the matrix $A_k$ converges to an upper-triangular matrix (or a quasi-upper-triangular form in the real case), whose diagonal entries are the eigenvalues of $A$.
 
-*(PLOT 2: A flow diagram demonstrating the iteration: from $A_{k-1}$ to $Q_k R_k$ and then to $A_k = R_k Q_k$.)*
-
-## Derivation
+### Derivation
 
 The idea behind the QR method arises from the following observations:
 
@@ -50,9 +51,7 @@ By repeatedly factoring $A_{k-1}$ into $Q_k R_k$ and then forming $A_k = R_k Q_k
 
 In practice, to ensure rapid convergence and numerical stability, shifts are employed (the so-called "QR algorithm with shifts"). This modification chooses special shifts based on elements of $A_k$ to speed up convergence to eigenvalues.
 
-*(PLOT 3: A demonstration showing how adding shifts to the QR step improves the rate of convergence and numerical stability.)*
-
-## Algorithm Steps
+### Algorithm Steps
 
 I. **Initialization**: Set $A_0 = A$.
 
@@ -61,6 +60,7 @@ II. **QR Factorization**: Compute the QR factorization of $A_{k-1}$:
 $$A_{k-1} = Q_k R_k.$$
 
 The QR factorization can be computed using:
+
 - Gram-Schmidt orthogonalization,
 - Householder transformations,
 - or Givens rotations.
@@ -72,6 +72,7 @@ $$A_k = R_k Q_k.$$
 Note that:
 
 $$A_k = Q_k^{-1} A_{k-1} Q_k,$$
+
 so $A_k$ and $A_{k-1}$ are similar.
 
 IV. **Check for Convergence**:
@@ -82,9 +83,7 @@ V. **Output**:
 
 The diagonal elements of the nearly upper-triangular matrix $A_k$ at convergence approximate the eigenvalues of the original matrix $A$.
 
-*(PLOT 4: A flowchart outlining the iterative process and the convergence check.)*
-
-## Example
+### Example
 
 **Given System**:  
 
@@ -113,9 +112,7 @@ After sufficient iterations, the matrix $A_k$ will approximate an upper-triangul
 
 For this simple $2 \times 2$ matrix, the method would quickly converge. The eigenvalues obtained would match the exact eigenvalues solved by the characteristic equation.
 
-*(PLOT 5: A schematic showing how the off-diagonal entries decrease over iterations for a sample matrix, illustrating convergence.)*
-
-## Advantages
+### Advantages
 
 I. **All Eigenvalues Simultaneously**:
 
@@ -129,9 +126,7 @@ III. **Broad Applicability**:
 
 The QR method works for both real and complex matrices and can be adapted to handle a variety of matrix types efficiently.
 
-*(PLOT 6: Comparison of the QR method’s convergence rate vs. other methods like power iteration for multiple eigenvalues.)*
-
-## Limitations
+### Limitations
 
 I. **No Direct Eigenvectors**:
 
@@ -144,5 +139,3 @@ Although efficient algorithms exist, the QR method can be computationally intens
 III. **Convergence Speed for Certain Matrices**:
 
 While generally fast, convergence can be slow if the matrix has certain structures or if shifts are not chosen wisely, making it less practical without proper optimization.
-
-*(PLOT 7: A plot illustrating the computational complexity vs. matrix size for different eigenvalue algorithms, showing where the QR method fits.)*
