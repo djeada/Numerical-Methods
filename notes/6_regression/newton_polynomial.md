@@ -88,7 +88,9 @@ III. **Form the Newton Polynomial**:
 
 Once you have all the divided differences:
 
-$$P(x) = f[x_0] + f[x_0,x_1](x - x_0) + f[x_0,x_1,x_2](x-x_0)(x-x_1) + \cdots$$
+$$
+P(x) = f\[x_0\] + f\[x_0,x_1\](x - x_0) + f\[x_0,x_1,x_2\](x-x_0)(x-x_1) + \cdots
+$$
 
 IV. **Use the Polynomial for Interpolation**:
 
