@@ -1,25 +1,18 @@
-## Introduction
+## Thin Plate Spline Interpolation
 
 **Thin Plate Spline (TPS) Interpolation** is a non-parametric, spline-based method for interpolating scattered data in two or more dimensions. Originally arising in the context of fitting a smooth surface through a set of points in $\mathbb{R}^2$, thin plate splines can be generalized to higher dimensions. The name "thin plate" comes from the physical analogy of bending a thin sheet of metal so that it passes through given points with minimal bending energy.
 
 While polynomial methods or radial basis functions can also perform interpolation, TPS stands out by providing a minimal "bending energy" solution, leading to a surface that is not only guaranteed to pass through the given points but is also as flat (smooth) as possible away from these points. This makes thin plate splines particularly favored in fields like image warping, geometric modeling, and shape deformation.
 
-## Conceptual Illustration (Not Removing the Plot)
+### Conceptual Illustration
 
 Imagine you have a set of control points $(x_i,y_i,z_i)$ in 3D space, where $(x_i,y_i)$ represent spatial coordinates and $z_i$ is the function value at that location. Thin plate spline interpolation finds a surface $z=f(x,y)$ that exactly passes through all these points. If you imagine the surface as a thin metal sheet pinned at these points, the TPS solution is the shape the sheet would naturally take if it were free to bend but not stretch, minimizing the total bending energy:
 
-```
-z 
-|          *
-|      *       *  known data points
-|    *    ~~~~~~~~~~~~~   <-- smooth surface
-|  *   
-+---------------------------------> x,y
-```
+![output(30)](https://github.com/user-attachments/assets/7eac6046-7538-45a2-8ac2-f9893ae7ffb4)
 
 The resulting surface is smooth, continuous in its derivatives, and tends to flatten out smoothly between data points.
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 Given a set of $N$ data points $\{(x_i,y_i,z_i)\}_{i=1}^N$, where no two points coincide, we want to find a function:
 
@@ -29,8 +22,10 @@ that interpolates the given data. Here:
 - The $\alpha_0, \alpha_1, \alpha_2$ terms represent a polynomial of degree 1 (a plane) that gives the global trend.
 - The function $\phi(r)$ is a radial basis function chosen as:
 
-$$\phi(r) = r^2 \ln(r),$$
+$$\phi(r) = r^2 \ln(r)$$
+
 which is the fundamental solution associated with the thin plate spline bending energy in 2D.
+
 - The $w_i$ are the coefficients for the radial basis part.
 
 This $f(x,y)$ must satisfy the interpolation conditions:
@@ -43,7 +38,7 @@ $$\sum_{i=1}^N w_i = \sum_{i=1}^N w_i x_i = \sum_{i=1}^N w_i y_i = 0.$$
 
 This leads to a linear system for the unknown parameters $\alpha_0,\alpha_1,\alpha_2,w_1,\ldots,w_N.$
 
-## Derivation
+### Derivation
 
 I. **Energy Minimization**:  
 
@@ -61,17 +56,14 @@ III. **Linear System**:
 Substitute $f(x,y)$ into the interpolation conditions. This produces a system of $N+3$ linear equations (for $w_i, \alpha_0,\alpha_1,\alpha_2$):
 
 $$\begin{bmatrix}
-
 0 & P^\top \\ P & K
-
 \end{bmatrix}
-
 \begin{bmatrix} \alpha \\ w \end{bmatrix} 
-
 =
+\begin{bmatrix} 0 \\ z \end{bmatrix}$$
 
-\begin{bmatrix} 0 \\ z \end{bmatrix},$$
 where:
+
 - $P$ is the $N \times 3$ matrix with rows $[1, x_i, y_i]$.
 - $K$ is the $N \times N$ matrix with entries $K_{ij}=\phi(\|(x_i,y_i)-(x_j,y_j)\|)$.
 - $z$ is the vector of observed $z_i$.
@@ -79,23 +71,30 @@ where:
 
 Solving this system yields the TPS coefficients.
 
-## Algorithm Steps
+### Algorithm Steps
 
 I. **Input**:
-- A set of points $(x_i,y_i,z_i)$, $i=1,\ldots,N.$
+
+A set of points $(x_i,y_i,z_i)$, $i=1,\ldots,N$
+
 II. **Form the Matrices**:
+
 - Compute the $N \times N$ kernel matrix $K$ with $K_{ij}= \phi(\sqrt{(x_i - x_j)^2+(y_i-y_j)^2})$ and $\phi(r)=r^2 \ln(r)$.
 - Form the $N \times 3$ matrix $P$ with rows $[1, x_i, y_i]$.
 - Construct the augmented block matrix and vector as described above.
+
 III. **Solve the Linear System**:
+
 - Solve the linear system for $\alpha$ and $w$.
 - This gives all parameters needed for the TPS surface.
+
 IV. **Interpolation**:
-- To find $f(x,y)$ at a new point $(x,y)$:
 
- $$f(x,y) = \alpha_0 + \alpha_1 x + \alpha_2 y + \sum_{i=1}^N w_i \phi(\sqrt{(x - x_i)^2+(y - y_i)^2}).$$
+To find $f(x,y)$ at a new point $(x,y)$:
 
-## Example
+$$f(x,y) = \alpha_0 + \alpha_1 x + \alpha_2 y + \sum_{i=1}^N w_i \phi(\sqrt{(x - x_i)^2+(y - y_i)^2}).$$
+
+### Example
 
 **Given Data**: Suppose we have 4 points:
 
@@ -120,34 +119,34 @@ IV. Once solved, you have a TPS surface that passes exactly through these four p
 
 (This is a simplified conceptual example; actual numbers require careful computation.)
 
-## Advantages
+### Advantages
 
-- **Smooth and Natural Surfaces**:
+I. **Smooth and Natural Surfaces**:
 
 TPS yields an infinitely differentiable surface minimizing bending energy, often producing visually pleasing, smooth interpolants.
 
-- **Exact Interpolation**:
+II. **Exact Interpolation**:
 
 The method exactly passes through all given data points.
 
-- **No Grid Required**:
+III. **No Grid Required**:
 
 Works with scattered data without needing a regular grid.
 
-- **Extensible**:
+IV. **Extensible**:
 
 Generalizes easily to higher dimensions by changing the form of $\phi(r)$.
 
-## Limitations
+### Limitations
 
-- **Computational Cost**:
+I. **Computational Cost**:
 
 Requires solving a $(N+3) \times (N+3)$ linear system. For large $N$, this can be expensive.
 
-- **Conditioning Issues**:
+II. **Conditioning Issues**:
 
 The system matrix may become ill-conditioned with many close points. Regularization (TPS smoothing splines) is often needed in practice.
 
-- **Global Method**:
+III. **Global Method**:
 
 Changing or adding one point affects the entire solution. There is no local control like piecewise methods (unless carefully combined with domain decomposition techniques).
