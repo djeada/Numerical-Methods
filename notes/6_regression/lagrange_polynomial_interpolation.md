@@ -28,7 +28,7 @@ Notice that $P_i(x_k) = \delta_{ik}$, where $\delta_{ik}$ is the Kronecker delta
 
 $$P_i(x_k) =
 \begin{cases}
-1 & \text{if } i=k,\\[6pt]
+1 & \text{if } i=k,\\\[6pt\]
 0 & \text{if } i \neq k.
 \end{cases}$$
 
