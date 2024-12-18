@@ -1,26 +1,16 @@
-## Introduction
+## Gaussian Interpolation
 
 **Gaussian Interpolation**, often associated with **Gauss’s forward and backward interpolation formulas**, is a technique that refines the approach of polynomial interpolation when data points are equally spaced. Instead of using the Newton forward or backward interpolation formulas directly from one end of the data interval, Gaussian interpolation centers the interpolation around a midpoint of the data set. This approach can provide better accuracy when the point at which we need to interpolate lies somewhere in the "interior" of the given data points rather than near the boundaries.
 
 In essence, Gaussian interpolation is a variant of Newton’s divided difference interpolation but employs a "central" reference point and finite differences structured around a central node. By choosing a midpoint as a reference and using appropriately shifted indices, Gaussian interpolation formulas often yield more stable and accurate approximations for values near the center of the data set.
 
-## Conceptual Illustration (Not Removing the Plot)
-
 Imagine you have a set of equally spaced points and corresponding function values:
-```
-f(x)
-|
-...|.......      * data points
-|      *   
-|    *
-|  *
-----+-------------------------------> x
-     x_0   x_1   x_2   ...   x_n
-```
+
+![output(29)](https://github.com/user-attachments/assets/074c2f58-7d0a-44ac-b12f-cb43c9417bfc)
 
 Newton’s forward or backward interpolation builds a polynomial starting from one end (like x_0 or x_n). Gaussian interpolation, however, selects a point near the center of the interval, say x_m (the midpoint), and builds the interpolation polynomial outward from this center. This symmetric approach can lead to a polynomial that better represents the function near that central area, potentially reducing error.
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 Assume we have a set of equally spaced data points:
 
@@ -43,7 +33,7 @@ Here $\Delta$ and $\nabla$ denote forward and backward difference operators, res
 
 The exact form depends on whether you use forward or backward differences and how you pick the center. The key point is that the polynomial is expressed in terms of $t$ and central differences, resulting in symmetric factorial factors that resemble the binomial expansions.
 
-## Derivation
+### Derivation
 
 I. **Starting from Equally Spaced Points**:  
 
@@ -67,7 +57,7 @@ IV. **Symmetry and Binomial Coefficients**:
 
 The resulting terms often involve products like $t(t-1)$, $t(t+1)$, and factorial denominators, mirroring expansions from Newton’s forward interpolation but recentered so that the polynomial captures behavior near the center more accurately.
 
-## Algorithm Steps
+### Algorithm Steps
 
 I. **Input**:
 - A set of equally spaced points $\{x_i\}$ and corresponding values $\{f(x_i)\}$.
@@ -95,6 +85,7 @@ $$f(0)=2, f(1)=3.5, f(2)=5, f(3)=5.8, f(4)=6$$
 Assume we pick $x_2=2$ as the central point ($m=2$). We want to interpolate $f(1.5)$.
 
 I. Compute differences around $x_2=2$:
+
 - $f(x_2)=f(2)=5$
 - $\Delta f(1)=f(2)-f(1)=5-3.5=1.5$
 - $\Delta f(2)=f(3)-f(2)=5.8-5=0.8$
@@ -114,30 +105,30 @@ IV. Evaluate to get an approximate $f(1.5)$.
 
 (*Note: The exact numeric example would require a full difference table and careful selection of forward/backward form, but this gives the general idea.*)
 
-## Advantages
+### Advantages
 
-- **Improved Accuracy Near the Center**:  
+I. **Improved Accuracy Near the Center**:  
 
 When the interpolation point $x$ is near the midpoint, Gaussian interpolation often yields less error compared to simple forward or backward Newton interpolation from the endpoints.
 
-- **Symmetric Structure**:  
+II. **Symmetric Structure**:  
 
 The formula’s symmetric form around a central point can produce more stable numerical results.
 
-- **Adaptable**:  
+III. **Adaptable**:  
 
 You can choose which direction (forward/backward) and how many terms to include, balancing complexity and accuracy.
 
-## Limitations
+### Limitations
 
-- **Requires Equally Spaced Points**:  
+I. **Requires Equally Spaced Points**:  
 
 Gaussian interpolation formulas are traditionally derived for equally spaced data. If spacing is uneven, this method is not directly applicable.
 
-- **More Complex Setup**:  
+II. **More Complex Setup**:  
 
 Determining the central point and computing central differences can be more involved than direct Newton forward/backward interpolation.
 
-- **Limited Gain if Not Near Center**:  
+III. **Limited Gain if Not Near Center**:  
 
 If the interpolation point is not near the data set’s midpoint, there may be no significant advantage over standard methods.
