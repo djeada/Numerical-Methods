@@ -1,20 +1,19 @@
+# eigen_value_decomposition.py
 import numpy as np
+from typing import Tuple
 
+def eigen_decomposition_full(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    eigenvalues: np.ndarray
+    eigenvectors: np.ndarray
+    eigenvalues, eigenvectors = np.linalg.eig(A)
+    D: np.ndarray = np.diag(eigenvalues)
+    P_inv: np.ndarray = np.linalg.inv(eigenvectors)
+    return eigenvectors, D, P_inv
 
-def eigenvalue_decomposition(matrix):
-    """
-    Perform eigenvalue decomposition of a matrix.
-
-    Args:
-        matrix (numpy.ndarray): The matrix to decompose.
-
-    Returns:
-        Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]: Tuple containing the eigenvectors (P),
-            eigenvalues (D), and inverse of eigenvectors (P^-1).
-    """
-    eigenvalues, eigenvectors = np.linalg.eig(matrix)
-    P = eigenvectors
-    D = np.diag(eigenvalues)
-    P_inv = np.linalg.inv(P)
-
-    return P, D, P_inv
+def eigen_decomposition_real_full(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    if not np.allclose(A, A.T):
+        raise ValueError("Matrix is not symmetric.")
+    eigenvalues, eigenvectors = np.linalg.eigh(A)
+    D: np.ndarray = np.diag(eigenvalues)
+    P_inv: np.ndarray = np.linalg.inv(eigenvectors)
+    return eigenvectors, D, P_inv
