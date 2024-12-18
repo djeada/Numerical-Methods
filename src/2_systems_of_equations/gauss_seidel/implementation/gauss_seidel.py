@@ -1,45 +1,37 @@
 import numpy as np
+from typing import Optional
 
+def inverse_matrix(A: np.ndarray) -> np.ndarray:
+    n: int = A.shape[0]
+    AI: np.ndarray = np.hstack((A.copy(), np.eye(n)))
+    for i in range(n):
+        max_row: int = np.argmax(np.abs(AI[i:, i])) + i
+        AI[[i, max_row]] = AI[[max_row, i]]
+        AI[i] = AI[i] / AI[i, i]
+        for j in range(n):
+            if i != j:
+                AI[j] -= AI[j, i] * AI[i]
+    return AI[:, n:]
 
-def gauss_seidel(A, b, x0=None, epsilon=1e-8, max_iter=100):
-    """
-    Gauss-Seidel method for solving a linear system of equations.
+def solve_inverse_matrix(A: np.ndarray, b: np.ndarray) -> np.ndarray:
+    A_inv: np.ndarray = inverse_matrix(A)
+    return A_inv @ b
 
-    Args:
-        A (numpy.ndarray): The coefficient matrix of the linear system.
-        b (numpy.ndarray): The constant vector of the linear system.
-        x0 (numpy.ndarray): The initial guess for the solution.
-        epsilon (float): The desired accuracy of the solution.
-        max_iter (int): The maximum number of iterations.
-
-    Returns:
-        numpy.ndarray: The estimated solution of the linear system.
-
-    Raises:
-        ValueError: If the maximum number of iterations is reached without convergence.
-    """
-    n = len(A)
-
-    # Initialize the solution
-    if x0 is None:
-        x = np.zeros_like(b, dtype=np.double)
-    else:
-        x = x0.astype(float)
-
-    for k in range(max_iter):
-        x_prev = x.copy()
-
+def gauss_seidel(
+    A: np.ndarray,
+    b: np.ndarray,
+    x0: Optional[np.ndarray] = None,
+    epsilon: float = 1e-8,
+    max_iter: int = 100
+) -> np.ndarray:
+    n: int = A.shape[0]
+    x: np.ndarray = np.zeros_like(b, dtype=np.double) if x0 is None else x0.astype(float)
+    for _ in range(max_iter):
+        x_prev: np.ndarray = x.copy()
         for i in range(n):
             x[i] = (
                 b[i] - np.dot(A[i, :i], x[:i]) - np.dot(A[i, i + 1 :], x_prev[i + 1 :])
             ) / A[i, i]
-
         if np.linalg.norm(x - x_prev) < epsilon:
-            print(f"Gauss-Seidel converged at iteration {k+1}")
             return x
-
-        print(f"Iteration {k+1}: x = {x}")
-
-    raise ValueError(
-        "Gauss-Seidel method did not converge within the maximum number of iterations."
-    )
+    raise ValueError("Gauss-Seidel method did not converge within the maximum number of iterations.")
