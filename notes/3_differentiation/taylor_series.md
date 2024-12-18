@@ -1,10 +1,10 @@
-## Introduction
+## Taylor Series 
 
 The Taylor series is a fundamental tool in calculus and mathematical analysis, offering a powerful way to represent and approximate functions. By expanding a function around a specific point, known as the "center" or "point of expansion," we can express it as an infinite sum of polynomial terms derived from the function’s derivatives. This concept is especially useful for approximating functions that are difficult or impossible to compute directly, as well as for understanding the local behavior of functions.
 
-*(PLOT 1: A graphical depiction showing how the first few Taylor polynomial approximations for a function $f(x)$ progressively improve near the point $a$.)*
+![output(28)](https://github.com/user-attachments/assets/cba25294-b445-42c2-9a3e-15dfc80813cf)
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 Consider a function $f(x)$ that is infinitely differentiable at a point $a$. The Taylor series of $f(x)$ about the point $a$ is given by:
 
@@ -13,15 +13,15 @@ $$f(x) = f(a) + f'(a)(x - a) + \frac{f''(a)}{2!}(x - a)^2 + \frac{f'''(a)}{3!}(x
 More compactly, we write:
 
 $$f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!}(x - a)^n,$$
+
 where:
+
 - $f^{(n)}(a)$ denotes the $n$-th derivative of $f$ evaluated at $x = a$.
 - $n!$ denotes the factorial of $n$.
 
 If the series converges to $f(x)$ for all $x$ in some interval around $a$, then the Taylor series provides an exact representation of the function in that interval.
 
-*(PLOT 2: A schematic showing derivatives of the function at $a$ feeding into the Taylor series terms.)*
-
-## Practical Use
+### Practical Use
 
 The Taylor series is not only a theoretical construct. It has numerous practical applications:
 
@@ -41,9 +41,7 @@ IV. **Series Solutions to Differential Equations**:
 
 Many differential equations can be solved (or approximated) by expressing their solutions as Taylor series expansions.
 
-*(PLOT 3: Demonstration of how a truncated Taylor series approximates a function near $a$.)*
-
-## Example
+### Example
 
 **Taylor Series of $e^x$ at $a = 0$**:
 
@@ -53,9 +51,7 @@ $$e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots$$
 
 This power series expansion converges for all real $x$, and even for complex $x$. Truncating the series after a few terms gives a good approximation of $e^x$ near $x = 0$.
 
-*(PLOT 4: A graph comparing $e^x$ and its partial sums: $1 + x$, $1 + x + x^2/2!$, etc., illustrating improved approximation near $0$.)*
-
-## Advantages
+### Advantages
 
 I. **Simplification into Polynomials**:  
 
@@ -69,7 +65,7 @@ III. **Uniform Approach**:
 
 Many functions, including transcendental functions (like $\sin x, \cos x, e^x$), can be expressed and handled using Taylor series in a uniform manner.
 
-## Limitations
+### Limitations
 
 I. **Local Validity**:  
 
