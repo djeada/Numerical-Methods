@@ -1,51 +1,23 @@
+# gaussian_elimination.py
 import numpy as np
+from typing import Tuple
 
-
-def gaussian_elimination(A, b=None):
-    """Perform Gaussian elimination on matrix A."""
-    n = len(A)
-
-    # If b is not provided, create it as a zero vector
-    if b is None:
-        b = np.zeros(n)
-
+def gaussian_elimination(A: np.ndarray, b: np.ndarray) -> np.ndarray:
+    n: int = A.shape[0]
+    augmented: np.ndarray = np.hstack((A.astype(float), b.reshape(-1, 1).astype(float)))
     for i in range(n):
-        # Search for maximum in this column
-        maxEl = abs(A[i][i])
-        maxRow = i
-        for k in range(i + 1, n):
-            if abs(A[k][i]) > maxEl:
-                maxEl = abs(A[k][i])
-                maxRow = k
-
-        # Swap maximum row with current row
-        A[[i, maxRow]] = A[[maxRow, i]]
-        b[[i, maxRow]] = b[[maxRow, i]]
-
-        # Make all rows below this one 0 in current column
-        for k in range(i + 1, n):
-            c = -A[k][i] / A[i][i]
-            for j in range(i, n):
-                if i == j:
-                    A[k][j] = 0
-                else:
-                    A[k][j] += c * A[i][j]
-            b[k] += c * b[i]
-
-    return A, b
-
-
-def solve_gaussian_elimination(A, b):
-    """Solve system of equations Ax = b using Gaussian elimination."""
-    n = len(A)
-
-    # Perform Gaussian elimination
-    A, b = gaussian_elimination(A, b)
-
-    # Back substitution
-    x = np.zeros(n)
+        pivot: int = np.argmax(np.abs(augmented[i:, i])) + i
+        if np.isclose(augmented[pivot, i], 0.0):
+            raise ValueError("Matrix is singular or nearly singular.")
+        if pivot != i:
+            augmented[[i, pivot]] = augmented[[pivot, i]]
+        augmented[i] = augmented[i] / augmented[i, i]
+        for j in range(i + 1, n):
+            augmented[j] -= augmented[j, i] * augmented[i]
+    x: np.ndarray = np.zeros(n)
     for i in range(n - 1, -1, -1):
-        x[i] = b[i] / A[i][i]
-        for k in range(i - 1, -1, -1):
-            b[k] -= A[k][i] * x[i]
+        x[i] = augmented[i, -1] - np.dot(augmented[i, i + 1:n], x[i + 1:n])
     return x
+
+def solve_gaussian_elimination(A: np.ndarray, b: np.ndarray) -> np.ndarray:
+    return gaussian_elimination(A, b)
