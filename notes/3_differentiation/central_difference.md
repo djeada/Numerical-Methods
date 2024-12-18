@@ -2,6 +2,8 @@
 
 - The central difference method is a finite difference method used for approximating derivatives. It utilizes the forward difference, backward difference, and the principles of Taylor series expansion to derive a more accurate approximation of derivatives.
 
+![Untitled](https://github.com/user-attachments/assets/367d9eb0-a68b-47d4-bace-f0279fd8b1f8)
+
 ## Mathematical Formulation and Derivation
 
 The central difference approximation of the first derivative of a function $f$ at a point $x$ with step size $h$ is given by:
