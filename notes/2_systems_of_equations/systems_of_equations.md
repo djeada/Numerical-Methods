@@ -2,7 +2,7 @@
 
 Linear systems of equations can be represented in a matrix form, which enables the use of a variety of numerical methods for solving them. 
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 A linear system can be written as a set of equations:
 
@@ -40,7 +40,7 @@ b = \begin{bmatrix}
 \end{bmatrix}
 $$
 
-## Criteria for a Unique Solution
+### Criteria for a Unique Solution
 
 A system of equations has a unique solution if and only if:
 
@@ -49,7 +49,7 @@ A system of equations has a unique solution if and only if:
 - The columns of A are linearly independent.
 - The rows of A are linearly independent.
 
-## Example
+### Example
 
 Consider the system of equations: 
 
@@ -85,12 +85,12 @@ $$
 
 The system can be solved using various matrix methods such as the Gaussian elimination method, which involves transforming the matrix A into its row echelon form and then performing back substitution to solve for x.
 
-## Advantages
+### Advantages
 
 - Matrix methods for solving systems of equations are systematic and can be easily implemented in computer programs.
 - Matrix representation is compact and insightful, especially when dealing with systems of many variables.
 
-## Limitations
+### Limitations
 
 - If the matrix is singular or nearly singular (i.e., det(A) is zero or close to zero), the system may have no solution or infinitely many solutions.
 - Large systems of equations may be computationally expensive to solve using matrix methods.
