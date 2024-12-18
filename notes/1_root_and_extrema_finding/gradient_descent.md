@@ -1,4 +1,4 @@
-## Introduction
+## Gradient Descent
 
 Gradient Descent is a fundamental first-order optimization algorithm widely used in mathematics, statistics, machine learning, and artificial intelligence. Its principal aim is to find the minimum of a given differentiable function $f(x)$. Instead of searching blindly, it uses gradient information — the direction of steepest increase — to iteratively move toward a minimum by taking steps in the opposite direction, known as the steepest descent direction.
 
@@ -12,17 +12,18 @@ Imagine the function $f(x)$ as a landscape of hills and valleys. Gradient descen
 
 In higher dimensions (e.g., $x \in \mathbb{R}^n$), this idea generalizes similarly, just with gradients represented as vectors.
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 Given a differentiable function $f : \mathbb{R}^n \to \mathbb{R}$, we want to solve:
 
-$$\min_{x \in \mathbb{R}^n} f(x).$$
+$$\min_{x \in \mathbb{R}^n} f(x)$$
 
 **Gradient Descent Update Rule**:
 
 At iteration $n$, we have the current approximation $x_n$. The gradient at $x_n$, denoted $\nabla f(x_n)$, points in the direction of greatest increase of $f$. To move towards a minimum, we take a step opposite to the gradient direction:
 
-$$x_{n+1} = x_n - \alpha \nabla f(x_n),$$
+$$x_{n+1} = x_n - \alpha \nabla f(x_n)$$
+
 where $\alpha > 0$ is the learning rate (also called the step size).
 
 **Key Components**:
@@ -33,7 +34,7 @@ II. **Learning Rate $\alpha$**: Determines how far we move in the direction of t
 
 Over successive iterations, provided the learning rate is chosen suitably and the function is well-behaved (e.g., convex), $x_n$ converges to a point $x^*$ where $\nabla f(x^*) = 0$, indicating a critical point, often a minimum.
 
-## Derivation
+### Derivation
 
 I. **First-Order Taylor Expansion**:  
 
@@ -56,36 +57,40 @@ Under suitable conditions (e.g., if $f$ is convex and $\alpha$ is sufficiently s
 $$\lim_{n \to \infty} x_n = x^*,$$
 where $x^*$ is a minimizer of $f$.
 
-## Algorithm Steps
+### Algorithm Steps
 
-**Pseudocode for Gradient Descent:**
+**Input:**
 
-I. **Input:**
 - A differentiable function $f(x)$.
 - A starting point $x_0$.
 - A learning rate $\alpha > 0$.
 - A convergence tolerance $\epsilon > 0$ or a maximum number of iterations $n_{\max}$.
-II. **Initialization:**
-- Set $n = 0$.
 
-III. **Iteration:**
+**Initialization:**
+
+Set $n = 0$.
+
+**Iteration:**
 
 I. Compute the gradient at the current point:
 
-  $$g_n = \nabla f(x_n).$$
+$$g_n = \nabla f(x_n).$$
 
 II. Update the point:
 
-  $$x_{n+1} = x_n - \alpha g_n.$$
+$$x_{n+1} = x_n - \alpha g_n.$$
 
 III. Check for convergence:
-  - If $\|x_{n+1} - x_n\| < \epsilon$ or $n > n_{\max}$, stop.
-  - Otherwise, increment $n = n+1$ and repeat from step (3.1).
-IV. **Output:**
+
+- If $\|x_{n+1} - x_n\| < \epsilon$ or $n > n_{\max}$, stop.
+- Otherwise, increment $n = n+1$ and repeat from step I.
+
+**Output:**
+
 - Approximate minimum $x_{n+1}$.
 - Number of iterations performed.
 
-## Example
+### Example
 
 **Given Function:**
 
@@ -94,26 +99,29 @@ $$f(x) = x^2.$$
 We know $f$ is minimized at $x = 0$. Let’s apply gradient descent step-by-step to illustrate how the algorithm converges to $x=0$.
 
 **Setup:**
+
 - Initial guess: $x_0 = 5$.
 - Learning rate: $\alpha = 0.1$.
 - Gradient: $f'(x) = 2x$.
-**Iteration Steps:**
 
-- **Iteration 1:**
+**Iteration 1:**
+
 - Current point: $x_0 = 5$.
 - Compute gradient: $f'(5) = 2 \cdot 5 = 10$.
 - Update:
 
 $$x_1 = x_0 - \alpha f'(x_0) = 5 - 0.1 \cdot 10 = 5 - 1 = 4.$$
 
-- **Iteration 2:**
+**Iteration 2:**
+
 - Current point: $x_1 = 4$.
 - Compute gradient: $f'(4) = 2 \cdot 4 = 8$.
 - Update:
 
 $$x_2 = x_1 - \alpha f'(x_1) = 4 - 0.1 \cdot 8 = 4 - 0.8 = 3.2.$$
 
-- **Iteration 3:**
+**Iteration 3:**
+
 - Current point: $x_2 = 3.2$.
 - Compute gradient: $f'(3.2) = 2 \cdot 3.2 = 6.4$.
 - Update:
@@ -122,7 +130,7 @@ $$x_3 = x_2 - \alpha f'(x_2) = 3.2 - 0.1 \cdot 6.4 = 3.2 - 0.64 = 2.56.$$
 
 Continuing this process, we observe that $x_n$ keeps getting closer to 0. Over many iterations, the point will approach the exact minimum at $x = 0$.
 
-## Advantages
+### Advantages
 
 I. **Simplicity and Ease of Implementation:**  
 
@@ -140,7 +148,7 @@ IV. **Versatility:**
 
 It can be applied to a broad class of differentiable functions and is often effective for complex, high-dimensional optimization problems.
 
-## Limitations
+### Limitations
 
 I. **Learning Rate Sensitivity:**  
 
