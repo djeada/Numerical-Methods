@@ -1,4 +1,4 @@
-## Introduction
+## Golden Ratio Search
 
 The Golden Ratio Search is a technique employed for locating the extremum (minimum or maximum) of a unimodal function over a given interval. Unlike gradient-based or derivative-requiring methods, this approach uses only function evaluations, making it broadly applicable even when derivatives are difficult or impossible to compute. The method takes its name from the special constant known as the golden ratio $\phi$, which uniquely balances intervals to reduce the problem domain efficiently.
 
@@ -12,7 +12,7 @@ Imagine the graph of a unimodal function $f(x)$. The goal is to isolate the mini
 
 We pick two points $x_1$ and $x_2$ inside $[a,b]$ using the golden ratio partitioning. Based on the function values at these points, we eliminate a portion of the interval that cannot contain the minimum. This procedure repeats, each time reducing the interval size while maintaining the guarantee of containing the minimum.
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 The golden ratio is defined as:
 
@@ -32,7 +32,7 @@ $$\frac{x_2 - a}{b - x_1} = \phi.$$
 
 Because of how $\phi$ partitions the interval, the ratio of the smaller subinterval to the larger subinterval is equal to $1/\phi$, ensuring a consistent and balanced reduction.
 
-## Derivation
+### Derivation
 
 I. **Unimodality Assumption:**
 
@@ -49,7 +49,9 @@ By doing so, we ensure:
 $$x_1 < x_2, \quad a < x_1 < x_2 < b.$$
 
 III. **Decision Criterion:**
+
 We evaluate $f(x_1)$ and $f(x_2)$:
+
 - If $f(x_1) > f(x_2)$, then the minimum must lie in $[x_1,b]$, because the function is smaller at $x_2$ and the segment $[a,x_1]$ can be safely discarded.
 - If $f(x_1) < f(x_2)$, then the minimum must lie in $[a,x_2]$, discarding the segment $[x_2,b]$.
 
@@ -63,45 +65,53 @@ $$|b - a| \left(\frac{1}{\phi}\right)^n.$$
 
 Once this length is less than a prescribed tolerance $\epsilon$, we accept that the minimum is approximated by any point within the current interval.
 
-## Algorithm Steps
+### Algorithm Steps
 
 **Pseudocode for Golden Ratio Search:**
 
-I. **Input:**
+**Input:**
+
 - A continuous unimodal function $f(x)$.
 - Initial interval $[a,b]$.
 - Tolerance $\epsilon > 0$ or maximum iterations $n_{\max}$.
-II. **Initialization:**
+
+**Initialization:**
+
 - Define $\phi = \frac{1 + \sqrt{5}}{2}$.
 - Set iteration counter $k = 0$.
 
-III. **Iteration:**
+**Iteration:**
 
 I. Compute:
 
-  $$x_1 = b - \frac{b-a}{\phi}, \quad x_2 = a + \frac{b-a}{\phi}.$$
+$$x_1 = b - \frac{b-a}{\phi}, \quad x_2 = a + \frac{b-a}{\phi}.$$
 
 II. Evaluate $f(x_1)$ and $f(x_2)$.
+
 III. If $f(x_1) > f(x_2)$:
-  - Set $a = x_1$.  
 
-  (The minimum is in the interval $[x_1,b]$)
+Set $a = x_1$.  
 
-  Else:
-  - Set $b = x_2$.  
+(The minimum is in the interval $\[x_1,b\]$)
 
-  (The minimum is in the interval $[a,x_2]$)
+Else:
+
+Set $b = x_2$.  
+
+(The minimum is in the interval $\[a,x_2\]$)
 
 IV. If $|b-a| < \epsilon$ or $k \geq n_{\max}$:
-  - Stop and approximate the minimum as $\frac{a+b}{2}$.
+
+Stop and approximate the minimum as $\frac{a+b}{2}$.
 
 V. Increment iteration counter $k = k+1$ and go back to step (3).
 
-IV. **Output:**
+**Output:**
+
 - Approximate location of the minimum.
 - Number of iterations performed.
 
-## Example
+### Example
 
 **Given Function:**
 
@@ -114,33 +124,36 @@ We know that $f(x)=x^2$ is unimodal (in fact, strictly convex) on any interval, 
 $$a = -2, \quad b = 2, \quad \phi = \frac{1+\sqrt{5}}{2} \approx 1.618.$$
 
 **Iteration 1:**
-- Compute:
+
+Compute:
 
 $$x_1 = b - \frac{b-a}{\phi} = 2 - \frac{2 - (-2)}{1.618} = 2 - \frac{4}{1.618} \approx 2 - 2.472 \approx -0.472.$$
 
 $$x_2 = a + \frac{b-a}{\phi} = -2 + \frac{4}{1.618} \approx -2 + 2.472 = 0.472.$$
 
-- Evaluate:
+Evaluate:
 
 $$f(x_1) = (-0.472)^2 \approx 0.2225, \quad f(x_2) = (0.472)^2 \approx 0.2225.$$
 
-- Since $f(x_1) = f(x_2)$, we can choose either subinterval. Let’s choose $[a,b] = [-2, x_2] = [-2, 0.472]$ for simplicity. So:
+Since $f(x_1) = f(x_2)$, we can choose either subinterval. Let’s choose $[a,b] = [-2, x_2] = [-2, 0.472]$ for simplicity. So:
 
 $$b = 0.472.$$
 
 **Iteration 2:**
-- New interval: $[a,b] = [-2,0.472]$
-- Compute new points:
+
+New interval: $[a,b] = [-2,0.472]$
+
+Compute new points:
 
 $$x_1 = b - \frac{b-a}{\phi} = 0.472 - \frac{0.472 - (-2)}{1.618} = 0.472 - \frac{2.472}{1.618} \approx 0.472 - 1.526 \approx -1.054.$$
 
 $$x_2 = a + \frac{b-a}{\phi} = -2 + \frac{2.472}{1.618} \approx -2 + 1.526 = -0.474.$$
 
-- Evaluate:
+Evaluate:
 
 $$f(x_1) = (-1.054)^2 \approx 1.110, \quad f(x_2) = (-0.474)^2 \approx 0.224.$$
 
-- Compare:
+Compare:
 
 $$f(x_1) = 1.110, \quad f(x_2) = 0.224.$$
 
@@ -150,14 +163,15 @@ We found $f(x_1) > f(x_2)$, which means the smaller value is at $x_2$. Thus, we 
 
 If $f(x_1) > f(x_2)$, we set:
 
-$$a = x_1 = -1.054,$$
+$$a = x_1 = -1.054$$
+
 maintaining $[a,b] = [-1.054, 0.472]$.
 
 **Subsequent Iterations:**
 
 At each iteration, you would similarly compute new $x_1, x_2$, evaluate $f(x_1)$ and $f(x_2)$, and narrow down the interval. Ultimately, as you continue, the interval will shrink around $x=0$, since $f(x) = x^2$ achieves its minimum at $x=0$.
 
-## Advantages
+### Advantages
 
 I. **No Derivatives Required:**
 
@@ -175,7 +189,7 @@ IV. **Simple to Implement:**
 
 The algorithm is straightforward and does not require complex computations.
 
-## Limitations
+### Limitations
 
 I. **Unimodality Required:**
 
