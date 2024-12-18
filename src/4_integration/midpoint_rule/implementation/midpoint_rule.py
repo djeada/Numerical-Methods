@@ -1,20 +1,29 @@
-def midpoint_rule(func, a, b, n):
-    """
-    Compute the approximate definite integral of a function using the midpoint rule.
+# midpoint_rule.py
+from typing import Callable
+import numpy as np
 
-    Args:
-        func (callable): The function to integrate.
-        a (float): The lower limit of integration.
-        b (float): The upper limit of integration.
-        n (int): The number of subintervals.
-
-    Returns:
-        float: The approximate definite integral.
-    """
+def midpoint_rule(
+    f: Callable[[float], float],
+    a: float,
+    b: float,
+    n: int
+) -> float:
+    if n <= 0:
+        raise ValueError("Number of intervals must be positive.")
     h = (b - a) / n
-    x = np.linspace(a + h / 2, b - h / 2, n)
-    y = func(x)
+    midpoints = a + h * (np.arange(n) + 0.5)
+    return h * np.sum(f(midpoints))
 
-    integral = h * np.sum(y)
-
-    return integral
+def midpoint_rule_multidim(
+    f: Callable[[np.ndarray], float],
+    bounds: list,
+    n: int
+) -> float:
+    if n <= 0:
+        raise ValueError("Number of intervals must be positive.")
+    dimensions = len(bounds)
+    h = [(b - a) / n for a, b in bounds]
+    grids = [a + h_i * (np.arange(n) + 0.5) for h_i, (a, b) in zip(h, bounds)]
+    mesh = np.meshgrid(*grids, indexing='ij')
+    points = np.stack(mesh, axis=-1).reshape(-1, dimensions)
+    return np.prod(h) * np.sum(f(points))
