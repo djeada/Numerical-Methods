@@ -52,7 +52,7 @@ $$x_{n+1} = x_n - f(x_n) \frac{x_n - x_{n-1}}{f(x_n)-f(x_{n-1})}.$$
 
 This is the Secant Method iteration formula.
 
-## Algorithm Steps
+### Algorithm Steps
 
 **Input:**
 
@@ -84,7 +84,7 @@ IV. Update indices: $n = n+1$ and repeat step I.
 - Approximate root $x_{n+1}$.
 - Number of iterations performed.
 
-## Example
+### Example
 
 **Given Function:**
 
