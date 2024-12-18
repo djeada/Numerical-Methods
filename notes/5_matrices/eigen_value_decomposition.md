@@ -1,4 +1,4 @@
-## Introduction
+## Eigenvalue Decomposition (EVD)
 
 Eigenvalue Decomposition (EVD), also known as Eigendecomposition, is a fundamental operation in linear algebra that breaks down a square matrix into a simpler form defined by its eigenvalues and eigenvectors. This decomposition provides deep insights into the properties and structure of a matrix, enabling simplifications in numerous computations such as matrix powers, transformations, and the solution of systems of linear equations. In many applications — from vibration analysis in engineering to principal component analysis in data science — EVD plays a critical role.
 
