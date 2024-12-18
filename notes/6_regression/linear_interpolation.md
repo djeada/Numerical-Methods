@@ -1,4 +1,4 @@
-## Introduction
+## Linear interpolation
 
 Linear interpolation is one of the most basic and commonly used interpolation methods. The idea is to approximate the value of a function between two known data points by assuming that the function behaves linearly (like a straight line) between these points. Although this assumption may be simplistic, it often provides a reasonable approximation, especially when the data points are close together or the underlying function is relatively smooth.
 
@@ -10,7 +10,7 @@ Imagine you have two points on a graph:
 
 Linear interpolation draws a straight line between the two known data points $(x_i,y_i)$ and $(x_{i+1},y_{i+1})$, and then estimates the value at $x$ by following this line.
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 Given two known data points $(x_i, y_i)$ and $(x_{i+1}, y_{i+1})$, and a target $x$-value with $x_i \leq x \leq x_{i+1}$, the line connecting these points has a slope $\alpha$ given by:
 
@@ -26,7 +26,7 @@ $$y = y_i + (x - x_i) \frac{y_{i+1} - y_i}{x_{i+1} - x_i}.$$
 
 This formula provides the interpolated $y$-value directly.
 
-## Derivation
+### Derivation
 
 ![Derivation Illustration](https://user-images.githubusercontent.com/37275728/188960726-ac99ac89-f1b8-4b82-9761-5093cb91d4db.png)
 
@@ -54,7 +54,7 @@ Simplifying:
 
 $$y = y_i + \frac{(y_{i+1} - y_i)}{x_{i+1}-x_i} (x - x_i).$$
 
-## Algorithm Steps
+### Algorithm Steps
 
 I. Identify the interval $[x_i, x_{i+1}]$ that contains the target $x$.
 
@@ -68,7 +68,7 @@ $$y = y_i + \frac{(y_{i+1} - y_i)}{x_{i+1}-x_i} (x - x_i).$$
 
 The result is the interpolated value $y$ at the desired $x$.
 
-## Example
+### Example
 
 **Given Points**: $A(-2,0)$ and $B(2,2)$. Suppose we want to find $y$ at $x=1$.
 
@@ -82,13 +82,13 @@ $$y = 0 + 0.5 (1 - (-2)) = 0.5 \times 3 = 1.5.$$
 
 So, the line passing through $(-2,0)$ and $(2,2)$ gives $y=1.5$ when $x=1$.
 
-## Advantages
+### Advantages
 
 - **Simplicity**: The calculation is straightforward and quick.
 - **Minimal Data Requirements**: Only two data points are needed.
 - **Local Approximation**: Good approximation if the function is nearly linear in the interval.
 
-## Limitations
+### Limitations
 
 - **Linear Assumption**: If the true relationship is not nearly linear, the approximation can be poor.
 - **No Derivative Information**: The method does not use any information about the slope or curvature of the underlying function.
