@@ -8,7 +8,7 @@ $$
 
 Not all matrices have an inverse. Only square matrices (those with the same number of rows and columns) are eligible to have an inverse, and even then, some do not. A matrix has an inverse if and only if it is non-singular, i.e., its determinant is not zero.
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 Given a square matrix A of order n, the inverse A^-1 is calculated as:
 
@@ -20,7 +20,7 @@ where det(A) is the determinant of A and adj(A) is the adjugate of A.
 
 The adjugate of A is the transpose of the cofactor matrix C of A. Each element c_ij of C is calculated as (-1)^(i+j) det(M_ij), where M_ij is the (i, j)th minor of A.
 
-## Using inverse matrix to solve matrix equations
+### Using inverse matrix to solve matrix equations
 
 We can solve a following matrix equation, using a matrix invers:
 
@@ -34,7 +34,7 @@ $$ \implies I\boldsymbol{x} = A^{-1}\boldsymbol{b} $$
 
 $$ \implies \boldsymbol{x} = A^{-1}\boldsymbol{b} $$
 
-## Algorithm Steps
+### Algorithm Steps
 
 Finding the inverse of a matrix is a multi-step process:
 
@@ -44,7 +44,7 @@ Finding the inverse of a matrix is a multi-step process:
 4. Calculate the adjugate of the matrix. The adjugate is simply the transpose of the cofactor matrix.
 5. Finally, the inverse of the original matrix is the adjugate divided by the determinant of the original matrix.
 
-## Example
+### Example
 
 Let's take a 2x2 matrix A as an example:
 
@@ -65,11 +65,11 @@ A^{-1} = \frac{1}{10} \begin{bmatrix} 6 & -7 \\
 -0.2 & 0.4\\ \end{bmatrix}
 $$
 
-## Advantages
+### Advantages
 
 - The inverse of a matrix is a powerful concept in linear algebra, offering a way to analytically solve systems of linear equations, among other things.
 
-## Limitations
+### Limitations
 
 - Not all matrices have an inverse. Only non-singular square matrices can be inverted.
 - Computing the inverse of a matrix involves calculating determinants and is therefore computationally expensive. For large matrices, numerical methods are often more efficient.
