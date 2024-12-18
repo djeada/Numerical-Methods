@@ -1,35 +1,14 @@
+# singular_value_decomposition.py
 import numpy as np
+from typing import Tuple
 
+def singular_value_decomposition(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    U, S, Vt = np.linalg.svd(A, full_matrices=True)
+    S_matrix = np.zeros((U.shape[1], Vt.shape[0]))
+    np.fill_diagonal(S_matrix, S)
+    return U, S_matrix, Vt
 
-def singular_value_decomposition(matrix):
-    """
-    Perform Singular Value Decomposition (SVD) of a matrix.
-
-    Args:
-        matrix (numpy.ndarray): The matrix to decompose.
-
-    Returns:
-        Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]: Tuple containing the left singular vectors (U),
-            singular values (S), and right singular vectors (V^T).
-    """
-    # Compute A^T * A
-    ata = np.dot(matrix.T, matrix)
-
-    # Compute eigenvalues and eigenvectors of A^T * A
-    eigenvalues, eigenvectors = np.linalg.eig(ata)
-
-    # Sort eigenvalues in descending order
-    sorted_indices = np.argsort(eigenvalues)[::-1]
-    eigenvalues = eigenvalues[sorted_indices]
-    eigenvectors = eigenvectors[:, sorted_indices]
-
-    # Compute singular values and square root of eigenvalues
-    singular_values = np.sqrt(eigenvalues)
-
-    # Compute right singular vectors (V^T) by normalizing eigenvectors of A^T * A
-    Vt = eigenvectors.T
-
-    # Compute left singular vectors (U) by dividing A * V by singular values
-    U = np.dot(matrix, Vt) / singular_values
-
-    return U, singular_values, Vt
+def singular_value_decomposition_reduced(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    U, S, Vt = np.linalg.svd(A, full_matrices=False)
+    S_matrix = np.diag(S)
+    return U, S_matrix, Vt
