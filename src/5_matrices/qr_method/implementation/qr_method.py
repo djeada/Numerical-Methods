@@ -1,36 +1,34 @@
+# qr_method.py
 import numpy as np
+from typing import Tuple
 
+def qr_decomposition(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    Q, R = np.linalg.qr(A)
+    return Q, R
 
-def qr_method(a, num_iter=10):
-    """
-    returns all eigenvalues
-    """
+def qr_algorithm(A: np.ndarray, tol: float = 1e-8, max_iterations: int = 1000) -> np.ndarray:
+    if A.shape[0] != A.shape[1]:
+        raise ValueError("Matrix must be square.")
+    A_k = A.copy().astype(float)
+    for _ in range(max_iterations):
+        Q, R = qr_decomposition(A_k)
+        A_k = R @ Q
+        off_diagonal = A_k - np.diag(np.diag(A_k))
+        if np.linalg.norm(off_diagonal, ord='fro') < tol:
+            break
+    return np.diag(A_k)
 
-    def qr_decomposition(a):
-        def householder_transformation(a):
-            v = a / (a[0] + np.copysign(np.linalg.norm(a), a[0]))
-            v[0] = 1
-
-            return v, 2 / np.dot(v.T, v)
-
-        m, n = a.shape
-        r = a.copy()
-        q = np.identity(m)
-
-        for i in range(n):
-            v, tau = householder_transformation(r[i:, i, np.newaxis])
-
-            H = np.identity(m)
-            H[i:, i:] -= tau * np.dot(v, v.T)
-            r = np.dot(H, r)
-            q = np.dot(H, q)
-
-        q = q[:n].T
-        r = np.triu(r[:n])
-        return q, r
-
-    for i in range(num_iter):
-        q, r = qr_decomposition(a)
-        a = np.dot(r, q)
-
-    return np.diagonal(a)
+def qr_algorithm_with_shifts(A: np.ndarray, tol: float = 1e-8, max_iterations: int = 1000) -> np.ndarray:
+    if A.shape[0] != A.shape[1]:
+        raise ValueError("Matrix must be square.")
+    A_k = A.copy().astype(float)
+    n = A_k.shape[0]
+    for _ in range(max_iterations):
+        shift = A_k[-1, -1]
+        A_shifted = A_k - shift * np.eye(n)
+        Q, R = qr_decomposition(A_shifted)
+        A_k = R @ Q + shift * np.eye(n)
+        off_diagonal = A_k - np.diag(np.diag(A_k))
+        if np.linalg.norm(off_diagonal, ord='fro') < tol:
+            break
+    return np.diag(A_k)
