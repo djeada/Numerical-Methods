@@ -14,10 +14,11 @@ Newton’s forward or backward interpolation builds a polynomial starting from o
 
 Assume we have a set of equally spaced data points:
 
-$$x_0, x_1, x_2, \ldots, x_n,$$
+$$x_0, x_1, x_2, \ldots, x_n$$
+
 with spacing $h = x_{i+1} - x_i$. Let the midpoint be $x_m$, where $m \approx n/2$ if $n$ is even. For convenience, we define a shifted variable:
 
-$$t = \frac{x - x_m}{h}.$$
+$$t = \frac{x - x_m}{h}$$
 
 The function values are $y_i = f(x_i)$. We then use central (forward and backward) differences around $x_m$ to construct the interpolation polynomial. The polynomial takes a form that involves binomial-type expansions with central differences, such as:
 
@@ -39,10 +40,12 @@ I. **Starting from Equally Spaced Points**:
 
 Given $f(x_0), f(x_1), \ldots, f(x_n)$ at points equally spaced by $h$, define:
 
-$$\Delta f(x_i) = f(x_{i+1}) - f(x_i),$$
+$$\Delta f(x_i) = f(x_{i+1}) - f(x_i)$$
+
 and higher-order differences:
 
-$$\Delta^2 f(x_i) = \Delta f(x_{i+1}) - \Delta f(x_i),$$
+$$\Delta^2 f(x_i) = \Delta f(x_{i+1}) - \Delta f(x_i)$$
+
 and so forth.
 
 II. **Choosing a Central Point**:
@@ -59,21 +62,30 @@ The resulting terms often involve products like $t(t-1)$, $t(t+1)$, and factoria
 
 ### Algorithm Steps
 
-I. **Input**:
+**Input**:
+
 - A set of equally spaced points $\{x_i\}$ and corresponding values $\{f(x_i)\}$.
 - A target point $x$ at which you want to interpolate.
-II. **Identify the Central Point**:
+
+I. **Identify the Central Point**:
+
 - Pick $x_m$ near the midpoint of the data set. If $n$ is even, $m = n/2$; if odd, $m$ is the central index.
 - Compute $t = (x - x_m)/h$.
-III. **Compute Central Differences**:
+
+II. **Compute Central Differences**:
+
 - Form a difference table of $f(x_i)$ values.
 - Compute $\Delta f, \Delta^2 f, \Delta^3 f, \ldots$ (or similarly $\nabla f, \nabla^2 f, \ldots$) centered around $x_m$.
-IV. **Apply Gaussian Formula**:
-- Substitute the central differences and the value of $t$ into the chosen Gaussian interpolation formula (forward or backward) to compute $f(x)$.
-V. **Calculate Interpolated Value**:
-- Sum the terms up to the desired order of approximation. More terms yield higher accuracy.
 
-## Example
+III. **Apply Gaussian Formula**:
+
+Substitute the central differences and the value of $t$ into the chosen Gaussian interpolation formula (forward or backward) to compute $f(x)$.
+
+IV. **Calculate Interpolated Value**:
+
+Sum the terms up to the desired order of approximation. More terms yield higher accuracy.
+
+### Example
 
 **Given Data**: Suppose we have points with spacing $h=1$:  
 
