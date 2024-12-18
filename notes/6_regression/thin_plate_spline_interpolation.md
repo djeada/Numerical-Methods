@@ -59,7 +59,10 @@ $$\begin{bmatrix}
 0 & P^\top \\ P & K
 \end{bmatrix}
 \begin{bmatrix} \alpha \\ w \end{bmatrix} 
-=
+$$
+
+$$
+\=
 \begin{bmatrix} 0 \\ z \end{bmatrix}$$
 
 where:
