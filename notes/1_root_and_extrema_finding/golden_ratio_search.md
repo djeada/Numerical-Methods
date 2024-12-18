@@ -67,8 +67,6 @@ Once this length is less than a prescribed tolerance $\epsilon$, we accept that 
 
 ### Algorithm Steps
 
-**Pseudocode for Golden Ratio Search:**
-
 **Input:**
 
 - A continuous unimodal function $f(x)$.
@@ -104,7 +102,7 @@ IV. If $|b-a| < \epsilon$ or $k \geq n_{\max}$:
 
 Stop and approximate the minimum as $\frac{a+b}{2}$.
 
-V. Increment iteration counter $k = k+1$ and go back to step (3).
+V. Increment iteration counter $k = k+1$ and go back to step I.
 
 **Output:**
 
