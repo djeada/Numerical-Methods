@@ -16,7 +16,7 @@ Consider a continuous function $f : \mathbb{R} \to \mathbb{R}$. Suppose that we 
 
 The bisection method proceeds by evaluating the midpoint:
 
-$$c = \frac{a + b}{2}.$$
+$$c = \frac{a + b}{2}$$
 
 We then check the sign of $f(c)$:
 
@@ -38,7 +38,9 @@ II. **First Iteration**:
 Compute the midpoint:
 
 $$c_1 = \frac{a_0 + b_0}{2}.$$
+
 Evaluate $f(c_1)$:
+
 - If $f(a_0)f(c_1) < 0$, set $a_1 = a_0$ and $b_1 = c_1$.
 - Else, set $a_1 = c_1$ and $b_1 = b_0$.
 
@@ -48,28 +50,28 @@ III. **Subsequent Iterations**:
 
 At the $k$-th iteration:
 
-$$c_k = \frac{a_{k-1} + b_{k-1}}{2},$$
+$$c_k = \frac{a_{k-1} + b_{k-1}}{2}$$
+
 and based on the sign test:
 
-$$f(a_{k-1})f(c_k) < 0 \implies [a_k, b_k] = [a_{k-1}, c_k],$$
+$$f(a_{k-1})f(c_k) < 0 \implies [a_k, b_k] = [a_{k-1}, c_k]$$
 or
 
-$$f(c_k)f(b_{k-1}) < 0 \implies [a_k, b_k] = [c_k, b_{k-1}].$$
+$$f(c_k)f(b_{k-1}) < 0 \implies [a_k, b_k] = [c_k, b_{k-1}]$$
 
 As iterations proceed, the length of the interval containing the root is:
 
-$$|b_k - a_k| = \frac{|b_0 - a_0|}{2^k}.$$
+$$|b_k - a_k| = \frac{|b_0 - a_0|}{2^k}$$
 
 IV. **Convergence Criterion**:
 
 The process is repeated until the desired precision $\epsilon$ is reached, i.e., when:
 
-$$|b_k - a_k| < \epsilon,$$
+$$|b_k - a_k| < \epsilon$$
+
 or until the maximum number of iterations $n_{\max}$ is exhausted.
 
 ### Algorithm Steps
-
-**Pseudocode for the Bisection Method:**
 
 **Input**:
 
@@ -85,7 +87,7 @@ or until the maximum number of iterations $n_{\max}$ is exhausted.
 
 I. Compute the midpoint:
 
-$$c = \frac{a+b}{2}.$$
+$$c = \frac{a+b}{2}$$
 
 II. Evaluate $f(c)$.
 
@@ -98,7 +100,7 @@ IV. Else, determine the sub-interval:
 - If $f(a)f(c) < 0$, set $b = c$.
 - Else, set $a = c$.
 
-V. Increment iteration counter $k = k+1$ and go back to step (3).
+V. Increment iteration counter $k = k+1$ and go back to step I.
 
 **Output**:
 
