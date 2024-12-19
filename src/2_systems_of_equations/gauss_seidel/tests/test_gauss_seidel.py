@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from implementation.gauss_seidel import inverse_matrix, solve_inverse_matrix, gauss_seidel
+from ..implementation.gauss_seidel import inverse_matrix, solve_inverse_matrix, gauss_seidel
 
 def test_inverse_matrix_identity():
     A = np.eye(3)
