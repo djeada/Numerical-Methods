@@ -1,7 +1,7 @@
 # test_newton_raphson.py
 import pytest
 import numpy as np
-from newton_raphson import newton_raphson, newton_raphson_system
+from ..implementation.newton_raphson import newton_raphson, newton_raphson_system
 
 
 # Univariate Tests
