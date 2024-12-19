@@ -1,7 +1,7 @@
 # test_cubic_spline.py
 import pytest
 import numpy as np
-from cubic_spline import cubic_spline
+from ..implementation.cubic_spline import cubic_spline
 
 def test_cubic_spline_basic():
     x = np.array([0, 1, 2, 3])
