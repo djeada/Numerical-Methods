@@ -138,18 +138,14 @@ def test_newton_raphson_system_nonlinear():
 
 def test_newton_raphson_system_singular_jacobian():
     def F(x):
-        return np.array([
-            x[0]**2,
-            x[0] * x[1]
-        ])
-
+        return np.array([x[0]**2, x[0] * x[1]])
+    
     def J(x):
         return np.array([
             [2 * x[0], 0],
-            [x[1], x[0]
-            ]
+            [x[1], x[0]]
         ])
-
+    
     x0 = np.array([0.0, 0.0])
     with pytest.raises(ValueError):
         newton_raphson_system(F, J, x0)
@@ -213,19 +209,15 @@ def test_newton_raphson_system_high_precision():
 
 def test_newton_raphson_system_no_initial_guess():
     def F(x):
-        return np.array([
-            x[0]**2 - 2,
-            x[1]**2 - 3
-        ])
-
+        return np.array([x[0]**2 - 2, x[1]**2 - 3])
+    
     def J(x):
         return np.array([
             [2 * x[0], 0],
             [0, 2 * x[1]]
         ])
-
-    with pytest.raises(ValueError):
-        # Since x0 is None, it defaults to np.zeros(1), but J(x) will be 2*0 for x0[0] which is zero
+    
+    with pytest.raises(ValueError, match="Initial guess x0 must be provided"):
         newton_raphson_system(F, J)
 
 
