@@ -1,7 +1,7 @@
 # test_relaxation_method.py
 import pytest
 import numpy as np
-from relaxation_method import relaxation_method
+from ..implementation.relaxation_method import relaxation_method
 
 
 def test_relaxation_constant():
