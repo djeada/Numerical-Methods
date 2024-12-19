@@ -8,12 +8,13 @@ def golden_ratio_search(
     tol: float = 1e-8,
     max_iterations: int = 1000
 ) -> float:
+    f_mod = lambda x: (f(x))**2
     gr = (np.sqrt(5) + 1) / 2
     c = b - (b - a) / gr
     d = a + (b - a) / gr
     for _ in range(max_iterations):
-        fc = f(c)
-        fd = f(d)
+        fc = f_mod(c)
+        fd = f_mod(d)
         if fc < fd:
             b, d = d, c
             c = b - (b - a) / gr
