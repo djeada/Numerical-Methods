@@ -1,7 +1,7 @@
 # test_euler_solver.py
 import pytest
 import numpy as np
-from ..implementation..euler import euler_method
+from ..implementation.euler import euler_method
 
 def test_euler_method_linear_ode():
     f = lambda t, y: y
