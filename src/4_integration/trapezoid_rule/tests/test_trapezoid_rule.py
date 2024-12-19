@@ -1,7 +1,7 @@
 # test_trapezoid_rule.py
 import pytest
 import numpy as np
-from implementation.trapezoid_rule import trapezoid_rule, trapezoid_rule_multidim
+from ..implementation.trapezoid_rule import trapezoid_rule, trapezoid_rule_multidim
 
 def test_trapezoid_rule_constant():
     f = lambda x: 5.0
