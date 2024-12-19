@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from implementation.inverse_matrix import inverse_matrix, solve_inverse_matrix
+from ..implementation.inverse_matrix import inverse_matrix, solve_inverse_matrix
 
 def test_inverse_matrix_identity():
     A = np.eye(3)
