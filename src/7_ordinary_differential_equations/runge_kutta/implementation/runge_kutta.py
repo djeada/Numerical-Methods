@@ -1,52 +1,28 @@
+# runge_kutta.py
 import numpy as np
-import matplotlib.pyplot as plt
+from typing import Callable, Tuple
 
-# y' = u
-# u' = -y
-
-"""
-y'' + y = 0
-
-y(0) = 0 and y'(0) = 1/pi
-"""
-
-
-def F(y, u, x):
-    return -y
-
-
-a = 0
-b = 2 * np.pi
-N = 100
-h = (b - a) / N
-
-xpoints = np.arange(a, b, h)
-ypoints = []
-upoints = []
-
-y = 0.0
-u = 1.0 / np.pi
-
-for x in xpoints:
-    ypoints.append(y)
-    upoints.append(u)
-
-    m1 = h * u
-    k1 = h * F(y, u, x)  # (x, v, t)
-
-    m2 = h * (u + 0.5 * k1)
-    k2 = h * F(y + 0.5 * m1, u + 0.5 * k1, x + 0.5 * h)
-
-    m3 = h * (u + 0.5 * k2)
-    k3 = h * F(y + 0.5 * m2, u + 0.5 * k2, x + 0.5 * h)
-
-    m4 = h * (u + k3)
-    k4 = h * F(y + m3, u + k3, x + h)
-
-    y += (m1 + 2 * m2 + 2 * m3 + m4) / 6
-    u += (k1 + 2 * k2 + 2 * k3 + k4) / 6
-
-plt.plot(xpoints, ypoints)
-# plt.xlim([0,4])
-# plt.xlim([0,4])
-plt.show()
+def runge_kutta_4(
+    f: Callable[[float, np.ndarray], np.ndarray],
+    t0: float,
+    y0: np.ndarray,
+    t_end: float,
+    h: float
+) -> Tuple[np.ndarray, np.ndarray]:
+    if h <= 0:
+        raise ValueError("Step size h must be positive.")
+    if t_end < t0:
+        raise ValueError("t_end must be greater than or equal to t0.")
+    n_steps = int(np.ceil((t_end - t0) / h))
+    t = np.linspace(t0, t0 + n_steps * h, n_steps + 1)
+    y = np.zeros((n_steps + 1, y0.size))
+    y[0] = y0
+    for i in range(n_steps):
+        ti = t[i]
+        yi = y[i]
+        k1 = f(ti, yi)
+        k2 = f(ti + h / 2, yi + h * k1 / 2)
+        k3 = f(ti + h / 2, yi + h * k2 / 2)
+        k4 = f(ti + h, yi + h * k3)
+        y[i + 1] = yi + (h / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
+    return t, y
