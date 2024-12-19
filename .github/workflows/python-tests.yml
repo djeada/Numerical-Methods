@@ -1,6 +1,5 @@
 name: Python Tests
 
-# Trigger the workflow on push and pull request events to the master branch
 on:
   push:
     branches: [ master ]
@@ -9,26 +8,23 @@ on:
 
 jobs:
   test:
-    # Use the latest Ubuntu runner
     runs-on: ubuntu-latest
-
-    # Define a matrix of Python versions to test against
     strategy:
       matrix:
-        python-version: [3.8, 3.9, 3.10, 3.11]  # Ensure only valid versions are listed
+        python-version: [3.8, 3.9, 3.10, 3.11]  # Valid Python versions only
 
     steps:
-      # Step 1: Check out the repository code
+      # Step 1: Check out the repository
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Python environment
+      # Step 2: Set up Python
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
-      # Step 3: Cache pip dependencies to speed up workflow
+      # Step 3: Cache pip dependencies
       - name: Cache pip
         uses: actions/cache@v3
         with:
@@ -43,14 +39,12 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # Step 5: Set PYTHONPATH to include the 'src' directory
+      # Step 5: Set PYTHONPATH (if needed)
       - name: Set PYTHONPATH
         run: echo "PYTHONPATH=$(pwd)/src" >> $GITHUB_ENV
 
-      # Step 6: Run the tests
+      # Step 6: Run tests
       - name: Run Tests
         run: |
-          # Navigate to the src directory
           cd src
-          # Discover and run all tests
           pytest
