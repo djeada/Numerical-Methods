@@ -1,7 +1,7 @@
 # test_thin_plate_spline_interpolation.py
 import pytest
 import numpy as np
-from thin_plate_spline_interpolation import thin_plate_spline_interpolation
+from ..implementation.thin_plate_spline_interpolation import thin_plate_spline_interpolation
 
 
 def test_tps_basic():
