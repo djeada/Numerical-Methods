@@ -1,7 +1,7 @@
 # test_forward_difference.py
 import pytest
 import numpy as np
-from forward_difference import forward_difference, forward_difference_gradient
+from ..implementation.forward_difference import forward_difference, forward_difference_gradient
 
 def test_forward_difference_constant():
     f = lambda x: 5.0
