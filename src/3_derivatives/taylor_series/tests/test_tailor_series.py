@@ -29,7 +29,8 @@ def test_taylor_series_ln():
     def ln_derivatives(k: int) -> float:
         if k == 0:
             return math.log(1)
-        return (-1) ** (k -1) * (k -1)! if k > 0 else 0
+        return (-1) ** (k - 1) * math.factorial(k - 1) if k > 0 else 0
+
     with pytest.raises(OverflowError):
         taylor_series(math.log, 1, 100, 2, ln_derivatives)
 
