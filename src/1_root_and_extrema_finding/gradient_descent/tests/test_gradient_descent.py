@@ -1,7 +1,7 @@
 # test_gradient_descent.py
 import pytest
 import numpy as np
-from implementation.gradient_descent import gradient_descent
+from ..implementation.gradient_descent import gradient_descent
 
 
 def test_gradient_descent_quadratic():
