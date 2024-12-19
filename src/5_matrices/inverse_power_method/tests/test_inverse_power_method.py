@@ -1,7 +1,7 @@
 # test_inverse_power_method.py
 import pytest
 import numpy as np
-from inverse_power_method import inverse_power_method
+from ..implementation.inverse_power_method import inverse_power_method
 
 def test_inverse_power_method_identity():
     A = np.eye(3)
