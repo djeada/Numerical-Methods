@@ -1,7 +1,7 @@
 # test_least_squares.py
 import pytest
 import numpy as np
-from implementation.least_squares import least_squares
+from ..implementation.least_squares import least_squares
 
 
 def test_least_squares_simple():
