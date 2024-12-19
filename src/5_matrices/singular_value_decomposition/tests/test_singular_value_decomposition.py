@@ -45,7 +45,7 @@ def test_svd_reduced():
     assert np.allclose(reconstructed, A, atol=1e-6)
     assert U.shape == (5, 3)
     assert S.shape == (3, 3)
-    assert Vt.shape == (3, 3))
+    assert Vt.shape == (3, 3)
     assert np.allclose(U @ U.T, np.eye(5)[:U.shape[0], :U.shape[0]])
 
 def test_svd_rank_deficient():
