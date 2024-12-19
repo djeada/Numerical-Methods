@@ -1,6 +1,6 @@
 import pytest
 import math
-from implementation.taylor_series import taylor_series
+from ..implementation.taylor_series import taylor_series
 
 def test_taylor_series_exp():
     def exp_derivatives(k: int) -> float:
