@@ -1,7 +1,7 @@
 # test_gaussian_elimination.py
 import pytest
 import numpy as np
-from gaussian_elimination import gaussian_elimination, solve_gaussian_elimination
+from ..implementation.gaussian_elimination import gaussian_elimination, solve_gaussian_elimination
 
 def test_gaussian_elimination_identity():
     A = np.eye(3)
