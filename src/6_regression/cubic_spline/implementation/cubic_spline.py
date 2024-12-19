@@ -1,76 +1,71 @@
+# cubic_spline.py
+import numpy as np
+from typing import Callable, Tuple
 import bisect
 
+def solve_tridiagonal_system(a: np.ndarray, b: np.ndarray, c: np.ndarray, d: np.ndarray) -> np.ndarray:
+    n = len(d)
+    # Forward sweep
+    for i in range(1, n):
+        w = a[i-1] / b[i-1]
+        b[i] = b[i] - w * c[i-1]
+        d[i] = d[i] - w * d[i-1]
+    # Back substitution
+    x = np.zeros(n)
+    x[-1] = d[-1] / b[-1]
+    for i in range(n-2, -1, -1):
+        x[i] = (d[i] - c[i] * x[i+1]) / b[i]
+    return x
 
-def cubic_spline(x_data, y_data):
-
-    if x_data.size != y_data.size:
-        raise Exception("X and Y vectors must have equal number of elements.")
-
-    if x_data.size < 3:
-        raise Exception("X and Y vectors have to contain at least 3 elements.")
-
-    n = x_data.size
-
-    def create_tri_diag_matrix_data(n, h):
-        A = [h[i] / (h[i] + h[i + 1]) for i in range(n - 2)]
-        A += [0]
-        B = [2] * n
-        C = [0]
-        C += [h[i + 1] / (h[i] + h[i + 1]) for i in range(n - 2)]
-        return A, B, C
-
-    def compute_D(n, h, y_data):
-        result = [0]
-        result += [
-            6
-            * (
-                (y_data[i + 1] - y_data[i]) / h[i]
-                - (y_data[i] - y_data[i - 1]) / h[i - 1]
-            )
-            / (h[i] + h[i - 1])
-            for i in range(1, n - 1)
-        ]
-        result += [0]
-        return result
-
-    def solve_tri_diag_sy_datastem(A, B, C, D):
-        c_p = C + [0]
-        d_p = [0] * len(B)
-        x_data = [0] * len(B)
-
-        c_p[0] = C[0] / B[0]
-        d_p[0] = D[0] / B[0]
-
-        for i in range(1, len(B)):
-            c_p[i] = c_p[i] / (B[i] - c_p[i - 1] * A[i - 1])
-            d_p[i] = (D[i] - d_p[i - 1] * A[i - 1]) / (B[i] - c_p[i - 1] * A[i - 1])
-
-        x_data[-1] = d_p[-1]
-
-        for i in range(len(B) - 2, -1, -1):
-            x_data[i] = d_p[i] - c_p[i] * x_data[i + 1]
-
-        return x_data
-
-    def result_function(point):
-        idx_data = min(bisect.bisect(x_data, point) - 1, n - 2)
-        z = (point - x_data[idx_data]) / h[idx_data]
-        C = coeffs[idx_data]
-        return (((C[0] * z) + C[1]) * z + C[2]) * z + C[3]
-
-    h = [x_data[i + 1] - x_data[i] for i in range(len(x_data) - 1)]
-    A, B, C = create_tri_diag_matrix_data(n, h)
-    D = compute_D(n, h, y_data)
-    M = solve_tri_diag_sy_datastem(A, B, C, D)
-
-    coeffs = [
-        [
-            (M[i + 1] - M[i]) * h[i] * h[i] / 6,
-            M[i] * h[i] * h[i] / 2,
-            (y_data[i + 1] - y_data[i] - (M[i + 1] + 2 * M[i]) * h[i] * h[i] / 6),
-            y_data[i],
-        ]
-        for i in range(n - 1)
-    ]
-
-    return result_function
+def cubic_spline(
+    x_data: np.ndarray,
+    y_data: np.ndarray
+) -> Callable[[float], float]:
+    if x_data.shape[0] != y_data.shape[0]:
+        raise ValueError("X and Y vectors must have equal number of elements.")
+    if x_data.shape[0] < 3:
+        raise ValueError("X and Y vectors must contain at least 3 elements.")
+    if len(np.unique(x_data)) != x_data.shape[0]:
+        raise ValueError("X data must contain unique values.")
+    if not np.all(np.diff(x_data) > 0):
+        raise ValueError("X data must be strictly increasing.")
+    
+    n = x_data.shape[0]
+    h = np.diff(x_data)
+    
+    # Construct the tridiagonal system
+    a = h[:-1]
+    b = 2 * (h[:-1] + h[1:])
+    c = h[1:]
+    d = 6 * ((y_data[2:] - y_data[1:-1]) / h[1:] - (y_data[1:-1] - y_data[:-2]) / h[:-1])
+    
+    # Natural spline boundary conditions: second derivatives at endpoints are zero
+    a = np.insert(a, 0, 0.0)
+    c = np.append(c, 0.0)
+    b = np.insert(b, 0, 1.0)
+    b = np.append(b, 1.0)
+    d = np.insert(d, 0, 0.0)
+    d = np.append(d, 0.0)
+    
+    # Solve the tridiagonal system
+    M = solve_tridiagonal_system(a, b, c, d)
+    
+    # Calculate coefficients for each spline segment
+    coeffs = []
+    for i in range(n - 1):
+        A = M[i] / (6 * h[i])
+        B = M[i+1] / (6 * h[i])
+        C = (y_data[i] / h[i]) - (M[i] * h[i] / 6)
+        D = (y_data[i+1] / h[i]) - (M[i+1] * h[i] / 6)
+        coeffs.append((A, B, C, D))
+    
+    def spline(point: float) -> float:
+        if point < x_data[0] or point > x_data[-1]:
+            raise ValueError("Point is outside the interpolation range.")
+        idx = bisect.bisect_right(x_data, point) - 1
+        idx = min(max(idx, 0), n - 2)
+        A, B, C, D = coeffs[idx]
+        z = point - x_data[idx]
+        return A * z**3 + B * z**2 + C * z + D
+    
+    return spline
