@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from implementation.golden_ratio_search import golden_ratio_search
+from ..implementation.golden_ratio_search import golden_ratio_search
 
 def test_golden_ratio_search_linear():
     f = lambda x: 2 * x - 4
