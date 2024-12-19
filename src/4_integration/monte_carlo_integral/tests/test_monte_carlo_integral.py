@@ -1,7 +1,7 @@
 # test_monte_carlo_integral.py
 import pytest
 import numpy as np
-from implementation.monte_carlo_integral import monte_carlo_integral, monte_carlo_integral_multidim
+from ..implementation.monte_carlo_integral import monte_carlo_integral, monte_carlo_integral_multidim
 
 def test_monte_carlo_integral_constant():
     f = lambda x: 5.0
