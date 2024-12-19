@@ -1,7 +1,7 @@
 # test_midpoint_rule.py
 import pytest
 import numpy as np
-from midpoint_rule import midpoint_rule, midpoint_rule_multidim
+from ..implementation.midpoint_rule import midpoint_rule, midpoint_rule_multidim
 
 def test_midpoint_rule_constant():
     f = lambda x: 5.0
