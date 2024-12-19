@@ -63,11 +63,11 @@ def newton_raphson_system(
     Raises:
         ValueError: If the Jacobian is singular at any iteration.
         ValueError: If the method does not converge within the maximum number of iterations.
+        ValueError: If the initial guess x0 is not provided.
     """
     if x0 is None:
-        x = np.zeros(1)
-    else:
-        x = x0.astype(float)
+        raise ValueError("Initial guess x0 must be provided")
+    x = x0.astype(float)
     for iteration in range(1, max_iterations + 1):
         Fx = F(x)
         Jx = J(x)

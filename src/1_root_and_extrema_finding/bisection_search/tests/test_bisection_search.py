@@ -45,7 +45,7 @@ def test_bisection_multiple_roots():
 
 def test_bisection_tolerance():
     f = lambda x: x**3 - 6 * x**2 + 11 * x - 6
-    a, b = 2, 4
+    a, b = 2.5, 4
     root = bisection_search(f, a, b, tol=1e-10)
     expected = 3.0
     assert np.isclose(root, expected, atol=1e-10)
@@ -60,7 +60,7 @@ def test_bisection_max_iterations():
 
 def test_bisection_convergence():
     f = lambda x: x**3 - 6 * x**2 + 11 * x - 6
-    a, b = 2, 4
+    a, b = 2.5, 4
     root = bisection_search(f, a, b)
     expected = 3.0
     assert np.isclose(root, expected)

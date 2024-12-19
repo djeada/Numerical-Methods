@@ -1,6 +1,6 @@
 # gradient_descent.py
 import numpy as np
-from typing import Callable, Optional
+from typing import Callable
 
 
 def gradient_descent(
@@ -14,8 +14,8 @@ def gradient_descent(
     x = x0.astype(float)
     for _ in range(max_iterations):
         grad = grad_f(x)
-        x_new = x - learning_rate * grad
-        if np.linalg.norm(x_new - x, ord=np.inf) < tol:
-            return x_new
-        x = x_new
+        grad_norm = np.linalg.norm(grad, ord=2)
+        if grad_norm < tol:
+            return x
+        x = x - learning_rate * grad
     raise ValueError("Gradient descent did not converge within the maximum number of iterations.")

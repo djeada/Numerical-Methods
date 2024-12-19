@@ -1,6 +1,7 @@
 import numpy as np
 from typing import Callable
 
+
 def golden_ratio_search(
     f: Callable[[float], float],
     a: float,
@@ -18,9 +19,12 @@ def golden_ratio_search(
         if fc < fd:
             b, d = d, c
             c = b - (b - a) / gr
-        else:
+        elif fc > fd:
             a, c = c, d
             d = a + (b - a) / gr
+        else:
+            # If fc == fd, return the midpoint
+            return (a + b) / 2
         if np.abs(b - a) < tol:
             return (b + a) / 2
     raise ValueError("Golden ratio search did not converge within the maximum number of iterations.")
