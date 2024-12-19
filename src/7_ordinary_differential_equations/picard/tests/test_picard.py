@@ -1,7 +1,7 @@
 # test_picard_solver.py
 import pytest
 import numpy as np
-from implementation.picard import picard_method
+from ..implementation.picard import picard_method
 
 def test_picard_method_linear_ode():
     f = lambda t, y: y
