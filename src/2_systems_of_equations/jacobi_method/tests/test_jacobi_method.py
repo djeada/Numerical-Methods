@@ -1,7 +1,7 @@
 # test_jacobi_method.py
 import pytest
 import numpy as np
-from jacobi_method import jacobi_method
+from ..implementation.jacobi_method import jacobi_method
 
 
 def test_jacobi_identity():
