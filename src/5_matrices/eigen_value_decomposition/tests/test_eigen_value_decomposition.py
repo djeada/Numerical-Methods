@@ -1,7 +1,7 @@
 # test_eigen_value_decomposition.py
 import pytest
 import numpy as np
-from eigen_value_decomposition import eigen_decomposition_full, eigen_decomposition_real_full
+from ..implementation.eigen_value_decomposition import eigen_decomposition_full, eigen_decomposition_real_full
 
 def test_eigen_decomposition_identity():
     A = np.eye(3)
