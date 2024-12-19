@@ -1,7 +1,7 @@
 # test_lagrange_polynomial.py
 import pytest
 import numpy as np
-from lagrange_polynomial import lagrange_polynomial
+from ..implementation.lagrange_polynomial import lagrange_polynomial
 
 
 def test_lagrange_polynomial_basic():
