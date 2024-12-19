@@ -1,7 +1,7 @@
 # test_secant_method.py
 import pytest
 import numpy as np
-from ..implementation.implementation.secant_method import secant_method
+from ..implementation.secant_method import secant_method
 
 
 
