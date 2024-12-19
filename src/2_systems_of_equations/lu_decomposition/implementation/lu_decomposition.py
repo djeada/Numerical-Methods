@@ -1,74 +1,37 @@
+# lu_decomposition.py
 import numpy as np
+from typing import Tuple
 
+def lu_decomposition(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    n: int = A.shape[0]
+    if A.shape[0] != A.shape[1]:
+        raise ValueError("Matrix A must be square.")
+    P: np.ndarray = np.eye(n)
+    L: np.ndarray = np.zeros((n, n), dtype=float)
+    U: np.ndarray = A.copy().astype(float)
+    for i in range(n):
+        pivot: int = np.argmax(np.abs(U[i:, i])) + i
+        if np.isclose(U[pivot, i], 0.0):
+            raise ValueError("Matrix is singular.")
+        if pivot != i:
+            U[[i, pivot]] = U[[pivot, i]]
+            P[[i, pivot]] = P[[pivot, i]]
+            if i > 0:
+                L[[i, pivot], :i] = L[[pivot, i], :i]
+        L[i, i] = 1.0
+        for j in range(i + 1, n):
+            factor: float = U[j, i] / U[i, i]
+            L[j, i] = factor
+            U[j] -= factor * U[i]
+    return P, L, U
 
-def lu_decomposition(matrix):
-    """
-    Conducts LU decomposition on a square matrix.
-
-    Parameters:
-        matrix (numpy.ndarray): A square matrix to decompose.
-
-    Returns:
-        L (numpy.ndarray): Lower triangular matrix.
-        U (numpy.ndarray): Upper triangular matrix.
-        P (numpy.ndarray): Permutation matrix.
-    """
-    size = matrix.shape[0]
-    L, U, P = np.eye(size), np.zeros_like(matrix), np.eye(size)
-
-    for index in range(size):
-        pivot_index = np.argmax(abs(matrix[index:, index])) + index
-
-        # Swap rows
-        (
-            matrix[[index, pivot_index]],
-            L[[index, pivot_index]],
-            P[[index, pivot_index]],
-        ) = (
-            matrix[[pivot_index, index]],
-            L[[pivot_index, index]],
-            P[[pivot_index, index]],
-        )
-
-        U[index, index:] = matrix[index, index:]
-        L[index + 1 :, index] = matrix[index + 1 :, index] / U[index, index]
-        U[index + 1 :, index:] = matrix[index + 1 :, index:] - np.outer(
-            L[index + 1 :, index], U[index, index:]
-        )
-
-    return L, U, P
-
-
-def forward_substitution(L, Pb):
-    n = L.shape[0]
-    y = np.zeros_like(Pb, dtype=np.double)
-
-    y[0] = Pb[0] / L[0, 0]
-
-    for i in range(1, n):
-        y[i] = (Pb[i] - np.dot(L[i, :i], y[:i])) / L[i, i]
-
-    return y
-
-
-def backward_substitution(U, y):
-    n = U.shape[0]
-    x = np.zeros_like(y, dtype=np.double)
-
-    x[-1] = y[-1] / U[-1, -1]
-
-    for i in range(n - 2, -1, -1):
-        x[i] = (y[i] - np.dot(U[i, i + 1 :], x[i + 1 :])) / U[i, i]
-
-    return x
-
-
-def solve_lu(A, b):
-    L, U, P = lu_decomposition(A)
-
-    Pb = np.dot(P, b)
-
-    y = forward_substitution(L, Pb)
-    x = backward_substitution(U, y)
-
+def solve_lu(P: np.ndarray, L: np.ndarray, U: np.ndarray, b: np.ndarray) -> np.ndarray:
+    Pb: np.ndarray = P @ b
+    y: np.ndarray = np.zeros_like(b, dtype=float)
+    n: int = L.shape[0]
+    for i in range(n):
+        y[i] = Pb[i] - np.dot(L[i, :i], y[:i])
+    x: np.ndarray = np.zeros_like(b, dtype=float)
+    for i in range(n - 1, -1, -1):
+        x[i] = (y[i] - np.dot(U[i, i + 1:], x[i + 1:])) / U[i, i]
     return x
