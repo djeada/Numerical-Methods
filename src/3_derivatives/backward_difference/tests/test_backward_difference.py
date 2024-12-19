@@ -1,7 +1,7 @@
 # test_backward_difference.py
 import pytest
 import numpy as np
-from backward_difference import backward_difference, backward_difference_gradient
+from ..implementation.backward_difference import backward_difference, backward_difference_gradient
 
 def test_backward_difference_constant():
     f = lambda x: 5.0
