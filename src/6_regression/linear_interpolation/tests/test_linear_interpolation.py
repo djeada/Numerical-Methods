@@ -1,7 +1,7 @@
 # test_linear_interpolation.py
 import pytest
 import numpy as np
-from implementation.linear_interpolation import linear_interpolation
+from ..implementation.linear_interpolation import linear_interpolation
 
 
 def test_linear_interpolation_basic():
