@@ -1,7 +1,7 @@
 # test_qr_method.py
 import pytest
 import numpy as np
-from qr_method import qr_decomposition, qr_algorithm, qr_algorithm_with_shifts
+from ..implementation.qr_method import qr_decomposition, qr_algorithm, qr_algorithm_with_shifts
 
 def test_qr_decomposition_identity():
     A = np.eye(3)
