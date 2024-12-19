@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8, 3.9, 3.10, 3.11]  # Valid Python versions only
+        python-version: [3.9, 3.10, 3.11]  # Valid Python versions only
 
     steps:
       # Step 1: Check out the repository
