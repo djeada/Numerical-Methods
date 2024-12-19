@@ -3,7 +3,7 @@ import numpy as np
 from typing import Callable
 
 
-def golden_ratio_search_root(
+def golden_ratio_search(
     f: Callable[[float], float],
     a: float,
     b: float,
