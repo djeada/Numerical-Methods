@@ -1,7 +1,7 @@
 # test_runge_kutta.py
 import pytest
 import numpy as np
-from implementation.runge_kutta import runge_kutta_4
+from ..implementation.runge_kutta import runge_kutta_4
 
 def test_runge_kutta_linear_ode():
     f = lambda t, y: y
