@@ -1,7 +1,7 @@
 # test_gaussian_interpolation.py
 import pytest
 import numpy as np
-from implementation.gaussian_interpolation import gaussian_interpolation
+from ..implementation.gaussian_interpolation import gaussian_interpolation
 
 def test_gaussian_interpolation_basic():
     x = np.array([0, 1, 2])
