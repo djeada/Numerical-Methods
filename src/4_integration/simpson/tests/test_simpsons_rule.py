@@ -1,7 +1,7 @@
 # test_simpson_rule.py
 import pytest
 import numpy as np
-from simpson_rule import simpson_rule, simpson_rule_multidim
+from ..implementation.simpson_rule import simpson_rule, simpson_rule_multidim
 
 def test_simpson_rule_constant():
     f = lambda x: 5.0
