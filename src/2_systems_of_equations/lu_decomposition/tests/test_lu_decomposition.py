@@ -1,7 +1,7 @@
 # test_lu_decomposition.py
 import pytest
 import numpy as np
-from lu_decomposition import lu_decomposition, solve_lu
+from ..implementation.lu_decomposition import lu_decomposition, solve_lu
 
 def test_lu_decomposition_identity():
     A = np.eye(3)
