@@ -1,7 +1,7 @@
 # test_singular_value_decomposition.py
 import pytest
 import numpy as np
-from implementation.singular_value_decomposition import singular_value_decomposition, singular_value_decomposition_reduced
+from ..implementation.singular_value_decomposition import singular_value_decomposition, singular_value_decomposition_reduced
 
 def test_svd_identity():
     A = np.eye(3)
