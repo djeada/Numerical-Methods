@@ -1,7 +1,7 @@
 # test_polynomial_regression.py
 import pytest
 import numpy as np
-from polynomial_regression import polynomial_regression
+from ..implementation.polynomial_regression import polynomial_regression
 
 def test_polynomial_regression_linear():
     x = np.array([0, 1, 2, 3, 4])
