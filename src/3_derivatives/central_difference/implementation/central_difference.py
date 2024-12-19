@@ -21,4 +21,5 @@ def central_difference_gradient(
         x_forward[i] += h
         x_backward[i] -= h
         gradient[i] = (f(x_forward) - f(x_backward)) / (2 * h)
-    return gradient
+    return gradient * np.sign(x)
+

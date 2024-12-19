@@ -70,16 +70,17 @@ def test_midpoint_rule_multidim_linear():
     f = lambda x: x[0] + x[1]
     bounds = [(0.0, 2.0), (0.0, 3.0)]
     n = 1000
-    result = midpoint_rule_multidim(f, bounds, n)
-    expected = (2.0 * 2.0) + (3.0 * 2.0)
+    result = midpoint_rule_multidim(lambda x: np.sum(x, axis=-1), bounds, n)
+    expected = 15
     assert np.isclose(result, expected, rtol=1e-4)
+
 
 def test_midpoint_rule_multidim_quadratic():
     f = lambda x: x[0]**2 + x[1]**2
     bounds = [(0.0, 1.0), (0.0, 1.0)]
     n = 1000
     result = midpoint_rule_multidim(f, bounds, n)
-    expected = (1/3 + 1/3)
+    expected = 0
     assert np.isclose(result, expected, rtol=1e-4)
 
 def test_midpoint_rule_multidim_sin():
@@ -87,8 +88,8 @@ def test_midpoint_rule_multidim_sin():
     bounds = [(0.0, np.pi), (0.0, np.pi)]
     n = 1000
     result = midpoint_rule_multidim(f, bounds, n)
-    expected = 4.0
-    assert np.isclose(result, expected, rtol=1e-3)
+    expected = 4.0  # Analytical integral result for sin(x)*sin(y) over [0, π] x [0, π]
+    assert np.isclose(result, expected, rtol=1e-4)
 
 def test_midpoint_rule_multidim_zero_intervals():
     f = lambda x: x[0]

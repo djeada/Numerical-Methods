@@ -1,4 +1,3 @@
-# backward_difference.py
 from typing import Callable, Optional
 import numpy as np
 
@@ -16,7 +15,10 @@ def backward_difference_gradient(
 ) -> np.ndarray:
     gradient = np.zeros_like(x, dtype=float)
     for i in range(len(x)):
+        x_forward = x.copy()
+        x_forward[i] += h
         x_backward = x.copy()
         x_backward[i] -= h
-        gradient[i] = (f(x) - f(x_backward)) / h
+        gradient[i] = (f(x_forward) - f(x_backward)) / (2 * h)
     return gradient
+

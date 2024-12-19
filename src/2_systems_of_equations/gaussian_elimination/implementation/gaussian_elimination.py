@@ -3,6 +3,10 @@ import numpy as np
 from typing import Tuple
 
 def gaussian_elimination(A: np.ndarray, b: np.ndarray) -> np.ndarray:
+    if A.shape[0] != A.shape[1]:
+        raise ValueError("Matrix A must be square.")
+    if A.shape[0] != b.shape[0]:
+        raise ValueError("Matrix A and vector b dimensions do not match.")
     n: int = A.shape[0]
     augmented: np.ndarray = np.hstack((A.astype(float), b.reshape(-1, 1).astype(float)))
     for i in range(n):
@@ -20,4 +24,6 @@ def gaussian_elimination(A: np.ndarray, b: np.ndarray) -> np.ndarray:
     return x
 
 def solve_gaussian_elimination(A: np.ndarray, b: np.ndarray) -> np.ndarray:
-    return gaussian_elimination(A, b)
+    x = gaussian_elimination(A, b)
+    return np.round(x, decimals=8)
+

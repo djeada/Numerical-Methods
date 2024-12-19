@@ -1,4 +1,3 @@
-# simpson_rule.py
 from typing import Callable, List
 import numpy as np
 
@@ -10,30 +9,39 @@ def simpson_rule(
 ) -> float:
     if n <= 0 or n % 2 != 0:
         raise ValueError("Number of intervals must be a positive even integer.")
+    x = np.linspace(a, b, n + 1)
+    y = np.array([f(xi) for xi in x])
     h = (b - a) / n
-    x = a + h * np.arange(n + 1)
-    y = f(x)
-    S = y[0] + y[-1] + 4 * np.sum(y[1:-1:2]) + 2 * np.sum(y[2:-2:2])
-    return S * h / 3
+    return (h / 3) * (y[0] + y[-1] + 4 * np.sum(y[1:-1:2]) + 2 * np.sum(y[2:-2:2]))
+
 
 def simpson_rule_multidim(
-    f: Callable[[np.ndarray], float],
+    f: Callable[[np.ndarray], np.ndarray],
     bounds: List[tuple],
     n: int
 ) -> float:
     if n <= 0 or n % 2 != 0:
         raise ValueError("Number of intervals must be a positive even integer.")
-    dimensions = len(bounds)
-    h = [(b - a) / n for a, b in bounds]
-    grids = [a + h_i * np.arange(n + 1) for h_i, (a, b) in zip(h, bounds)]
+    dims = len(bounds)
+    grids = [np.linspace(a, b, n + 1) for a, b in bounds]
     mesh = np.meshgrid(*grids, indexing='ij')
-    points = np.stack(mesh, axis=-1).reshape(-1, dimensions)
-    weights = np.ones(points.shape[0])
-    for dim in range(dimensions):
-        idx = points[:, dim]
-        idx = (idx - bounds[dim][0]) / h[dim]
-        idx = np.round(idx).astype(int)
-        weight = np.where((idx == 0) | (idx == n), 1,
-                          np.where(idx % 2 == 0, 2, 4))
-        weights *= weight
-    return np.sum(f(points) * weights) * np.prod(h) / 3
+    points = np.stack(mesh, axis=-1)
+    flat_points = points.reshape(-1, dims)
+    flat_vals = f(flat_points)
+    if isinstance(flat_vals, float):  # Handle scalar output
+        flat_vals = np.full(flat_points.shape[0], flat_vals)
+    vals = flat_vals.reshape([n + 1] * dims)
+    h = [(b - a) / n for a, b in bounds]
+
+    w_1d = np.ones(n + 1)
+    w_1d[1:-1:2] = 4
+    w_1d[2:-2:2] = 2
+    W = w_1d
+    for _ in range(dims - 1):
+        W = np.outer(W, w_1d)
+    W = W.reshape([n + 1] * dims)
+
+    return np.sum(vals * W) * np.prod(h) / 3**dims
+
+
+

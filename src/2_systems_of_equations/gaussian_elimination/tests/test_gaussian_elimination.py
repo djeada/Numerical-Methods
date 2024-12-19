@@ -34,8 +34,10 @@ def test_gaussian_elimination_singular():
 def test_gaussian_elimination_non_square():
     A = np.array([[1, 2, 3], [4, 5, 6]], dtype=float)
     b = np.array([7, 8], dtype=float)
-    with pytest.raises(IndexError):
+    with pytest.raises(ValueError):
         gaussian_elimination(A, b)
+
+
 
 def test_gaussian_elimination_zero_vector():
     A = np.array([[1, 2], [3, 4]], dtype=float)
@@ -58,13 +60,13 @@ def test_gaussian_elimination_least_squares():
     with pytest.raises(ValueError):
         gaussian_elimination(A, b)
 
+
 def test_solve_gaussian_elimination_simple():
     A = np.array([[3, 2], [1, 2]], dtype=float)
     b = np.array([5, 5], dtype=float)
     x = solve_gaussian_elimination(A, b)
-    expected = np.array([1, 2], dtype=float)
-    assert np.allclose(x, expected)
-
+    expected = np.array([0, 2.5], dtype=float)
+    assert np.allclose(x, expected, atol=1e-8)
 def test_solve_gaussian_elimination_complex():
     A = np.array([[2, -1, 0], [1, 3, 1], [0, -1, 1]], dtype=float)
     b = np.array([1, 7, 3], dtype=float)

@@ -1,5 +1,5 @@
 from typing import Callable
-import math
+import numpy as np
 
 def taylor_series(
     f: Callable[[float], float],
@@ -8,8 +8,7 @@ def taylor_series(
     x: float,
     derivatives: Callable[[int], float]
 ) -> float:
-    approximation: float = 0.0
-    for k in range(n):
-        term: float = derivatives(k)(a) / math.factorial(k) * (x - a) ** k
-        approximation += term
-    return approximation
+    k = np.arange(n)
+    factorial = np.cumprod(np.append(1, k[1:]))
+    terms = derivatives(k) / factorial * (x - a) ** k
+    return np.sum(terms)
