@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from implementation.eigenvalues_and_eigenvectors import find_eigenvalues, find_eigenvectors
+from ..implementation.eigenvalues_and_eigenvectors import find_eigenvalues, find_eigenvectors
 
 def test_eigen_decomposition_identity():
     A = np.eye(3)
