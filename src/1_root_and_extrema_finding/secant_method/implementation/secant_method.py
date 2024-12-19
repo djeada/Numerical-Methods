@@ -1,38 +1,23 @@
-def secant_method(func, x0, x1, epsilon=1e-8, max_iter=100):
-    """
-    Secant Method for finding the root of a function.
+# secant_method.py
+import numpy as np
+from typing import Callable
 
-    Args:
-        func (callable): The function for which to find the root.
-        x0 (float): The first initial guess for the root.
-        x1 (float): The second initial guess for the root.
-        epsilon (float): The desired accuracy of the solution.
-        max_iter (int): The maximum number of iterations.
 
-    Returns:
-        float: The estimated root of the function.
-
-    Raises:
-        ValueError: If the maximum number of iterations is reached without convergence.
-    """
-    x_prev = x0
-    x_curr = x1
-
-    for _ in range(max_iter):
-        f_prev = func(x_prev)
-        f_curr = func(x_curr)
-
-        if abs(f_curr) < epsilon:
-            return x_curr
-
-        x_next = x_curr - f_curr * (x_curr - x_prev) / (f_curr - f_prev)
-
-        if abs(x_next - x_curr) < epsilon:
-            return x_next
-
-        x_prev = x_curr
-        x_curr = x_next
-
-    raise ValueError(
-        "Secant method did not converge within the maximum number of iterations."
-    )
+def secant_method(
+    f: Callable[[float], float],
+    x0: float,
+    x1: float,
+    tol: float = 1e-6,
+    max_iterations: int = 100000
+) -> float:
+    for _ in range(max_iterations):
+        f_x0 = f(x0)
+        f_x1 = f(x1)
+        denominator = f_x1 - f_x0
+        if np.isclose(denominator, 0.0):
+            raise ValueError("Denominator is zero. Division by zero encountered.")
+        x2 = x1 - f_x1 * (x1 - x0) / denominator
+        if np.abs(x2 - x1) < tol:
+            return x2
+        x0, x1 = x1, x2
+    raise ValueError("Secant method did not converge within the maximum number of iterations.")
