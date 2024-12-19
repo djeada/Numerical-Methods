@@ -1,7 +1,7 @@
 # test_heun_solver.py
 import pytest
 import numpy as np
-from ..implementation..heun import heun_method
+from ..implementation.heun import heun_method
 
 def test_heun_method_linear_ode():
     f = lambda t, y: y
