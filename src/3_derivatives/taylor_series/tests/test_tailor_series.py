@@ -4,7 +4,7 @@ from ..implementation.taylor_series import taylor_series
 
 def test_taylor_series_exp():
     def exp_derivatives(k: int) -> float:
-        return math.exp(0)
+        return 1.0  # The derivative of exp(0) is always 1
     approx = taylor_series(math.exp, 0, 10, 1, exp_derivatives)
     expected = math.exp(1)
     assert math.isclose(approx, expected, rel_tol=1e-9)
@@ -28,8 +28,8 @@ def test_taylor_series_cos():
 def test_taylor_series_ln():
     def ln_derivatives(k: int) -> float:
         if k == 0:
-            return math.log(1)
-        return (-1) ** (k - 1) * math.factorial(k - 1) if k > 0 else 0
+            return 0.0  # ln(1) = 0
+        return (-1) ** (k - 1) / k if k > 0 else 0.0
 
     with pytest.raises(OverflowError):
         taylor_series(math.log, 1, 100, 2, ln_derivatives)
@@ -50,14 +50,15 @@ def test_taylor_series_zero_terms():
 
 def test_taylor_series_negative_x():
     def exp_derivatives(k: int) -> float:
-        return math.exp(0)
+        return 1.0  # The derivative of exp(0) is always 1
     approx = taylor_series(math.exp, 0, 10, -1, exp_derivatives)
     expected = math.exp(-1)
     assert math.isclose(approx, expected, rel_tol=1e-9)
 
 def test_taylor_series_high_terms():
     def exp_derivatives(k: int) -> float:
-        return math.exp(0)
+        return 1.0  # The derivative of exp(0) is always 1
     approx = taylor_series(math.exp, 0, 20, 1, exp_derivatives)
     expected = math.exp(1)
     assert math.isclose(approx, expected, rel_tol=1e-12)
+    
