@@ -1,7 +1,7 @@
 # test_central_difference.py
 import pytest
 import numpy as np
-from implementation.central_difference import central_difference, central_difference_gradient
+from ..implementation.central_difference import central_difference, central_difference_gradient
 
 def test_central_difference_constant():
     f = lambda x: 5.0
