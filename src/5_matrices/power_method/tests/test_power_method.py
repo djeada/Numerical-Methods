@@ -2,7 +2,7 @@
 # test_power_method.py
 import pytest
 import numpy as np
-from ..implementation.implementation.power_method import power_method
+from ..implementation.power_method import power_method
 
 def test_power_method_identity():
     A = np.eye(3)
