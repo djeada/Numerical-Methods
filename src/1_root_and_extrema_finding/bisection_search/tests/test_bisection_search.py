@@ -1,7 +1,7 @@
 # test_bisection_search.py
 import pytest
 import numpy as np
-from implementation.bisection_search import bisection_search
+from ..implementation.bisection_search import bisection_search
 
 
 def test_bisection_linear():
