@@ -18,13 +18,21 @@ def power_method(
     x /= np.linalg.norm(x)
     eigenvalue = 0.0
     for _ in range(max_iterations):
-        x_new = A @ x
-        x_new_norm = np.linalg.norm(x_new)
-        if x_new_norm == 0:
+        x_old = x.copy()
+        y = A @ x
+        y_norm = np.linalg.norm(y)
+        if y_norm == 0:
             raise ValueError("Encountered zero vector during iterations.")
-        x_new /= x_new_norm
-        eigenvalue_new = x_new @ A @ x
+        x_new = y / y_norm
+        if np.dot(x_old, x_new) < 0:
+            x_new = -x_new
+        eigenvalue_new = np.dot(A @ x_old, x_new)
         if np.abs(eigenvalue_new - eigenvalue) < tol:
+            if not np.isclose(eigenvalue_new.imag if np.iscomplex(eigenvalue_new) else 0, 0, atol=tol):
+                raise ValueError("Matrix has complex eigenvalues.")
+            eigenvalue_new = eigenvalue_new.real
+            x_new = x_new.real
+            x_new[np.abs(x_new) < 1e-10] = 0.0
             return eigenvalue_new, x_new
         eigenvalue = eigenvalue_new
         x = x_new

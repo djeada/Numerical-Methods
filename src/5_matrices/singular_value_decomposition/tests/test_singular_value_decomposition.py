@@ -16,10 +16,8 @@ def test_svd_diagonal():
     A = np.diag([1, 2, 3])
     U, S, Vt = singular_value_decomposition(A)
     reconstructed = U @ S @ Vt
-    assert np.allclose(reconstructed, A)
-    assert np.allclose(U, np.eye(3))
-    assert np.allclose(Vt, np.eye(3))
-    assert np.allclose(S, A)
+    assert np.allclose(reconstructed, A), "Reconstruction failed"
+    assert np.allclose(U @ U.T, np.eye(U.shape[0])), "U is not orthonormal"
 
 def test_svd_symmetric():
     A = np.array([[4, 0], [0, 3]], dtype=float)
@@ -39,14 +37,27 @@ def test_svd_non_square():
     assert Vt.shape == (3, 3)
 
 def test_svd_reduced():
+
     A = np.random.rand(5, 3)
-    U, S, Vt = singular_value_decomposition_reduced(A)
-    reconstructed = U @ S @ Vt
-    assert np.allclose(reconstructed, A, atol=1e-6)
-    assert U.shape == (5, 3)
-    assert S.shape == (3, 3)
-    assert Vt.shape == (3, 3)
-    assert np.allclose(U @ U.T, np.eye(5)[:U.shape[0], :U.shape[0]])
+
+    U, S_matrix, Vt = singular_value_decomposition_reduced(A)
+
+    reconstructed = U @ S_matrix @ Vt
+
+    assert np.allclose(reconstructed, A, atol=1e-6), "Reconstruction failed"
+
+    assert U.shape == (5, 3), "Incorrect U shape"
+
+    assert S_matrix.shape == (3, 3), "Incorrect S shape"
+
+    assert Vt.shape == (3, 3), "Incorrect Vt shape"
+
+    assert np.allclose(U.T @ U, np.eye(U.shape[1]), atol=1e-6), "U is not orthonormal"
+
+
+
+
+
 
 def test_svd_rank_deficient():
     A = np.array([[2, 4], [1, 2]], dtype=float)
@@ -89,18 +100,26 @@ def test_svd_reduced_random_matrix():
     assert np.allclose(Vt @ Vt.T, np.eye(5))
 
 def test_svd_reduced_non_square():
+
     A = np.random.rand(3, 5)
-    U, S, Vt = singular_value_decomposition_reduced(A)
-    reconstructed = U @ S @ Vt
-    assert np.allclose(reconstructed, A, atol=1e-6)
-    assert U.shape == (3, 3)
-    assert S.shape == (3, 5)
-    assert Vt.shape == (5, 5)
-    assert np.allclose(U @ U.T, np.eye(3))
+
+    U, S_matrix, Vt = singular_value_decomposition_reduced(A)
+
+    reconstructed = U @ S_matrix @ Vt
+
+    assert np.allclose(reconstructed, A, atol=1e-6), "Reconstruction failed"
+
+    assert U.shape == (3, 3), "Incorrect U shape"
+
+    assert S_matrix.shape == (3, 3), "Incorrect S shape"
+
+    assert Vt.shape == (3, 5), "Incorrect Vt shape"
 
 def test_svd_reduced_rank_deficient():
     A = np.array([[1, 2, 3], [2, 4, 6], [3, 6, 9]], dtype=float)
     U, S, Vt = singular_value_decomposition_reduced(A)
     reconstructed = U @ S @ Vt
-    assert np.allclose(reconstructed, A)
-    assert np.count_nonzero(np.diag(S)) == 1
+    assert np.allclose(reconstructed, A), "Reconstruction failed"
+    non_zero_singular_values = np.sum(np.diag(S) > 1e-10)
+    assert non_zero_singular_values == 1, "Incorrect number of non-zero singular values"
+

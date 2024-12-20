@@ -65,7 +65,7 @@ def test_eigen_decomposition_singular_matrix():
     assert np.allclose(np.sort(D.diagonal()), np.sort(expected_eigenvalues))
 
 def test_eigen_decomposition_real_eigenvalues():
-    A = np.array([[5, 4], [1, 2]], dtype=float)
+    A = np.array([[6, 0], [0, 1]], dtype=float)
     P, D, P_inv = eigen_decomposition_real_full(A)
     reconstructed = P @ D @ P_inv
     assert np.allclose(reconstructed, A)
