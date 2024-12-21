@@ -92,25 +92,27 @@ Method | Notes | Implementation | Examples
 
 Method | Notes | Implementation | Examples
 ------ | ----- | -------------- | --------
-| Euler's Method | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/7_ordinary_differential_equations/eulers_method.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/eulers_method/implementation/eulers_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/tree/master/src/7_ordinary_differential_equations/eulers_method/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| Heun's Method | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/7_ordinary_differential_equations/heuns_method.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/heuns_method/implementation/heuns_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/tree/master/src/7_ordinary_differential_equations/heuns_method/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| Runge Kutta | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/7_ordinary_differential_equations/runge_kutta.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/runge_kutta/implementation/runge_kutta.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/tree/master/src/7_ordinary_differential_equations/picard_method/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
-| Picard's Method | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/7_ordinary_differential_equations/picards_method.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/picard_method/implementation/picard_method.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/tree/master/src/7_ordinary_differential_equations/picard_method/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Euler's Method | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/7_ordinary_differential_equations/eulers_method.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/eulers/implementation/eulers.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/tree/master/src/7_ordinary_differential_equations/eulers/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Heun's Method | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/7_ordinary_differential_equations/heuns_method.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/heuns/implementation/heuns.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/tree/master/src/7_ordinary_differential_equations/heuns/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Runge Kutta | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/7_ordinary_differential_equations/runge_kutta.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/runge_kutta/implementation/runge_kutta.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/tree/master/src/7_ordinary_differential_equations/runge_kutta/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Picard's Method | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/7_ordinary_differential_equations/picards_method.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/7_ordinary_differential_equations/picard/implementation/picard.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/tree/master/src/7_ordinary_differential_equations/picard/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
 
 ## References
 
-* https://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/
-* https://en.wikiversity.org/wiki/Cubic_Spline_Interpolation
-* https://faculty.chass.ncsu.edu/garson/PA765/statnote.htm
-* https://jmahaffy.sdsu.edu/courses/s18/math541/Lectures.html
-* https://engcourses-uofa.ca/books/numericalanalysis
-* https://johnfoster.pge.utexas.edu/numerical-methods-book
-* https://math.nyu.edu/~stadler/num1/material/
+- [MIT OpenCourseWare: Linear Algebra](https://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/)
+- [Wikiversity: Cubic Spline Interpolation](https://en.wikiversity.org/wiki/Cubic_Spline_Interpolation)
+- [Statnotes: Statistical Concepts by Dr. Garson](https://faculty.chass.ncsu.edu/garson/PA765/statnote.htm)
+- [Numerical Methods Lectures, SDSU](https://jmahaffy.sdsu.edu/courses/s18/math541/Lectures.html)
+- [Numerical Analysis: U of A Engineering Courses](https://engcourses-uofa.ca/books/numericalanalysis)
+- [Numerical Methods by John Foster, UT Austin](https://johnfoster.pge.utexas.edu/numerical-methods-book)
+- [Numerical Methods Course Material, NYU](https://math.nyu.edu/~stadler/num1/material/)
 
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-Please make sure to update tests as appropriate.
+Contributions are welcome! If you'd like to propose a major change, please open an issue first to discuss your ideas. 
+
+When contributing, ensure you update relevant tests as needed to maintain the integrity of the project.
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+
+This project is licensed under the [MIT License](https://choosealicense.com/licenses/mit/).
