@@ -1,11 +1,9 @@
 from typing import Callable, Tuple
 import numpy as np
 
+
 def monte_carlo_integral(
-    f: Callable[[float], float],
-    a: float,
-    b: float,
-    num_samples: int = 1000000
+    f: Callable[[float], float], a: float, b: float, num_samples: int = 1000000
 ) -> float:
     if num_samples <= 0:
         raise ValueError("Number of samples must be greater than zero.")
@@ -15,10 +13,11 @@ def monte_carlo_integral(
     integral = (b - a) * np.mean(evaluations)
     return integral
 
+
 def monte_carlo_integral_multidim(
     f: Callable[[np.ndarray], float],
     bounds: Tuple[Tuple[float, float], ...],
-    num_samples: int = 1000000
+    num_samples: int = 1000000,
 ) -> float:
     if num_samples <= 0:
         raise ValueError("Number of samples must be greater than zero.")

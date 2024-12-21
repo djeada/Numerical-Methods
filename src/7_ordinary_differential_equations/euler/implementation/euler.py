@@ -2,12 +2,13 @@
 import numpy as np
 from typing import Callable, Tuple
 
+
 def euler_method(
     f: Callable[[float, np.ndarray], np.ndarray],
     t0: float,
     y0: np.ndarray,
     t_end: float,
-    h: float
+    h: float,
 ) -> Tuple[np.ndarray, np.ndarray]:
     if h <= 0:
         raise ValueError("Step size h must be positive.")

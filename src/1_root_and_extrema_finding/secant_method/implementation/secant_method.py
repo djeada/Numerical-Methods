@@ -8,7 +8,7 @@ def secant_method(
     x0: float,
     x1: float,
     tol: float = 1e-6,
-    max_iterations: int = 100000
+    max_iterations: int = 100000,
 ) -> float:
     for _ in range(max_iterations):
         f_x0 = f(x0)
@@ -20,4 +20,6 @@ def secant_method(
         if np.abs(x2 - x1) < tol:
             return x2
         x0, x1 = x1, x2
-    raise ValueError("Secant method did not converge within the maximum number of iterations.")
+    raise ValueError(
+        "Secant method did not converge within the maximum number of iterations."
+    )

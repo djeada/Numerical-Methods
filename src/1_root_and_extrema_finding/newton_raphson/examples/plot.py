@@ -1,13 +1,16 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def f(x):
     """Example function: f(x) = x^2 - 4"""
-    return x**2 - 4
+    return x ** 2 - 4
+
 
 def df(x):
     """Derivative of the example function: f'(x) = 2x"""
     return 2 * x
+
 
 def newton_method_visualize(func, dfunc, x0, tol=1e-6, max_iterations=20):
     """
@@ -52,27 +55,30 @@ def newton_method_visualize(func, dfunc, x0, tol=1e-6, max_iterations=20):
 
     # Plot the function and Newton's method steps
     plt.figure(figsize=(8, 6))
-    plt.plot(x, y, label='$f(x) = x^2 - 4$', color='blue')
-    plt.scatter(x_values, y_values, color='red', label="Newton's Method Steps")
-    plt.axhline(0, color='black', linewidth=0.5)
+    plt.plot(x, y, label="$f(x) = x^2 - 4$", color="blue")
+    plt.scatter(x_values, y_values, color="red", label="Newton's Method Steps")
+    plt.axhline(0, color="black", linewidth=0.5)
 
     # Highlight the starting and final points
-    plt.scatter(x_values[0], y_values[0], color='green', label='Starting Point')
-    plt.scatter(x_values[-1], y_values[-1], color='purple', label='Final Point')
+    plt.scatter(x_values[0], y_values[0], color="green", label="Starting Point")
+    plt.scatter(x_values[-1], y_values[-1], color="purple", label="Final Point")
 
     plt.title("Newton's Method: Progress of Steps")
-    plt.xlabel('x')
-    plt.ylabel('f(x)')
+    plt.xlabel("x")
+    plt.ylabel("f(x)")
     plt.legend()
     plt.grid(True)
     plt.show()
 
+
 # Example function and derivative
 def f(x):
-    return x**2 - 4
+    return x ** 2 - 4
+
 
 def df(x):
     return 2 * x
+
 
 # Initial conditions for Newton's Method
 x0 = 3  # Starting point

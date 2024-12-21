@@ -3,11 +3,7 @@ import numpy as np
 from typing import Tuple
 
 
-def lagrange_polynomial(
-    x_data: np.ndarray,
-    y_data: np.ndarray,
-    point: float
-) -> float:
+def lagrange_polynomial(x_data: np.ndarray, y_data: np.ndarray, point: float) -> float:
     if x_data.shape[0] != y_data.shape[0]:
         raise ValueError("X and Y vectors must have equal number of elements.")
     if x_data.shape[0] < 1:

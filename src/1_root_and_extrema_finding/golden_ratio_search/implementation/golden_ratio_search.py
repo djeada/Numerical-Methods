@@ -7,9 +7,9 @@ def golden_ratio_search(
     a: float,
     b: float,
     tol: float = 1e-8,
-    max_iterations: int = 1000
+    max_iterations: int = 1000,
 ) -> float:
-    f_mod = lambda x: (f(x))**2
+    f_mod = lambda x: (f(x)) ** 2
     gr = (np.sqrt(5) + 1) / 2
     c = b - (b - a) / gr
     d = a + (b - a) / gr
@@ -27,4 +27,6 @@ def golden_ratio_search(
             return (a + b) / 2
         if np.abs(b - a) < tol:
             return (b + a) / 2
-    raise ValueError("Golden ratio search did not converge within the maximum number of iterations.")
+    raise ValueError(
+        "Golden ratio search did not converge within the maximum number of iterations."
+    )

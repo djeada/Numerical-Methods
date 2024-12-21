@@ -17,14 +17,12 @@ def solve_linear_system(A: np.ndarray, b: np.ndarray) -> np.ndarray:
             augmented[j] -= augmented[j, i] * augmented[i]
     x = np.zeros(n)
     for i in range(n - 1, -1, -1):
-        x[i] = augmented[i, -1] - np.dot(augmented[i, i + 1:n], x[i + 1:n])
+        x[i] = augmented[i, -1] - np.dot(augmented[i, i + 1 : n], x[i + 1 : n])
     return x
 
 
 def gaussian_interpolation(
-        x_data: np.ndarray,
-        y_data: np.ndarray,
-        point: float
+    x_data: np.ndarray, y_data: np.ndarray, point: float
 ) -> float:
     if x_data.shape[0] != y_data.shape[0]:
         raise ValueError("X and Y vectors must have equal number of elements.")

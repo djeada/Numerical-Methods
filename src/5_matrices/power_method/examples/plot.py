@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from numpy.linalg import norm
 
+
 def power_method(A, max_iterations=100, tolerance=1e-6):
     """
     Power Method for finding the dominant eigenvalue and its associated eigenvector.
@@ -27,15 +28,15 @@ def power_method(A, max_iterations=100, tolerance=1e-6):
         # Estimate the dominant eigenvalue using the Rayleigh quotient
         eigenvalue = np.dot(x.T, y)
         eigenvalues.append(eigenvalue)
-        
+
         # Normalize the resulting vector
         x_next = y / norm(y)
-        
+
         # Check convergence
         if norm(x_next - x) < tolerance:
             print(f"Converged after {i+1} iterations.")
             break
-        
+
         x = x_next
 
     dominant_eigenvalue = eigenvalue
@@ -43,7 +44,7 @@ def power_method(A, max_iterations=100, tolerance=1e-6):
 
     # Plot convergence
     plt.figure(figsize=(8, 6))
-    plt.plot(range(1, len(eigenvalues) + 1), eigenvalues, marker='o', linestyle='-')
+    plt.plot(range(1, len(eigenvalues) + 1), eigenvalues, marker="o", linestyle="-")
     plt.title("Convergence of Dominant Eigenvalue")
     plt.xlabel("Iteration")
     plt.ylabel("Eigenvalue Estimate")
@@ -52,9 +53,9 @@ def power_method(A, max_iterations=100, tolerance=1e-6):
 
     return dominant_eigenvalue, dominant_eigenvector
 
+
 # Example Matrix A
-A = np.array([[4, 1],
-              [2, 3]])
+A = np.array([[4, 1], [2, 3]])
 
 # Perform Power Method for Dominant Eigenvalue and Eigenvector
 eigenvalue, eigenvector = power_method(A)

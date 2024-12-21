@@ -1,11 +1,11 @@
 # test_newton_raphson.py
 import pytest
 import numpy as np
-from ..implementation.newton_raphson import newton_raphson, \
-    newton_raphson_system
+from ..implementation.newton_raphson import newton_raphson, newton_raphson_system
 
 
 # Univariate Tests
+
 
 def test_newton_raphson_linear():
     f = lambda x: 2 * x - 4
@@ -97,18 +97,13 @@ def test_newton_raphson_initial_guess():
 
 # Multivariate Tests
 
+
 def test_newton_raphson_system_linear():
     def F(x):
-        return np.array([
-            3 * x[0] + 2 * x[1] - 5,
-            x[0] - x[1] + 1
-        ])
+        return np.array([3 * x[0] + 2 * x[1] - 5, x[0] - x[1] + 1])
 
     def J(x):
-        return np.array([
-            [3, 2],
-            [1, -1]
-        ])
+        return np.array([[3, 2], [1, -1]])
 
     x0 = np.array([0.0, 0.0])
     root = newton_raphson_system(F, J, x0)
@@ -119,16 +114,10 @@ def test_newton_raphson_system_linear():
 
 def test_newton_raphson_system_nonlinear():
     def F(x):
-        return np.array([
-            x[0] ** 2 + x[1] ** 2 - 4,
-            x[0] * x[1] - 1
-        ])
+        return np.array([x[0] ** 2 + x[1] ** 2 - 4, x[0] * x[1] - 1])
 
     def J(x):
-        return np.array([
-            [2 * x[0], 2 * x[1]],
-            [x[1], x[0]]
-        ])
+        return np.array([[2 * x[0], 2 * x[1]], [x[1], x[0]]])
 
     x0 = np.array([2.0, 1.0])
     root = newton_raphson_system(F, J, x0)
@@ -141,10 +130,7 @@ def test_newton_raphson_system_singular_jacobian():
         return np.array([x[0] ** 2, x[0] * x[1]])
 
     def J(x):
-        return np.array([
-            [2 * x[0], 0],
-            [x[1], x[0]]
-        ])
+        return np.array([[2 * x[0], 0], [x[1], x[0]]])
 
     x0 = np.array([0.0, 0.0])
     with pytest.raises(ValueError):
@@ -153,16 +139,10 @@ def test_newton_raphson_system_singular_jacobian():
 
 def test_newton_raphson_system_non_convergent():
     def F(x):
-        return np.array([
-            np.exp(x[0]) + x[1] - 3,
-            x[0] ** 2 + x[1] ** 2 - 4
-        ])
+        return np.array([np.exp(x[0]) + x[1] - 3, x[0] ** 2 + x[1] ** 2 - 4])
 
     def J(x):
-        return np.array([
-            [np.exp(x[0]), 1],
-            [2 * x[0], 2 * x[1]]
-        ])
+        return np.array([[np.exp(x[0]), 1], [2 * x[0], 2 * x[1]]])
 
     x0 = np.array([0.0, 0.0])
     with pytest.raises(ValueError):
@@ -171,16 +151,10 @@ def test_newton_raphson_system_non_convergent():
 
 def test_newton_raphson_system_exact_solution():
     def F(x):
-        return np.array([
-            x[0] - 2,
-            x[1] + 3
-        ])
+        return np.array([x[0] - 2, x[1] + 3])
 
     def J(x):
-        return np.array([
-            [1, 0],
-            [0, 1]
-        ])
+        return np.array([[1, 0], [0, 1]])
 
     x0 = np.array([0.0, 0.0])
     root = newton_raphson_system(F, J, x0)
@@ -190,16 +164,10 @@ def test_newton_raphson_system_exact_solution():
 
 def test_newton_raphson_system_high_precision():
     def F(x):
-        return np.array([
-            x[0] ** 3 - 6 * x[0] ** 2 + 11 * x[0] - 6,
-            x[1] - 1
-        ])
+        return np.array([x[0] ** 3 - 6 * x[0] ** 2 + 11 * x[0] - 6, x[1] - 1])
 
     def J(x):
-        return np.array([
-            [3 * x[0] ** 2 - 12 * x[0] + 11, 0],
-            [0, 1]
-        ])
+        return np.array([[3 * x[0] ** 2 - 12 * x[0] + 11, 0], [0, 1]])
 
     x0 = np.array([3.5, 1.0])
     root = newton_raphson_system(F, J, x0, tol=1e-12)
@@ -212,10 +180,7 @@ def test_newton_raphson_system_no_initial_guess():
         return np.array([x[0] ** 2 - 2, x[1] ** 2 - 3])
 
     def J(x):
-        return np.array([
-            [2 * x[0], 0],
-            [0, 2 * x[1]]
-        ])
+        return np.array([[2 * x[0], 0], [0, 2 * x[1]]])
 
     with pytest.raises(ValueError, match="Initial guess x0 must be provided"):
         newton_raphson_system(F, J)
@@ -223,27 +188,22 @@ def test_newton_raphson_system_no_initial_guess():
 
 def test_newton_raphson_system_large_system():
     def F(x):
-        return np.array([
-            x[0] + x[1] + x[2] - 6,
-            2 * x[0] + 5 * x[1] + x[3] - 4,
-            2 * x[0] + 3 * x[2] - 2,
-            4 * x[1] - x[3] - 1
-        ])
+        return np.array(
+            [
+                x[0] + x[1] + x[2] - 6,
+                2 * x[0] + 5 * x[1] + x[3] - 4,
+                2 * x[0] + 3 * x[2] - 2,
+                4 * x[1] - x[3] - 1,
+            ]
+        )
 
     def J(x):
-        return np.array([
-            [1, 1, 1, 0],
-            [2, 5, 0, 1],
-            [2, 0, 3, 0],
-            [0, 4, 0, -1]
-        ])
+        return np.array([[1, 1, 1, 0], [2, 5, 0, 1], [2, 0, 3, 0], [0, 4, 0, -1]])
 
     x0 = np.array([1.0, 1.0, 1.0, 1.0])
     root = newton_raphson_system(F, J, x0)
-    expected = np.linalg.solve(np.array([
-        [1, 1, 1, 0],
-        [2, 5, 0, 1],
-        [2, 0, 3, 0],
-        [0, 4, 0, -1]
-    ]), np.array([6, 4, 2, 1]))
+    expected = np.linalg.solve(
+        np.array([[1, 1, 1, 0], [2, 5, 0, 1], [2, 0, 3, 0], [0, 4, 0, -1]]),
+        np.array([6, 4, 2, 1]),
+    )
     assert np.allclose(root, expected, atol=1e-8)

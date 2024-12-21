@@ -58,7 +58,7 @@ def test_relaxation_exact_fixed_point():
 
 
 def test_relaxation_close_to_fixed_point():
-    f = lambda x: x - 0.1 * (x**3 - x - 2)
+    f = lambda x: x - 0.1 * (x ** 3 - x - 2)
     initial_guess = 1.5
     root = relaxation_method(f, initial_guess, omega=0.5, tol=1e-10)
     expected = 1.5213797068045676  # Approximate root of x^3 - x - 2 = 0
@@ -83,7 +83,7 @@ def test_relaxation_high_precision():
 
 
 def test_relaxation_initial_guess():
-    f = lambda x: x**2 - 2
+    f = lambda x: x ** 2 - 2
     initial_guess = 1.5
     root = relaxation_method(f, initial_guess)
     # Fixed points: x = 2 and x = -1

@@ -1,8 +1,10 @@
 import numpy as np
 from scipy.linalg import hessenberg
 
+
 def qr_decomposition(A: np.ndarray):
     return np.linalg.qr(A)
+
 
 def qr_algorithm(A: np.ndarray, tol: float = 1e-8, max_iterations: int = 2000):
     if A.shape[0] != A.shape[1]:
@@ -43,11 +45,16 @@ def qr_algorithm(A: np.ndarray, tol: float = 1e-8, max_iterations: int = 2000):
             A_k = R @ Q
 
         if iterations >= max_iterations:
-            raise ValueError("QR algorithm did not converge within the maximum number of iterations.")
+            raise ValueError(
+                "QR algorithm did not converge within the maximum number of iterations."
+            )
 
     return np.sort(eigenvalues)
 
-def qr_algorithm_with_shifts(A: np.ndarray, tol: float = 1e-8, max_iterations: int = 2000):
+
+def qr_algorithm_with_shifts(
+    A: np.ndarray, tol: float = 1e-8, max_iterations: int = 2000
+):
     if A.shape[0] != A.shape[1]:
         raise ValueError("Matrix must be square.")
 
@@ -96,7 +103,8 @@ def qr_algorithm_with_shifts(A: np.ndarray, tol: float = 1e-8, max_iterations: i
             A_k = R @ Q + shift * np.eye(A_k.shape[0])
 
         if iterations >= max_iterations:
-            raise ValueError("QR algorithm with shifts did not converge within the maximum number of iterations.")
+            raise ValueError(
+                "QR algorithm with shifts did not converge within the maximum number of iterations."
+            )
 
     return np.sort(eigenvalues)
-

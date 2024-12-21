@@ -13,7 +13,7 @@ def test_bisection_linear():
 
 
 def test_bisection_quadratic():
-    f = lambda x: x**2 - 4
+    f = lambda x: x ** 2 - 4
     a, b = 0, 3
     root = bisection_search(f, a, b)
     expected = 2.0
@@ -29,14 +29,14 @@ def test_bisection_sin():
 
 
 def test_bisection_no_root():
-    f = lambda x: x**2 + 1
+    f = lambda x: x ** 2 + 1
     a, b = 0, 1
     with pytest.raises(ValueError):
         bisection_search(f, a, b)
 
 
 def test_bisection_multiple_roots():
-    f = lambda x: x**3 - x
+    f = lambda x: x ** 3 - x
     a, b = 0, 2
     root = bisection_search(f, a, b)
     expected = 0.0
@@ -44,7 +44,7 @@ def test_bisection_multiple_roots():
 
 
 def test_bisection_tolerance():
-    f = lambda x: x**3 - 6 * x**2 + 11 * x - 6
+    f = lambda x: x ** 3 - 6 * x ** 2 + 11 * x - 6
     a, b = 2.5, 4
     root = bisection_search(f, a, b, tol=1e-10)
     expected = 3.0
@@ -59,7 +59,7 @@ def test_bisection_max_iterations():
 
 
 def test_bisection_convergence():
-    f = lambda x: x**3 - 6 * x**2 + 11 * x - 6
+    f = lambda x: x ** 3 - 6 * x ** 2 + 11 * x - 6
     a, b = 2.5, 4
     root = bisection_search(f, a, b)
     expected = 3.0
@@ -75,7 +75,7 @@ def test_bisection_exact_root():
 
 
 def test_bisection_close_to_root():
-    f = lambda x: x**2 - 2
+    f = lambda x: x ** 2 - 2
     a, b = 1, 2
     root = bisection_search(f, a, b)
     expected = np.sqrt(2)

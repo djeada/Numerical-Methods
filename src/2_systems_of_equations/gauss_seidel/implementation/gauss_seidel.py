@@ -1,6 +1,7 @@
 import numpy as np
 from typing import Optional
 
+
 def inverse_matrix(A: np.ndarray) -> np.ndarray:
     n: int = A.shape[0]
     AI: np.ndarray = np.hstack((A.copy(), np.eye(n)))
@@ -20,15 +21,18 @@ def solve_inverse_matrix(A: np.ndarray, b: np.ndarray) -> np.ndarray:
     A_inv: np.ndarray = inverse_matrix(A)
     return A_inv @ b
 
+
 def gauss_seidel(
     A: np.ndarray,
     b: np.ndarray,
     x0: Optional[np.ndarray] = None,
     epsilon: float = 1e-8,
-    max_iter: int = 100
+    max_iter: int = 100,
 ) -> np.ndarray:
     n: int = A.shape[0]
-    x: np.ndarray = np.zeros_like(b, dtype=np.double) if x0 is None else x0.astype(float)
+    x: np.ndarray = (
+        np.zeros_like(b, dtype=np.double) if x0 is None else x0.astype(float)
+    )
     for _ in range(max_iter):
         x_prev: np.ndarray = x.copy()
         for i in range(n):
@@ -37,4 +41,6 @@ def gauss_seidel(
             ) / A[i, i]
         if np.linalg.norm(x - x_prev) < epsilon:
             return x
-    raise ValueError("Gauss-Seidel method did not converge within the maximum number of iterations.")
+    raise ValueError(
+        "Gauss-Seidel method did not converge within the maximum number of iterations."
+    )

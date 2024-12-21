@@ -9,7 +9,7 @@ def test_lagrange_polynomial_basic():
     y = np.array([1, 3, 2])
     point = 1.5
     result = lagrange_polynomial(x, y, point)
-    expected =2.875
+    expected = 2.875
     assert np.isclose(result, expected, atol=1e-6)
 
 
@@ -116,7 +116,6 @@ def test_lagrange_polynomial_exact_match_middle():
     result = lagrange_polynomial(x, y, point)
     expected = 4
     assert np.isclose(result, expected, atol=1e-6)
-
 
 
 def test_lagrange_polynomial_multiple_queries():

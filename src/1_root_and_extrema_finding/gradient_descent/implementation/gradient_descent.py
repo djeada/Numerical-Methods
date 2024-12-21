@@ -9,7 +9,7 @@ def gradient_descent(
     x0: np.ndarray,
     learning_rate: float = 0.01,
     tol: float = 1e-6,
-    max_iterations: int = 1000
+    max_iterations: int = 1000,
 ) -> np.ndarray:
     x = x0.astype(float)
     for _ in range(max_iterations):
@@ -18,4 +18,6 @@ def gradient_descent(
         if grad_norm < tol:
             return x
         x = x - learning_rate * grad
-    raise ValueError("Gradient descent did not converge within the maximum number of iterations.")
+    raise ValueError(
+        "Gradient descent did not converge within the maximum number of iterations."
+    )

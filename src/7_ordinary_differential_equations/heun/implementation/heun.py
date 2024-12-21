@@ -2,6 +2,7 @@
 import numpy as np
 from typing import Callable, Tuple
 
+
 def heun_method(f, t0, y0, t_end, h):
     if h <= 0:
         raise ValueError("Step size h must be positive.")

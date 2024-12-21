@@ -13,12 +13,7 @@ def test_least_squares_simple():
 
 
 def test_least_squares_overdetermined():
-    A = np.array([
-        [1, 1],
-        [1, 2],
-        [1, 3],
-        [1, 4]
-    ])
+    A = np.array([[1, 1], [1, 2], [1, 3], [1, 4]])
     b = np.array([2, 3, 4, 5])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]
@@ -26,10 +21,7 @@ def test_least_squares_overdetermined():
 
 
 def test_least_squares_exact_solution():
-    A = np.array([
-        [2, 1],
-        [1, -1]
-    ])
+    A = np.array([[2, 1], [1, -1]])
     b = np.array([1, -1])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]
@@ -37,11 +29,7 @@ def test_least_squares_exact_solution():
 
 
 def test_least_squares_singular():
-    A = np.array([
-        [1, 2],
-        [2, 4],
-        [3, 6]
-    ])
+    A = np.array([[1, 2], [2, 4], [3, 6]])
     b = np.array([2, 4, 6])
     with pytest.raises(ValueError):
         least_squares(A, b)
@@ -80,11 +68,7 @@ def test_least_squares_single_variable():
 
 
 def test_least_squares_negative_values():
-    A = np.array([
-        [1, -1],
-        [-1, 1],
-        [1, 1]
-    ])
+    A = np.array([[1, -1], [-1, 1], [1, 1]])
     b = np.array([0, 0, 2])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]
@@ -92,11 +76,7 @@ def test_least_squares_negative_values():
 
 
 def test_least_squares_fractional_solution():
-    A = np.array([
-        [0.5, 1.5],
-        [1.0, 2.0],
-        [1.5, 2.5]
-    ])
+    A = np.array([[0.5, 1.5], [1.0, 2.0], [1.5, 2.5]])
     b = np.array([1.0, 2.0, 3.0])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]
@@ -104,10 +84,7 @@ def test_least_squares_fractional_solution():
 
 
 def test_least_squares_high_precision():
-    A = np.array([
-        [1.0000001, 1.0000002],
-        [1.0000003, 1.0000004]
-    ])
+    A = np.array([[1.0000001, 1.0000002], [1.0000003, 1.0000004]])
     b = np.array([2.0000003, 2.0000007])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]
@@ -115,32 +92,21 @@ def test_least_squares_high_precision():
 
 
 def test_least_squares_inconsistent_system():
-    A = np.array([
-        [1, 2],
-        [2, 4],
-        [3, 6]
-    ])
+    A = np.array([[1, 2], [2, 4], [3, 6]])
     b = np.array([1, 2, 5])
     with pytest.raises(ValueError):
         least_squares(A, b)
 
 
 def test_least_squares_zero_rows():
-    A = np.array([
-        [1, 2],
-        [0, 0],
-        [3, 4]
-    ])
+    A = np.array([[1, 2], [0, 0], [3, 4]])
     b = np.array([5, 0, 11])
     with pytest.raises(ValueError):
         least_squares(A, b)
 
 
 def test_least_squares_exact_match():
-    A = np.array([
-        [1, 0],
-        [0, 1]
-    ])
+    A = np.array([[1, 0], [0, 1]])
     b = np.array([3, 4])
     x = least_squares(A, b)
     expected = np.array([3, 4])
@@ -148,21 +114,15 @@ def test_least_squares_exact_match():
 
 
 def test_least_squares_multiple_answers():
-    A = np.array([
-        [1, 1],
-        [2, 2]
-    ])
+    A = np.array([[1, 1], [2, 2]])
     b = np.array([2, 4])
     with pytest.raises(ValueError):
         least_squares(A, b)
 
+
 @pytest.mark.skip()
 def test_least_squares_highly_correlated():
-    A = np.array([
-        [1, 1.0001],
-        [2, 2.0002],
-        [3, 3.0003]
-    ])
+    A = np.array([[1, 1.0001], [2, 2.0002], [3, 3.0003]])
     b = np.array([2.0001, 4.0002, 6.0003])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]

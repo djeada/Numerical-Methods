@@ -1,14 +1,16 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def f(x):
     """Example function: f(x) = x^2"""
-    return x**2
+    return x ** 2
+
 
 def golden_ratio_search_visualize(func, a, b, tol=1e-6, max_iterations=100):
     """
     Visualizes the initial and final steps of the Golden Ratio Search method for function minimization on a single plot.
-    
+
     Parameters:
         func (function): The function to minimize.
         a (float): Initial lower bound of the interval.
@@ -56,23 +58,41 @@ def golden_ratio_search_visualize(func, a, b, tol=1e-6, max_iterations=100):
 
     # Plot initial and final intervals on the same plot
     plt.figure(figsize=(8, 6))
-    plt.plot(x, y, label='$f(x) = x^2$', color='blue')
-    plt.axhline(0, color='black', linewidth=0.5)
+    plt.plot(x, y, label="$f(x) = x^2$", color="blue")
+    plt.axhline(0, color="black", linewidth=0.5)
 
     # Initial step
-    plt.scatter([a_initial, b_initial], [func(a_initial), func(b_initial)], color='red', label='Initial Brackets [a, b]')
-    plt.scatter([intervals[0][2], intervals[0][3]], [func(intervals[0][2]), func(intervals[0][3])], color='green', label='Initial Points x1, x2')
+    plt.scatter(
+        [a_initial, b_initial],
+        [func(a_initial), func(b_initial)],
+        color="red",
+        label="Initial Brackets [a, b]",
+    )
+    plt.scatter(
+        [intervals[0][2], intervals[0][3]],
+        [func(intervals[0][2]), func(intervals[0][3])],
+        color="green",
+        label="Initial Points x1, x2",
+    )
 
     # Final step
-    plt.scatter([a_final, b_final], [func(a_final), func(b_final)], color='purple', label='Final Brackets [a, b]')
-    plt.scatter([x1, x2], [func(x1), func(x2)], color='orange', label='Final Points x1, x2')
+    plt.scatter(
+        [a_final, b_final],
+        [func(a_final), func(b_final)],
+        color="purple",
+        label="Final Brackets [a, b]",
+    )
+    plt.scatter(
+        [x1, x2], [func(x1), func(x2)], color="orange", label="Final Points x1, x2"
+    )
 
-    plt.title('Golden Ratio Search: Initial and Final Steps')
-    plt.xlabel('x')
-    plt.ylabel('f(x)')
+    plt.title("Golden Ratio Search: Initial and Final Steps")
+    plt.xlabel("x")
+    plt.ylabel("f(x)")
     plt.legend()
     plt.grid(True)
     plt.show()
+
 
 # Initial conditions for Golden Ratio Search
 a = -2

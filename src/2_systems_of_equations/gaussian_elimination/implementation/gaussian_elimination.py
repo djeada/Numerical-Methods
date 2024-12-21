@@ -2,6 +2,7 @@
 import numpy as np
 from typing import Tuple
 
+
 def gaussian_elimination(A: np.ndarray, b: np.ndarray) -> np.ndarray:
     if A.shape[0] != A.shape[1]:
         raise ValueError("Matrix A must be square.")
@@ -20,10 +21,10 @@ def gaussian_elimination(A: np.ndarray, b: np.ndarray) -> np.ndarray:
             augmented[j] -= augmented[j, i] * augmented[i]
     x: np.ndarray = np.zeros(n)
     for i in range(n - 1, -1, -1):
-        x[i] = augmented[i, -1] - np.dot(augmented[i, i + 1:n], x[i + 1:n])
+        x[i] = augmented[i, -1] - np.dot(augmented[i, i + 1 : n], x[i + 1 : n])
     return x
+
 
 def solve_gaussian_elimination(A: np.ndarray, b: np.ndarray) -> np.ndarray:
     x = gaussian_elimination(A, b)
     return np.round(x, decimals=8)
-

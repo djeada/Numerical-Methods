@@ -1,6 +1,7 @@
 import numpy as np
 from typing import Any
 
+
 def inverse_matrix(A: np.ndarray) -> np.ndarray:
     n: int = A.shape[0]
     AI: np.ndarray = np.hstack((A.copy(), np.eye(n)))
@@ -14,6 +15,7 @@ def inverse_matrix(A: np.ndarray) -> np.ndarray:
             if i != j:
                 AI[j] -= AI[j, i] * AI[i]
     return AI[:, n:]
+
 
 def solve_inverse_matrix(A: np.ndarray, b: np.ndarray) -> np.ndarray:
     A_inv: np.ndarray = inverse_matrix(A)

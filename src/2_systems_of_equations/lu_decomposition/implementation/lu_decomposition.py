@@ -2,6 +2,7 @@
 import numpy as np
 from typing import Tuple
 
+
 def lu_decomposition(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     n: int = A.shape[0]
     if A.shape[0] != A.shape[1]:
@@ -25,6 +26,7 @@ def lu_decomposition(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]
             U[j] -= factor * U[i]
     return P, L, U
 
+
 def solve_lu(P: np.ndarray, L: np.ndarray, U: np.ndarray, b: np.ndarray) -> np.ndarray:
     Pb: np.ndarray = P @ b
     y: np.ndarray = np.zeros_like(b, dtype=float)
@@ -33,5 +35,5 @@ def solve_lu(P: np.ndarray, L: np.ndarray, U: np.ndarray, b: np.ndarray) -> np.n
         y[i] = Pb[i] - np.dot(L[i, :i], y[:i])
     x: np.ndarray = np.zeros_like(b, dtype=float)
     for i in range(n - 1, -1, -1):
-        x[i] = (y[i] - np.dot(U[i, i + 1:], x[i + 1:])) / U[i, i]
+        x[i] = (y[i] - np.dot(U[i, i + 1 :], x[i + 1 :])) / U[i, i]
     return x

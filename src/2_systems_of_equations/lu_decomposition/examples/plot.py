@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def lu_decomposition(A):
     """
     Perform LU decomposition of a square matrix A.
@@ -20,12 +21,13 @@ def lu_decomposition(A):
         # Compute upper triangular matrix U
         for j in range(i, n):
             U[i, j] = A[i, j] - np.sum(L[i, :i] * U[:i, j])
-        
+
         # Compute lower triangular matrix L
-        for j in range(i+1, n):
+        for j in range(i + 1, n):
             L[j, i] = (A[j, i] - np.sum(L[j, :i] * U[:i, i])) / U[i, i]
 
     return L, U
+
 
 def forward_substitution(L, b):
     """
@@ -44,6 +46,7 @@ def forward_substitution(L, b):
         c[i] = (b[i] - np.dot(L[i, :i], c[:i])) / L[i, i]
     return c
 
+
 def backward_substitution(U, c):
     """
     Solve the upper triangular system Ux = c using backward substitution.
@@ -57,9 +60,10 @@ def backward_substitution(U, c):
     """
     n = U.shape[0]
     x = np.zeros_like(c, dtype=float)
-    for i in range(n-1, -1, -1):
-        x[i] = (c[i] - np.dot(U[i, i+1:], x[i+1:])) / U[i, i]
+    for i in range(n - 1, -1, -1):
+        x[i] = (c[i] - np.dot(U[i, i + 1 :], x[i + 1 :])) / U[i, i]
     return x
+
 
 def solve_lu(A, b):
     """
@@ -77,6 +81,7 @@ def solve_lu(A, b):
     x = backward_substitution(U, c)
     return x, L, U
 
+
 def plot_matrix_decomposition(L, U):
     """
     Visualize the L and U matrices from LU decomposition.
@@ -86,23 +91,22 @@ def plot_matrix_decomposition(L, U):
         U (numpy.ndarray): Upper triangular matrix.
     """
     fig, axes = plt.subplots(1, 2, figsize=(12, 6))
-    axes[0].imshow(L, cmap='coolwarm', interpolation='none')
-    axes[0].set_title('Lower Triangular Matrix L')
-    axes[0].axis('off')
+    axes[0].imshow(L, cmap="coolwarm", interpolation="none")
+    axes[0].set_title("Lower Triangular Matrix L")
+    axes[0].axis("off")
 
-    axes[1].imshow(U, cmap='coolwarm', interpolation='none')
-    axes[1].set_title('Upper Triangular Matrix U')
-    axes[1].axis('off')
+    axes[1].imshow(U, cmap="coolwarm", interpolation="none")
+    axes[1].set_title("Upper Triangular Matrix U")
+    axes[1].axis("off")
 
-    plt.suptitle('LU Decomposition Visualization')
+    plt.suptitle("LU Decomposition Visualization")
     plt.tight_layout()
     plt.show()
 
+
 if __name__ == "__main__":
     # Example system
-    A = np.array([[2, 3, -4],
-                  [3, -3, 2],
-                  [-2, 6, -1]], dtype=float)
+    A = np.array([[2, 3, -4], [3, -3, 2], [-2, 6, -1]], dtype=float)
     b = np.array([1, -2, 3], dtype=float)
 
     print("Solving system using LU decomposition:")

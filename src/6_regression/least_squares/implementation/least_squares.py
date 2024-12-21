@@ -1,7 +1,7 @@
-
 import numpy as np
 from numpy.linalg import LinAlgError
 from typing import Tuple
+
 
 def solve_linear_system(A: np.ndarray, b: np.ndarray) -> np.ndarray:
     A = A.astype(float)
@@ -20,8 +20,11 @@ def solve_linear_system(A: np.ndarray, b: np.ndarray) -> np.ndarray:
             augmented[j] -= factor * augmented[i]
     x = np.zeros(n)
     for i in range(n - 1, -1, -1):
-        x[i] = (augmented[i, -1] - np.dot(augmented[i, i + 1:n], x[i + 1:n])) / augmented[i, i]
+        x[i] = (
+            augmented[i, -1] - np.dot(augmented[i, i + 1 : n], x[i + 1 : n])
+        ) / augmented[i, i]
     return x
+
 
 def least_squares(A: np.ndarray, b: np.ndarray) -> np.ndarray:
     if A.ndim != 2 or A.shape[0] < A.shape[1]:
@@ -44,5 +47,7 @@ def least_squares(A: np.ndarray, b: np.ndarray) -> np.ndarray:
         AtA_pseudo_inv = Vt.T @ s_inv @ U.T
         x = AtA_pseudo_inv @ Atb
     except LinAlgError:
-        raise ValueError("Singular matrix encountered during least squares computation.")
+        raise ValueError(
+            "Singular matrix encountered during least squares computation."
+        )
     return x

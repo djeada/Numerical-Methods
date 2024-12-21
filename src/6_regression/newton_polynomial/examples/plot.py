@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def divided_differences(x, y):
     """
     Compute the divided difference table for Newton's Interpolation.
@@ -19,8 +20,9 @@ def divided_differences(x, y):
     for j in range(1, n):
         for i in range(n - j):
             table[i][j] = (table[i + 1][j - 1] - table[i][j - 1]) / (x[i + j] - x[i])
-    
+
     return table[0]
+
 
 def newton_polynomial(x, coefficients, x_data):
     """
@@ -39,10 +41,11 @@ def newton_polynomial(x, coefficients, x_data):
     product_term = 1.0
 
     for i in range(1, n):
-        product_term *= (x - x_data[i - 1])
+        product_term *= x - x_data[i - 1]
         result += coefficients[i] * product_term
 
     return result
+
 
 def plot_newton_interpolation(x_data, y_data):
     """
@@ -61,14 +64,15 @@ def plot_newton_interpolation(x_data, y_data):
 
     # Plot data points and interpolated polynomial
     plt.figure(figsize=(8, 6))
-    plt.scatter(x_data, y_data, color='red', label='Data Points')
-    plt.plot(x_fine, y_fine, label="Newton's Polynomial", color='blue')
+    plt.scatter(x_data, y_data, color="red", label="Data Points")
+    plt.plot(x_fine, y_fine, label="Newton's Polynomial", color="blue")
     plt.title("Newton's Interpolation Polynomial")
-    plt.xlabel('x')
-    plt.ylabel('y')
+    plt.xlabel("x")
+    plt.ylabel("y")
     plt.legend()
     plt.grid(True)
     plt.show()
+
 
 # Example data points
 x_data = np.array([1, 2, 3])

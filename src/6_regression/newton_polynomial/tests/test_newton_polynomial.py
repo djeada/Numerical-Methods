@@ -3,6 +3,7 @@ import pytest
 import numpy as np
 from ..implementation.newton_polynomial import newton_polynomial
 
+
 def test_newton_polynomial_basic():
     x = np.array([0, 1, 2])
     y = np.array([1, 3, 2])
@@ -11,12 +12,14 @@ def test_newton_polynomial_basic():
     expected = 2.875
     assert np.isclose(result, expected, atol=1e-6)
 
+
 def test_newton_polynomial_single_point():
     x = np.array([2])
     y = np.array([5])
     point = 2
     with pytest.raises(ValueError):
         newton_polynomial(x, y, point)
+
 
 def test_newton_polynomial_exact_match():
     x = np.array([0, 1, 2, 3])
@@ -25,6 +28,7 @@ def test_newton_polynomial_exact_match():
     result = newton_polynomial(x, y, point)
     expected = 8.0
     assert np.isclose(result, expected, atol=1e-6)
+
 
 def test_newton_polynomial_out_of_bounds_low():
     x = np.array([1, 2, 3])
@@ -35,6 +39,7 @@ def test_newton_polynomial_out_of_bounds_low():
     expected = 0
     assert np.isclose(result, expected, atol=1e-6)
 
+
 def test_newton_polynomial_out_of_bounds_high():
     x = np.array([1, 2, 3])
     y = np.array([2, 4, 6])
@@ -44,12 +49,14 @@ def test_newton_polynomial_out_of_bounds_high():
     expected = 8
     assert np.isclose(result, expected, atol=1e-6)
 
+
 def test_newton_polynomial_non_equal_lengths():
     x = np.array([0, 1, 2])
     y = np.array([0, 1])
     point = 1
     with pytest.raises(ValueError):
         newton_polynomial(x, y, point)
+
 
 def test_newton_polynomial_insufficient_points():
     x = np.array([])
@@ -58,12 +65,14 @@ def test_newton_polynomial_insufficient_points():
     with pytest.raises(ValueError):
         newton_polynomial(x, y, point)
 
+
 def test_newton_polynomial_duplicate_x_values():
     x = np.array([0, 1, 1, 2])
     y = np.array([0, 1, 1, 4])
     point = 1
     with pytest.raises(ValueError):
         newton_polynomial(x, y, point)
+
 
 def test_newton_polynomial_negative_values():
     x = np.array([-2, -1, 0, 1])
@@ -73,6 +82,7 @@ def test_newton_polynomial_negative_values():
     expected = 2.25
     assert np.isclose(result, expected, atol=1e-6)
 
+
 def test_newton_polynomial_float_precision():
     x = np.array([0.0, 1.0, 2.0])
     y = np.array([0.0, 1.0, 4.0])
@@ -80,6 +90,7 @@ def test_newton_polynomial_float_precision():
     result = newton_polynomial(x, y, point)
     expected = 3.999996
     assert np.isclose(result, expected, atol=1e-5)
+
 
 def test_newton_polynomial_multiple_segments():
     x = np.linspace(0, 10, 11)
@@ -89,6 +100,7 @@ def test_newton_polynomial_multiple_segments():
     expected = 7.3 ** 2
     assert np.isclose(result, expected, atol=1e-2)
 
+
 def test_newton_polynomial_large_dataset():
     x = np.linspace(-10, 10, 21)
     y = np.sin(x)
@@ -96,6 +108,7 @@ def test_newton_polynomial_large_dataset():
     result = newton_polynomial(x, y, point)
     expected = np.sin(2.345)
     assert np.isclose(result, expected, atol=1e-3)
+
 
 def test_newton_polynomial_exact_match_middle():
     x = np.array([0, 1, 2, 3, 4])
@@ -105,6 +118,7 @@ def test_newton_polynomial_exact_match_middle():
     expected = 4.0
     assert np.isclose(result, expected, atol=1e-6)
 
+
 def test_newton_polynomial_multiple_queries():
     x = np.array([0, 1, 2, 3, 4])
     y = np.array([0, 1, 4, 9, 16])
@@ -112,6 +126,7 @@ def test_newton_polynomial_multiple_queries():
     expected = [0.25, 2.25, 6.25, 12.25]
     results = [newton_polynomial(x, y, p) for p in points]
     assert np.allclose(results, expected, atol=1e-2)
+
 
 def test_newton_polynomial_non_monotonic_x():
     x = np.array([0, 2, 1, 3])
@@ -124,6 +139,7 @@ def test_newton_polynomial_non_monotonic_x():
     coeffs = np.polyfit(x, y, deg=3)
     expected = np.polyval(coeffs, point)
     assert np.isclose(result, expected, atol=1e-2)
+
 
 def test_newton_polynomial_high_degree():
     x = np.array([0, 1, 2, 3, 4, 5])

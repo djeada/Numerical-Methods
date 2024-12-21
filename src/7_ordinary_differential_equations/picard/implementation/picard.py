@@ -9,7 +9,7 @@ def picard_method(
     t_end: float,
     h: float,
     tol: float = 1e-6,
-    max_iterations: int = 1000
+    max_iterations: int = 1000,
 ) -> Tuple[np.ndarray, np.ndarray]:
     if h <= 0:
         raise ValueError("Step size h must be positive.")

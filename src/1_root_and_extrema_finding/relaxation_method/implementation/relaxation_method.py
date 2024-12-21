@@ -2,12 +2,13 @@
 import numpy as np
 from typing import Callable
 
+
 def relaxation_method(
     func: Callable[[float], float],
     initial_guess: float,
     omega: float = None,
     tol: float = 1e-6,
-    max_iterations: int = 100000
+    max_iterations: int = 100000,
 ) -> float:
     x = initial_guess
     delta = 1e-8

@@ -1,9 +1,11 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 def f(x):
     """Example function: f(x) = x^2 - 4"""
-    return x**2 - 4
+    return x ** 2 - 4
+
 
 def secant_method_visualize(f_func, x0, x1, tol=1e-6, max_iterations=50):
     """
@@ -49,24 +51,26 @@ def secant_method_visualize(f_func, x0, x1, tol=1e-6, max_iterations=50):
 
     # Plot the function and Secant Method steps
     plt.figure(figsize=(8, 6))
-    plt.plot(x, y, label='$f(x) = x^2 - 4$', color='blue')
-    plt.axhline(0, color='black', linewidth=0.5)
-    plt.scatter(x_values, y_values, color='red', label='Secant Method Steps')
+    plt.plot(x, y, label="$f(x) = x^2 - 4$", color="blue")
+    plt.axhline(0, color="black", linewidth=0.5)
+    plt.scatter(x_values, y_values, color="red", label="Secant Method Steps")
 
     # Highlight the starting and final points
-    plt.scatter(x_values[0], y_values[0], color='green', label='Starting Point')
-    plt.scatter(x_values[-1], y_values[-1], color='purple', label='Final Point')
+    plt.scatter(x_values[0], y_values[0], color="green", label="Starting Point")
+    plt.scatter(x_values[-1], y_values[-1], color="purple", label="Final Point")
 
     plt.title("Secant Method: Progress of Steps")
-    plt.xlabel('x')
-    plt.ylabel('f(x)')
+    plt.xlabel("x")
+    plt.ylabel("f(x)")
     plt.legend()
     plt.grid(True)
     plt.show()
 
+
 # Example function for Secant Method
 def f(x):
-    return x**2 - 4
+    return x ** 2 - 4
+
 
 # Initial guesses for Secant Method
 x0 = 0

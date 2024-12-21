@@ -4,7 +4,6 @@ import numpy as np
 from ..implementation.secant_method import secant_method
 
 
-
 def test_secant_linear():
     f = lambda x: 2 * x - 4
     root = secant_method(f, 0, 5)
@@ -13,7 +12,7 @@ def test_secant_linear():
 
 
 def test_secant_quadratic():
-    f = lambda x: x**2 - 4
+    f = lambda x: x ** 2 - 4
     root = secant_method(f, 1, 3)
     expected = 2.0
     assert np.isclose(root, expected, atol=1e-6)
@@ -27,20 +26,20 @@ def test_secant_sin():
 
 
 def test_secant_no_root():
-    f = lambda x: x**2 + 1
+    f = lambda x: x ** 2 + 1
     with pytest.raises(ValueError):
         secant_method(f, 0, 1)
 
 
 def test_secant_multiple_roots():
-    f = lambda x: x**3 - x
+    f = lambda x: x ** 3 - x
     root = secant_method(f, 0.5, 2.0)
     expected = 1.0
     assert np.isclose(root, expected, atol=1e-6)
 
 
 def test_secant_tolerance():
-    f = lambda x: x**3 - 6 * x**2 + 11 * x - 6
+    f = lambda x: x ** 3 - 6 * x ** 2 + 11 * x - 6
     root = secant_method(f, 2.5, 3.5, tol=1e-10)
     expected = 3.0
     assert np.isclose(root, expected, atol=1e-10)
@@ -60,7 +59,7 @@ def test_secant_exact_root():
 
 
 def test_secant_close_to_root():
-    f = lambda x: x**2 - 2
+    f = lambda x: x ** 2 - 2
     root = secant_method(f, 1.4, 1.5)
     expected = np.sqrt(2)
     assert np.isclose(root, expected, atol=1e-8)
@@ -74,14 +73,14 @@ def test_secant_negative_root():
 
 
 def test_secant_high_precision():
-    f = lambda x: x**3 - 6 * x**2 + 11 * x - 6
+    f = lambda x: x ** 3 - 6 * x ** 2 + 11 * x - 6
     root = secant_method(f, 3.5, 4.0, tol=1e-12)
     expected = 3.0
     assert np.isclose(root, expected, atol=1e-12)
 
 
 def test_secant_initial_guess():
-    f = lambda x: x**2 - 1
+    f = lambda x: x ** 2 - 1
     root = secant_method(f, 0.5, 2.0)
     expected = 1.0
     assert np.isclose(root, expected, atol=1e-6)

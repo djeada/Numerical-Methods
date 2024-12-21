@@ -20,11 +20,13 @@ y_fit = beta[0] + beta[1] * x_fit  # Fitted line
 
 # Step 4: Visualization
 plt.figure(figsize=(8, 6))
-plt.scatter(x, y, color='red', label='Data Points')  # Original data points
-plt.plot(x_fit, y_fit, color='blue', label=f'Fitted Line: y = {beta[0]:.2f} + {beta[1]:.2f}x')
-plt.xlabel('X-axis')
-plt.ylabel('Y-axis')
-plt.title('Least Squares Regression - Fitted Line')
+plt.scatter(x, y, color="red", label="Data Points")  # Original data points
+plt.plot(
+    x_fit, y_fit, color="blue", label=f"Fitted Line: y = {beta[0]:.2f} + {beta[1]:.2f}x"
+)
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+plt.title("Least Squares Regression - Fitted Line")
 plt.legend()
 plt.grid(True)
 plt.show()

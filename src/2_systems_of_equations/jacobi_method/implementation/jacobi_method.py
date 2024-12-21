@@ -8,7 +8,7 @@ def jacobi_method(
     b: np.ndarray,
     x0: Optional[np.ndarray] = None,
     epsilon: float = 1e-8,
-    max_iterations: int = 1000
+    max_iterations: int = 1000,
 ) -> np.ndarray:
     if A.shape[0] != A.shape[1]:
         raise ValueError("Matrix A must be square.")
@@ -27,4 +27,6 @@ def jacobi_method(
         if np.linalg.norm(x_new - x, ord=np.inf) < epsilon:
             return x_new
         x = x_new
-    raise ValueError("Jacobi method did not converge within the maximum number of iterations.")
+    raise ValueError(
+        "Jacobi method did not converge within the maximum number of iterations."
+    )

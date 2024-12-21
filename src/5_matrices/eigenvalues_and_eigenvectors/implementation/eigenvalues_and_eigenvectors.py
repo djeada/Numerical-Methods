@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def find_eigenvalues(matrix: np.ndarray) -> np.ndarray:
     """
     Compute eigenvalues by solving the characteristic polynomial det(A - λI) = 0.
@@ -9,6 +10,7 @@ def find_eigenvalues(matrix: np.ndarray) -> np.ndarray:
     coeffs = np.poly(matrix)  # Polynomial coefficients for det(A - λI) = 0
     eigenvalues = np.roots(coeffs)  # Roots of the polynomial
     return eigenvalues
+
 
 def find_eigenvectors(matrix: np.ndarray) -> np.ndarray:
     """
@@ -44,7 +46,10 @@ def find_eigenvectors(matrix: np.ndarray) -> np.ndarray:
             if np.abs(augmented_matrix[i, i]) < 1e-12:
                 v[i] = 1  # Free variable
             else:
-                v[i] = -np.sum(augmented_matrix[i, i + 1:n] * v[i + 1:n]) / augmented_matrix[i, i]
+                v[i] = (
+                    -np.sum(augmented_matrix[i, i + 1 : n] * v[i + 1 : n])
+                    / augmented_matrix[i, i]
+                )
 
         norm = np.linalg.norm(v)
         if norm == 0:

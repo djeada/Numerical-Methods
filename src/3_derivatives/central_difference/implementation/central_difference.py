@@ -2,17 +2,13 @@
 from typing import Callable
 import numpy as np
 
-def central_difference(
-    f: Callable[[float], float],
-    x: float,
-    h: float = 1e-5
-) -> float:
+
+def central_difference(f: Callable[[float], float], x: float, h: float = 1e-5) -> float:
     return (f(x + h) - f(x - h)) / (2 * h)
 
+
 def central_difference_gradient(
-    f: Callable[[np.ndarray], float],
-    x: np.ndarray,
-    h: float = 1e-5
+    f: Callable[[np.ndarray], float], x: np.ndarray, h: float = 1e-5
 ) -> np.ndarray:
     gradient = np.zeros_like(x, dtype=float)
     for i in range(len(x)):
@@ -22,4 +18,3 @@ def central_difference_gradient(
         x_backward[i] -= h
         gradient[i] = (f(x_forward) - f(x_backward)) / (2 * h)
     return gradient * np.sign(x)
-

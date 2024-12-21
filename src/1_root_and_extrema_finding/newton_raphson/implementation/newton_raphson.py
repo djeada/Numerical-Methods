@@ -8,7 +8,7 @@ def newton_raphson(
     df: Callable[[float], float],
     x0: float,
     tol: float = 1e-8,
-    max_iterations: int = 1000
+    max_iterations: int = 1000,
 ) -> float:
     """
     Newton-Raphson method for finding the root of a real-valued function.
@@ -37,7 +37,9 @@ def newton_raphson(
         if np.abs(x_new - x) < tol:
             return x_new
         x = x_new
-    raise ValueError("Newton-Raphson method did not converge within the maximum number of iterations.")
+    raise ValueError(
+        "Newton-Raphson method did not converge within the maximum number of iterations."
+    )
 
 
 def newton_raphson_system(
@@ -45,7 +47,7 @@ def newton_raphson_system(
     J: Callable[[np.ndarray], np.ndarray],
     x0: Optional[np.ndarray] = None,
     tol: float = 1e-8,
-    max_iterations: int = 1000
+    max_iterations: int = 1000,
 ) -> np.ndarray:
     """
     Newton-Raphson method for finding the root of a system of nonlinear equations.
@@ -79,4 +81,6 @@ def newton_raphson_system(
         if np.linalg.norm(delta, ord=np.inf) < tol:
             return x_new
         x = x_new
-    raise ValueError("Newton-Raphson method did not converge within the maximum number of iterations.")
+    raise ValueError(
+        "Newton-Raphson method did not converge within the maximum number of iterations."
+    )

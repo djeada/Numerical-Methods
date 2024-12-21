@@ -3,11 +3,11 @@ from typing import Optional, Tuple
 
 
 def inverse_power_method(
-        A: np.ndarray,
-        tol: float = 1e-8,
-        max_iterations: int = 10000,
-        x0: Optional[np.ndarray] = None,
-        shift: float = 0.0
+    A: np.ndarray,
+    tol: float = 1e-8,
+    max_iterations: int = 10000,
+    x0: Optional[np.ndarray] = None,
+    shift: float = 0.0,
 ) -> Tuple[float, np.ndarray]:
     if A.shape[0] != A.shape[1]:
         raise ValueError("Matrix must be square.")
@@ -33,7 +33,8 @@ def inverse_power_method(
             y = np.linalg.solve(A_shifted, x)
         except np.linalg.LinAlgError:
             raise ValueError(
-                "Matrix (A - shift * I) is singular and cannot be inverted.")
+                "Matrix (A - shift * I) is singular and cannot be inverted."
+            )
 
         y_norm = np.linalg.norm(y)
         if y_norm == 0:
@@ -48,4 +49,5 @@ def inverse_power_method(
         x = y
 
     raise ValueError(
-        "Inverse Power method did not converge within the maximum number of iterations.")
+        "Inverse Power method did not converge within the maximum number of iterations."
+    )

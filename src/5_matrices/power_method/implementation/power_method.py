@@ -2,11 +2,12 @@
 import numpy as np
 from typing import Optional, Tuple
 
+
 def power_method(
     A: np.ndarray,
     tol: float = 1e-8,
     max_iterations: int = 1000,
-    x0: Optional[np.ndarray] = None
+    x0: Optional[np.ndarray] = None,
 ) -> Tuple[float, np.ndarray]:
     if A.shape[0] != A.shape[1]:
         raise ValueError("Matrix must be square.")
@@ -28,7 +29,9 @@ def power_method(
             x_new = -x_new
         eigenvalue_new = np.dot(A @ x_old, x_new)
         if np.abs(eigenvalue_new - eigenvalue) < tol:
-            if not np.isclose(eigenvalue_new.imag if np.iscomplex(eigenvalue_new) else 0, 0, atol=tol):
+            if not np.isclose(
+                eigenvalue_new.imag if np.iscomplex(eigenvalue_new) else 0, 0, atol=tol
+            ):
                 raise ValueError("Matrix has complex eigenvalues.")
             eigenvalue_new = eigenvalue_new.real
             x_new = x_new.real
@@ -36,4 +39,6 @@ def power_method(
             return eigenvalue_new, x_new
         eigenvalue = eigenvalue_new
         x = x_new
-    raise ValueError("Power method did not converge within the maximum number of iterations.")
+    raise ValueError(
+        "Power method did not converge within the maximum number of iterations."
+    )
