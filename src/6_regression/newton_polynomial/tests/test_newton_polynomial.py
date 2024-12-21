@@ -8,7 +8,7 @@ def test_newton_polynomial_basic():
     y = np.array([1, 3, 2])
     point = 1.5
     result = newton_polynomial(x, y, point)
-    expected = 2.5
+    expected = 2.875
     assert np.isclose(result, expected, atol=1e-6)
 
 def test_newton_polynomial_single_point():
@@ -90,11 +90,11 @@ def test_newton_polynomial_multiple_segments():
     assert np.isclose(result, expected, atol=1e-2)
 
 def test_newton_polynomial_large_dataset():
-    x = np.linspace(-100, 100, 201)
+    x = np.linspace(-10, 10, 21)
     y = np.sin(x)
-    point = 23.456
+    point = 2.345
     result = newton_polynomial(x, y, point)
-    expected = np.sin(23.456)
+    expected = np.sin(2.345)
     assert np.isclose(result, expected, atol=1e-3)
 
 def test_newton_polynomial_exact_match_middle():

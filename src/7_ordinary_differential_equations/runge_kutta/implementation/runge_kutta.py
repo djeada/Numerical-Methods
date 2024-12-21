@@ -1,4 +1,3 @@
-# runge_kutta.py
 import numpy as np
 from typing import Callable, Tuple
 
@@ -25,4 +24,4 @@ def runge_kutta_4(
         k3 = f(ti + h / 2, yi + h * k2 / 2)
         k4 = f(ti + h, yi + h * k3)
         y[i + 1] = yi + (h / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
-    return t, y
+    return t, y.squeeze()

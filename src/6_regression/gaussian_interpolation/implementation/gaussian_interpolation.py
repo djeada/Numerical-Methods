@@ -2,6 +2,7 @@
 import numpy as np
 from typing import Tuple
 
+
 def solve_linear_system(A: np.ndarray, b: np.ndarray) -> np.ndarray:
     n = A.shape[0]
     augmented = np.hstack((A.astype(float), b.reshape(-1, 1).astype(float)))
@@ -19,10 +20,11 @@ def solve_linear_system(A: np.ndarray, b: np.ndarray) -> np.ndarray:
         x[i] = augmented[i, -1] - np.dot(augmented[i, i + 1:n], x[i + 1:n])
     return x
 
+
 def gaussian_interpolation(
-    x_data: np.ndarray,
-    y_data: np.ndarray,
-    point: float
+        x_data: np.ndarray,
+        y_data: np.ndarray,
+        point: float
 ) -> float:
     if x_data.shape[0] != y_data.shape[0]:
         raise ValueError("X and Y vectors must have equal number of elements.")
@@ -30,8 +32,14 @@ def gaussian_interpolation(
         raise ValueError("At least two points are required for interpolation.")
     if len(np.unique(x_data)) != x_data.shape[0]:
         raise ValueError("X data must contain unique values.")
-    n = x_data.shape[0]
-    vandermonde = np.vander(x_data, increasing=True)
+    if point < np.min(x_data) or point > np.max(x_data):
+        raise ValueError("Point is out of bounds.")
+
+    x_mean = np.mean(x_data)
+    x_scale = np.max(np.abs(x_data - x_mean))
+    x_scaled = (x_data - x_mean) / x_scale
+    point_scaled = (point - x_mean) / x_scale
+
+    vandermonde = np.vander(x_scaled, increasing=True)
     coefficients = solve_linear_system(vandermonde, y_data)
-    powers = np.arange(n)
-    return np.dot(coefficients, point ** powers)
+    return np.dot(coefficients, point_scaled ** np.arange(len(coefficients)))

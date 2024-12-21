@@ -1,6 +1,4 @@
-# polynomial_regression.py
 import numpy as np
-from typing import Tuple
 
 def solve_linear_system(A: np.ndarray, b: np.ndarray) -> np.ndarray:
     n = A.shape[0]
