@@ -252,8 +252,6 @@ $$x_2 = \frac{c_2 - u_{23}x_3}{u_{22}} = \frac{-3.5 - (8)(-0.0434783)}{-7.5} = \
 
 $$x_1 = \frac{c_1 - u_{12}x_2 - u_{13}x_3}{u_{11}} = \frac{1 - 3(0.42029) - (-4)(-0.0434783)}{2} = \frac{1 - 1.26087 - 0.1739132}{2} = \frac{-0.4347832}{2} = -0.2173916$$
 
-(To maintain consistency with the original example’s final solution, one may verify arithmetic carefully or consider a simpler rounding. If re-checking is done, the end result can be made consistent. With perfect arithmetic, one obtains a neat solution. The small discrepancies here are due to rounding steps shown explicitly. In a precise calculation, the final solution should be very close to $(x,y,z) = (1, -1, 1)$.)
-
 **Re-checking the arithmetic (without rounding along the way)** from the original worked solution:  
 
 By carefully following the original derivation in the user’s notes (without intermediate rounding), the exact solution given was:
@@ -264,16 +262,12 @@ This slight discrepancy arose due to rounding at intermediate steps in this demo
 
 ### Advantages
 
-I. **Efficiency for Multiple Right-Hand Sides**: Once $A = LU$ is computed, any system $A\mathbf{x} = \mathbf{b}$ can be solved efficiently by forward and backward substitution. This is particularly valuable when solving multiple systems with the same coefficient matrix but different right-hand-side vectors.
-
-II. **Stable and Systematic**: LU decomposition organizes the elimination steps into structured matrices $L$ and $U$, making the process more systematic. With partial pivoting, LU decomposition becomes numerically stable for a wide class of problems.
-
-III. **Facilitates Other Computations**: LU decomposition can be used to quickly compute determinants ($\det(A) = \prod u_{ii}$) and inverses of matrices, as well as to assist in more advanced factorizations and decompositions.
+- Once $A = LU$ is computed, any system $A\mathbf{x} = \mathbf{b}$ can be solved efficiently by forward and backward substitution. This is particularly valuable when solving multiple systems with the same coefficient matrix but different right-hand-side vectors.
+- LU decomposition organizes the elimination steps into structured matrices $L$ and $U$, making the process more systematic. With partial pivoting, LU decomposition becomes numerically stable for a wide class of problems.
+- LU decomposition can be used to quickly compute determinants ($\det(A) = \prod u_{ii}$) and inverses of matrices, as well as to assist in more advanced factorizations and decompositions.
 
 ### Limitations
 
-I. **Pivoting Sometimes Required**: Not all matrices are conveniently LU decomposable without row interchanges. For many practical cases, partial pivoting is performed, leading to $PA = LU$ instead of $A = LU$.
-
-II. **Not Always Applicable**: If $A$ has zeros on the diagonal or does not satisfy certain conditions, it may not be possible to obtain an LU decomposition without permutations.
-
-III. **Fill-in for Sparse Matrices**: For large sparse matrices, naive LU decomposition may lead to significant fill-in (new nonzero elements in $L$ and $U$), increasing memory and computation costs.
+- Not all matrices are conveniently LU decomposable without row interchanges. For many practical cases, partial pivoting is performed, leading to $PA = LU$ instead of $A = LU$.
+- If $A$ has zeros on the diagonal or does not satisfy certain conditions, it may not be possible to obtain an LU decomposition without permutations.
+- For large sparse matrices, naive LU decomposition may lead to significant fill-in (new nonzero elements in $L$ and $U$), increasing memory and computation costs.
