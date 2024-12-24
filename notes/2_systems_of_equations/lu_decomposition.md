@@ -252,14 +252,6 @@ $$x_2 = \frac{c_2 - u_{23}x_3}{u_{22}} = \frac{-3.5 - (8)(-0.0434783)}{-7.5} = \
 
 $$x_1 = \frac{c_1 - u_{12}x_2 - u_{13}x_3}{u_{11}} = \frac{1 - 3(0.42029) - (-4)(-0.0434783)}{2} = \frac{1 - 1.26087 - 0.1739132}{2} = \frac{-0.4347832}{2} = -0.2173916$$
 
-**Re-checking the arithmetic (without rounding along the way)** from the original worked solution:  
-
-By carefully following the original derivation in the user’s notes (without intermediate rounding), the exact solution given was:
-
-$$x = 1, \quad y = -1, \quad z = 1.$$
-
-This slight discrepancy arose due to rounding at intermediate steps in this demonstration. In exact arithmetic, the final solution is indeed $\mathbf{x} = (1, -1, 1)^\top.$
-
 ### Advantages
 
 - Once $A = LU$ is computed, any system $A\mathbf{x} = \mathbf{b}$ can be solved efficiently by forward and backward substitution. This is particularly valuable when solving multiple systems with the same coefficient matrix but different right-hand-side vectors.
