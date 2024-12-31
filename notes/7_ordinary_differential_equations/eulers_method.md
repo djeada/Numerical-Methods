@@ -2,7 +2,7 @@
 
 Euler's Method is a numerical technique applied in the realm of initial value problems for ordinary differential equations (ODEs). The simplicity of this method makes it a popular choice in cases where the differential equation lacks a closed-form solution. The method might not always provide the most accurate result, but it offers a good trade-off between simplicity and accuracy.
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 Consider an initial value problem (IVP) represented as:
 
@@ -19,7 +19,7 @@ where:
 - $h$ is the step size,
 - $f(t_n, u_n)$ is the derivative of $u$ at $t = t_n$.
 
-## Derivation
+### Derivation
 
 Let's start with the Taylor series:
 
@@ -33,13 +33,13 @@ Which is roughly equivalent to:
 
 $$ u(t+h)=u(t)+ h f(u(t),t)$$
 
-## Algorithm Steps
+### Algorithm Steps
 
 1. Start with initial conditions $t_0$ and $u_0$.
 2. Calculate $u_{n+1}$ using the formula: $u_{n+1} = u_n + h*f(t_n, u_n)$.
 3. Repeat the above step for a given number of steps or until the final value of $t$ is reached.
 
-## Example
+### Example
 
 $$ u'(t)=u(t),$$
 
@@ -69,13 +69,15 @@ $$  u(0.1) \approx1.05+0.05 \cdot 1.05 $$
 
 $$  u(0.1) \approx 1.1025 $$
 
-## Advantages
+### Advantages  
 
-- Euler's method is straightforward to implement.
-- It can provide a reasonable approximation when the step size is small and the function is well-behaved.
+- Euler's method is **easy** to implement and serves as a foundational technique for introducing numerical solution methods for ODEs.  
+- It can provide **reasonable approximations** for well-behaved functions when the step size is sufficiently small.  
+- The simplicity of the method makes it computationally inexpensive for basic problems and suitable for initial experimentation.  
 
-## Limitations
+### Limitations  
 
-- The method is not always accurate and can lead to significant errors if the step size is not chosen appropriately.
-- Errors from each step accumulate, leading to larger errors in the final result.
-- The method might not be stable for all types of ODEs.
+- **Accuracy** is limited, as the method can introduce significant errors if the step size is too large or if the function has rapid changes.  
+- The **cumulative error** from each step can grow significantly, making the method unsuitable for long-time integration.  
+- **Stability** is an issue, as Euler's method may fail to converge or produce reliable results for stiff or oscillatory ODEs.  
+- The method lacks the ability to adapt step sizes dynamically, which can lead to inefficiencies or inaccuracies in varying conditions.  
