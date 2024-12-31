@@ -67,10 +67,16 @@ $$
 
 ### Advantages
 
-- The inverse of a matrix is a powerful concept in linear algebra, offering a way to analytically solve systems of linear equations, among other things.
+- The **inverse of a matrix** provides an analytical solution for systems of linear equations of the form $A \mathbf{x} = \mathbf{b}$, where $\mathbf{x} = A^{-1} \mathbf{b}$, offering a direct approach when the inverse is available.
+- Matrix inversion is a **fundamental concept in linear algebra**, with applications ranging from solving systems of equations to transformations in geometry, optimization problems, and control systems.
+- It enables the **characterization of matrix properties**, such as determining whether a matrix is singular (non-invertible) and finding relationships in systems represented by matrices.
+- Inverse matrices are used in **statistical computations**, such as calculating the covariance matrix in multivariate analysis and solving normal equations in least squares problems.
+- The computation of $A^{-1}$ can be performed **once and reused** for multiple right-hand sides $\mathbf{b}$, making it useful in scenarios where multiple systems need solving with the same matrix $A$.
 
 ### Limitations
 
-- Not all matrices have an inverse. Only non-singular square matrices can be inverted.
-- Computing the inverse of a matrix involves calculating determinants and is therefore computationally expensive. For large matrices, numerical methods are often more efficient.
-
+- **Not all matrices are invertible.** A matrix must be square (having the same number of rows and columns) and non-singular (having a non-zero determinant) to possess an inverse.
+- **Computational cost is high** for calculating matrix inverses directly. The process involves determinant calculations and can be computationally prohibitive for large matrices, with complexity on the order of $O(n^3)$ for typical methods like Gaussian elimination.
+- Using the inverse to solve $A \mathbf{x} = \mathbf{b}$ is often **less efficient and less numerically stable** than solving the system directly with techniques like LU decomposition or iterative methods, especially for large or sparse systems.
+- Small numerical errors in the computation of the inverse can **magnify errors in the solution**, particularly for ill-conditioned matrices, making direct inversion less desirable in sensitive applications.
+- The process of inversion does not apply to **non-square or singular matrices,** and alternative approaches like pseudo-inverse computation or regularization methods must be employed for such cases.
