@@ -87,10 +87,14 @@ The system can be solved using various matrix methods such as the Gaussian elimi
 
 ### Advantages
 
-- Matrix methods for solving systems of equations are systematic and can be easily implemented in computer programs.
-- Matrix representation is compact and insightful, especially when dealing with systems of many variables.
+- Matrix methods provide a **systematic approach** to solving systems of equations, which makes them straightforward to automate in computer algorithms.
+- The **compact representation** of systems using matrices is especially useful when dealing with many variables and equations.
+- These methods allow for **scalability**, as they are adaptable to both small and large systems, leveraging computational tools and libraries.
+- Matrix methods offer **insight into system properties**, such as determinant calculations, linear independence, and transformations.
 
 ### Limitations
 
-- If the matrix is singular or nearly singular (i.e., det(A) is zero or close to zero), the system may have no solution or infinitely many solutions.
-- Large systems of equations may be computationally expensive to solve using matrix methods.
+- When the matrix is **singular or nearly singular**, the system may not have a unique solution, potentially leading to no solution or infinitely many solutions.
+- Solving **large systems** using direct matrix methods can be computationally expensive, often requiring significant time and memory resources.
+- Ill-conditioned matrices can cause **numerical instability**, where small changes in inputs result in large errors in the solution.
+- Representing and solving **sparse systems** using dense matrix techniques can be inefficient unless specialized sparse matrix methods are employed.
