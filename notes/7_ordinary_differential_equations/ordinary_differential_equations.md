@@ -1,57 +1,276 @@
 ## Ordinary Differential Equations (ODEs)
 
-Ordinary Differential Equations (ODEs) are equations that involve one independent variable and the derivatives of one dependent variable with respect to the independent variable. They are called "ordinary" to distinguish them from partial differential equations (PDEs), which involve partial derivatives of a function.
+An **ordinary differential equation (ODE)** is an equation that involves:
 
-## Understanding Differential Equations
+I. One independent variable, often denoted by $t$ (in many applications, $t$ represents time).
 
-ODEs are equations that describe how a quantity changes with respect to another quantity. For example, they can describe how an object's velocity (change in position) changes with respect to time, leading to equations of motion.
+II. One dependent variable (or unknown function), which we may denote by $y(t)$.
 
-## Key Concepts in Ordinary Differential Equations
+III. The derivatives of the dependent variable with respect to the independent variable.
 
-- **Order**: The order of an ODE is the order of the highest derivative present in the equation. For instance, if the highest derivative is the second derivative, it is a second-order ODE.
+Formally, an ODE can be written as
 
-- **Degree**: The degree of an ODE is the power (or exponent) of the highest order derivative once the equation has been simplified as much as possible.
+$$F\bigl(t, y(t), y'(t), y''(t), \dots, y^{(n)}(t)\bigr) = 0$$
 
-- **Linearity**: An ODE is considered linear if the dependent variable and all its derivatives appear to the power 1 (not raised to any power other than 1) and are not multiplied together. Any other form is a non-linear ODE.
+where $y^{(n)}(t)$ denotes the $n$-th derivative of $y$ with respect to $t$. The integer $n$ is called the **order** of the ODE.
 
-- **Homogeneous**: A linear ODE is said to be homogeneous if it can be written so that every term is a homogeneous function of the same degree. Otherwise, it's inhomogeneous or non-homogeneous.
+The term *ordinary* differentiates it from a **partial differential equation (PDE)**, in which derivatives with respect to multiple independent variables can appear.
 
-## Mathematical Forms of Ordinary Differential Equations
+### Classification and Terminology
 
-- **General First Order ODE**: This type of ODE takes the form $u'(t)=f(u(t),t)$ with an initial condition $u(t_0) = u_0$. The derivative of $u$ with respect to $t$ is a known function of $u$ and $t$. We also have a known initial condition of $u$ at a specific time $t_0$.
+- **Order**: The order of an ODE is the order of the highest derivative appearing in the equation.
+- **Degree**: The degree of an ODE is the exponent of the highest-order derivative after the equation has been simplified and cleared of any fractional or irrational expressions in the derivatives.
+- **Linearity vs. Nonlinearity**: 
 
-- **First Order Linear ODE**: This is a specific case of the first-order ODE, taking the general form $\\frac{dy}{dt} + p(t)y = g(t)$, where $p(t)$ and $g(t)$ are any function of $t$.
+A (single) ODE is **linear** if it can be expressed in the form
 
-- **Second Order Linear ODE**: This type of ODE has the general form $\\frac{d^2y}{dt^2} + a(t)\\frac{dy}{dt} + b(t)y = g(t)$, where $a(t)$, $b(t)$, and $g(t)$ are any function of $t$.
+$$a_n(t)y^{(n)}(t) + a_{n-1}(t)y^{(n-1)}(t) + \cdots + a_1(t)y'(t) + a_0(t)y(t) = g(t)$$
 
-- **Homogeneous ODE**: If $g(t)$ equals zero, the ODE is called homogeneous. The general form is $\\frac{d^2y}{dt^2} + a(t)\\frac{dy}{dt} + b(t)y = 0$.
+where $a_0(t), \dots, a_n(t)$ and $g(t)$ are functions of $t$ only (i.e., do not depend on $y$ or its derivatives). If any product of the dependent variable and/or its derivatives or any power other than $1$ of $y$ or its derivatives appears, then the ODE is **nonlinear**.
 
-- **Nonhomogeneous ODE**: If $g(t)$ does not equal zero, the ODE is called nonhomogeneous. As described above, the general form is $\\frac{d^2y}{dt^2} + a(t)\\frac{dy}{dt} + b(t)y = g(t)$.
+- **Homogeneous vs. Nonhomogeneous** (Inhomogeneous) for Linear ODEs: A linear ODE is called **homogeneous** if $g(t) \equiv 0$. Otherwise, it is **nonhomogeneous** or **inhomogeneous** if $g(t) \neq 0$.
+- **Autonomous vs. Nonautonomous**: An **autonomous** ODE is one in which the independent variable $t$ does not appear explicitly in the function $F$. For instance, $y' = f(y)$ is autonomous. A **nonautonomous** ODE explicitly depends on $t$, for example $y' = f(t, y)$.
 
-- **Autonomous ODE**: This is an ODE in which the independent variable (generally $t$) does not appear explicitly. An example is $\\frac{dy}{dt} = f(y)$.
+### Understanding Differential Equations
 
-## Solutions of Ordinary Differential Equations
+Differential equations capture the relationship between a function (representing a quantity of interest) and its rates of change. These arise naturally in numerous domains:
 
-The goal of solving an ODE is to find an approximate solution at a finite set of points. Here are some examples:
+- In **physics**, Newton’s laws of motion lead to second-order ODEs in time describing the positions of objects.
+- In **biology**, population growth can often be modeled by first-order ODEs.
+- In **engineering**, circuits and systems obey Kirchhoff’s laws or mass-spring-damper systems described by second-order ODEs.
+- In **economics**, growth models and dynamic systems can be formulated as ODEs.
 
-- The general solution of the first-order ODE $\\frac{dy}{dt} = a y$ is $y(t) = C e^{a t}$, where $C$ is a constant.
+#### Initial Conditions and Boundary Conditions
 
-- The general solution of the homogeneous second-order ODE $\\frac{d^2y}{dt^2} + a\\frac{dy}{dt} + b y = 0$ depends on the roots of the characteristic equation $r^2 + a r + b = 0$. If the roots are real and distinct, the general solution is $y(t) = C_1 e^{r_1 t} + C_2 e^{r_2 t}$. If the roots are complex, the general solution is $y(t) = e^{αt}(C_1 \cos(βt) + C_2 \sin(βt))$. If the roots are real and repeated, the general solution is $y(t) = (C_1 + C_2 t)e^{r t}$.
+To find a unique solution, one often needs:
 
-- The general solution of the nonhomogeneous second-order ODE $\\frac{d^2y}{dt^2} + a\\frac{dy}{dt} + b y = g(t)$ is $y(t) = y_h(t) + y_p(t)$, where $y_h(t)$ is the general solution of the associated homogeneous equation, and $y_p(t)$ is a particular solution of the nonhomogeneous equation.
+- **Initial conditions**, e.g., for a first-order ODE $y'(t) = f(t,y)$, one typically specifies $y(t_0) = y_0$.
+- For higher-order ODEs, more initial values (or boundary values) are required. For example, a second-order ODE might need $y(t_0) = y_0$ and $y'(t_0) = v_0$.
 
-## Examples of Ordinary Differential Equations
+The combination of a differential equation and enough conditions to fix a unique solution is called an **initial value problem (IVP)** or **boundary value problem (BVP)**, depending on whether the conditions are specified at a single point (IVP) or at different points (BVP).
 
-- **Newton's Second Law** of motion is a second-order ODE: $F = ma$.
-- **Population dynamics** can be described using first-order ODEs: $\\frac{dP}{dt} = kP$.
+#### Existence and Uniqueness of Solutions
 
-## Applications
+A crucial theoretical aspect of ODEs is ensuring whether a solution to a given IVP exists and whether it is unique. One fundamental result for first-order ODEs is the **Picard–Lindelöf theorem (also known as the Existence and Uniqueness Theorem)**, which states that if:
 
-- ODEs are fundamental to physics, engineering, economics, and many other disciplines.
-- They describe various phenomena such as heat conduction, wave propagation, and quantum mechanics.
+I. $f(t,y)$ is continuous in a region around $(t_0, y_0)$,
 
-## Limitations
+II. $f$ satisfies a Lipschitz condition in $y$ (i.e., there exists a constant $L$ such that
 
-- ODEs can become quite complex and may not have straightforward or even known solutions, especially for nonlinear and high order ODEs.
-- Some methods for solving ODEs require certain assumptions (such as constant coefficients) to be made. If these assumptions do not hold, these methods may not be applicable.
-- The complexity of solving differential equations increases with the order and non-linearity of the equation.
+$$\bigl| f(t, y_1) - f(t, y_2) \bigr| \le L \bigl| y_1 - y_2 \bigr|$$
+
+for all $y_1, y_2$ in that region), then there exists a time interval $(t_0 - \delta, t_0 + \delta)$ on which there is a unique solution $y(t)$ satisfying $y(t_0) = y_0$.
+
+### Main Concepts in Ordinary Differential Equations
+
+We revisit the key concepts with further mathematical detail:
+
+#### Order
+
+If an ODE contains derivatives up to the $n$-th derivative, it is called an **$n$-th order** ODE. For example:
+
+- $\frac{dy}{dt} = f(t, y)$ is a first-order ODE.
+- $\frac{d^2y}{dt^2} + a(t)\frac{dy}{dt} + b(t)y = 0$ is a second-order ODE.
+
+#### Degree
+
+The **degree** is determined by writing the ODE in polynomial form in its highest-order derivative. For example, the ODE
+
+$$\left(y''\right)^2 + \left(y'\right)^3 + y = 0$$
+is **not** in polynomial form due to the squared second derivative and cubed first derivative. However, if we could (somehow) algebraically solve for the highest-order derivative and rewrite it linearly or as a polynomial expression without fractional exponents, then the exponent of that highest-order derivative would tell us the degree. Many ODEs (especially linear ones) are understood in simpler terms: the degree is typically $1$ for linear ODEs.
+
+#### Linearity
+
+A **linear** ODE of order $n$ has the form
+
+$$a_n(t)y^{(n)} + a_{n-1}(t)y^{(n-1)} + \cdots + a_1(t)y' + a_0(t)y = g(t),$$
+
+where each $a_k(t)$ (for $k = 0,1,\dots,n$) and $g(t)$ depend only on $t$. No products like $(y')^2$ or $yy''$ occur, nor do terms such as $\sin(y)$. If such terms do occur, the ODE is **nonlinear**.
+
+#### Homogeneity
+
+- A linear ODE is **homogeneous** if $g(t) = 0$. The homogeneous form is
+
+  $$a_n(t)y^{(n)} + a_{n-1}(t)y^{(n-1)} + \cdots + a_1(t)y' + a_0(t)y = 0.$$
+- It is **nonhomogeneous (or inhomogeneous)** if $g(t) \neq 0$.
+
+### 3.5 Autonomous ODEs
+
+- An **autonomous** ODE does not explicitly depend on $t$. Formally, it takes a form such as $y' = f(y)$.
+- The solutions and their qualitative behavior can often be studied using **phase-line analysis** (for first-order autonomous ODEs) or **phase-plane analysis** (for second-order systems), etc.
+
+## 4. Mathematical Forms of Ordinary Differential Equations
+
+Below are some standard forms that frequently appear.
+
+### 4.1 General First-Order ODE
+
+$$\frac{dy}{dt} = f\bigl(t, y(t)\bigr), 
+
+\quad 
+y(t_0) = y_0.$$
+- **Goal**: Find a function $y(t)$ that satisfies the differential equation for $t$ in some interval containing $t_0$ and also satisfies the initial condition $y(t_0) = y_0$.
+
+### 4.2 First-Order Linear ODE
+
+$$\frac{dy}{dt} + p(t)y = g(t).$$
+
+This is a subset of the above form but is special because its solution technique is well-known. A classic approach is the **Integrating Factor** method:
+
+I. Multiply both sides by the integrating factor
+
+   $$\mu(t) = e^{\int p(t)dt}.$$
+
+II. Rewrite the left-hand side as the derivative of $\mu(t)y(t)$.
+
+III. Integrate both sides w.r.t. $t$ to solve for $y(t)$.
+
+### 4.3 Second-Order Linear ODE
+
+$$\frac{d^2y}{dt^2} + a(t)\frac{dy}{dt} + b(t)y = g(t).$$
+- **Homogeneous** if $g(t) = 0$.
+- **Nonhomogeneous** if $g(t) \neq 0$.
+
+#### Constant-Coefficient Case
+
+When $a$ and $b$ are constants, the ODE
+
+$$y'' + ay' + by = g(t)$$
+can be solved using:
+
+I. **Characteristic equation** for the associated homogeneous part:
+
+   $$r^2 + ar + b = 0.$$
+II. The solution of the homogeneous ODE depends on the discriminant $\Delta = a^2 - 4b$:
+   - If $\Delta > 0$, two distinct real roots $r_1$ and $r_2$. 
+   - If $\Delta = 0$, a repeated real root $r$.
+   - If $\Delta < 0$, two complex conjugate roots $\alpha \pm i\beta$.
+
+III. A **particular solution** $y_p(t)$ must be found (e.g., via the method of undetermined coefficients or variation of parameters) for the nonhomogeneous case.
+
+IV. The **general solution** is $y(t) = y_h(t) + y_p(t)$.
+
+### 4.4 Autonomous ODE
+
+$$\frac{dy}{dt} = f\bigl(y(t)\bigr).$$
+- Analyzing equilibrium (steady-state) solutions where $f(y)=0$ is a powerful tool for studying the long-term behavior (qualitative analysis).
+
+## 5. Solutions of Ordinary Differential Equations
+
+### 5.1 General Remarks
+
+A **solution** to an ODE on an interval $I$ is a function $y(t)$ that:
+
+I. Is differentiable up to the required order on $I$.
+
+II. Substitutes into the ODE to satisfy it identically for all $t \in I$.
+
+### 5.2 General vs. Particular Solutions
+
+- A **general solution** often contains constants (like $C_1, C_2, \ldots$) that can be set by initial or boundary conditions.
+- A **particular solution** is a single, specific solution that satisfies both the ODE and a given set of boundary/initial conditions.
+
+### 5.3 Classic Examples
+
+I. **First-Order Linear with Constant Coefficient**  
+
+   $$\frac{dy}{dt} = ay 
+
+   \quad \longrightarrow \quad
+
+   \frac{dy}{y} = adt.$$
+
+   Integrating both sides:
+
+   $$\ln|y| = at + C \quad \longrightarrow \quad y(t) = C_1 e^{a t}.$$
+
+   If $y(t_0) = y_0$, then $C_1 = y_0 e^{-a t_0}$.
+
+II. **Second-Order Homogeneous with Constant Coefficients**  
+
+   $$y'' + ay' + by = 0.$$
+   The characteristic equation is $r^2 + ar + b = 0$. Let $\Delta = a^2 - 4b$. 
+   - If $\Delta > 0$ with roots $r_1, r_2$, the general solution is
+
+     $$y(t) = C_1 e^{r_1 t} + C_2 e^{r_2 t}.$$
+   - If $\Delta = 0$ with repeated root $r$, the general solution is
+
+     $$y(t) = \bigl(C_1 + C_2t\bigr) e^{r t}.$$
+   - If $\Delta < 0$ with complex roots $\alpha \pm i\beta$, the general solution is
+
+     $$y(t) = e^{\alpha t}\bigl(C_1 \cos(\beta t) + C_2 \sin(\beta t)\bigr).$$
+
+III. **Second-Order Nonhomogeneous with Constant Coefficients**  
+
+   $$y'' + ay' + by = g(t).$$
+
+   One finds the **general solution** as
+
+   $$y(t) = y_h(t) + y_p(t),$$
+   where $y_h(t)$ is the general solution of the homogeneous equation, and $y_p(t)$ is any particular solution of the original nonhomogeneous equation.
+
+## 6. Examples of Ordinary Differential Equations
+
+I. **Newton’s Second Law of Motion**  
+
+   Often written as $F = ma$. Since $a = \frac{d^2 x}{dt^2}$,
+
+   $$m\frac{d^2x}{dt^2} = F(x, t).$$
+
+   This is a **second-order** ODE. If $F$ depends only on $x$ and $t$ (and possibly $v = x'$), it may be nonlinear or linear (if $F$ is linear in $x$, $x'$, etc.).
+
+II. **Population Dynamics**  
+
+   The logistic model:
+
+   $$\frac{dP}{dt} = rP \left(1 - \frac{P}{K}\right),$$
+   is a **first-order** **nonlinear** **autonomous** ODE describing population growth with a carrying capacity $K$.
+
+III. **RC Circuit (First-Order Linear ODE)**  
+
+   Consider a resistor $R$ in series with a capacitor $C$. The voltage $V_C(t)$ across the capacitor satisfies:
+
+   $$C\frac{dV_C}{dt} + \frac{V_C(t)}{R} = \frac{V_{\text{in}}(t)}{R}.$$
+
+   Rearranged:
+
+   $$\frac{dV_C}{dt} + \frac{1}{RC}V_C(t) = \frac{V_{\text{in}}(t)}{RC}.$$
+
+   This is a first-order linear ODE.
+
+## 7. Applications
+
+ODEs are ubiquitous in mathematical modeling across disciplines:
+
+- **Physics**:  
+  - Quantum mechanics (via the Schrödinger equation, which is often partial differential but can reduce to ODEs in special cases).
+  - Mechanics of particles and rigid bodies (using Newton’s laws or Lagrangian/Hamiltonian formulations).
+- **Engineering**:  
+  - System dynamics, control theory (transfer functions, state-space models).
+  - Electronics (RLC circuits, operational amplifiers).
+- **Biology and Epidemiology**:  
+  - Spread of infectious diseases (SIR models).
+  - Biochemical reaction kinetics (Michaelis–Menten equations).
+- **Economics and Finance**:  
+  - Dynamical systems in macroeconomics (growth models).
+  - Option pricing (although typically PDEs, certain simplifications lead to ODEs).
+- **Chemistry**:  
+  - Reaction-rate equations (e.g., the rate of product formation in chemical kinetics).
+
+## 8. Limitations and Complexities
+
+I. **Analytical Solutions May Not Exist**  
+
+Many ODEs, especially nonlinear ones, do not admit solutions in closed-form expressions. Numerical methods (Euler’s method, Runge–Kutta methods, etc.) become critical.
+
+II. **High-Order and Nonlinear ODEs**  
+
+As the order or nonlinearity increases, the complexity of solving and analyzing solutions grows. Certain qualitative methods (stability analysis, phase-plane diagrams, etc.) are used instead of closed-form solutions.
+
+III. **Dependence on Assumptions**  
+
+Often, ODE models rely on simplifying assumptions (e.g., linearization, ignoring certain effects). If these assumptions fail, the applicability of the solution is limited.
+
+IV. **Parameter Sensitivity**  
+
+In many real-world models, slight changes in parameters can lead to drastically different solutions (chaotic systems).
