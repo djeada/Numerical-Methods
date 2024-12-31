@@ -22,13 +22,13 @@ A_{n1} & A_{n2} & \cdots & A_{nn}
 
 $$
 \mathbf{x} = \begin{bmatrix}
-x_1 \\ x_2 \\ \vdots \\ x_n
+x_1 \\ x_2 \\ \cdots \\ x_n
 \end{bmatrix}
 $$
 
 $$
 \mathbf{b} = \begin{bmatrix}
-b_1 \\ b_2 \\ \vdots \\ b_n
+b_1 \\ b_2 \\ \cdots \\ b_n
 \end{bmatrix}$$
 
 If $A$ is nonsingular (invertible), there exists a unique solution $\mathbf{x}^*$ such that $A\mathbf{x}^* = \mathbf{b}$.
@@ -158,18 +158,14 @@ If we continue iterating until the changes in $x$ and $y$ are negligible (for ex
 
 $$x \approx 1.04, \quad y \approx 1.60.$$
 
-### Advantages
+### Advantages of the Gauss-Seidel Method
 
-I. **Faster Convergence than Jacobi**: By using the most recently updated values of the variables in the same iteration, the Gauss-Seidel method often converges in fewer iterations than the Jacobi method, especially for well-conditioned or diagonally dominant systems.
+- The Gauss-Seidel method often achieves **faster convergence than the Jacobi method** because it uses the most recent updates of variables during the same iteration, particularly effective for well-conditioned or diagonally dominant systems.
+- **Memory requirements are minimal** since the method only needs storage for the matrix $A$, the vector $\mathbf{b}$, and the current iterate $\mathbf{x}^{(k)}$, making it efficient for large sparse systems.
+- The method’s **ease of implementation** lies in its simple iterative formulas, which avoid the need for complex matrix factorizations and can be adapted for certain parallel computing environments.
 
-II. **Memory Efficiency**: The method only requires storage for the matrix $A$, the right-hand side vector $\mathbf{b}$, and the current iterate $\mathbf{x}^{(k)}$. No additional large-scale data structures are needed, making it suitable for large sparse systems where direct methods may be infeasible.
+### Limitations of the Gauss-Seidel Method
 
-III. **Ease of Implementation**: The Gauss-Seidel update formulas are straightforward and do not require complex factorization steps. It’s a purely iterative approach that can be easily implemented and parallelized (with some caution).
-
-### Limitations
-
-I. **Convergence Requirements**: The method does not always converge. Convergence is guaranteed if $A$ is strictly diagonally dominant or if $A$ is symmetric positive definite. For other cases, it may fail to converge or may converge very slowly.
-
-II. **Serial Nature of Updates**: In contrast to the Jacobi method, Gauss-Seidel updates are inherently sequential since each new value depends on previously updated values in the same iteration. This can limit straightforward parallelization.
-
-III. **Potential Slowdown for Certain Matrices**: Even when it does converge, convergence can be slow if the system is ill-conditioned or not sufficiently diagonal dominant. In such cases, more sophisticated methods or preconditioners might be required.
+- Convergence is not **assured unless specific conditions** are met, such as when $A$ is strictly diagonally dominant or symmetric positive definite, and it can fail or converge very slowly otherwise.
+- Updates in the Gauss-Seidel method are **sequential in nature**, as each variable depends on previously updated variables from the same iteration, which restricts straightforward parallelization.
+- For systems that are ill-conditioned or not sufficiently diagonal dominant, the method can experience a **significant slowdown in convergence**, necessitating the use of alternative techniques or preconditioners for efficiency.
