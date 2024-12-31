@@ -31,7 +31,6 @@ PDEs capture how a function $u(\mathbf{x}, t)$ varies in multiple directions or 
 
 To *uniquely* solve a PDE, one typically needs to specify **boundary conditions** (BCs) and/or **initial conditions** (ICs), depending on the PDE’s type and physical context:
 
-
 **Boundary conditions**: 
 
 - **Dirichlet BC**: Specify the value of $u$ on the boundary (e.g., $u = f$ on $\partial \Omega$).
@@ -233,36 +232,16 @@ where $V(S,t)$ is the price of an option, $S$ is the underlying asset price, $r$
 
 ### Applications of PDEs
 
-I. **Physics**:  
-
-Elasticity, electrodynamics (Maxwell’s equations), gravitation (Einstein field equations), quantum mechanics (Schrödinger, Dirac).
-
-II. **Engineering**:  
-
-Structural analysis, heat exchangers, fluid dynamics (compressible/incompressible flows), aerodynamics.
-
-III. **Biology**:  
-
-Reaction-diffusion systems modeling pattern formation (Turing patterns), population genetics PDEs, tumor growth models.
-
-IV. **Finance**:  
-
-Derivative pricing (Black–Scholes, Heston, etc.), risk assessment PDEs.
-
-V. **Geosciences**:  
-
-Geological modeling, seismic wave propagation, reservoir simulation.
+- In **physics**, partial differential equations describe phenomena such as material elasticity, electromagnetic fields using Maxwell’s equations, gravitational fields through Einstein's equations, and quantum states via Schrödinger or Dirac equations.  
+- In **engineering**, they are essential for analyzing structures, designing efficient heat exchangers, modeling fluid flows (whether compressible or not), and studying aerodynamic forces.  
+- **Biology** uses these equations to simulate reaction-diffusion systems that explain pattern formation like Turing patterns, predict population genetics trends, and model tumor growth dynamics.  
+- In **finance**, partial differential equations help price derivatives using models like Black–Scholes or Heston and assess risks in financial systems.  
+- For **geosciences**, these equations support geological modeling, simulate the propagation of seismic waves, and guide reservoir simulation for resource management.  
 
 ### Limitations and Complexities
 
-I. **Complexity of Existence and Regularity**  
-   - PDE theory can be very intricate, especially for nonlinear PDEs. Proving existence, uniqueness, and *regularity* (smoothness of solutions) often requires advanced functional analysis (Sobolev spaces, distributions, etc.).
-II. **Nonlinear Phenomena**  
-   - Phenomena like shock waves (discontinuities), turbulence, and pattern formation complicate PDE theory and sometimes lead to open problems (e.g., Navier–Stokes regularity in 3D is a famous Millennium Prize problem).
-III. **Boundary and Initial Conditions**  
-   - The *type* of boundary conditions must match the PDE classification (elliptic, parabolic, hyperbolic) to ensure well-posedness.  
-   - Incorrect or incomplete boundary data can render a problem ill-posed (no solutions, non-unique solutions, or highly sensitive solutions).
-IV. **Dimension and Scalability**  
-   - Real-life problems (3D, time-dependent) lead to PDEs in 4D $(x,y,z,t)$ or more. Solving them accurately, even numerically, can be computationally expensive (the “curse of dimensionality”).
-V. **Parameter Sensitivity**  
-   - Physical or material parameters can drastically change solution behavior (e.g., transition from laminar to turbulent flow in fluid dynamics).
+- **Existence and regularity** of solutions to PDEs can be challenging to prove, particularly for nonlinear equations, requiring tools from advanced functional analysis such as Sobolev spaces and distributions.  
+- **Nonlinear phenomena** like shock waves, turbulence, and pattern formation add complexity to PDE theory, with some aspects remaining unresolved, such as the Navier–Stokes regularity problem in 3D.  
+- **Boundary and initial conditions** must be carefully chosen to align with the PDE classification (elliptic, parabolic, or hyperbolic) to ensure the problem is well-posed and avoids issues like non-unique or highly sensitive solutions. 
+- **Dimensionality** in real-world scenarios often leads to PDEs in 4D or higher (e.g., \(x, y, z, t\)), making accurate solutions computationally intensive due to the curse of dimensionality.  
+- **Parameter sensitivity** in PDEs means that small changes in physical or material parameters can lead to significant shifts in behavior, such as the onset of turbulence in fluid dynamics.
