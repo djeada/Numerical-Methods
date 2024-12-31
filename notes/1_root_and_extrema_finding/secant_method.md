@@ -8,7 +8,7 @@ Conceptually, the Secant Method constructs a secant line between two points $(x_
 
 Imagine plotting the function $f(x)$:
 
-![output(18)](https://github.com/user-attachments/assets/5e904eb0-1c4f-499a-9937-39fcdb210fde)
+![secant_method](https://github.com/user-attachments/assets/5e904eb0-1c4f-499a-9937-39fcdb210fde)
 
 The intersection of the secant line with the x-axis gives the next approximation $x_{n+1}$. Repeating this procedure leads to progressively better approximations of the root, assuming the method converges.
 
@@ -98,7 +98,8 @@ $$x_0=0, \quad x_1=1$$
 
 - $f(x_0)=f(0)=0^2-4=-4$.
 - $f(x_1)=f(1)=1^2-4=-3$.
-- Update:
+
+Update:
 
 $$x_2 = x_1 - f(x_1)\frac{x_1 - x_0}{f(x_1)-f(x_0)} = 1 -(-3)\frac{1-0}{(-3)-(-4)} = 1 -(-3)\frac{1}{-3+4} = 1-( -3 \times 1 ) = 1 +3 =4.$$
 
@@ -114,7 +115,8 @@ Now:
 
 - $x_1=1, x_2=4$.
 - $f(1)=-3, f(4)=4^2-4=16-4=12.$
-- Update:
+
+Update:
 
 $$x_3 = x_2 - f(x_2)\frac{x_2 - x_1}{f(x_2)-f(x_1)} = 4 - 12\frac{4-1}{12-(-3)} = 4 - 12\frac{3}{15}=4 -12 \times 0.2 =4 -2.4=1.6.$$
 
@@ -124,7 +126,8 @@ Now:
 
 - $x_2=4, x_3=1.6$.
 - $f(4)=12, f(1.6)=1.6^2-4=2.56-4=-1.44.$
-- Update:
+
+Update:
 
 $$x_4 = x_3 - f(x_3)\frac{x_3 - x_2}{f(x_3)-f(x_2)} = 1.6 - (-1.44)\frac{1.6-4}{-1.44-12} $$
 
@@ -146,32 +149,13 @@ However, let's simplify by noting that if we start closer to the root, the metho
 
 ### Advantages
 
-I. **No Derivative Required:**
-
-Unlike Newton’s method, the secant method does not need an analytic derivative, making it suitable for functions that are not easily differentiable.
-
-II. **Faster Convergence than Bisection:**
-
-Typically, the secant method converges more quickly than the bisection method, often exhibiting convergence rates faster than linear (though not as fast as Newton's quadratic convergence).
-
-III. **Simple Implementation:**
-
-The formula is straightforward and requires only function evaluations, no special bracket or derivative calculations.
+- The secant method avoids requiring an **analytic derivative**, unlike Newton’s method, which is particularly useful for functions that are difficult or impossible to differentiate analytically.
+- Convergence in the secant method is typically **faster than linear convergence**, which is common in the bisection method, though it is not as fast as the quadratic convergence seen in Newton's method.
+- The secant method is easy to **implement due to its simple iterative formula**, which relies only on function evaluations and does not require derivative or interval-based calculations.
 
 ### Limitations
 
-I. **No Guaranteed Convergence:**
-
-The secant method does not guarantee convergence for arbitrary initial points. Bad initial guesses can lead to divergence.
-
-II. **Multiple Roots Issues:**
-
-The method may converge to an unintended root if the function has multiple zeros and the initial guesses are placed closer to a different root.
-
-III. **Stability Depends on Initial Guesses:**
-
-The quality and location of the initial guesses $x_0, x_1$ heavily influence the convergence rate and the ultimate root to which the method converges.
-
-IV. **Not as Fast as Newton’s Method:**
-
-Although no derivatives are needed, the secant method does not usually achieve the rapid quadratic convergence of Newton’s method, making it a compromise between no-derivative methods and derivative-based methods.
+- Convergence is not **guaranteed**, as poor initial guesses can cause divergence or failure to find a root.
+- Functions with **multiple roots** pose challenges because the secant method may converge to an unintended root if the initial guesses are closer to a different zero.
+- The method’s **stability and efficiency are highly dependent** on the initial guesses, $x_0$ and $x_1$, which play a critical role in determining whether the method converges and how quickly.
+- The secant method does not offer **quadratic convergence** like Newton’s method, resulting in slower convergence rates compared to derivative-based methods when derivatives are available and feasible to compute.
