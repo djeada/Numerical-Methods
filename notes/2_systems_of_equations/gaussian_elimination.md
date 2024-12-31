@@ -4,7 +4,7 @@ Gaussian elimination is a fundamental algorithmic procedure in linear algebra us
 
 From a conceptual viewpoint, Gaussian elimination provides a structured approach to eliminating unknowns step-by-step. Geometrically, each linear equation represents a hyperplane in $n$-dimensional space, and the solution of the system corresponds to the intersection point(s) of these hyperplanes. Gaussian elimination successively "clears out" the variables, enabling a direct path to the solution (or revealing inconsistencies or infinite solution sets if they exist).
 
-![output(25)](https://github.com/user-attachments/assets/54011276-5a17-4666-8fbf-91d92ee9c30e)
+![gaussian_elimination](https://github.com/user-attachments/assets/54011276-5a17-4666-8fbf-91d92ee9c30e)
 
 ### Mathematical Formulation
 
@@ -212,16 +212,13 @@ The solution is $\mathbf{x} = (2,\, 3,\, -1)^\top$.
 
 ### Advantages
 
-I. **General Applicability**: Gaussian elimination can handle any $n \times n$ system of linear equations (even non-square systems, leading to detection of no solution or infinite solutions).
-
-II. **Foundation for Other Methods**: It is the fundamental procedure underlying more advanced factorization techniques like LU and QR decompositions.
-
-III. **Determines Rank and Inverse**: Beyond solving systems, Gaussian elimination can be used to determine the rank of a matrix and, if the matrix is invertible, to find its inverse by applying the method to $[A | I]$.
+- Gaussian elimination has **general applicability** to any $n \times n$ system of linear equations, and it can also identify cases where no solution or infinitely many solutions exist in non-square systems.
+- The method serves as a **foundation for advanced techniques** like LU decomposition and QR decomposition, forming a building block for many numerical algorithms.
+- It can be used to **determine the rank of a matrix** and to compute the inverse of a matrix when applicable by applying the procedure to the augmented matrix $[A | I]$.
 
 ### Limitations
 
-I. **Numerical Instability**: Without pivoting, the method can suffer severe round-off errors. Partial or complete pivoting improves stability but may increase computational effort.
+- **Numerical instability** is a concern due to round-off errors, particularly without pivoting. Partial or full pivoting mitigates this issue but may require additional computational steps.
+- The method’s **computational cost**, proportional to $O(n^3)$ operations, can become prohibitive for large-scale systems, making it less efficient than iterative methods for such cases.
+- A **zero pivot element** halts the process unless row interchanges are performed. Pivoting is necessary to avoid division by zero and to maintain algorithmic stability.
 
-II. **Computational Cost**: Gaussian elimination requires on the order of $O(n^3)$ floating-point operations, which can be expensive for very large $n$.
-
-III. **Division by Zero**: If a pivot element is zero, the method stalls unless row interchanges are performed. Such pivoting is essential to handle these cases.
