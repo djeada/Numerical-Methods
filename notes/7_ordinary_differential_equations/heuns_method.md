@@ -2,7 +2,7 @@
 
 Heun's method is an improved version of Euler's method that enhances accuracy by using an average of the slope at the beginning and the predicted slope at the end of the interval.
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 Assuming a first order differential equation:
 
@@ -20,7 +20,7 @@ $$ u_{n+1} = u_n + \frac{h}{2} [f(t_n, u_n) + f(t_{n} + h, \tilde{u}_{n+1})]. $$
 
 This process is repeated for each point in the desired interval.
 
-## Derivation
+### Derivation
 
 The second-order Taylor series expansion around $t$ is given by:
 
@@ -38,14 +38,14 @@ and approximating $u(t + h)$ by removing the higher order term yields Heun's met
 
 $$ u(t + h) \approx u(t) + \frac{h}{2} [f(t, u(t)) + f(t + h, \tilde{u}_{n+1})]. $$
 
-## Algorithm Steps
+### Algorithm Steps
 
 1. Begin with initial conditions $u_0$ and $t_0$.
 2. Compute $\tilde{u}_{n+1}$ using the predictor step.
 3. Calculate $u_{n+1}$ using the corrector step.
 4. Repeat steps 2-3 for all points in the desired interval.
 
-## Example
+### Example
 
 Consider the differential equation
 
@@ -75,12 +75,15 @@ $$ u(0.1) \approx u(0.05) + \frac{h}{2} [f(t, u(0.05)) + f(t + h, \tilde{u}_{n+1
 
 So, the approximate solution to $u(0.1)$ with Heun's method is $1.105158203125$.
 
-## Advantages
+### Advantages  
 
-- Heun's method is relatively straightforward and easy to understand.
-- It generally provides a more accurate approximation than Euler's method.
+- Heun's method is **simple** to implement and easy to understand, making it accessible for introductory numerical analysis.  
+- It often provides a more **accurate approximation** than Euler's method by incorporating a correction step based on the trapezoidal rule.  
+- The method offers a good balance between **computational simplicity** and improved accuracy for many non-stiff problems.  
 
-## Limitations
+### Limitations  
 
-- Although Heun's method is more accurate than Euler's method, it can still produce substantial error for large step sizes or complicated functions.
-- Similar to Euler's method, Heun's method may not provide accurate results for stiff systems or problems with high nonlinearity.
+- While more accurate than Euler’s method, Heun's method can still introduce **significant errors** when using large step sizes or dealing with highly nonlinear functions.  
+- Like other explicit methods, it is not well-suited for **stiff systems**, where implicit methods are typically more effective.  
+- The need to evaluate $f(t, u)$ at multiple points in each step increases the **computational effort** compared to simpler methods like Euler’s.  
+- The accuracy of Heun’s method is still limited for **complex dynamics**, requiring smaller step sizes to achieve desired precision, which may increase computational cost.  
