@@ -22,11 +22,11 @@ a_{n1} & a_{n2} & \cdots & a_{nn}
 $$
 
 $$
-\mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{bmatrix}
+\mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ \cdots \\ x_n \end{bmatrix}
 $$
 
 $$
-\mathbf{b} = \begin{bmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{bmatrix}
+\mathbf{b} = \begin{bmatrix} b_1 \\ b_2 \\ \cdots \\ b_n \end{bmatrix}
 $$
 
 We form the augmented matrix $[A|\mathbf{b}]$:
