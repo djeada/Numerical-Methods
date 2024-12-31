@@ -2,7 +2,7 @@
 
 The Taylor series is a fundamental tool in calculus and mathematical analysis, offering a powerful way to represent and approximate functions. By expanding a function around a specific point, known as the "center" or "point of expansion," we can express it as an infinite sum of polynomial terms derived from the function’s derivatives. This concept is especially useful for approximating functions that are difficult or impossible to compute directly, as well as for understanding the local behavior of functions.
 
-![output(28)](https://github.com/user-attachments/assets/cba25294-b445-42c2-9a3e-15dfc80813cf)
+![taylor_series](https://github.com/user-attachments/assets/cba25294-b445-42c2-9a3e-15dfc80813cf)
 
 ### Mathematical Formulation
 
@@ -53,28 +53,12 @@ This power series expansion converges for all real $x$, and even for complex $x$
 
 ### Advantages
 
-I. **Simplification into Polynomials**:  
-
-Representing functions as polynomials can make them easier to manipulate, integrate, differentiate, and approximate.
-
-II. **Local Approximation**:  
-
-By capturing information from all derivatives at a single point, Taylor series provide a rich local approximation, telling us not only about the function’s value but also its slope, curvature, and higher-order characteristics at that point.
-
-III. **Uniform Approach**:  
-
-Many functions, including transcendental functions (like $\sin x, \cos x, e^x$), can be expressed and handled using Taylor series in a uniform manner.
+- Representing functions as **polynomials simplifies operations** like integration, differentiation, and approximation, making complex functions easier to work with mathematically.
+- Taylor series provide a **local approximation** of functions by incorporating derivatives of all orders at a single point, capturing details such as slope, curvature, and higher-order behaviors.
+- The method offers a **uniform approach** to handling a wide range of functions, including transcendental functions like $\sin x$, $\cos x$, and $e^x$, through polynomial representations.
 
 ### Limitations
 
-I. **Local Validity**:  
-
-The series accurately represents $f(x)$ near $a$. As $x$ moves away from $a$, convergence might slow down or fail entirely, limiting the usefulness of the approximation far from the center.
-
-II. **Requirement of Infinite Differentiability**:  
-
-The function must be infinitely differentiable at $a$ for the Taylor series to exist. Not all functions meet this criterion.
-
-III. **Convergence Issues**:  
-
-Even if a function is infinitely differentiable, the Taylor series might not converge to the function for all $x$. Some functions have Taylor series that converge only within a restricted radius, or may fail to converge to the function’s actual values outside that radius.
+- The approximation has **local validity**, meaning it works best near the point $a$. Moving farther from $a$ can lead to reduced accuracy or even divergence.
+- Taylor series require **infinite differentiability** at the point $a$, limiting their applicability to functions that are not smooth or have points of non-differentiability.
+- Even for infinitely differentiable functions, **convergence issues** can arise, with some Taylor series converging only within a certain radius or failing to match the function outside that radius, affecting their global accuracy.
