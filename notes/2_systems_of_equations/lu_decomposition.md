@@ -254,12 +254,12 @@ $$x_1 = \frac{c_1 - u_{12}x_2 - u_{13}x_3}{u_{11}} = \frac{1 - 3(0.42029) - (-4)
 
 ### Advantages
 
-- Once $A = LU$ is computed, any system $A\mathbf{x} = \mathbf{b}$ can be solved efficiently by forward and backward substitution. This is particularly valuable when solving multiple systems with the same coefficient matrix but different right-hand-side vectors.
-- LU decomposition organizes the elimination steps into structured matrices $L$ and $U$, making the process more systematic. With partial pivoting, LU decomposition becomes numerically stable for a wide class of problems.
-- LU decomposition can be used to quickly compute determinants ($\det(A) = \prod u_{ii}$) and inverses of matrices, as well as to assist in more advanced factorizations and decompositions.
+- Once $A = LU$ is computed, **solving multiple systems $A\mathbf{x} = \mathbf{b}$** becomes efficient, as only forward and backward substitution are required for each new right-hand-side vector $\mathbf{b}$. This is particularly beneficial in applications requiring repeated solves with the same matrix $A$.
+- LU decomposition organizes the **elimination steps into the matrices $L$ (lower triangular) and $U$ (upper triangular)**, simplifying the process and providing a structured representation of the system. Partial pivoting can be incorporated, enhancing numerical stability for a wide range of problems.
+- It allows for the efficient computation of **matrix determinants** (via $\det(A) = \prod u_{ii}$) and matrix inverses, and serves as a building block for advanced numerical techniques, such as eigenvalue computations and solving partial differential equations.
 
 ### Limitations
 
-- Not all matrices are conveniently LU decomposable without row interchanges. For many practical cases, partial pivoting is performed, leading to $PA = LU$ instead of $A = LU$.
-- If $A$ has zeros on the diagonal or does not satisfy certain conditions, it may not be possible to obtain an LU decomposition without permutations.
-- For large sparse matrices, naive LU decomposition may lead to significant fill-in (new nonzero elements in $L$ and $U$), increasing memory and computation costs.
+- Not all matrices are directly LU decomposable without row interchanges. For many practical cases, **partial pivoting** is required, resulting in a decomposition of the form $PA = LU$, where $P$ is a permutation matrix.
+- If the matrix $A$ has **zero diagonal elements or does not meet certain structural conditions**, direct LU decomposition without permutations may fail or lead to numerical instability.
+- For **large sparse matrices**, naive LU decomposition can cause significant **fill-in**, where new nonzero elements appear in $L$ and $U$. This increases both memory usage and computational complexity, potentially rendering the method impractical without specialized sparse matrix techniques.
