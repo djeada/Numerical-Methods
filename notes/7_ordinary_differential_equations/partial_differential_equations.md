@@ -10,7 +10,7 @@ III. The **partial derivatives** of $u$ with respect to these independent variab
 
 Formally, a PDE can be written as:
 
-$$F\bigl( x_1, \ldots, x_d,  u, u_{x_1}, u_{x_2},\ldots, u_{x_1 x_1}, u_{x_1 x_2},\ldots \bigr) = 0$
+$$F\bigl( x_1, \ldots, x_d,  u, u_{x_1}, u_{x_2},\ldots, u_{x_1 x_1}, u_{x_1 x_2},\ldots \bigr) = 0$$
 
 where $u_{x_i}$ denotes the partial derivative of $u$ with respect to $x_i$, and $u_{x_i x_j}$ denotes second partial derivatives, and so on.
 
