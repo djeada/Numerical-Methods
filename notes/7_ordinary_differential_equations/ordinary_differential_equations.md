@@ -94,24 +94,22 @@ where each $a_k(t)$ (for $k = 0,1,\dots,n$) and $g(t)$ depend only on $t$. No pr
   $$a_n(t)y^{(n)} + a_{n-1}(t)y^{(n-1)} + \cdots + a_1(t)y' + a_0(t)y = 0.$$
 - It is **nonhomogeneous (or inhomogeneous)** if $g(t) \neq 0$.
 
-### 3.5 Autonomous ODEs
+#### Autonomous ODEs
 
 - An **autonomous** ODE does not explicitly depend on $t$. Formally, it takes a form such as $y' = f(y)$.
 - The solutions and their qualitative behavior can often be studied using **phase-line analysis** (for first-order autonomous ODEs) or **phase-plane analysis** (for second-order systems), etc.
 
-## 4. Mathematical Forms of Ordinary Differential Equations
+### Mathematical Forms of Ordinary Differential Equations
 
 Below are some standard forms that frequently appear.
 
-### 4.1 General First-Order ODE
+#### General First-Order ODE
 
-$$\frac{dy}{dt} = f\bigl(t, y(t)\bigr), 
+$$\frac{dy}{dt} = f\bigl(t, y(t)\bigr), \quad y(t_0) = y_0$$
 
-\quad 
-y(t_0) = y_0.$$
 - **Goal**: Find a function $y(t)$ that satisfies the differential equation for $t$ in some interval containing $t_0$ and also satisfies the initial condition $y(t_0) = y_0$.
 
-### 4.2 First-Order Linear ODE
+#### First-Order Linear ODE
 
 $$\frac{dy}{dt} + p(t)y = g(t).$$
 
@@ -119,15 +117,16 @@ This is a subset of the above form but is special because its solution technique
 
 I. Multiply both sides by the integrating factor
 
-   $$\mu(t) = e^{\int p(t)dt}.$$
+$$\mu(t) = e^{\int p(t)dt}.$$
 
 II. Rewrite the left-hand side as the derivative of $\mu(t)y(t)$.
 
 III. Integrate both sides w.r.t. $t$ to solve for $y(t)$.
 
-### 4.3 Second-Order Linear ODE
+#### Second-Order Linear ODE
 
-$$\frac{d^2y}{dt^2} + a(t)\frac{dy}{dt} + b(t)y = g(t).$$
+$$\frac{d^2y}{dt^2} + a(t)\frac{dy}{dt} + b(t)y = g(t)$$
+
 - **Homogeneous** if $g(t) = 0$.
 - **Nonhomogeneous** if $g(t) \neq 0$.
 
@@ -136,28 +135,32 @@ $$\frac{d^2y}{dt^2} + a(t)\frac{dy}{dt} + b(t)y = g(t).$$
 When $a$ and $b$ are constants, the ODE
 
 $$y'' + ay' + by = g(t)$$
+
 can be solved using:
 
 I. **Characteristic equation** for the associated homogeneous part:
 
-   $$r^2 + ar + b = 0.$$
+$$r^2 + ar + b = 0$$
+
 II. The solution of the homogeneous ODE depends on the discriminant $\Delta = a^2 - 4b$:
-   - If $\Delta > 0$, two distinct real roots $r_1$ and $r_2$. 
-   - If $\Delta = 0$, a repeated real root $r$.
-   - If $\Delta < 0$, two complex conjugate roots $\alpha \pm i\beta$.
+
+- If $\Delta > 0$, two distinct real roots $r_1$ and $r_2$. 
+- If $\Delta = 0$, a repeated real root $r$.
+- If $\Delta < 0$, two complex conjugate roots $\alpha \pm i\beta$.
 
 III. A **particular solution** $y_p(t)$ must be found (e.g., via the method of undetermined coefficients or variation of parameters) for the nonhomogeneous case.
 
 IV. The **general solution** is $y(t) = y_h(t) + y_p(t)$.
 
-### 4.4 Autonomous ODE
+#### Autonomous ODE
 
 $$\frac{dy}{dt} = f\bigl(y(t)\bigr).$$
-- Analyzing equilibrium (steady-state) solutions where $f(y)=0$ is a powerful tool for studying the long-term behavior (qualitative analysis).
 
-## 5. Solutions of Ordinary Differential Equations
+Analyzing equilibrium (steady-state) solutions where $f(y)=0$ is a powerful tool for studying the long-term behavior (qualitative analysis).
 
-### 5.1 General Remarks
+### Solutions of Ordinary Differential Equations
+
+#### General Remarks
 
 A **solution** to an ODE on an interval $I$ is a function $y(t)$ that:
 
@@ -165,7 +168,7 @@ I. Is differentiable up to the required order on $I$.
 
 II. Substitutes into the ODE to satisfy it identically for all $t \in I$.
 
-### 5.2 General vs. Particular Solutions
+#### General vs. Particular Solutions
 
 - A **general solution** often contains constants (like $C_1, C_2, \ldots$) that can be set by initial or boundary conditions.
 - A **particular solution** is a single, specific solution that satisfies both the ODE and a given set of boundary/initial conditions.
@@ -174,103 +177,83 @@ II. Substitutes into the ODE to satisfy it identically for all $t \in I$.
 
 I. **First-Order Linear with Constant Coefficient**  
 
-   $$\frac{dy}{dt} = ay 
+$$\frac{dy}{dt} = ay \quad \longrightarrow \quad \frac{dy}{y} = adt$$
 
-   \quad \longrightarrow \quad
+Integrating both sides:
 
-   \frac{dy}{y} = adt.$$
+$$\ln|y| = at + C \quad \longrightarrow \quad y(t) = C_1 e^{a t}$$
 
-   Integrating both sides:
-
-   $$\ln|y| = at + C \quad \longrightarrow \quad y(t) = C_1 e^{a t}.$$
-
-   If $y(t_0) = y_0$, then $C_1 = y_0 e^{-a t_0}$.
+If $y(t_0) = y_0$, then $C_1 = y_0 e^{-a t_0}$.
 
 II. **Second-Order Homogeneous with Constant Coefficients**  
 
-   $$y'' + ay' + by = 0.$$
-   The characteristic equation is $r^2 + ar + b = 0$. Let $\Delta = a^2 - 4b$. 
-   - If $\Delta > 0$ with roots $r_1, r_2$, the general solution is
+$$y'' + ay' + by = 0.$$
+The characteristic equation is $r^2 + ar + b = 0$. Let $\Delta = a^2 - 4b$. 
+- If $\Delta > 0$ with roots $r_1, r_2$, the general solution is
 
-     $$y(t) = C_1 e^{r_1 t} + C_2 e^{r_2 t}.$$
-   - If $\Delta = 0$ with repeated root $r$, the general solution is
+ $$y(t) = C_1 e^{r_1 t} + C_2 e^{r_2 t}.$$
+- If $\Delta = 0$ with repeated root $r$, the general solution is
 
-     $$y(t) = \bigl(C_1 + C_2t\bigr) e^{r t}.$$
-   - If $\Delta < 0$ with complex roots $\alpha \pm i\beta$, the general solution is
+ $$y(t) = \bigl(C_1 + C_2t\bigr) e^{r t}.$$
+- If $\Delta < 0$ with complex roots $\alpha \pm i\beta$, the general solution is
 
-     $$y(t) = e^{\alpha t}\bigl(C_1 \cos(\beta t) + C_2 \sin(\beta t)\bigr).$$
+ $$y(t) = e^{\alpha t}\bigl(C_1 \cos(\beta t) + C_2 \sin(\beta t)\bigr).$$
 
 III. **Second-Order Nonhomogeneous with Constant Coefficients**  
 
-   $$y'' + ay' + by = g(t).$$
+$$y'' + ay' + by = g(t).$$
 
-   One finds the **general solution** as
+One finds the **general solution** as
 
-   $$y(t) = y_h(t) + y_p(t),$$
-   where $y_h(t)$ is the general solution of the homogeneous equation, and $y_p(t)$ is any particular solution of the original nonhomogeneous equation.
+$$y(t) = y_h(t) + y_p(t),$$
+where $y_h(t)$ is the general solution of the homogeneous equation, and $y_p(t)$ is any particular solution of the original nonhomogeneous equation.
 
-## 6. Examples of Ordinary Differential Equations
+### Examples of Ordinary Differential Equations
 
 I. **Newton’s Second Law of Motion**  
 
-   Often written as $F = ma$. Since $a = \frac{d^2 x}{dt^2}$,
+Often written as $F = ma$. Since $a = \frac{d^2 x}{dt^2}$,
 
-   $$m\frac{d^2x}{dt^2} = F(x, t).$$
+$$m\frac{d^2x}{dt^2} = F(x, t).$$
 
-   This is a **second-order** ODE. If $F$ depends only on $x$ and $t$ (and possibly $v = x'$), it may be nonlinear or linear (if $F$ is linear in $x$, $x'$, etc.).
+This is a **second-order** ODE. If $F$ depends only on $x$ and $t$ (and possibly $v = x'$), it may be nonlinear or linear (if $F$ is linear in $x$, $x'$, etc.).
 
 II. **Population Dynamics**  
 
-   The logistic model:
+The logistic model:
 
-   $$\frac{dP}{dt} = rP \left(1 - \frac{P}{K}\right),$$
-   is a **first-order** **nonlinear** **autonomous** ODE describing population growth with a carrying capacity $K$.
+$$\frac{dP}{dt} = rP \left(1 - \frac{P}{K}\right),$$
+is a **first-order** **nonlinear** **autonomous** ODE describing population growth with a carrying capacity $K$.
 
 III. **RC Circuit (First-Order Linear ODE)**  
 
-   Consider a resistor $R$ in series with a capacitor $C$. The voltage $V_C(t)$ across the capacitor satisfies:
+Consider a resistor $R$ in series with a capacitor $C$. The voltage $V_C(t)$ across the capacitor satisfies:
 
-   $$C\frac{dV_C}{dt} + \frac{V_C(t)}{R} = \frac{V_{\text{in}}(t)}{R}.$$
+$$C\frac{dV_C}{dt} + \frac{V_C(t)}{R} = \frac{V_{\text{in}}(t)}{R}.$$
 
-   Rearranged:
+Rearranged:
 
-   $$\frac{dV_C}{dt} + \frac{1}{RC}V_C(t) = \frac{V_{\text{in}}(t)}{RC}.$$
+$$\frac{dV_C}{dt} + \frac{1}{RC}V_C(t) = \frac{V_{\text{in}}(t)}{RC}.$$
 
-   This is a first-order linear ODE.
+This is a first-order linear ODE.
 
-## 7. Applications
+### Applications
 
 ODEs are ubiquitous in mathematical modeling across disciplines:
 
-- **Physics**:  
-  - Quantum mechanics (via the Schrödinger equation, which is often partial differential but can reduce to ODEs in special cases).
-  - Mechanics of particles and rigid bodies (using Newton’s laws or Lagrangian/Hamiltonian formulations).
-- **Engineering**:  
-  - System dynamics, control theory (transfer functions, state-space models).
-  - Electronics (RLC circuits, operational amplifiers).
-- **Biology and Epidemiology**:  
-  - Spread of infectious diseases (SIR models).
-  - Biochemical reaction kinetics (Michaelis–Menten equations).
-- **Economics and Finance**:  
-  - Dynamical systems in macroeconomics (growth models).
-  - Option pricing (although typically PDEs, certain simplifications lead to ODEs).
-- **Chemistry**:  
-  - Reaction-rate equations (e.g., the rate of product formation in chemical kinetics).
+- **Quantum mechanics** uses the Schrödinger equation, which can reduce to ordinary differential equations in specific cases.  
+- The motion of particles and rigid bodies is described by Newton's laws or through **Lagrangian/Hamiltonian formulations**, involving ordinary differential equations.  
+- **System dynamics** and control theory rely on transfer functions and state-space models based on ordinary differential equations.  
+- Electrical circuits, such as **RLC circuits** and operational amplifiers, are modeled using ordinary differential equations to describe voltage and current over time.  
+- The spread of infectious diseases is modeled with the **SIR framework**, a system of ordinary differential equations for population groups.  
+- **Biochemical reactions** are often described by the Michaelis–Menten equations, which are ordinary differential equations for reaction rates.  
+- **Macroeconomic systems** use dynamical models to study growth and other phenomena through ordinary differential equations.  
+- **Option pricing** models, while typically based on partial differential equations, can simplify to ordinary differential equations under certain assumptions.  
+- **Chemical kinetics** describes reaction rates using ordinary differential equations for product formation.  
 
-## 8. Limitations and Complexities
+### Limitations and Complexities
 
-I. **Analytical Solutions May Not Exist**  
-
-Many ODEs, especially nonlinear ones, do not admit solutions in closed-form expressions. Numerical methods (Euler’s method, Runge–Kutta methods, etc.) become critical.
-
-II. **High-Order and Nonlinear ODEs**  
-
-As the order or nonlinearity increases, the complexity of solving and analyzing solutions grows. Certain qualitative methods (stability analysis, phase-plane diagrams, etc.) are used instead of closed-form solutions.
-
-III. **Dependence on Assumptions**  
-
-Often, ODE models rely on simplifying assumptions (e.g., linearization, ignoring certain effects). If these assumptions fail, the applicability of the solution is limited.
-
-IV. **Parameter Sensitivity**  
-
-In many real-world models, slight changes in parameters can lead to drastically different solutions (chaotic systems).
+- **Analytical solutions** often do not exist for many ordinary differential equations, especially nonlinear ones, requiring the use of numerical methods like Euler’s method and Runge–Kutta methods.  
+- **High-order and nonlinear ODEs** become increasingly complex to solve, leading to reliance on qualitative methods such as stability analysis and phase-plane diagrams instead of closed-form solutions.  
+- **Simplifying assumptions** underpin many ODE models, such as linearization or ignoring certain effects, but these assumptions can limit the solution's applicability when they do not hold.  
+- **Parameter sensitivity** in real-world models means small changes in parameters can result in drastically different outcomes, as seen in chaotic systems.  
