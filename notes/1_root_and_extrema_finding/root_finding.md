@@ -127,12 +127,12 @@ Open methods rely on derivative information or estimates, and do not require an 
 
 #### Example Flow of Decision
 
-1. **Does $f$ have an easily detectable sign change?**  
-   - If yes, bracket with Bisection or False Position.  
-   - If no, try a scanning approach or use domain knowledge to guess an interval.
-2. **Is $f'(x)$ analytically or numerically cheap to compute?**  
-   - If yes, Newton’s method is often best for faster local convergence.  
-   - If no, try secant or other derivative-free methods.
-3. **Is reliability absolutely critical?**  
-   - Use a robust method (bracketing or Brent’s). Possibly combine bracket-based bounding with open steps.
-carefully balancing these factors, one can efficiently and reliably approximate solutions to $f(x) = 0$ across a wide spectrum of applications, from small-scale problems to large-scale engineering simulations.
+- Determine if $f(x)$ has an easily detectable sign change.  
+- If a sign change is present, use bracketing methods like bisection or false position to isolate the root.  
+- If no sign change is found, scan the domain or apply domain knowledge to guess a valid interval.  
+- Assess if $f'(x)$ is analytically or numerically cheap to compute.  
+- If derivatives are easy to compute, use Newton’s method for faster local convergence.  
+- If derivatives are not available or are expensive, use derivative-free methods like secant.  
+- Decide if reliability is a key priority for the solution.  
+- If reliability is critical, select robust methods like Brent’s, which combine bracketing and open steps.  
+- Balance these considerations to choose a method suitable for the specific problem and application context.  
