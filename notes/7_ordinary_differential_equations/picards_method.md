@@ -8,7 +8,7 @@ Picard's method originates from the idea of expressing the solution to an ODE as
 
 $$y_{n+1}(x) = y_0 + \int_{x_0}^{x} f(t, y_n(t)) dt$$
 
-## Derivation
+### Derivation
 
 Picard's method of successive approximations is based on the principle of transforming the differential equation into an equivalent integral equation, which can then be solved iteratively. Let's take a look at how it's derived.
 
@@ -38,13 +38,13 @@ where $y_0(t)$ is the initial guess (often taken as the constant function $y_0(t
 
 Each approximation $y_{n+1}(t)$ is defined in terms of the previous approximation $y_n(t)$, creating an iterative process which can be repeated until a desired level of accuracy is achieved.
 
-## Algorithm steps
+### Algorithm steps
 
 1. Start with an initial approximation $y_0(x)$.
 2. Calculate the next approximation $y_{n+1}(x) = y_0 + \int_{x_0}^{x} f(t, y_n(t)) dt$.
 3. Repeat step 2 for a pre-determined number of iterations $n$ or until the approximation of the solution meets the required accuracy.
 
-## Example Application of Picard's Method
+### Example Application
 
 Suppose we are given the ODE $y' = x + y$ with the initial condition $y(0) = 1$.
 
@@ -56,12 +56,17 @@ Starting with an initial approximation $y_0(x) = 1$, we follow these steps:
 
 In this example, the successive approximations for the solution of the ODE $y' = x + y$ become $y(x) = 1 + \frac{1}{2}x^2 + x$ and $y(x) = 1 + \frac{1}{6}x^3 + x^2 + x$.
 
-## Advantages of Using Picard's Method
+### Advantages
 
-- Picard's method is relatively simple to apply and offers a series-based solution to the ODE, which can be beneficial for understanding the structure of the solution.
+- Picard's method provides a **straightforward iterative process** for solving ODEs and is particularly useful in theoretical contexts for proving the existence and uniqueness of solutions.  
+- The **series-based solution** derived from Picard's method allows for a clear understanding of the solution's structure and behavior in mathematical terms.  
+- It can serve as a foundation for teaching **iterative techniques** and for introducing students to numerical and analytical solution methods.  
+- The method is well-suited for equations where both the function \( f(x, y) \) and its **integral** are smooth, ensuring convergence in many standard cases.  
 
-## Limitations of Picard's Method
+### Limitations
 
-- Every step in Picard's method involves evaluating an integral, which can be computationally expensive for complex functions or high-precision requirements.
-- The convergence of the solution is not always guaranteed. For instance, the method may not work if the function $f(x, y)$ or its integral has certain discontinuities or other problematic features.
-- In certain cases, such as for stiff or highly nonlinear ODEs, Picard's method might converge slowly, which can be a computational disadvantage.
+- Each iteration of **Picard's method** involves evaluating an integral, which becomes computationally demanding for complex or multidimensional functions.  
+- **Convergence** is not guaranteed for functions \( f(x, y) \) that are discontinuous, unbounded, or violate Lipschitz conditions in the region of interest.  
+- The method tends to converge slowly for **stiff or nonlinear ODEs**, making it less practical for such problems compared to other numerical methods.  
+- Applying Picard's method can be impractical for ODEs requiring **high precision**, as the number of iterations to achieve accuracy grows significantly.  
+- The approach is not suitable for equations where **numerical solutions** are desired quickly, as alternative methods like Runge-Kutta or finite difference techniques are often more efficient.  
