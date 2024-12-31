@@ -185,34 +185,15 @@ $$a_3 = 1.875, \quad b_3 = 2.5.$$
 
 Continuing this process, as we further narrow down the interval, we find that the root approaches $x=2$. Indeed, $f(2)=0$ exactly, so the root is $x=2$.
 
-### Advantages
+### Advantages  
 
-I. **Guaranteed Convergence:**  
+1. **Guaranteed convergence** is ensured if $f$ is continuous and the interval $[a, b]$ satisfies $f(a)f(b) < 0$, making the method reliable for root-finding.  
+2. The **robustness and simplicity** of the method come from its reliance only on function evaluations, requiring no derivatives or complex operations, making it easy to use across various problems.  
+3. The method’s **stable and predictable behavior** allows for precise estimation of the number of iterations required to achieve a desired accuracy since the interval halves with each iteration.  
 
-If $f$ is continuous and the initial interval $[a,b]$ satisfies $f(a)f(b)<0$, the method will converge to a root.
+### Limitations  
 
-II. **Robustness and Simplicity:**  
-
-The method requires only function evaluations—no derivatives or complicated operations are needed. This makes it easy to understand, implement, and apply to a wide range of problems.
-
-III. **Stable and Predictable Behavior:**  
-
-The number of steps required to achieve a given accuracy can be predicted since the interval size reduces by half each iteration.
-
-### Limitations
-
-I. **Slow Convergence:**  
-
-The bisection method converges linearly, which can be slow compared to other methods like Newton-Raphson or Secant methods, especially for well-behaved functions where derivative information is available.
-
-II. **Requires Initial Bracketing of the Root:**  
-
-You must know two points $[a,b]$ such that $f(a)f(b)<0$. If no such interval is known, it can be hard to apply the method.
-
-III. **Single Root Finding in a Given Interval:**  
-
-The method only finds one root in a given interval. If multiple roots exist, each must be isolated and bracketed separately.
-
-IV. **Not Ideal for Complex or Multiple Roots Situations:**  
-
-The method does not take advantage of any additional information like derivatives or higher-order approximations. Thus, it may not be suitable for more complicated root-finding scenarios where more advanced methods excel.
+1. **Slow convergence** is a drawback, as the method converges linearly, making it inefficient compared to faster methods like Newton-Raphson or Secant methods for well-behaved functions.  
+2. The requirement for an **initial bracketing of the root** means that you must first identify two points $[a, b]$ where $f(a)f(b) < 0$, which can be challenging if the function’s behavior is not well-known.  
+3. The method is limited to **finding a single root** within a given interval, necessitating separate bracketing for each root in cases where multiple roots exist.  
+4. **Inapplicability to complex or multiple root situations** arises because the method does not use additional information like derivatives or higher-order approximations, making it less suitable for complicated problems.  
