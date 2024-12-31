@@ -130,38 +130,17 @@ $$x_3 = x_2 - \alpha f'(x_2) = 3.2 - 0.1 \cdot 6.4 = 3.2 - 0.64 = 2.56.$$
 
 Continuing this process, we observe that $x_n$ keeps getting closer to 0. Over many iterations, the point will approach the exact minimum at $x = 0$.
 
-### Advantages
+### Advantages  
 
-I. **Simplicity and Ease of Implementation:**  
+1. **Simplicity and ease of implementation** make gradient descent a popular choice, as it only requires first-order gradients and is straightforward to code.  
+2. **Scalability** allows gradient descent to handle problems with large parameter spaces, such as deep learning models with millions of parameters, and advanced variants like stochastic gradient descent enhance its applicability in machine learning.  
+3. **No need for second-order information** makes it computationally cheaper than methods requiring Hessians, as it relies solely on first-order derivatives.  
+4. **Versatility** enables its application to a wide range of differentiable functions, particularly in complex, high-dimensional optimization problems.  
 
-Gradient descent requires only the first-order gradient and is straightforward to code, making it popular across many applications.
+### Limitations  
 
-II. **Scalability:**  
+1. **Learning rate sensitivity** poses a challenge, as selecting a learning rate \(\alpha\) that is too large can cause divergence, while a small \(\alpha\) may lead to very slow convergence.  
+2. **Local minima and saddle points** in non-convex optimization problems can trap gradient descent, preventing it from finding the global minimum or causing it to plateau.  
+3. **Ill-conditioned problems** with elongated contours or ravines can cause inefficient convergence, often requiring preconditioning or adaptive techniques to address the issue.  
+4. **Dependence on good initialization** means poor starting points may lead to suboptimal solutions or prolonged convergence, particularly in functions with challenging landscapes.
 
-It is well-suited for problems with very large parameter spaces, such as deep learning models with millions of parameters. More advanced variants (e.g., stochastic gradient descent) are widely used in machine learning.
-
-III. **No Need for Second-Order Information:**  
-
-Unlike methods requiring Hessians, gradient descent only needs first-order derivatives, which are often cheaper to compute.
-
-IV. **Versatility:**  
-
-It can be applied to a broad class of differentiable functions and is often effective for complex, high-dimensional optimization problems.
-
-### Limitations
-
-I. **Learning Rate Sensitivity:**  
-
-Choosing a good learning rate $\alpha$ is challenging. If $\alpha$ is too large, the algorithm may diverge; if it is too small, convergence can be painfully slow.
-
-II. **Local Minima and Saddle Points:**  
-
-In non-convex optimization, gradient descent may get stuck in local minima or plateau at saddle points, failing to find the global minimum.
-
-III. **Ill-Conditioned Problems:**  
-
-When the Hessian of $f$ is ill-conditioned (e.g., the function's surface is elongated or has ravines), gradient descent may zigzag or converge slowly, requiring techniques like preconditioning or adaptive learning rates.
-
-IV. **Dependence on Good Initialization:**  
-
-Although gradient descent can work from a wide range of starting points, very poor initializations can lead to slow convergence or suboptimal solutions, depending on the function's structure.
