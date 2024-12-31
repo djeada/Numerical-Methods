@@ -133,28 +133,12 @@ Continue iterating until $|x^{(k+1)} - x^{(k)}|$ and $|y^{(k+1)} - y^{(k)}|$ are
 
 ### Advantages
 
-I. **Simplicity of Implementation**:  
-
-The Jacobi method is conceptually straightforward. Each new approximation uses only values from the previous iteration, making the code easy to write and understand.
-
-II. **Parallelization**:  
-
-Since each component $x_i^{(k+1)}$ depends exclusively on old values $x_j^{(k)}$, the computations for each $i$ can be done in parallel, taking advantage of modern multi-core or GPU architectures.
-
-III. **Wide Applicability (With Conditions)**:  
-
-The method can be applied to any system with nonzero diagonal elements. While diagonal dominance ensures convergence, modifications or relaxation schemes can help the method converge in other contexts.
+- The **simplicity of implementation** is a key advantage of the Jacobi method, as each new approximation depends solely on values from the previous iteration, making the algorithm straightforward to code and understand.
+- The Jacobi method supports **parallelization** effectively because each component $x_i^{(k+1)}$ depends only on values $x_j^{(k)}$ from the previous iteration. This allows computations for all $i$ to be performed simultaneously, leveraging modern parallel computing hardware such as multi-core CPUs or GPUs.
+- The method offers **wide applicability** as it can be used for any system where the diagonal elements of $A$ are nonzero. While convergence is guaranteed under diagonal dominance, additional techniques such as relaxation can expand its usability.
 
 ### Limitations
 
-I. **Need for Diagonal Dominance**:  
-
-If the matrix $A$ is not diagonally dominant or does not meet certain convergence criteria, the Jacobi method may fail to converge, oscillate, or converge very slowly.
-
-II. **Slow Convergence**:  
-
-Compared to other iterative methods like Gauss-Seidel, the Jacobi method often converges more slowly. In practice, one might prefer more advanced methods or use Jacobi as a preconditioner.
-
-III. **Sensitivity to Initial Guess**:  
-
-Although the initial guess does not affect final correctness if the method converges, a poor initial guess can lead to an increased number of iterations or stagnation near a suboptimal region.
+- **Diagonal dominance or specific convergence conditions** are necessary for the Jacobi method to work effectively. Without these, the method may fail to converge, oscillate, or converge at an impractically slow rate.
+- The Jacobi method suffers from **slow convergence** compared to more advanced iterative methods like Gauss-Seidel or conjugate gradient methods. Its relative inefficiency often makes it less attractive for practical applications unless used as part of a preconditioning strategy.
+- The method exhibits **sensitivity to the initial guess**. Although a poor initial guess does not affect the correctness of the final solution if convergence occurs, it can significantly increase the number of iterations needed or result in stagnation near suboptimal values.
