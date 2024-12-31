@@ -2,7 +2,7 @@
 
 Linear interpolation is one of the most basic and commonly used interpolation methods. The idea is to approximate the value of a function between two known data points by assuming that the function behaves linearly (like a straight line) between these points. Although this assumption may be simplistic, it often provides a reasonable approximation, especially when the data points are close together or the underlying function is relatively smooth.
 
-**Conceptual Illustration (Not Removing the Plot)**:
+**Conceptual Illustration**:
 
 Imagine you have two points on a graph:
 
@@ -84,12 +84,12 @@ So, the line passing through $(-2,0)$ and $(2,2)$ gives $y=1.5$ when $x=1$.
 
 ### Advantages
 
-- **Simplicity**: The calculation is straightforward and quick.
-- **Minimal Data Requirements**: Only two data points are needed.
-- **Local Approximation**: Good approximation if the function is nearly linear in the interval.
+- The method offers **simplicity**, as the calculation involves straightforward arithmetic, making it easy and quick to apply.
+- **Minimal data requirements** make it practical, needing only two data points to estimate intermediate values.
+- It provides a **local approximation**, working well when the function is nearly linear within the specified interval.
 
 ### Limitations
 
-- **Linear Assumption**: If the true relationship is not nearly linear, the approximation can be poor.
-- **No Derivative Information**: The method does not use any information about the slope or curvature of the underlying function.
-- **Accuracy**: The accuracy diminishes as the interval $(x_{i+1}-x_i)$ grows large or the function becomes more non-linear.
+- The **linear assumption** can lead to poor results if the actual relationship between points is not close to linear.
+- Linear interpolation uses **no derivative information**, ignoring the slope or curvature of the function, which could enhance accuracy.
+- **Accuracy diminishes** as the interval between points increases or as the function becomes more non-linear, leading to potential errors in approximation.
