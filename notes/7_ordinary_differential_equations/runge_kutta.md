@@ -2,7 +2,7 @@
 
 The Runge-Kutta method is part of a family of iterative methods, both implicit and explicit, which are frequently employed for the numerical integration of ordinary differential equations (ODEs). This family encompasses widely recognized methods like the Euler Method, Heun's method (a.k.a., the 2nd-order Runge-Kutta), and the 4th-order Runge-Kutta method.
 
-## Mathematical Formulation
+### Mathematical Formulation
 
 The first-order ODE that is typically used in the Runge-Kutta methods takes the following form:
 
@@ -22,7 +22,7 @@ $$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3),$$
 
 $$u(t + \Delta t) = u(t) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4).$$
 
-## Derivation of Runge-Kutta Method
+### Derivation of Runge-Kutta Method
 
 The derivation of the Runge-Kutta methods, especially the 4th order Runge-Kutta method, begins with an initial condition and attempts to estimate the solution value after a small step $\Delta t$. This is achieved by taking weighted averages of increments at the beginning, middle, and end of the interval. The purpose is to imitate a Taylor series expansion, but without the necessity of computing higher derivatives.
 
@@ -54,14 +54,14 @@ $$u(t + \Delta t) = u(t) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4),$$
 
 In this method, the weights of $k_1, k_2, k_3, k_4$ (1/6, 1/3, 1/3, 1/6) are chosen such that the error term is $O(\Delta t^5)$, indicating that the local truncation error at each step is proportional to the fifth power of the step size, and the global truncation error (after $N$ steps) is proportional to the fourth power of the step size.
 
-## Algorithm Steps
+### Algorithm Steps
 
 1. Begin with the initial condition $u(t_0) = u_0$.
 2. For each step, compute $k_1, k_2, k_3, k_4$ as indicated above.
 3. Update $u(t + \Delta t) = u(t) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$.
 4. Repeat steps 2 and 3 until a specified number of iterations is reached or the solution approximation is satisfactory.
 
-## Example
+### Example
 
 Consider the differential equation
 
@@ -109,12 +109,16 @@ $$u(0.1) = 1.05104166667 + \frac{1}{6}(0.0525520833335 + 2 \cdot 0.0531899049680
 
 $$u(0.1) = 1.10517087727.$$
 
-## Advantages
+### Advantages  
 
-- Runge-Kutta methods, especially the 4th order, provide a good compromise between accuracy and computational effort.
-- They do not require the computation of higher derivatives of $f(t, u)$, unlike Taylor series methods.
+- Runge-Kutta methods, particularly the 4th order, strike a **balance** between computational efficiency and solution accuracy, making them widely used in practice.  
+- They avoid the need to compute **higher derivatives** of $f(t, u)$, which can be complex or impractical in certain problems, unlike Taylor series methods.  
+- The methods are versatile and can handle a wide range of **initial value problems**, making them applicable in diverse fields such as physics, engineering, and biology.  
+- **Intermediate steps** within the Runge-Kutta framework improve stability and accuracy compared to simpler methods like Euler’s method.  
 
-## Limitations
+### Limitations  
 
-- Runge-Kutta methods can become inefficient for stiff differential equations, which may require an implicit method.
-- The error accumulates with each step, hence they may not be suitable for problems requiring high precision.
+- Runge-Kutta methods may be inefficient or fail entirely for **stiff differential equations**, which often require specialized implicit methods.  
+- The **error accumulation** over multiple steps limits their suitability for long-time integration or problems demanding extremely high precision.  
+- They involve multiple evaluations of $f(t, u)$ at each step, which can make them computationally expensive for complex systems or multidimensional problems.  
+- For highly **oscillatory systems**, the choice of step size becomes critical, and incorrect step sizes may lead to instability or inaccuracies.  
