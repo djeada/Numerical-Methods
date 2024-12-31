@@ -95,7 +95,7 @@ $$\Delta = B^2 - AC$$
 
 **Parabolic** if $\Delta = 0$.  
 
-- Classic example: **Heat (or diffusion) equation**, $u_t = \alphau_{xx}$.  
+- Classic example: **Heat (or diffusion) equation**, $u_t = \alpha u_{xx}$.  
 - Parabolic PDEs often describe *time-evolving diffusion-type* phenomena.
 
 **Hyperbolic** if $\Delta > 0$.  
@@ -125,7 +125,7 @@ A nonhomogeneous extension of Laplace’s equation.
 
 **Heat (Diffusion) Equation**:
 
-$$u_t = \alpha\nabla^2 u \quad \text{(e.g., in 1D: } u_t = \alphau_{xx}\text{).}$$
+$$u_t = \alpha\nabla^2 u \quad \text{(e.g., in 1D: } u_t = \alpha u_{xx}\text{).}$$
 
 Models heat diffusion, particle diffusion in fluids, etc. It evolves in time toward an equilibrium (steady state).
 
@@ -205,7 +205,7 @@ I. **Laplace’s Equation** $\nabla^2 u = 0$:
 - Governs steady heat distribution or electrostatic potential in a region $\Omega\subseteq \mathbb{R}^n$.  
 - Usually accompanied by boundary conditions like $u|_{\partial \Omega} = f(\mathbf{x})$.
 
-II. **Heat Equation** $u_t = \alphau_{xx}$:  
+II. **Heat Equation** $u_t = \alpha u_{xx}$:  
 
 - Models temperature evolution in a rod.  
 - Often with initial condition $u(x,0) = \phi(x)$ and boundary conditions (Dirichlet or Neumann).
