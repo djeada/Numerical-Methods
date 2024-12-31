@@ -169,38 +169,16 @@ maintaining $[a,b] = [-1.054, 0.472]$.
 
 At each iteration, you would similarly compute new $x_1, x_2$, evaluate $f(x_1)$ and $f(x_2)$, and narrow down the interval. Ultimately, as you continue, the interval will shrink around $x=0$, since $f(x) = x^2$ achieves its minimum at $x=0$.
 
-### Advantages
+### Advantages  
 
-I. **No Derivatives Required:**
+1. **No derivatives required** makes the Golden Ratio Search ideal for problems where derivative information is unavailable or too expensive to compute.  
+2. **Guaranteed reduction** of the search interval by approximately $\frac{1}{\phi}$ (the Golden Ratio) in each iteration ensures steady progress toward locating the minimum.  
+3. The method's **robustness** guarantees convergence to a minimum within the provided interval, assuming the function is unimodal.  
+4. **Simplicity of implementation** makes the algorithm accessible, as it involves straightforward iterative calculations without the need for complex procedures.  
 
-The Golden Ratio Search uses only function values, making it suitable for scenarios where derivatives are unavailable or expensive to compute.
+### Limitations  
 
-II. **Guaranteed Reduction:**
-
-Each iteration reduces the search interval by a factor of approximately $\frac{1}{\phi}$, ensuring systematic and predictable progress toward the minimum.
-
-III. **Robustness:**
-
-Being a bracketing method, it guarantees convergence to a minimum in the provided interval, provided the function is unimodal.
-
-IV. **Simple to Implement:**
-
-The algorithm is straightforward and does not require complex computations.
-
-### Limitations
-
-I. **Unimodality Required:**
-
-The method relies on the function being unimodal within the given interval. If multiple minima exist, the method may converge to a local, rather than global, minimum or may fail to isolate a single solution.
-
-II. **Initial Bracketing Needed:**
-
-The method requires a known interval $[a,b]$ that contains the minimum. If no such interval is known, selecting it may be challenging.
-
-III. **Not the Fastest for All Problems:**
-
-Although more efficient than some methods (like equal spacing or naive searches), the Golden Ratio Search is still not as fast as methods that utilize gradient information (e.g., Newton’s method) when such information is readily available.
-
-IV. **Possible Slow Convergence on Flat Regions:**
-
-If the function is very flat around the minimum, the reduction per iteration might still feel slow, as function evaluations give little information to further narrow down quickly.
+1. **Unimodality required** means the method assumes the function has only one minimum in the interval; multiple minima can lead to convergence to a local minimum or failure to isolate a solution.  
+2. **Initial bracketing** of the interval $[a, b]$ containing the minimum is essential, and determining this interval can be challenging if the function's behavior is poorly understood.  
+3. The method is **not the fastest** for all problems, particularly when gradient-based methods like Newton’s method or quasi-Newton methods can be used effectively.  
+4. **Slow convergence** can occur in flat regions around the minimum, where reductions per iteration provide limited new information for further narrowing the interval.  
