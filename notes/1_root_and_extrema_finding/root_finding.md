@@ -135,4 +135,3 @@ Open methods rely on derivative information or estimates, and do not require an 
 - If derivatives are not available or are expensive, use derivative-free methods like secant.  
 - Decide if reliability is a key priority for the solution.  
 - If reliability is critical, select robust methods like Brent’s, which combine bracketing and open steps.  
-- Balance these considerations to choose a method suitable for the specific problem and application context.  
