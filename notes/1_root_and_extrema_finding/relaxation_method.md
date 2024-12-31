@@ -143,38 +143,17 @@ $$x_3 = g(x_2) = g(0.8148)=\frac{(0.8148)^2 +2}{3}=\frac{0.6639+2}{3}\approx\fra
 
 Repeating this process, we observe $x_n$ approaching one of the roots (in this case, it will move closer to $x=1$, depending on the behavior of $g(x)$ near that root).
 
-### Advantages
+### Advantages  
 
-I. **Flexible Formulation:**
+1. **Flexible formulation** allows the relaxation method to work by simply rewriting the equation in fixed-point form $x = g(x)$ and iterating, making it conceptually straightforward.  
+2. **Potentially faster than bisection**, the method can converge more quickly when $g(x)$ is well-chosen, particularly if $|g'(x)| < 1$ near the root.  
+3. **Broad applicability** makes the method suitable for nonlinear equations that do not require derivatives, although convergence often depends on the properties of $g(x)$.  
+4. **Straightforward implementation** is achieved by directly iterating $x_{n+1} = g(x_n)$, provided an appropriate $g(x)$ is identified.  
 
-The relaxation method is conceptually simple: just rewrite the equation in fixed-point form and iterate.
+### Limitations  
 
-II. **Potentially Faster Than Bisection:**
+1. **No guaranteed convergence** means the method may fail if $|g'(x)| \geq 1$ in the vicinity of the root, unlike bracketing methods that ensure convergence under certain conditions.  
+2. **Sensitive to the choice of $g(x)$**, as some transformations of $f(x) = 0$ into $x = g(x)$ promote convergence while others lead to divergence.  
+3. **Initial guess importance** highlights that a poor starting point can result in divergence or very slow convergence, making the method less robust in such cases.  
+4. **Dependent on continuity and differentiability**, with standard convergence theory requiring $g(x)$ to be continuous and differentiable, limiting its applicability for problems that do not meet these conditions.  
 
-For well-chosen $g(x)$, it can converge faster than some bracketing methods such as bisection, especially if the derivative $|g'(x)|<1$ near the root.
-
-III. **Broad Applicability:**
-
-The method does not require derivatives (though good convergence often relates to the derivative of $g$), and can be applied to a variety of nonlinear equations where other methods might be inconvenient.
-
-IV. **Straightforward Implementation:**
-
-Implementing $x_{n+1}=g(x_n)$ is often quite direct once a suitable $g$ is identified.
-
-### Limitations
-
-I. **No Guaranteed Convergence:**
-
-Unlike the bisection method, which is guaranteed to converge if the function satisfies certain conditions, the relaxation method may fail to converge if $|g'(x)| \geq 1$ in the vicinity of the root.
-
-II. **Sensitive to the Choice of $g(x)$:**
-
-There are infinitely many ways to rewrite $f(x)=0$ as $x=g(x)$. Some transformations promote convergence, while others cause divergence.
-
-III. **Initial Guess Importance:**
-
-A poor initial guess may lead to divergence or extremely slow convergence.
-
-IV. **Dependent on Continuity and Differentiability:**
-
-The standard theory and convergence conditions assume that $g(x)$ is continuous and differentiable. Problems violating these conditions may not be suitable for this method.
