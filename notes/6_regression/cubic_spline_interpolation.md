@@ -2,11 +2,11 @@
 
 Cubic spline interpolation is a refined mathematical tool frequently used within numerical analysis. It's an approximation technique that employs piecewise cubic polynomials, collectively forming a cubic spline. These cubic polynomials are specifically engineered to pass through a defined set of data points, hence striking a balance between overly simple (like linear) and overly intricate (like high-degree polynomial) interpolations.
 
-**Conceptual Illustration (Not Removing the Plot)**:
+**Conceptual Illustration**:
 
 Imagine you have a set of points on a 2D plane. A cubic spline will "thread" through these points, forming a smooth curve that does not exhibit sudden bends or wiggles:
 
-![Screenshot from 2022-09-07 21-24-04](https://user-images.githubusercontent.com/37275728/188960890-781f5947-1d8c-40bc-aba7-91728024eabe.png)
+![cubic_spline_interpolation](https://user-images.githubusercontent.com/37275728/188960890-781f5947-1d8c-40bc-aba7-91728024eabe.png)
 
 The spline is constructed from piecewise cubic segments that meet at the data points with continuous first and second derivatives, ensuring a visually natural and mathematically smooth interpolation.
 
@@ -167,31 +167,12 @@ This gives piecewise polynomials smoothly interpolating the given points.
 
 ### Advantages
 
-I. **Smoothness:**  
-
-Produces smooth curves with continuous first and second derivatives.
-
-II. **Controlled Behavior:**  
-
-Avoids large oscillations that high-degree polynomial interpolation might introduce.
-
-III. **Local Control:**  
-
-Changing one data point affects only the neighboring spline segments, not the entire polynomial.
+- Splines ensure **smoothness** by producing curves with continuous first and second derivatives, leading to a natural and visually appealing fit.
+- The method provides **controlled behavior**, avoiding the large oscillations often observed in high-degree polynomial interpolation.
+- **Local control** means that changing a single data point only impacts the neighboring spline segments, rather than the entire curve.
 
 ### Limitations
 
-I. **Complexity:**  
-
-Requires setting up and solving a linear system of equations, which is more involved than simpler interpolation methods.
-
-II. **Computational Cost:**  
-
-More computationally expensive than methods like linear interpolation, especially for very large data sets.
-
-III. **Boundary Conditions Needed:**  
-
-The behavior at the endpoints depends on chosen boundary conditions (natural, clamped, etc.), which must be specified.
-
-- It can be computationally intense compared to more straightforward methods.
-- It requires the resolution of a system of equations, which can become complex with a large number of control points.
+- The method involves **complexity**, as it requires setting up and solving a linear system of equations, making it more complicated than simpler interpolation techniques.
+- **Computational cost** is higher than methods like linear interpolation, particularly for large datasets with many control points.
+- **Boundary conditions** must be specified (e.g., natural, clamped) to define the behavior at the endpoints, which can influence the overall fit of the spline.
