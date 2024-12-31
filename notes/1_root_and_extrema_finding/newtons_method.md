@@ -143,34 +143,16 @@ $$x_3 = 2.0065 - \frac{0.0260}{4.013}\approx 2.0065 -0.00648= 2.0000$$
 
 After a few iterations, we have $x_3 \approx 2.0000$, which is very close to the actual root $x=2$.
 
-### Advantages
+### Advantages  
 
-I. **Fast Convergence:**
+1. **Fast convergence** makes Newton's method highly efficient when the initial guess is close to the actual root and $f'(x) \neq 0$, as it exhibits quadratic convergence.  
+2. **Simplicity** in implementation requires only evaluations of the function and its derivative at each step, making the method conceptually straightforward.  
+3. **Fewer iterations** are typically needed to achieve a desired accuracy compared to bracketing methods like the bisection method, assuming the method converges.  
 
-When close to the actual root and if $f'(x) \neq 0$ near the root, Newton's method exhibits quadratic convergence, making it very efficient.
+### Limitations  
 
-II. **Simplicity:**
+1. **Requirement of the derivative** means that $f'(x)$ must either be computable or approximated, which can be challenging or computationally expensive for certain functions.  
+2. **No guaranteed convergence** occurs if the initial guess is far from the root, or if $f'(x)$ is small or zero near the approximation, potentially leading to divergence.  
+3. **Wrong root or complex behavior** may arise in cases where the function has multiple roots or inflection points, causing convergence to an unintended root or erratic behavior.  
+4. **Division by zero** is a critical issue if $f'(x_n) = 0$ at any iteration, requiring safeguards or modifications to the standard algorithm to handle such cases.  
 
-The method is straightforward to implement, requiring only function and derivative evaluations at each iteration.
-
-III. **Fewer Iterations:**
-
-Compared to methods like the bisection method, Newton's method typically needs fewer iterations to achieve a given accuracy, provided it converges.
-
-### Limitations
-
-I. **Requirement of Derivative:**
-
-You must be able to differentiate $f(x)$ or approximate the derivative. For some functions, computing $f'(x)$ might be complex or expensive.
-
-II. **No Guaranteed Convergence:**
-
-If the initial guess is not sufficiently close to the root, or if $f'(x)$ is small or zero near the approximation, Newton’s method can fail to converge or even diverge.
-
-III. **Wrong Root or Complex Behavior:**
-
-The method may converge to a different root than intended if the function has multiple roots. It can also be led astray by inflection points or discontinuities in the function or its derivative.
-
-IV. **Potential Division by Zero:**
-
-If $f'(x_n)=0$ for some iteration, the method cannot proceed in its standard form, necessitating safeguards or alternative approaches.
