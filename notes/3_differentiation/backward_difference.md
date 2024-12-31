@@ -4,23 +4,25 @@ The backward difference method is a finite difference technique employed to appr
 
 ### Mathematical Formulation
 
-The backward difference approximation of the first derivative of a function \( f \) at a point \( x \) with a step size \( h \) is mathematically expressed as:
+The backward difference approximation of the first derivative of a function $f$ at a point $x$ with a step size $h$ is mathematically expressed as:
 
 $$
 f'(x) \approx \frac{f(x) - f(x - h)}{h}
+
 $$
 
-This formula is derived from the fundamental definition of the derivative, which represents the rate of change of a function at a specific point. In the context of finite differences, the backward difference method estimates this rate by calculating the difference in function values between the point \( x \) and a preceding point \( x - h \), then dividing by the step size \( h \). Geometrically, this approximation corresponds to the slope of the secant line that connects the points \( (x - h, f(x - h)) \) and \( (x, f(x)) \). By focusing on the interval leading up to \( x \), the backward difference method provides an estimate of the derivative based solely on past information, making it suitable for situations where future data points are not accessible.
+This formula is derived from the fundamental definition of the derivative, which represents the rate of change of a function at a specific point. In the context of finite differences, the backward difference method estimates this rate by calculating the difference in function values between the point $x$ and a preceding point $x - h$, then dividing by the step size $h$. Geometrically, this approximation corresponds to the slope of the secant line that connects the points $(x - h, f(x - h))$ and $(x, f(x))$. By focusing on the interval leading up to $x$, the backward difference method provides an estimate of the derivative based solely on past information, making it suitable for situations where future data points are not accessible.
 
 ### Example
 
-Consider the function \( f(x) = x^2 \). We aim to approximate the derivative of this function at the point \( x = 2 \) using the backward difference method with a step size \( h = 0.01 \). Applying the backward difference formula, we perform the following calculation:
+Consider the function $f(x) = x^2$. We aim to approximate the derivative of this function at the point $x = 2$ using the backward difference method with a step size $h = 0.01$. Applying the backward difference formula, we perform the following calculation:
 
 $$
 f'(2) \approx \frac{f(2) - f(2 - 0.01)}{0.01} = \frac{4 - 3.9601}{0.01} = 3.99
+
 $$
 
-In this example, the exact derivative of \( f(x) = x^2 \) at \( x = 2 \) is \( f'(2) = 2 \times 2 = 4 \). The approximation obtained using the backward difference method is \( 3.99 \), which is remarkably close to the exact value. This demonstrates the method's effectiveness in providing accurate derivative estimates, especially when the function is smooth and the step size \( h \) is appropriately chosen. However, it's important to recognize that the approximation's accuracy depends on the function's behavior and the selected step size.
+In this example, the exact derivative of $f(x) = x^2$ at $x = 2$ is $f'(2) = 2 \times 2 = 4$. The approximation obtained using the backward difference method is $3.99$, which is remarkably close to the exact value. This demonstrates the method's effectiveness in providing accurate derivative estimates, especially when the function is smooth and the step size $h$ is appropriately chosen. However, it's important to recognize that the approximation's accuracy depends on the function's behavior and the selected step size.
 
 ### Advantages of the Backward Difference Method
 
