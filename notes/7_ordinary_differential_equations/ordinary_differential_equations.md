@@ -173,7 +173,7 @@ II. Substitutes into the ODE to satisfy it identically for all $t \in I$.
 - A **general solution** often contains constants (like $C_1, C_2, \ldots$) that can be set by initial or boundary conditions.
 - A **particular solution** is a single, specific solution that satisfies both the ODE and a given set of boundary/initial conditions.
 
-### 5.3 Classic Examples
+### Classic Examples
 
 I. **First-Order Linear with Constant Coefficient**  
 
