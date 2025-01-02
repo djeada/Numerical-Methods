@@ -17,6 +17,7 @@ The resulting surface is smooth, continuous in its derivatives, and tends to fla
 Given a set of $N$ data points $\{(x_i,y_i,z_i)\}_{i=1}^N$, where no two points coincide, we want to find a function:
 
 $$f(x,y) = \alpha_0 + \alpha_1 x + \alpha_2 y + \sum_{i=1}^N w_i \phi(\| (x,y)-(x_i,y_i) \|)$$
+
 that interpolates the given data. Here:
 
 - The $\alpha_0, \alpha_1, \alpha_2$ terms represent a polynomial of degree 1 (a plane) that gives the global trend.
@@ -34,7 +35,7 @@ $$f(x_i,y_i) = z_i, \quad i=1,\ldots,N.$$
 
 Additionally, to ensure a unique solution and remove degeneracies, $f(x,y)$ must satisfy:
 
-$$\sum_{i=1}^N w_i = \sum_{i=1}^N w_i x_i = \sum_{i=1}^N w_i y_i = 0.$$
+$$\sum_{i=1}^N w_i = \sum_{i=1}^N w_i x_i = \sum_{i=1}^N w_i y_i = 0$$
 
 This leads to a linear system for the unknown parameters $\alpha_0,\alpha_1,\alpha_2,w_1,\ldots,w_N.$
 
@@ -59,11 +60,7 @@ $$\begin{bmatrix}
 0 & P^\top \\ P & K
 \end{bmatrix}
 \begin{bmatrix} \alpha \\ w \end{bmatrix} 
-$$
-
-$$
-\=
-\begin{bmatrix} 0 \\ z \end{bmatrix}$$
+=\begin{bmatrix} 0 \\ z \end{bmatrix}$$
 
 where:
 
@@ -124,32 +121,13 @@ IV. Once solved, you have a TPS surface that passes exactly through these four p
 
 ### Advantages
 
-I. **Smooth and Natural Surfaces**:
-
-TPS yields an infinitely differentiable surface minimizing bending energy, often producing visually pleasing, smooth interpolants.
-
-II. **Exact Interpolation**:
-
-The method exactly passes through all given data points.
-
-III. **No Grid Required**:
-
-Works with scattered data without needing a regular grid.
-
-IV. **Extensible**:
-
-Generalizes easily to higher dimensions by changing the form of $\phi(r)$.
+- TPS yields an infinitely differentiable surface, minimizing bending energy, and producing visually pleasing, smooth **interpolants**.
+- The method exactly passes through all given data **points**.
+- TPS works with scattered data without needing a regular **grid**.
+- It generalizes easily to higher dimensions by changing the form of $\phi(r)$, making it **extensible**.
 
 ### Limitations
 
-I. **Computational Cost**:
-
-Requires solving a $(N+3) \times (N+3)$ linear system. For large $N$, this can be expensive.
-
-II. **Conditioning Issues**:
-
-The system matrix may become ill-conditioned with many close points. Regularization (TPS smoothing splines) is often needed in practice.
-
-III. **Global Method**:
-
-Changing or adding one point affects the entire solution. There is no local control like piecewise methods (unless carefully combined with domain decomposition techniques).
+- TPS requires solving a $(N+3) \times (N+3)$ linear system, which can be **expensive** for large $N$.
+- The system matrix may become ill-conditioned with many close points, often necessitating regularization like TPS smoothing **splines**.
+- Changing or adding one point affects the entire solution, as TPS is a **global** method, lacking local control like piecewise methods unless combined with domain decomposition techniques.
