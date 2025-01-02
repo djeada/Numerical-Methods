@@ -8,10 +8,10 @@ A linear system can be written as a set of equations:
 
 $$
 \begin{eqnarray*}
-  A_{11}x_1 + A_{12}x_2 + \ldots + A_{1n}x_n &=& b_1 \\
-  A_{21}x_1 + A_{22}x_2 + \ldots + A_{2n}x_n &=& b_2 \\
+  A_{11}x_1 + A_{12}x_2 + \ldots + A_{1n}x_n = b_1 \\
+  A_{21}x_1 + A_{22}x_2 + \ldots + A_{2n}x_n = b_2 \\
   \vdots \\
-  A_{n1}x_1 + A_{n2}x_2 + \ldots + A_{nn}x_n &=& b_n
+  A_{n1}x_1 + A_{n2}x_2 + \ldots + A_{nn}x_n = b_n
 \end{eqnarray*} 
 $$
 
@@ -55,9 +55,9 @@ Consider the system of equations:
 
 $$
 \begin{eqnarray*}
-  3x + 2y - z &=& 1 \\
-  2x - 2y + 4z &=& -2 \\
-  -x + 0.5y - z &=& 0
+  3x + 2y - z = 1 \\
+  2x - 2y + 4z = -2 \\
+  -x + 0.5y - z = 0
 \end{eqnarray*}
 $$
 
