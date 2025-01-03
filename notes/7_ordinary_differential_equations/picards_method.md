@@ -58,18 +58,18 @@ Because $y(0) = 1$, this becomes
 
 $$y(x) = 1 + \int_{0}^{x} \bigl(t + y(t)\bigr) dt$$
 
-### Step 1: Choose an initial guess
+#### Step 1: Choose an initial guess
 
 A simple choice for the initial approximation is a constant function that satisfies the initial condition:
 $$y_0(x) = 1$$
 
-### Step 2: Form the iteration
+#### Step 2: Form the iteration
 
 Define the $(n+1)$-th approximation $y_{n+1}(x)$ by
 
 $$y_{n+1}(x) = 1 + \int_{0}^{x} \bigl(t + y_n(t)\bigr) dt$$
 
-### Step 3: Compute the first few iterates
+#### Step 3: Compute the first few iterates
 
 I. **First iterate $\mathbf{y_1}$:**
 
@@ -79,7 +79,9 @@ $$y_1(x) = 1 + \int_0^x \bigl(t + y_0(t)\bigr) dt = 1 + \int_0^x \bigl(t + 1\big
 Compute the integral:
 
 $$\int_0^x \bigl(t + 1\bigr) dt = \left[\tfrac{1}{2}t^2 + t\right]_{t=0}^{t=x} = \tfrac{1}{2}x^2 + x$$
+
 Hence
+
 $$y_1(x) = 1 + \left(\tfrac{1}{2}x^2 + x\right) = 1 + x + \tfrac{1}{2}x^2$$
 
 II. **Second iterate $\mathbf{y_2}$:**
@@ -96,11 +98,11 @@ $$y_2(x) = 1 + \bigl(x + x^2 + \tfrac{1}{6}x^3\bigr) = 1 + x + x^2 + \tfrac{1}{6
 
 In principle, you continue in this manner—substituting $y_n(x)$ back into the integral equation—to obtain $y_{n+1}(x)$. You either stop when you get a satisfactory approximation or when you reach your maximum number of iterations.
 
-### Observing a Pattern
+#### Observing a Pattern
 
 Notice how each iteration adds higher-order polynomial terms in $x$. In fact, this process is **building the power-series expansion** of the true solution around $x=0$. More and more terms (with increasing powers of $x$) appear as you iterate.
 
-### The Exact Solution
+#### The Exact Solution
 
 Although Picard iteration is a good way to *approximate* or *numerically* solve the ODE, we can also solve it directly by standard methods for first-order linear ODEs. Indeed, rewriting
 
@@ -128,7 +130,7 @@ $$y(x) = 2 e^x - (x+1)$$
 
 A quick check: at $x=0$, $y(0) = 2\cdot 1 - (0+1) = 1$, matching the initial condition.
 
-### Connecting Back to the Iterates
+#### Connecting Back to the Iterates
 
 If you **expand the exact solution** $y(x) = 2e^x - (x+1)$ in a Maclaurin series around $x=0$,
 
