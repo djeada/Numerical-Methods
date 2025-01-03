@@ -155,12 +155,12 @@ If one needs a purely numerical approach (especially for more complicated $f(x,y
 - Picard's method provides a **straightforward iterative process** for solving ODEs and is particularly useful in theoretical contexts for proving the existence and uniqueness of solutions.  
 - The **series-based solution** derived from Picard's method allows for a clear understanding of the solution's structure and behavior in mathematical terms.  
 - It can serve as a foundation for teaching **iterative techniques** and for introducing students to numerical and analytical solution methods.  
-- The method is well-suited for equations where both the function \( f(x, y) \) and its **integral** are smooth, ensuring convergence in many standard cases.  
+- The method is well-suited for equations where both the function $f(x, y)$ and its **integral** are smooth, ensuring convergence in many standard cases.  
 
 ### Limitations
 
-- Each iteration of **Picard's method** involves evaluating an integral, which becomes computationally demanding for complex or multidimensional functions.  
-- **Convergence** is not guaranteed for functions \( f(x, y) \) that are discontinuous, unbounded, or violate Lipschitz conditions in the region of interest.  
+- Each iteration of **Picard's method** involves evaluating an integral, which becomes computationally demanding for complicated or multidimensional functions.  
+- **Convergence** is not guaranteed for functions $f(x, y)$ that are discontinuous, unbounded, or violate Lipschitz conditions in the region of interest.  
 - The method tends to converge slowly for **stiff or nonlinear ODEs**, making it less practical for such problems compared to other numerical methods.  
 - Applying Picard's method can be impractical for ODEs requiring **high precision**, as the number of iterations to achieve accuracy grows significantly.  
 - The approach is not suitable for equations where **numerical solutions** are desired quickly, as alternative methods like Runge-Kutta or finite difference techniques are often more efficient.  
