@@ -144,11 +144,11 @@ $$y_1(x) = 1 + x + \tfrac{1}{2}x^2, \quad y_2(x) = 1 + x + x^2 + \tfrac{1}{6}x^3
 
 and so on. Each iterate gets you closer to the true (infinite series) solution; numerically, you see that the coefficients of each power of $x$ converge to those in the exact expansion.
 
-In this example, the partial sums $y_0, y_1, y_2,  dots$ quickly converge to the **exact solution** 
+In this example, the partial sums $y_0, y_1, y_2, \cdots$ quickly converge to the **exact solution** 
 
 $$y(x) = 2 e^x - (x+1)$$
 
-If one needs a purely numerical approach (especially for more complicated $f(x,y)$), continuing the iteration until it stabilizes (or up to a certain tolerance/number of terms) provides a valid approximate solution.
+If one needs a purely numerical approach (especially for more complicated $f(x,y)$ ), continuing the iteration until it stabilizes (or up to a certain tolerance/number of terms) provides a valid approximate solution.
 
 ### Advantages
 
