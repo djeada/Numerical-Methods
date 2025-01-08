@@ -116,3 +116,7 @@ When contributing, ensure you update relevant tests as needed to maintain the in
 ## License
 
 This project is licensed under the [MIT License](https://choosealicense.com/licenses/mit/).
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=djeada/Numerical-Methods&type=Date)](https://star-history.com/#djeada/Numerical-Methods&Date)
