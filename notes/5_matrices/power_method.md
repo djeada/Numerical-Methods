@@ -2,13 +2,16 @@
 
 The power method is a fundamental iterative algorithm for estimating the eigenvalue of largest magnitude and its associated eigenvector for a given matrix. This technique is particularly appealing when dealing with large and sparse matrices, where direct eigenvalue computations (e.g., via the characteristic polynomial) are computationally expensive or numerically unstable. The power method capitalizes on the property that repeated multiplication by a matrix $A$ will cause any initial vector to align with the direction of the eigenvector associated with the dominant eigenvalue, assuming this eigenvalue is well-separated from the others in magnitude.
 
-![output(20)](https://github.com/user-attachments/assets/e48ec2b5-fd18-4886-a4b9-497c73aae0de)
+![power_method](https://github.com/user-attachments/assets/e48ec2b5-fd18-4886-a4b9-497c73aae0de)
 
-### Key Concepts
-
-- **Dominant Eigenvalue and Eigenvector**: The power method iteratively refines a vector that converges to the eigenvector associated with the eigenvalue of greatest magnitude (the dominant eigenvalue).
-- **Sparse and Large Matrices**: The method requires only matrix-vector multiplications, making it efficient for large and sparse problems.
-- **Uniqueness of the Largest Eigenvalue**: Convergence is guaranteed if the largest eigenvalue in magnitude is unique and separated from the second-largest in magnitude.
+- The power method **iteratively** refines a vector to approximate the eigenvector associated with the dominant eigenvalue.
+- It is particularly **efficient** for large and sparse matrices since it only requires matrix-vector multiplications.
+- Convergence is ensured when the largest eigenvalue in magnitude is **unique** and well-separated from the next largest.
+- The method starts with an initial **guess** vector, which is repeatedly multiplied by the matrix to approach the dominant eigenvector.
+- **Normalization** of the vector at each step prevents numerical overflow or underflow during the iterations.
+- The rate of **convergence** depends on the ratio between the dominant eigenvalue and the second-largest eigenvalue in magnitude.
+- The power method can be **extended** to find multiple eigenvalues by deflating the matrix after each dominant eigenvalue is found.
+- It is widely used in applications such as Google's PageRank algorithm to determine the importance of web pages.
 
 ### Mathematical Formulation
 
@@ -97,16 +100,12 @@ $$\begin{bmatrix}0.55 \\ 0.83\end{bmatrix}$$
 
 ### Advantages
 
-I. **Simplicity**: The algorithm is straightforward to implement.
-
-II. **Efficiency for Large Sparse Matrices**: Requires only matrix-vector multiplication, beneficial when $A$ is large and sparse.
-
-III. **Low Memory Footprint**: No need to store large amounts of data; only the current vector and its transform are needed.
+- The algorithm is **straightforward** to implement, making it accessible for various applications.
+- It is **beneficial** for large and sparse matrices since it only requires matrix-vector multiplication.
+- The method maintains a **low** memory footprint by only storing the current vector and its transformation.
 
 ### Limitations
 
-I. **Single Dominant Eigenvalue Only**: It finds only the largest eigenvalue in magnitude, not all eigenvalues.
-
-II. **Slow Convergence if Eigenvalues Are Close**: If $|\lambda_1|$ and $|\lambda_2|$ are close, convergence can be slow.
-
-III. **Requires a Unique Largest Eigenvalue**: If the largest eigenvalue is not unique, the method may fail to converge to a single eigenvector.
+- The power method can find only the **largest** eigenvalue in magnitude, not all eigenvalues.
+- Convergence may be **slow** if the magnitudes of the first and second eigenvalues are close.
+- The method **requires** a unique largest eigenvalue to ensure convergence to a single eigenvector.
