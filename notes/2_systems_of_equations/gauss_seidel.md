@@ -108,8 +108,11 @@ II. $7x + 8y = 20$
 
 **Step-by-Step Iteration:**
 
-- **Initialization**: Let $x^{(0)} = 0, \, y^{(0)} = 0$.
-- **Iteration 1** ($k=0$ to $k=1$):
+**Initialization**: 
+
+$$x^{(0)} = 0, y^{(0)} = 0$$
+
+**Iteration 1** ($k=0$ to $k=1$):
 
 Update $x$:
 
