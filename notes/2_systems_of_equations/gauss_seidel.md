@@ -95,7 +95,8 @@ $$\begin{aligned}
 
 This can be expressed in matrix form as:
 
-$$A = \begin{bmatrix} 5 & -1 \\ 7 & 8 \end{bmatrix}, \quad
+$$A = \begin{bmatrix} 5 & -1 \\ 
+7 & 8 \end{bmatrix}, \quad
 \mathbf{x} = \begin{bmatrix} x \\ y \end{bmatrix}, \quad
 \mathbf{b} = \begin{bmatrix} 6 \\ 20 \end{bmatrix}$$
 
