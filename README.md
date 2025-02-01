@@ -106,6 +106,7 @@ Method | Notes | Implementation | Examples
 - [Numerical Analysis: U of A Engineering Courses](https://engcourses-uofa.ca/books/numericalanalysis)
 - [Numerical Methods by John Foster, UT Austin](https://johnfoster.pge.utexas.edu/numerical-methods-book)
 - [Numerical Methods Course Material, NYU](https://math.nyu.edu/~stadler/num1/material/)
+- [Fundamentals of Numerical Computation by Tobin A. Driscoll and Richard J. Braun](https://fncbook.com/)
 
 ## Contributing
 
