@@ -50,11 +50,9 @@ $$
 
 In this form:
 
-I. $\mathbf{A}$ (an $n \times n$ matrix) contains the coefficients of the variables.
-
-II. $\mathbf{x}$ (an $n \times 1$ column vector) represents the unknowns of the system.
-
-III. $\mathbf{b}$ (an $n \times 1$ column vector) contains the constant terms from the right-hand side of each equation.
+- $\mathbf{A}$ (an $n \times n$ matrix) contains the coefficients of the variables.
+- $\mathbf{x}$ (an $n \times 1$ column vector) represents the unknowns of the system.
+- $\mathbf{b}$ (an $n \times 1$ column vector) contains the constant terms from the right-hand side of each equation.
 
 Expressing the system in matrix form allows us to apply well-studied algebraic procedures and computational routines to solve for $\mathbf{x}$.
 
@@ -62,19 +60,27 @@ Expressing the system in matrix form allows us to apply well-studied algebraic p
 
 A system $\mathbf{A}\mathbf{x} = \mathbf{b}$ of $n$ linear equations in $n$ unknowns has a *unique* solution if and only if any one (and thus all) of the following equivalent conditions holds:
 
-I. Non-zero determinant: $\det(\mathbf{A}) \neq 0$.  
+I. **Non-zero determinant**: 
+
+$$\det(\mathbf{A}) \neq 0$$  
 
 A non-zero determinant indicates that the matrix $\mathbf{A}$ is *invertible*.
 
-II. Invertibility of $\mathbf{A}$: There exists an inverse matrix $\mathbf{A}^{-1}$ such that  
+II. **Invertibility of $\mathbf{A}$**: 
+
+There exists an inverse matrix $\mathbf{A}^{-1}$ such that  
 
 $$
 \mathbf{x} = \mathbf{A}^{-1}\mathbf{b}.
 $$
 
-III. Linear independence of columns: The columns of $\mathbf{A}$ are linearly independent vectors in $\mathbb{R}^n$. In practical terms, no column can be written as a linear combination of the other columns.
+III. **Linear independence of columns**: 
 
-IV. Linear independence of rows: Similarly, the rows of $\mathbf{A}$ are also linearly independent. No row can be expressed as a linear combination of the other rows.
+The columns of $\mathbf{A}$ are linearly independent vectors in $\mathbb{R}^n$. In practical terms, no column can be written as a linear combination of the other columns.
+
+IV. **Linear independence of rows**: 
+
+Similarly, the rows of $\mathbf{A}$ are also linearly independent. No row can be expressed as a linear combination of the other rows.
 
 If any of these criteria fail (e.g., $\det(\mathbf{A}) = 0$), the system does not have a unique solution: it may either have *no solution* (inconsistent system) or *infinitely many solutions* (underdetermined system).
 
