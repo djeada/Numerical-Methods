@@ -14,7 +14,7 @@ $$
 
 This formula is derived from the fundamental definition of the derivative, which represents the instantaneous rate of change of a function at a specific point. In the context of finite differences, the forward difference method estimates this rate by calculating the difference in function values between the point $x + h$ and the point $x$, then dividing by the step size $h$. Geometrically, this approximation corresponds to the slope of the secant line that connects the points $(x, f(x))$ and $(x + h, f(x + h))$. By focusing on the interval leading forward from $x$, the forward difference method provides an estimate of the derivative based solely on future information, making it suitable for applications where data progresses in a forward direction.
 
-The simplicity of the forward difference formula allows for easy implementation in computational algorithms. However, it is important to recognize that this method introduces an approximation error, which is influenced by the choice of the step size $h$. Selecting an appropriate $h$ is crucial to balancing accuracy and numerical stability in derivative approximations.
+The simplicity of the forward difference formula allows for easy implementation in computational algorithms. On the flip side this method introduces an approximation error, which is influenced by the choice of the step size $h$. Selecting an appropriate $h$ is crucial to balancing accuracy and numerical stability in derivative approximations.
 
 ### Example
 
@@ -24,7 +24,7 @@ $$
 f'(2) \approx \frac{f(2 + 0.01) - f(2)}{0.01} = \frac{4.0401 - 4}{0.01} = 4.01
 $$
 
-In this example, the exact derivative of $f(x) = x^2$ at $x = 2$ is $f'(2) = 2 \times 2 = 4$. The approximation obtained using the forward difference method is $4.01$, which is remarkably close to the exact value. This demonstrates the method's effectiveness in providing accurate derivative estimates, especially when the function is smooth and the step size $h$ is appropriately chosen. However, it's important to note that the accuracy of the approximation can vary depending on the function's behavior and the selected step size. For functions with rapid changes or higher curvature, smaller step sizes may be necessary to achieve comparable accuracy, albeit at the cost of increased computational effort and potential numerical instability.
+In this example, the exact derivative of $f(x) = x^2$ at $x = 2$ is $f'(2) = 2 \times 2 = 4$. The approximation obtained using the forward difference method is $4.01$, which is remarkably close to the exact value. This demonstrates the method's effectiveness in providing accurate derivative estimates, especially when the function is smooth and the step size $h$ is appropriately chosen. The accuracy of the approximation can vary depending on the function's behavior and the selected step size. For functions with rapid changes or higher curvature, smaller step sizes may be necessary to achieve comparable accuracy, albeit at the cost of increased computational effort and potential numerical instability.
 
 ### Advantages
 
