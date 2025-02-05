@@ -137,7 +137,7 @@ $$[A|\mathbf{b}] = \begin{bmatrix}
 
 II. **Forward Elimination**:
 
-- Pivot in first row is $a_{11} = 2$. Normalize the first row by dividing by 2:
+Pivot in first row is $a_{11} = 2$. Normalize the first row by dividing by 2:
 
 $$\begin{bmatrix}
 1 & 0.5 & -0.5 & 4 \\
@@ -145,15 +145,15 @@ $$\begin{bmatrix}
 -2 & 1 & 2 & -3
 \end{bmatrix}$$
 
-- Eliminate $x$-terms in row 2 and row 3 using row 1:
-- For row 2: Add 3 times row 1:
+Eliminate $x$-terms in row 2 and row 3 using row 1:
+For row 2: Add 3 times row 1:
 
 $$(-3)R_1 + R_2 \to R_2 \implies
 R_2 = \begin{bmatrix}
 0 & 0.5 & 0.5 & 1
 \end{bmatrix}$$
   
-- For row 3: Add 2 times row 1:
+For row 3: Add 2 times row 1:
 
 $$(2)R_1 + R_3 \to R_3 \implies
 R_3 = \begin{bmatrix}
@@ -170,7 +170,7 @@ $$\begin{bmatrix}
 \end{bmatrix}
 $$
 
-- Next pivot is $a_{22} = 0.5$. Normalize the second row by dividing by 0.5:
+Next pivot is $a_{22} = 0.5$. Normalize the second row by dividing by 0.5:
 
 $$\begin{bmatrix}
 1 & 0.5 & -0.5 & 4 \\
@@ -179,7 +179,7 @@ $$\begin{bmatrix}
 \end{bmatrix}
 $$
 
-- Eliminate below the second pivot:
+Eliminate below the second pivot:
 
 For row 3: subtract 2 times row 2 from row 3:
 
@@ -199,16 +199,16 @@ $$
 
 III. **Back Substitution**:
 
-- From the last equation: $-1 \cdot z = 1 \implies z = -1$.
-- Substitute $z = -1$ into second equation:
+From the last equation: $-1 \cdot z = 1 \implies z = -1$.
+Substitute $z = -1$ into second equation:
 
 $y + 1(-1) = 2 \implies y = 3$.
 
-- Substitute $y = 3, z = -1$ into first equation:  
+Substitute $y = 3, z = -1$ into first equation:  
 
 $x + 0.5(3) -0.5(-1) = 4 \implies x + 1.5 + 0.5 = 4 \implies x = 2$.
 
-The solution is $\mathbf{x} = (2,\, 3,\, -1)^\top$.
+The solution is $\mathbf{x} = (2, 3, -1)^\top$.
 
 ### Advantages
 
