@@ -226,7 +226,7 @@ where $\mathbf{v}$ is velocity, $p$ pressure, $\nu$ kinematic viscosity, $\mathb
 
 V. **Black–Scholes Equation** (Finance)  
 
-$$\frac{\partial V}{\partial t} + \tfrac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS\frac{\partial V}{\partial S} - rV = 0$
+$$\frac{\partial V}{\partial t} + \tfrac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS\frac{\partial V}{\partial S} - rV = 0$$
 
 where $V(S,t)$ is the price of an option, $S$ is the underlying asset price, $r$ is risk-free rate, $\sigma$ volatility.
 
