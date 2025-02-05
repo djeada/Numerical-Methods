@@ -14,18 +14,16 @@ $$F\bigl( x_1, \ldots, x_d,  u, u_{x_1}, u_{x_2},\ldots, u_{x_1 x_1}, u_{x_1 x_2
 
 where $u_{x_i}$ denotes the partial derivative of $u$ with respect to $x_i$, and $u_{x_i x_j}$ denotes second partial derivatives, and so on.
 
-**Key difference from ODEs**: In ODEs, there is only one independent variable, whereas in PDEs, there are multiple independent variables.
+In ODEs, there is only one independent variable, whereas in PDEs, there are **multiple independent variables**.
 
 ### Understanding Partial Differential Equations
 
-#### Conceptual Overview
-
 PDEs capture how a function $u(\mathbf{x}, t)$ varies in multiple directions or with time. They arise in virtually all areas of physics, engineering, finance, and many other fields:
 
-- **Physics**: Continuum mechanics (stress-strain analysis), electromagnetics (Maxwell’s equations), fluid dynamics (Navier–Stokes equations), quantum mechanics (Schrödinger equation).
-- **Engineering**: Heat transfer (heat equation), wave propagation (wave equation), elasticity, structural analysis.
-- **Economics/Finance**: Option pricing (Black–Scholes equation), dynamic optimization with multiple variables.
-- **Biology**: Reaction-diffusion systems for population genetics, pattern formation in developmental biology.
+• In Physics, continuum mechanics uses stress-strain analysis, electromagnetics employs Maxwell’s equations, fluid dynamics applies the Navier–Stokes equations, and quantum mechanics is based on the Schrödinger equation.  
+• In Engineering, heat transfer is modeled by the heat equation, wave propagation is described using the wave equation, and elasticity alongside structural analysis is approached through mathematical models.  
+• In Economics and Finance, the Black–Scholes equation is used for option pricing while dynamic optimization handles multiple variables to analyze decision-making processes.  
+• In Biology, reaction-diffusion systems are applied to population genetics and pattern formation in developmental biology is explored to understand the emergence of structures.
 
 #### Boundary and Initial Conditions
 
@@ -33,11 +31,33 @@ To *uniquely* solve a PDE, one typically needs to specify **boundary conditions*
 
 **Boundary conditions**: 
 
-- **Dirichlet BC**: Specify the value of $u$ on the boundary (e.g., $u = f$ on $\partial \Omega$).
-- **Neumann BC**: Specify the normal derivative of $u$ on the boundary (e.g., $\frac{\partial u}{\partial n} = g$ on $\partial \Omega$).
-- **Robin (or mixed) BC**: A combination of value and normal derivative (e.g., $\alpha u + \beta \frac{\partial u}{\partial n} = h$ on $\partial \Omega$).
+I. *Dirichlet BC*: 
 
-**Initial conditions**: When time $t$ is involved (often in parabolic or hyperbolic PDEs), one typically specifies the initial state of $u$ (and possibly some derivatives) at $t = t_0$. For instance, for the heat equation:
+This condition requires specifying the value of the function $u$ directly on the boundary; mathematically, it is expressed as  
+
+$$u\big|_{\partial \Omega} = f$$  
+
+where $f$ is a prescribed function on the boundary $\partial \Omega$. This is typically used in scenarios where the state of the system is fixed at the boundary.
+
+II. *Neumann BC*: 
+
+This condition involves setting the normal derivative of the function $u$ on the boundary; it is given by  
+
+$$\frac{\partial u}{\partial n}\bigg|_{\partial \Omega} = g$$  
+
+where $g$ is a known function defined on $\partial \Omega$ and $\frac{\partial u}{\partial n}$ denotes the derivative in the direction normal to the boundary. This is useful when the flux across the boundary is specified.
+
+III. *Robin (or mixed) BC*: 
+
+This condition combines both the function value and its normal derivative on the boundary, and is formulated as  
+
+$$\alpha u + \beta \frac{\partial u}{\partial n}\bigg|_{\partial \Omega} = h$$  
+
+where $\alpha$, $\beta$, and $h$ are given functions (or constants) on $\partial \Omega$. This type of condition is applied when both the state of the system and its flux at the boundary are influenced by external factors.
+  
+**Initial conditions**: 
+
+When time $t$ is involved (often in parabolic or hyperbolic PDEs), one typically specifies the initial state of $u$ (and possibly some derivatives) at $t = t_0$. For instance, for the heat equation:
 
 $$u(\mathbf{x}, t_0) = \phi(\mathbf{x}).$$
 
