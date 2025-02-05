@@ -88,11 +88,11 @@ II. **Forward Elimination** (to reach upper-triangular form):
 
 For $i = 1$ to $n$:
 
-I. **Partial Pivoting (if desired)**: Find the row (pivotRow) below (and including) the current row $i$ that has the largest absolute value in column $i$. Swap the current row $i$ with pivotRow to reduce numerical instability.
+II.I. **Partial Pivoting (if desired)**: Find the row (pivotRow) below (and including) the current row $i$ that has the largest absolute value in column $i$. Swap the current row $i$ with pivotRow to reduce numerical instability.
 
-II. **Pivot Normalization**: Divide the entire $i$-th row by $a_{ii}$ (the pivot) to make the pivot element equal to 1.
+II.II. **Pivot Normalization**: Divide the entire $i$-th row by $a_{ii}$ (the pivot) to make the pivot element equal to 1.
 
-III. **Elimination**: For each row $j > i$, subtract $a_{ji}$ times the $i$-th row from the $j$-th row to make the elements below the pivot zero.
+III.III. **Elimination**: For each row $j > i$, subtract $a_{ji}$ times the $i$-th row from the $j$-th row to make the elements below the pivot zero.
 
 After these steps, the matrix is in row echelon form:
 
