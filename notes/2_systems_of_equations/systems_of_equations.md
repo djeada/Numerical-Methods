@@ -8,14 +8,12 @@ When working with linear systems, representing the equations in *matrix form* pr
 
 A general linear system with $n$ variables $x_1, x_2, \ldots, x_n$ can be expressed as:
 
-$$
-\begin{cases}
+$$\begin{cases}
 A_{11}x_1 + A_{12}x_2 + \cdots + A_{1n}x_n = b_1, \\
 A_{21}x_1 + A_{22}x_2 + \cdots + A_{2n}x_n = b_2, \\
-\quad\;\;\;\vdots \\
+\quad\vdots \\
 A_{n1}x_1 + A_{n2}x_2 + \cdots + A_{nn}x_n = b_n.
-\end{cases}
-$$
+\end{cases}$$
 
 We can rewrite this collection of equations succinctly as:
 
