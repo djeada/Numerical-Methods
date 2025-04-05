@@ -99,6 +99,38 @@ Method | Notes | Implementation | Examples
 
 ## References
 
+### Books
+
+- **Burden, Richard L.; Faires, J. Douglas**  
+  *Numerical Analysis, 9th Edition*  
+  [Amazon Link](https://amzn.to/4jcJ6Ku)
+
+- **Epperson, James F.**  
+  *An Introduction to Numerical Methods and Analysis*  
+  [Amazon Link](https://amzn.to/4hZUdWl)
+
+- **Press, William H.; Teukolsky, Saul A.; Vetterling, William T.; Flannery, Brian P.**  
+  *Numerical Recipes: The Art of Scientific Computing, 3rd Edition*  
+  [Amazon Link](https://amzn.to/4liZQ4w)
+
+- **Heath, Michael T.**  
+  *Scientific Computing: An Introductory Survey*  
+  [Amazon Link](https://amzn.to/41YDYE5)
+
+- **Giordano, Nicholas J.; Nakanishi, Hisao**  
+  *Computational Physics*  
+  [Amazon Link](https://amzn.to/4cmFQtN)
+
+- **Chapra, Steven C.**  
+  *Applied Numerical Methods with MATLAB for Engineers and Scientists*  
+  [Amazon Link](https://amzn.to/42h0Z49)
+
+- **LeVeque, Randall J.**  
+  *Finite Difference Methods for Ordinary and Partial Differential Equations*  
+  [Amazon Link](https://amzn.to/3RyCpqm)
+
+### Online Resources
+
 - [MIT OpenCourseWare: Linear Algebra](https://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/)
 - [Wikiversity: Cubic Spline Interpolation](https://en.wikiversity.org/wiki/Cubic_Spline_Interpolation)
 - [Statnotes: Statistical Concepts by Dr. Garson](https://faculty.chass.ncsu.edu/garson/PA765/statnote.htm)
