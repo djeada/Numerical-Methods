@@ -2,7 +2,7 @@
 
 Lagrange Polynomial Interpolation is a widely used technique for determining a polynomial that passes exactly through a given set of data points. Suppose we have a set of $(n+1)$ data points $(x_0, y_0), (x_1, y_1), \ldots, (x_n, y_n)$ where all $x_i$ are distinct. The aim is to find a polynomial $L(x)$ of degree at most $n$ such that:
 
-$$L(x_i) = y_i, \quad \text{for} \; i=0,1,\ldots,n.$$
+$$L(x_i) = y_i, \quad \text{for} \; i=0,1,\ldots,n$$
 
 Instead of solving a system of linear equations (as would be required if we used a general polynomial form), Lagrange interpolation provides a direct formula for the interpolating polynomial in terms of **Lagrange basis polynomials**. This approach is conceptually straightforward and does not require forming and solving large linear systems.
 
@@ -22,7 +22,7 @@ I. **Lagrange Basis Polynomials:**
 
 For each $i$ in $\{0,1,\ldots,n\}$, define the $i$-th Lagrange basis polynomial $P_i(x)$ by:
 
-$$P_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n} \frac{x - x_j}{x_i - x_j}.$$
+$$P_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n} \frac{x - x_j}{x_i - x_j}$$
 
 Notice that $P_i(x_k) = \delta_{ik}$, where $\delta_{ik}$ is the Kronecker delta. In other words:
 
@@ -36,7 +36,7 @@ II. **Lagrange Interpolating Polynomial:**
 
 Once we have the $P_i(x)$, the interpolating polynomial $L(x)$ is given by:
 
-$$L(x) = \sum_{i=0}^{n} y_i P_i(x).$$
+$$L(x) = \sum_{i=0}^{n} y_i P_i(x)$$
 
 By construction, $L(x_j) = y_j$ for all $j$. The degree of $L(x)$ is at most $n$.
 
@@ -44,11 +44,11 @@ By construction, $L(x_j) = y_j$ for all $j$. The degree of $L(x)$ is at most $n$
 
 Starting from the requirement that $L(x)$ matches all data points:
 
-$$L(x_i) = y_i \quad \text{for } i=0,1,\ldots,n.$$
+$$L(x_i) = y_i \quad \text{for } i=0,1,\ldots,n$$
 
 Consider polynomials $P_i(x)$ defined as:
 
-$$P_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n} \frac{x - x_j}{x_i - x_j}.$$
+$$P_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n} \frac{x - x_j}{x_i - x_j}$$
 
 This construction ensures that for each fixed $i$:
 
@@ -59,7 +59,7 @@ Hence $P_i(x)$ acts like a "selector" polynomial that equals 1 at $x_i$ and 0 at
 
 To construct $L(x)$ that passes through all points, we form:
 
-$$L(x) = \sum_{i=0}^{n} y_i P_i(x).$$
+$$L(x) = \sum_{i=0}^{n} y_i P_i(x)$$
 
 Evaluating at $x = x_k$:
 
@@ -84,13 +84,13 @@ For each $i=0,1,\ldots,n$:
 - Initialize $P_i(x)=1$.
 - For each $j=0,1,\ldots,n$ with $j \neq i$:
 
-$$P_i(x) = P_i(x) \cdot \frac{x - x_j}{x_i - x_j}.$$
+$$P_i(x) = P_i(x) \cdot \frac{x - x_j}{x_i - x_j}$$
 
 IV. **Form the Interpolating Polynomial**:
 
 Compute:
 
-$$L(x) = \sum_{i=0}^{n} y_i P_i(x).$$
+$$L(x) = \sum_{i=0}^{n} y_i P_i(x)$$
 
 **Result**:
 
@@ -102,21 +102,21 @@ The polynomial $L(x)$ is the desired Lagrange interpolating polynomial. To inter
 
 Let’s consider three points:
 
-$$A(-1,1), \quad B(2,3), \quad C(3,5).$$
+$$A(-1,1), \quad B(2,3), \quad C(3,5)$$
 
 We have $n=2$ (since there are 3 points), and thus the polynomial $L(x)$ will be of degree at most 2.
 
 **Compute $P_0(x)$** for the point $A(-1, 1)$:
 
-$$P_0(x) = \frac{(x - x_1)(x - x_2)}{(x_0-x_1)(x_0-x_2)} = \frac{(x - 2)(x - 3)}{(-1 -2)(-1 -3)} = \frac{(x - 2)(x - 3)}{(-3)(-4)} = \frac{(x - 2)(x - 3)}{12}.$$
+$$P_0(x) = \frac{(x - x_1)(x - x_2)}{(x_0-x_1)(x_0-x_2)} = \frac{(x - 2)(x - 3)}{(-1 -2)(-1 -3)} = \frac{(x - 2)(x - 3)}{(-3)(-4)} = \frac{(x - 2)(x - 3)}{12}$$
 
 **Compute $P_1(x)$** for the point $B(2,3)$:
 
-$$P_1(x) = \frac{(x - x_0)(x - x_2)}{(x_1 - x_0)(x_1 - x_2)} = \frac{(x +1)(x - 3)}{(2 + 1)(2 - 3)} = \frac{(x+1)(x - 3)}{3 \cdot (-1)} = -\frac{(x+1)(x-3)}{3}.$$
+$$P_1(x) = \frac{(x - x_0)(x - x_2)}{(x_1 - x_0)(x_1 - x_2)} = \frac{(x +1)(x - 3)}{(2 + 1)(2 - 3)} = \frac{(x+1)(x - 3)}{3 \cdot (-1)} = -\frac{(x+1)(x-3)}{3}$$
 
 **Compute $P_2(x)$** for the point $C(3,5)$:
 
-$$P_2(x) = \frac{(x - x_0)(x - x_1)}{(x_2 - x_0)(x_2 - x_1)} = \frac{(x +1)(x - 2)}{(3 + 1)(3 - 2)} = \frac{(x+1)(x - 2)}{4}.$$
+$$P_2(x) = \frac{(x - x_0)(x - x_1)}{(x_2 - x_0)(x_2 - x_1)} = \frac{(x +1)(x - 2)}{(3 + 1)(3 - 2)} = \frac{(x+1)(x - 2)}{4}$$
 
 Now, plug these into $L(x)$:
 
@@ -124,7 +124,7 @@ $$L(x) = y_0 P_0(x) + y_1 P_1(x) + y_2 P_2(x)$$
 
 Substitute $(y_0, y_1, y_2) = (1,3,5)$:
 
-$$L(x) = 1 \cdot \frac{(x - 2)(x - 3)}{12} + 3 \cdot \left(-\frac{(x+1)(x - 3)}{3}\right) + 5 \cdot \frac{(x+1)(x-2)}{4}.$$
+$$L(x) = 1 \cdot \frac{(x - 2)(x - 3)}{12} + 3 \cdot \left(-\frac{(x+1)(x - 3)}{3}\right) + 5 \cdot \frac{(x+1)(x-2)}{4}$$
 
 This polynomial will exactly fit the three given points.
 
