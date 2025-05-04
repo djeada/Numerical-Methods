@@ -26,7 +26,7 @@ where $f\_\*$ is an (unknown) deterministic function and $(\varepsilon\_i)$ are 
 | $\boldsymbol\beta\in\mathbb R^{p}$                        | vector of unknown regression coefficients                         |
 | $\widehat{\boldsymbol\beta}$                              | estimator of $\boldsymbol\beta$                                 |
 | $\mathbf r=\mathbf y-\mathbf X\widehat{\boldsymbol\beta}$ | vector of residuals                                               |
-| $\|\cdot\|\_2$                                             | Euclidean (ℓ2) norm                                               |
+| $\lVert \cdot \rVert_2$                                   | Euclidean ($\ell_2$) norm                                  |
 
 ### Curve Fitting
 
@@ -49,9 +49,14 @@ $\widehat{\mathbf a}=(\mathbf V^{\top}\mathbf V)^{-1}\mathbf V^{\top}\mathbf y.$
 
 ![curve_fitting](https://github.com/djeada/Numerical-Methods/assets/37275728/03a26675-9baa-4557-92fb-2ab86c9d7b7c)
 
-> **Remark 1 (Overfitting and Regularisation).**  High-degree polynomials can interpolate noisy data yet extrapolate disastrously.  Ridge ($\ell\_2$) or Lasso ($\ell\_1$) penalties enforce smoothness or sparsity:
-> $S_{\lambda}(\boldsymbol a)=\underbrace{\|\mathbf V\boldsymbol a-\mathbf y\|_2^2}_{\text{data-fit}}\; +\; \lambda\underbrace{\|\boldsymbol a\|_q^q}_{\text{regulariser}},\quad q\in\{1,2\}.$
-> Closed-form solutions exist for $q=2$; for $q=1$ convex optimisation is required.
+> **Remark (Overfitting and Regularisation).**
+> High-degree polynomials can interpolate noisy data yet extrapolate disastrously. Ridge ($\ell_2$) or Lasso ($\ell_1$) penalties enforce smoothness or sparsity:
+
+$$
+S_\lambda(a) = \lVert V\,a - y\rVert_2^2 + \lambda\,\lVert a\rVert_q^q,\quad q\in\{1,2\}
+$$
+
+> Closed-form solutions exist for $q=2$; for $q=1$ one must resort to convex optimisation.
 
 Other classical curve-fitting families include **splines**, **B-splines**, **Bezier curves**, **wavelet bases**, and **kernel smoothers** (e.g. Nadaraya–Watson).  Each trades parametric flexibility against interpretability and computational cost.
 
@@ -102,7 +107,7 @@ $$
 For instance, in logistic regression $g(\mu)=\log\bigl(\mu/(1-\mu)\bigr)$. Parameters are found by maximizing the likelihood
 
 $$
-\hat\beta = \arg\max_{\beta}\;\prod_{i=1}^{N} f\bigl(y_i;\,\mu(x_i;\beta)\bigr),
+\hat\beta = \arg\max_{\beta}\prod_{i=1}^{N} f\bigl(y_i;\,\mu(x_i;\beta)\bigr),
 $$
 
 using Fisher scoring or Newton methods.
@@ -211,7 +216,7 @@ $$
 \hat\beta
 = \begin{pmatrix}\hat\beta_0\\\hat\beta_1\end{pmatrix}
 \approx
-\begin{pmatrix}-0.236\\1.751\end{pmatrix}.
+\begin{pmatrix}-0.236, 1.751\end{pmatrix}.
 $$
 
 The fitted line is
@@ -246,7 +251,7 @@ $$
 
 $$
 \nabla^2\ell(\beta) = -\,X^\top \mathrm{diag}\bigl(\pi \circ (1 - \pi)\bigr)\,X 
-\;\preceq\;0.
+\preceq0.
 $$
 
 Newton iteration: $\boldsymbol\beta^{(t+1)}=\boldsymbol\beta^{(t)}-(\nabla^2\ell)^{-1}\nabla\ell$.
@@ -271,11 +276,11 @@ Autocorrelated or clustered errors require GLS or “sandwich” covariance esti
 
 III. **Heteroscedasticity:**
 
-If $\Var(\varepsilon_i \mid \mathbf{x}_i) = \sigma_i^2$, the usual OLS variance formula is invalid; use White’s (HC) estimators instead.
+If $Var(\varepsilon_i \mid \mathbf{x}_i) = \sigma_i^2$, the usual OLS variance formula is invalid; use White’s (HC) estimators instead.
 
 IV. **Multicollinearity:**
 
-Near–linear dependence among columns of $X$ inflates $\Var(\hat\beta_j)$; ridge regression can shrink the condition number.
+Near–linear dependence among columns of $X$ inflates $Var(\hat\beta_j)$; ridge regression can shrink the condition number.
 
 V. **High Use & Outliers:**
 
