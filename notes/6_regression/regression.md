@@ -59,69 +59,84 @@ Other classical curve-fitting families include **splines**, **B-splines**, **Bez
 
 ### Regression Analysis
 
-In modern statistical language, *regression* is synonymous with *conditional mean modelling*.  We assume
-$\mathbb E[\,y\mid\mathbf x\,]=\mu(\mathbf x;\,\boldsymbol\beta),$
-where $\mu(\cdot;,\boldsymbol\beta)$ is a known link indexed by parameters $\boldsymbol\beta$.  The task is to estimate $\boldsymbol\beta$ given i.i.d. samples.
+In modern statistics, **regression** refers to modeling the conditional mean
+
+$$
+\mathbb{E}[\,y\mid x\,] = \mu(x;\,\beta),
+$$
+
+where $\mu(\cdot;\beta)$ is a known function (link) indexed by parameters $\beta$. Given i.i.d. samples $(x_i,y_i)$, our goal is to estimate $\beta$.
 
 #### Linear Model
 
-When
+If
 
 $$
-\mu(\mathbf{x}, \boldsymbol\beta)
-= \mathbf{x}^\top \boldsymbol\beta.
+\mu(x;\beta) = x^\top \beta,
 $$
 
-the model is **linear in parameters**.  
-
-Writing $\mathbf X\boldsymbol\beta$ for the fitted values, the *ordinary least squares* (OLS) estimator is obtained by solving
+the model is **linear** in the parameters. Writing the data matrix $X$ and response vector $y$, the OLS estimator solves
 
 $$
-\hat{\boldsymbol\beta}_{\mathrm{OLS}}
-= \arg\min_{\boldsymbol\beta}\,\bigl\|\mathbf{y}-\mathbf{X}\,\boldsymbol\beta\bigr\|_2^2.
+\hat\beta = \arg\min_{\beta}\,\|\,y - X\beta\|_2^2.
 $$
 
-Assuming $rank(\mathbf X)=p\le N$, the solution is
-
-$\widehat{\boldsymbol\beta}_{\text{OLS}}=(\mathbf X^{\top}\mathbf X)^{-1}\mathbf X^{\top}\mathbf y.$
-
-**Gauss–Markov Theorem.**  Under spherical errors $\operatorname{Cov}(\boldsymbol\varepsilon)=\sigma^{2}\mathbf I\_N$, OLS is the **best linear unbiased estimator** (BLUE): for any linear unbiased estimator $\tilde{\boldsymbol\beta}=\mathbf C\mathbf y$ with $\mathbf C\mathbf X=\mathbf I\_p$ we have
+When $\mathrm{rank}(X)=p$, the closed-form solution is
 
 $$
-\mathrm{Var}\bigl(\tilde{\boldsymbol\beta}\bigr)
-- \mathrm{Var}\bigl(\hat{\boldsymbol\beta}_{\mathrm{OLS}}\bigr)
-\succeq 0.
+\hat\beta = (X^\top X)^{-1}X^\top y.
 $$
 
-#### Generalised Linear Model (GLM)
+**Gauss–Markov Theorem.** If $\mathrm{Cov}(\varepsilon)=\sigma^2I$, then among all linear unbiased estimators $\tilde\beta = Cy$ with $CX=I$, OLS has the smallest variance:
 
-For exponential-family responses ($y\sim\text{Bernoulli}$, Poisson, Gamma, etc.) we posit
-$g(\,\mu(\mathbf x)\,) = \mathbf x^{\top}\boldsymbol\beta,$
-where $g$ is a monotonic *link*.  E.g. logistic regression sets $g(\mu)=\log(\mu/(1-\mu))$.  Parameters are estimated via **maximum likelihood**
-$\widehat{\boldsymbol\beta}=\arg\max_{\boldsymbol\beta}\; \prod_{i=1}^{N} f_Y\bigl(y_i;\,\mu_i(\boldsymbol\beta)\bigr),$
-which is solved by Fisher scoring or (quasi-)Newton iterations.
+$$
+\mathrm{Var}(\tilde\beta) - \mathrm{Var}(\hat\beta) \succeq 0.
+$$
 
-#### Non-linear Least Squares (NLS)
+#### Generalized Linear Model (GLM)
 
-Suppose $\mu(\mathbf x;\boldsymbol\beta)$ is nonlinear in $\boldsymbol\beta$, e.g. Michaelis–Menten kinetics
-$\mu(x;V_{\max},K_m)=\frac{V_{\max}x}{K_m+x}.$  The loss
-$S(\boldsymbol\beta)=\sum_{i=1}^{N}\bigl(y_i-\mu(\mathbf x_i;\boldsymbol\beta)\bigr)^2$
-becomes non-convex; Levenberg–Marquardt or trust-region methods are standard.
+For responses in the exponential family (e.g.\ Bernoulli, Poisson), we introduce a **link** $g$ so that
+
+$$
+g\bigl(\mu(x)\bigr) = x^\top \beta.
+$$
+
+For instance, in logistic regression $g(\mu)=\log\bigl(\mu/(1-\mu)\bigr)$. Parameters are found by maximizing the likelihood
+
+$$
+\hat\beta = \arg\max_{\beta}\;\prod_{i=1}^{N} f\bigl(y_i;\,\mu(x_i;\beta)\bigr),
+$$
+
+using Fisher scoring or Newton methods.
+
+#### Nonlinear Least Squares (NLS)
+
+When $\mu(x;\beta)$ is nonlinear in $\beta$ (e.g.\ Michaelis–Menten: $\mu(x;V,K)=Vx/(K+x)$), we minimize
+
+$$
+S(\beta) = \sum_{i=1}^N \bigl(y_i - \mu(x_i;\beta)\bigr)^2.
+$$
+
+This loss is generally non-convex; standard solvers include Levenberg–Marquardt or trust-region algorithms.
 
 ### Concepts in Regression
 
-| Concept                  | Formal Definition                                                                                                                                                                                        |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Parameter Estimation** | Solve $\widehat{\boldsymbol\theta}=\arg\min\_{\boldsymbol\theta},\mathcal L(\boldsymbol\theta)$ where $\mathcal L$ is least-squares or negative log-likelihood.                                      |
-| **Fitted Values**        | $\widehat{y}\_i = \mu(\mathbf x\_i;\widehat{\boldsymbol\theta})$                                                                                                                                       |
-| **Residuals**            | $r\_i=y\_i-\widehat{y}*i$ (raw), $\hat\varepsilon\_i=r\_i/(1-h*{ii})$ (externally studentised) with $h\_{ii}$ the hat-matrix diagonal.                                                             |
-| **Loss / Error**         | Classical: $\mathrm{RSS}=\sum\_{i}r\_i^{2}$; Classification: $\mathrm{CrossEntropy}=-\sum\_{i} y\_i\log\widehat{y}\_i+(1-y\_i)\log(1-\widehat{y}\_i)$                                                |
-| **Risk**                 | $R(\widehat f)=\mathbb E\bigl\[\mathcal L(\widehat f(\mathbf x),y)\bigr]$.  Empirical risk minimisation (ERM) replaces $\mathbb E$ by sample mean.                                                   |
-| **Goodness-of-Fit**      | $R^2 = 1-\tfrac{\mathrm{RSS}}{\mathrm{TSS}}$ with $\mathrm{TSS}=\sum\_{i}(y\_i-\bar y)^2$; Adjusted $\bar R^2=1-(1-R^2)\tfrac{N-1}{N-p-1}$; AIC $=2k-2\log\hat L$; BIC $=k\log N-2\log\hat L$. |
-| **Inference**            | Wald test: $\displaystyle z\_j = \frac{\widehat\beta\_j}{\widehat{\mathrm{se}}(\widehat\beta\_j)}\stackrel{\text{approx}}\sim N(0,1)$; LR test: $;2(\ell\_1-\ell\_0)\sim\chi^2\_{df}$.               |
-| **Prediction Interval**  | For new $\mathbf x\_0$: $\widehat y\_0\pm t\_{N-p,1-\alpha/2};\widehat\sigma\sqrt{1+ \mathbf x\_0^{\top}(\mathbf X^{\top}\mathbf X)^{-1}\mathbf x\_0}$.                                              |
-
----
+| Concept                  | Formal Definition                                                                                                                                        |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Parameter Estimation** | $\displaystyle \hat\theta = \arg\min_{\theta}\,\mathcal L(\theta)$ where $\mathcal L$ is least‐squares or negative log‐likelihood.                       |
+| **Fitted Values**        | $\displaystyle \hat y_i = \mu(\mathbf x_i;\,\hat\theta)$                                                                                                 |
+| **Residuals**            | $\displaystyle r_i = y_i - \hat y_i$                                                                                                                     |
+|                          | $\displaystyle \hat\varepsilon_i = \frac{r_i}{1 - h_{ii}}$, with $h_{ii}$ the $i$th diagonal of the hat matrix.                                          |
+| **Loss / Error**         | $\displaystyle \mathrm{RSS} = \sum_i r_i^2$                                                                                                              |
+|                          | $\displaystyle -\sum_i \bigl[y_i\log\hat y_i + (1-y_i)\log(1-\hat y_i)\bigr]$                                                                            |
+| **Risk**                 | $\displaystyle R(\hat f) = \mathbb{E}\bigl[\mathcal L(\hat f(\mathbf x),y)\bigr]$, empirical risk minimisation replaces $\mathbb{E}$ by the sample mean. |
+| **Goodness-of-Fit**      | $\displaystyle R^2 = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}},\quad \mathrm{TSS} = \sum_i (y_i - \bar y)^2$                                                 |
+|                          | $\displaystyle \bar R^2 = 1 - (1 - R^2)\,\frac{N-1}{N-p-1}$                                                                                              |
+|                          | $\displaystyle \mathrm{AIC} = 2k - 2\log\hat L$                                                                                                          |
+|                          | $\displaystyle \mathrm{BIC} = k\log N - 2\log\hat L$                                                                                                     |
+| **Inference**            | $\displaystyle z_j = \frac{\hat\beta_j}{\widehat{\mathrm{se}}(\hat\beta_j)} \approx N(0,1)$                                                              |
+|                          | $\displaystyle 2(\ell_1 - \ell_0)\sim \chi^2_{\text{df}}$                                                                                                |
+| **Prediction Interval**  | $\displaystyle \hat y_0 \pm t_{N-p,\,1-\alpha/2}\,\hat\sigma\sqrt{1 + \mathbf x_0^\top (X^\top X)^{-1}\mathbf x_0}$                                      |
 
 ### Types of Regression Methods
 
@@ -136,29 +151,107 @@ becomes non-convex; Levenberg–Marquardt or trust-region methods are standard.
 
 > **Computational Note.**  High-dimensional ($p\gg N$) problems demand numerical linear-algebra tricks: Woodbury identity, iterative conjugate gradient, stochastic gradient descent (SGD), or variance-reduced methods (SVRG, SAGA).
 
----
-
 ### Worked Examples
 
 #### Example 1 – OLS in Matrix Form
 
-Let
-$\mathbf X = \begin{bmatrix}1 & 0.8\\1 & 1.2\\1 & 1.9\\1 & 2.4\\1 & 3.0\end{bmatrix},\qquad \mathbf y = \begin{bmatrix}1.2\\1.9\\3.1\\3.9\\5.1\end{bmatrix}.$
-Compute $\mathbf X^{\top}\mathbf X=\begin{bmatrix}5 & 9.3\9.3 & 19.49\end{bmatrix}$, $\mathbf X^{\top}\mathbf y=\begin{bmatrix}15.2\30.47\end{bmatrix}$, so
-$\widehat{\boldsymbol\beta}=\begin{bmatrix}0.067\\1.689\end{bmatrix},\quad R^2=0.998.$  Thus $\widehat y=0.067+1.689x$.
+We have $N=5$ observations $\{(x_i,y_i)\}$ and wish to fit
+
+$$
+y_i = \beta_0 + \beta_1 x_i + \varepsilon_i,\qquad
+\varepsilon_i\sim\text{mean }0.
+$$
+
+We stack the data as
+
+$$
+X = 
+\begin{bmatrix}
+1 & 0.8\\
+1 & 1.2\\
+1 & 1.9\\
+1 & 2.4\\
+1 & 3.0
+\end{bmatrix}, 
+\qquad
+y =
+\begin{bmatrix}
+1.2\\
+1.9\\
+3.1\\
+3.9\\
+5.1
+\end{bmatrix}.
+$$
+
+The OLS estimator is
+
+$$
+\hat\beta
+= (X^\top X)^{-1}\,X^\top y.
+$$
+
+Compute
+
+$$
+X^\top X
+= \begin{bmatrix}
+5   & 9.30\\
+9.30&20.45
+\end{bmatrix},
+\quad
+X^\top y
+= \begin{bmatrix}
+15.20\\
+33.79
+\end{bmatrix}.
+$$
+
+Hence
+
+$$
+\hat\beta
+= \begin{pmatrix}\hat\beta_0\\\hat\beta_1\end{pmatrix}
+\approx
+\begin{pmatrix}-0.236\\1.751\end{pmatrix}.
+$$
+
+The fitted line is
+
+$$
+\hat y = -0.236 + 1.751\,x.
+$$
+
+To assess fit, let $\bar y=15.20/5=3.04$. Then
+
+$$
+R^2
+= 1 - \frac{\sum_i (y_i - \hat y_i)^2}{\sum_i (y_i - \bar y)^2}
+\approx 0.998.
+$$
 
 #### Example 2 – Logistic Regression, MLE Derivatives
 
 For binary data $y\_i\in{0,1}$ the log-likelihood is
-$\ell(\boldsymbol\beta)=\sum_{i=1}^{N}\Bigl[y_i\,\mathbf x_i^{\top}\boldsymbol\beta-\log\bigl\{1+e^{\mathbf x_i^{\top}\boldsymbol\beta}\bigr\}\Bigr].$
-Gradient and Hessian:
-\begin{align}
-\nabla\ell &= \mathbf X^{\top}(\mathbf y-\boldsymbol\pi),\qquad \boldsymbol\pi=\operatorname{logit}^{-1}(\mathbf X\boldsymbol\beta),\\
-\nabla^2\ell &=-\mathbf X^{\top}\operatorname{diag}(\boldsymbol\pi\odot(1-\boldsymbol\pi)),\mathbf X;\text{ (negative definite)}.
-\end{align}
-Newton iteration: $\boldsymbol\beta^{(t+1)}=\boldsymbol\beta^{(t)}-(\nabla^2\ell)^{-1}\nabla\ell$.
 
----
+$$
+\ell(\beta) = \sum_{i=1}^N \bigl[y_i\,x_i^\top \beta - \log\bigl(1 + e^{x_i^\top \beta}\bigr)\bigr].
+$$
+
+Gradient and Hessian:
+
+$$
+\nabla\ell(\beta) = X^\top (y - \pi), 
+\quad 
+\pi = (1 + e^{-X\beta})^{-1},
+$$
+
+$$
+\nabla^2\ell(\beta) = -\,X^\top \mathrm{diag}\bigl(\pi \circ (1 - \pi)\bigr)\,X 
+\;\preceq\;0.
+$$
+
+Newton iteration: $\boldsymbol\beta^{(t+1)}=\boldsymbol\beta^{(t)}-(\nabla^2\ell)^{-1}\nabla\ell$.
 
 ### Applications
 
@@ -168,20 +261,43 @@ Newton iteration: $\boldsymbol\beta^{(t+1)}=\boldsymbol\beta^{(t)}-(\nabla^2\ell
 * **Marketing & A/B Testing** – Uplift modelling, mixed-effect regressions for hierarchical data.
 * **Machine Learning Pipelines** – Feature engineering baseline, stacking/blending meta-learners, interpretability audits.
 
----
-
 ### Limitations & Pitfalls
 
-1. **Model Misspecification** – When $f\_\*(\mathbf x)$ lies outside the chosen hypothesis class, estimators are biased even as $N\to\infty$.
-2. **Violation of IID** – Autocorrelated or clustered errors require GLS or sandwich covariances.
-3. **Heteroscedasticity** – $\operatorname{Var}(\varepsilon\_i\mid\mathbf x\_i)=\sigma\_i^2$ invalidates OLS variance formulas; use White/HC estimators.
-4. **Multicollinearity** – Near-linear dependence inflates $\operatorname{Var}(\widehat\beta\_j)$; ridge shrinks condition number.
-5. **High-Leverage & Outliers** – Influence measures: Cook’s $D\_i=\frac{r\_i^2 h\_{ii}}{p\hat\sigma^2(1-h\_{ii})^2}$; robust M-estimators mitigate.
-6. **Overfitting / High Variance** – Cross-validation, information criteria, or Bayesian model averaging select model complexity.
-7. **External Validity** – Regression learns conditional mean on $\mathcal D$; distribution shift breaks prediction (covariate shift, concept drift).
-8. **Causal Inference vs. Prediction** – Regression coefficients are not causal unless confounding is addressed (instrumental variables, RCTs, DAGs).
+I. **Model Misspecification:**
 
----
+When $f_*(\mathbf{x})$ lies outside the chosen hypothesis class, estimators remain biased even as $N \to \infty$.
+
+II. **Violation of IID:**
+
+Autocorrelated or clustered errors require GLS or “sandwich” covariance estimators.
+
+III. **Heteroscedasticity:**
+
+If $\Var(\varepsilon_i \mid \mathbf{x}_i) = \sigma_i^2$, the usual OLS variance formula is invalid; use White’s (HC) estimators instead.
+
+IV. **Multicollinearity:**
+
+Near–linear dependence among columns of $X$ inflates $\Var(\hat\beta_j)$; ridge regression can shrink the condition number.
+
+V. **High Use & Outliers:**
+
+Cook’s distance
+
+$$D_i = \frac{r_i^2,h_{ii}}{p,\hat\sigma^2,(1 - h_{ii})^2}$$
+
+identifies influential points; strong M–estimators mitigate their effect.
+
+VI. **Overfitting / High Variance:**
+
+Cross-validation, information criteria, or Bayesian model averaging help choose model complexity.
+
+VII. **External Validity:**
+
+Regression learns the conditional mean on $\mathcal{D}$; distribution shifts (covariate shift, concept drift) break prediction accuracy.
+
+VIII. **Causal Inference vs. Prediction:**
+
+Regression coefficients are not causal unless confounding is addressed (e.g.\ via instrumental variables, RCTs, or DAG-based adjustment).
 
 ### Further Reading
 
