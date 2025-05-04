@@ -17,8 +17,6 @@ $$
 
 where $f\_\*$ is an (unknown) deterministic function and $(\varepsilon\_i)$ are random errors.  The analyst’s objective is to construct an estimator $\widehat f$ (or equivalently to estimate a parameter vector $\widehat{\boldsymbol\theta}$ specifying $\widehat f$) such that some notion of risk—mean-squared error, negative log-likelihood, predictive log-loss, etc.—is minimized.
 
-Below we preserve the original high-level outline but expand each section with mathematical exactitude.  Symbols used repeatedly are collected in the following table.
-
 | Symbol                                                      | Meaning                                                           |
 | ----------------------------------------------------------- | ----------------------------------------------------------------- |
 | $N$                                                       | sample size (number of observations)                              |
