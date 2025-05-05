@@ -92,8 +92,6 @@ $$
 
 In this case, Simpson's Rule provides an exact approximation, demonstrating its effectiveness for polynomial functions of degree two or lower.
 
-This example highlights how Simpson's Rule accurately approximates integrals, especially when the function being integrated is well-represented by quadratic polynomials within each subinterval. The method's precision in this scenario underscores its utility in numerical integration tasks.
-
 ### Advantages
 
 * When compared to the Rectangle (Midpoint) Rule and the Trapezoidal Rule, the method often yields a more *accurate approximation* of definite integrals. This increased accuracy comes from using quadratic polynomials to model the function’s behavior, allowing it to capture curvature and more complex features. For smooth functions that can be closely approximated by parabolas over each pair of subintervals, the method can achieve exact results with *fewer subintervals* than other approaches. This efficiency is especially useful in computational applications where reducing the number of function evaluations saves significant processing time.
