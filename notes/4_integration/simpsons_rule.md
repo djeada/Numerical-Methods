@@ -57,7 +57,7 @@ IV. **Aggregate the Results:**
 - Sum all the weighted function values as per the formula to obtain the total integral approximation.
 - This aggregated sum represents the estimated area under the curve $f(x)$ over the interval $[a, b]$.
 
-By meticulously following these steps, Simpson's Rule systematically constructs a reliable approximation of the definite integral, balancing computational efficiency with high accuracy.
+Simpson's Rule systematically constructs a reliable approximation of the definite integral, balancing computational efficiency with high accuracy.
 
 ### Example
 
