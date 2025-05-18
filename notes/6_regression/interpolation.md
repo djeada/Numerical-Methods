@@ -26,12 +26,12 @@ Because the nodes $x_i$ are **distinct**, the classical existence-and-uniqueness
 
 ### Concepts
 
-| Method                          | Essential idea                                          | Interpolant form                                                    | Error behavior\*                                                | Typical use-case                       |
-| ------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------- |
-| **Linear**                      | Join successive points by straight segments             | Piecewise degree-1                                                  | $O(h^2)$                                                        | Fast previews, computer graphics       |
-| **Polynomial**                  | Single poly of degree $n$ through all nodes             | Lagrange, Newton, barycentric, etc.                                 | $O(h^{n+1})$ but risk of *Runge* oscillations when $n$ is large | Small $n$ on modest intervals          |
-| **Spline**                      | Glue low-degree polynomials with continuity constraints | Piecewise degree-$k$ (usually 3)                                    | $O(h^{k+1})$ plus good shape control                            | Smooth curves, CAD/CAM, statistics     |
-| **Radial Basis Function (RBF)** | Weighted radial kernels centered at nodes               | $\displaystyle \hat f(x)=\sum_{i=0}^{n} \lambda_i\,\phi(\|x-x_i\|)$ | Spectral for smooth $\phi$                                      | Scattered data, high-dimensional grids |
+| Method                          | Essential idea                                          | Interpolant form                                                                         | Error behavior\*                                                | Typical use-case                       |
+| ------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------- |
+| **Linear**                      | Join successive points by straight segments             | Piecewise degree-1                                                                       | $O(h^2)$                                                        | Fast previews, computer graphics       |
+| **Polynomial**                  | Single poly of degree $n$ through all nodes             | Lagrange, Newton, barycentric, etc.                                                      | $O(h^{n+1})$ but risk of *Runge* oscillations when $n$ is large | Small $n$ on modest intervals          |
+| **Spline**                      | Glue low-degree polynomials with continuity constraints | Piecewise degree-$k$ (usually 3)                                                         | $O(h^{k+1})$ plus good shape control                            | Smooth curves, CAD/CAM, statistics     |
+| **Radial Basis Function (RBF)** | Weighted radial kernels centered at nodes               | $\displaystyle \hat f(x)=\sum_{i=0}^{n} \lambda_i\,\phi\bigl(\lVert x - x_i\rVert\bigr)$ | Spectral for smooth $\phi$                                      | Scattered data, high-dimensional grids |
 
 Assuming evenly spaced nodes with spacing $h=\max_i (x_{i+1}-x_i)$.
 
