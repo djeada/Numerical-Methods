@@ -12,23 +12,23 @@ Given a matrix of features $X \in \mathbb{R}^{m \times n}$ (with $m$ observation
 
 We model:
 
-$$\hat{Y} = X \beta.$$
+$$\hat{Y} = X \beta$$
 
 **Objective**: Minimize the Residual Sum of Squares (RSS):
 
-$$RSS(\beta) = \| Y - X\beta \|_2^2 = (Y - X\beta)^\top (Y - X\beta).$$
+$$RSS(\beta) = \| Y - X\beta \|_2^2 = (Y - X\beta)^\top (Y - X\beta)$$
 
 The goal is to find $\beta$ that solves:
 
-$$\min_\beta \| Y - X\beta \|_2^2.$$
+$$\min_\beta \| Y - X\beta \|_2^2$$
 
 By setting the gradient of this objective with respect to $\beta$ to zero, we obtain the **Normal Equation**:
 
-$$X^\top X \beta = X^\top Y.$$
+$$X^\top X \beta = X^\top Y$$
 
 Provided $X^\top X$ is invertible, we have a closed-form solution:
 
-$$\beta = (X^\top X)^{-1} X^\top Y.$$
+$$\beta = (X^\top X)^{-1} X^\top Y$$
 
 This $\beta$ is the least squares estimate of the coefficient vector, ensuring that the fitted line (or hyperplane, in the multi-dimensional case) is the best fit in the least squares sense.
 
@@ -48,27 +48,27 @@ II. **Defining the Error to Minimize**:
 
 We define the residuals as:
 
-$$r = Y - X\beta.$$
+$$r = Y - X\beta$$
 
 The objective is to minimize:
 
-$$RSS(\beta) = r^\top r = (Y - X\beta)^\top (Y - X\beta).$$
+$$RSS(\beta) = r^\top r = (Y - X\beta)^\top (Y - X\beta)$$
 
 III. **Finding the Minimum**:
 
 To minimize with respect to $\beta$, take the gradient and set it to zero:
 
-$$\frac{\partial RSS}{\partial \beta} = -2X^\top(Y - X\beta) = 0.$$
+$$\frac{\partial RSS}{\partial \beta} = -2X^\top(Y - X\beta) = 0$$
 
 This implies:
 
-$$X^\top Y - X^\top X \beta = 0 \implies X^\top X \beta = X^\top Y.$$
+$$X^\top Y - X^\top X \beta = 0 \implies X^\top X \beta = X^\top Y$$
 
 IV. **Solving the Normal Equation**:
 
 If $X^\top X$ is invertible:
 
-$$\beta = (X^\top X)^{-1} X^\top Y.$$
+$$\beta = (X^\top X)^{-1} X^\top Y$$
 
 This formula provides a closed-form solution for the ordinary least squares estimator $\beta$.
 
@@ -92,13 +92,13 @@ III. **Check Invertibility**:
 
 IV. **Solve for $\beta$**:
 
-$$\beta = (X^\top X)^{-1} X^\top Y.$$
+$$\beta = (X^\top X)^{-1} X^\top Y$$
 
 V. **Use the Model for Prediction**:
 
 For a new input $x_{\text{new}}$, predict:
 
-$$\hat{y}_{\text{new}} = x_{\text{new}}^\top \beta.$$
+$$\hat{y}_{\text{new}} = x_{\text{new}}^\top \beta$$
 
 ### Example
 
