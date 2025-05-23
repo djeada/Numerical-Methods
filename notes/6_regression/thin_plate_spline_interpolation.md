@@ -56,7 +56,7 @@ III. **Linear System**:
 
 Substitute $f(x,y)$ into the interpolation conditions. This produces a system of $N+3$ linear equations (for $w\_i, \alpha\_0,\alpha\_1,\alpha\_2$):
 
-$$$\begin{bmatrix}
+$$\begin{bmatrix}
 0 & P^\top \\ P & K
 \end{bmatrix}
 \begin{bmatrix} \alpha \\ w \end{bmatrix}
