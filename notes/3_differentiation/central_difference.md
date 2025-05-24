@@ -1,6 +1,6 @@
 ## Central Difference Method
 
-The central difference method is a finite difference method used for approximating derivatives. It utilizes the forward difference, backward difference, and the principles of Taylor series expansion to derive a more accurate approximation of derivatives. This method is particularly valuable in numerical analysis and computational applications where analytical derivatives are difficult or impossible to obtain. By considering points on both sides of the target point, the central difference method balances the approximation, leading to improved accuracy compared to one-sided methods.
+The central‐difference method is a finite‐difference scheme for estimating derivatives that combines forward and backward differences via Taylor‐series expansions. By evaluating the function at points symmetrically placed around the target, it cancels out many of the lower‐order error terms, yielding a more accurate approximation than one‐sided methods. This balanced approach is especially useful in numerical analysis and computational applications where closed‐form derivatives are unavailable or costly to compute.
 
 ![Central Difference Method Illustration](https://github.com/user-attachments/assets/367d9eb0-a68b-47d4-bace-f0279fd8b1f8)
 
@@ -12,16 +12,50 @@ $$
 f'(x) \approx \frac{f(x + h) - f(x - h)}{2h}
 $$
 
-This formula is derived from the average of the forward and backward difference formulas. The forward difference approximation is expressed as:
+This formula is derived from the average of the forward and backward difference formulas. 
+
+Let's start with Taylor's formula. For some $\xi_1\in(x,x+h)$ and $\xi_2\in(x-h,x)$, Taylor’s theorem gives
 
 $$
-f'(x_0)\approx \frac{f(x_0+h)-f(x_0)}{h}, \quad h>0
+f(x+h) = f(x) + hf'(x) + \frac{h^2}{2}f''(x) + \frac{h^3}{6}f^{(3)}(\xi_1)
+$$
+
+$$
+f(x-h) = f(x) - hf'(x) + \frac{h^2}{2}f''(x) - \frac{h^3}{6}f^{(3)}(\xi_2)
+$$
+
+The forward difference approximation is expressed as:
+
+$$
+\frac{f(x+h)-f(x)}{h}
+= \frac{\bigl[f(x)+h f'(x)+\tfrac{h^2}{2}f''(x)+\tfrac{h^3}{6}f^{(3)}(\xi_1)\bigr] - f(x)}{h}
+$$
+
+$$
+= f'(x) + \frac{h}{2}f''(x) + \frac{h^2}{6}f^{(3)}(\xi_1)
+$$
+
+Thus
+
+$$
+\frac{f(x+h)-f(x)}{h} = f'(x) + \mathcal{O}(h)
 $$
 
 Similarly, the backward difference approximation is:
 
 $$
-f'(x_0)\approx \frac{f(x_0) - f(x_0 - h)}{h}, \quad h>0
+\frac{f(x)-f(x-h)}{h}
+= \frac{f(x) - \bigl[f(x)-h f'(x)+\tfrac{h^2}{2}f''(x)-\tfrac{h^3}{6}f^{(3)}(\xi_2)\bigr]}{h}
+$$
+
+$$
+= f'(x) - \frac{h}{2}f''(x) + \frac{h^2}{6}f^{(3)}(\xi_2)
+$$
+
+Thus
+
+$$
+\frac{f(x)-f(x-h)}{h} = f'(x) + \mathcal{O}(h)
 $$
 
 By taking the average of these two approximations, we eliminate the leading error terms, resulting in a more accurate estimate of the derivative. The Taylor series expansion is a representation of a function as an infinite sum of terms calculated from the function's derivatives at a single point. We use this expansion to improve our approximation of derivatives:
@@ -36,13 +70,53 @@ $$
 f(x_0-h) = f(x_0) - hf'(x_0) + \frac{h^2}{2}f''(x_0) + \mathcal{O}(h^3)
 $$
 
-Subtracting the second equation from the first and rearranging for $f'(x_0)$:
+Add the two approximations and divide by 2:
 
 $$
-f'(x_0) = \frac{f(x_0+h) - f(x_0-h)}{2h} + \mathcal{O}(h^2)
+\frac12\biggl[\frac{f(x+h)-f(x)}{h} + \frac{f(x)-f(x-h)}{h}\biggr]
 $$
 
-This formula represents the slope of the secant line passing through the points $(x - h, f(x - h))$ and $(x + h, f(x + h))$. The use of both forward and backward points allows the central difference method to achieve a higher order of accuracy by effectively canceling out lower-order error terms.
+$$
+= \frac12\Bigl[\bigl(f'(x) + \tfrac{h}{2}f''(x) + \tfrac{h^2}{6}f^{(3)}(\xi_1)\bigr)
+\quad + \bigl(f'(x) - \tfrac{h}{2}f''(x) + \tfrac{h^2}{6}f^{(3)}(\xi_2)\bigr)\Bigr] 
+$$
+
+$$
+= f'(x) + \frac{h^2}{12}\bigl(f^{(3)}(\xi_1)+f^{(3)}(\xi_2)\bigr)
+$$
+
+Notice the $\pm\tfrac{h}{2}f''(x)$ terms cancel exactly, leaving only an $\mathcal{O}(h^2)$ remainder.
+
+Rewriting the left side,
+
+$$
+\frac{1}{2}\Bigl(\tfrac{f(x+h)-f(x)}{h} + \tfrac{f(x)-f(x-h)}{h}\Bigr)
+= \frac{f(x+h)-f(x-h)}{2h}
+$$
+
+Hence
+
+$$
+\frac{f(x+h)-f(x-h)}{2h}
+= f'(x) + \underbrace{\frac{h^2}{12}\bigl(f^{(3)}(\xi_1)+f^{(3)}(\xi_2)\bigr)}_{\displaystyle\mathcal{O}(h^2)}
+$$
+
+or equivalently
+
+$$
+f'(x)
+= \frac{f(x+h)-f(x-h)}{2h} - \mathcal{O}(h^2)
+$$
+
+Dropping the explicit remainder,
+
+$$
+\boxed{
+f'(x)\approx \frac{f(x+h)-f(x-h)}{2h}
+}
+$$
+
+which is **second‐order accurate** (error $\propto h^2$) because the leading $h^1$ terms have cancelled.
 
 ### Error in Central Difference Method
 
