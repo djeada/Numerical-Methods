@@ -288,7 +288,7 @@ We wish to interpolate $f(1.5)$
 
 I. **Choose the central row and reduced argument**
 
-* Mid-index $m=2\Rightarrowx_m = 2$.
+* Mid-index $m=2 -> x_m = 2$.
 * Reduced distance from the centre
 
 $$
