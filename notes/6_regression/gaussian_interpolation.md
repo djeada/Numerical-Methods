@@ -16,7 +16,7 @@ Assume we have **equally spaced abscissae**
 
 $$
 x_0,x_1,x_2,\dots ,x_n, \qquad 
-h = x_{i+1}-x_i (\text{constant step}).
+h = x_{i+1}-x_i (\text{constant step})
 $$
 
 Let the “mid-table’’ node be $x_m$ where
@@ -34,7 +34,7 @@ $$
 To measure how far the interpolation point $x$ sits from the centre we introduce the dimensionless variable
 
 $$
-\boxed{t=\dfrac{x-x_m}{h}}.
+\boxed{t=\dfrac{x-x_m}{h}}
 $$
 
 Difference operators near the centre
@@ -42,15 +42,16 @@ Difference operators near the centre
 *Forward* and *backward* first differences are
 
 $$
-\Delta y_i = y_{i+1}-y_i, 
+\Delta y_i = y_{i+1}-y_i
 $$
 
 $$
-\nabla y_i = y_i-y_{i-1},
+\nabla y_i = y_i-y_{i-1}
 $$
 
 with higher‐order differences generated recursively, e.g.
-$\Delta^2 y_i = \Delta(\Delta y_i)=y_{i+2}-2y_{i+1}+y_i$.
+
+$$\Delta^2 y_i = \Delta(\Delta y_i)=y_{i+2}-2y_{i+1}+y_i$$
 
 For a central scheme we evaluate these differences on the rows immediately **adjacent to** $x_m$:
 
@@ -91,7 +92,7 @@ $$
 Forward and backward differences
 
 $$
-\Delta y_i = y_{i+1}-y_i,
+\Delta y_i = y_{i+1}-y_i
 $$
 
 $$
@@ -102,154 +103,133 @@ with higher orders obtained recursively, e.g.
 
 $$
 \Delta^{2}y_i = \Delta(\Delta y_i)=y_{i+2}-2y_{i+1}+y_i, \quad
-\nabla^{2}y_i = \nabla(\nabla y_i)=y_i-2y_{i-1}+y_{i-2},
+\nabla^{2}y_i = \nabla(\nabla y_i)=y_i-2y_{i-1}+y_{i-2}
 $$
 
 and so on.
 
-II.  **Choosing the central origin and defining the reduced argument**
+II. **Choosing the central origin and defining the reduced argument**
 
 Pick the index
 
-  $$
-  m =
-  \begin{cases}
-     n/2, & n\text{ even},\\[4pt]
-     (n-1)/2, & n\text{ odd},
-  \end{cases}
-  \qquad\Longrightarrow\qquad x_m\approx\text{mid-table}.
-  $$
+$$
+m =
+\begin{cases}
+   n/2, & n\text{ even}
+   (n-1)/2, & n\text{ odd},
+\end{cases}
+\qquad\Longrightarrow\qquad x_m\approx\text{mid-table}
+$$
 
-* Introduce the dimensionless distance of the target point $x$ from the centre:
+Introduce the dimensionless distance of the target point $x$ from the centre:
 
-  $$
-  t = \dfrac{x-x_m}{h}.
-  $$
+$$
+t = \dfrac{x-x_m}{h}.
+$$
 
-  > $t=0$ at the centre, $t=\pm1$ exactly one grid step away, etc.
+> $t=0$ at the centre, $t=\pm1$ exactly one grid step away, etc.
 
-III.  **Re-expanding Newton’s forward/backward polynomial about $x_m$**
+III. **Re-expanding Newton’s forward/backward polynomial about $x_m$**
 
-1. **Start from Newton’s forward series with base row $x_{m-1}$ (one step left of the centre):**
+Start from Newton’s forward series with base row $x_{m-1}$ (one step left of the centre):
 
-   $$
-   f(x)
-   = y_{m-1}
-     + p\Delta y_{m-1}
-     + \frac{p(p-1)}{2!}\Delta^{2}y_{m-1}
-     + \frac{p(p-1)(p-2)}{3!}\Delta^{3}y_{m-1}
-     + \cdots ,
-   $$
+$$
+f(x) = y_{m-1} + p\Delta y_{m-1} + \frac{p(p-1)}{2!}\Delta^{2}y_{m-1} + \frac{p(p-1)(p-2)}{3!}\Delta^{3}y_{m-1} + \cdots
+$$
 
-   where $p = \dfrac{x-x_{m-1}}{h}=t+1$.
+where $p = \dfrac{x-x_{m-1}}{h}=t+1$.
 
-2. **Rewrite every occurrence of $p$ in terms of $t$.**
-   Because $p = t+1$,
+Rewrite every occurrence of $p$ in terms of $t$.
 
-   $$
-   \begin{aligned}
-   p &= t+1,\\
-   p(p-1) &= (t+1)t, \\
-   p(p-1)(p-2) &= (t+1)t(t-1),\quad\text{etc.}
-   \end{aligned}
-   $$
+Because $p = t+1$,
 
-3. **Shift the constant term from $y_{m-1}$ to $y_m$.**
-   Note that $y_m = y_{m-1} + \Delta y_{m-1}$.
-   Substitute $y_{m-1}=y_m-\Delta y_{m-1}$ into the series and regroup.
-   After cancelling like terms one obtains the **Gauss forward central formula**
+$$
+\begin{aligned}
+p &= t+1,\\
+p(p-1) &= (t+1)t, \\
+p(p-1)(p-2) &= (t+1)t(t-1),\quad\text{etc.}
+\end{aligned}
+$$
 
-   $$
-   \boxed{%
-   f(x)\approx
-   y_m
-   + t\Delta y_{m-1}
-   + \frac{t(t-1)}{2!}\Delta^{2}y_{m-1}
-   + \frac{t(t+1)(t-1)}{3!}\Delta^{3}y_{m-2}
-   + \cdots }.
-   $$
+Shift the constant term from $y_{m-1}$ to $y_m$.
 
-4. **Analogous manipulation starting from Newton’s backward series one row to the right of the centre ($x_{m+1}$) yields**
+Note that $y_m = y_{m-1} + \Delta y_{m-1}$.
 
-   $$
-   \boxed{%
-   f(x)\approx
-   y_m
-   + t\nabla y_{m+1}
-   + \frac{t(t+1)}{2!}\nabla^{2}y_{m+1}
-   + \frac{t(t+1)(t-1)}{3!}\nabla^{3}y_{m+2}
-   + \cdots }.
-   $$
+Substitute $y_{m-1}=y_m-\Delta y_{m-1}$ into the series and regroup.
+
+After cancelling like terms one obtains the **Gauss forward central formula**
+
+$$
+\boxed{f(x)\approx y_m + t\Delta y_{m-1} + \frac{t(t-1)}{2!}\Delta^2 y_{m-1} + \frac{t(t+1)(t-1)}{3!}\Delta^3 y_{m-2} + \cdots}
+$$
+
+Analogous manipulation starting from Newton’s backward series one row to the right of the centre ($x_{m+1}$) yields
+
+$$
+\boxed{f(x)\approx y_m + t\nabla y_{m+1} + \frac{t(t+1)}{2!}\nabla^2 y_{m+1} + \frac{t(t+1)(t-1)}{3!}\nabla^3 y_{m+2} + \cdots}
+$$
 
 These are precisely **Gauss’s forward and backward central-difference polynomials**.
 
 IV.  **Why the factorial products look symmetric**
 
-* Each coefficient in the forward (or backward) series is now a **central factorial** such as
-  $t(t-1), t(t+1)(t-1),\ldots$.
-  These arise automatically when you substitute $p=t\pm1$ and regroup.
-
-* The difference rows used—$\Delta y_{m-1}, \Delta^{2}y_{m-1}, \Delta^{3}y_{m-2}, \ldots$ on the left,
-  or $\nabla y_{m+1}, \nabla^{2}y_{m+1}, \ldots$ on the right—step out symmetrically from the centre, so the truncated polynomial minimises the error for any $x$ with $|t|\lesssim 1$ (i.e.\ near the middle of the table).
-
+* Each coefficient in the forward (or backward) series is now a **central factorial** such as $t(t-1), t(t+1)(t-1),\ldots$. These arise automatically when you substitute $p=t\pm1$ and regroup.
+* The difference rows used—$\Delta y_{m-1}, \Delta^{2}y_{m-1}, \Delta^{3}y_{m-2}, \ldots$ on the left, or $\nabla y_{m+1}, \nabla^{2}y_{m+1}, \ldots$ on the right—step out symmetrically from the centre, so the truncated polynomial minimises the error for any $x$ with $|t|\lesssim 1$ (i.e.\ near the middle of the table).
 * In the limit $t\to0$ both polynomials reduce to $f(x_m)$ as expected; as $|t|$ approaches 1 they smoothly match Newton’s ordinary forward/backward formulas, ensuring continuity across the entire tabulated interval.
 
-
-### Algorithm Steps — fully detailed, one-by-one
-
----
+### Algorithm Steps
 
 **Input**
 
-* equally spaced nodes and ordinates
-  $\{(x_i,y_i)\}_{i=0}^{n}, y_i=f(x_i)$ with step $h=x_{i+1}-x_i$;
-* a target abscissa $x$ that lies inside the table.
+Equally spaced nodes and ordinates
 
----
+$${(x_i,y_i)}{i=0}^{n}, y_i=f(x_i)$$
 
-#### I. Identify the central reference row
+with step $h=x{i+1}-x_i$ and a target abscissa $x$ that lies inside the table.
 
-1. **Locate the mid-index**
+I. **Identify the central reference row**
 
-   $$
-   m=
-   \begin{cases}
-      n/2, & n\ \text{even},\\[4pt]
-      (n-1)/2, & n\ \text{odd}.
-   \end{cases}
-   $$
+Locate the mid-index**
 
-   Hence $x_m$ is as close as possible to the table’s midpoint.
-2. **Reduced argument**
+$$
+m=
+\begin{cases}
+   n/2, & n\ \text{even}
+   (n-1)/2, & n\ \text{odd}
+\end{cases}
+$$
 
-   $$
-   t=\dfrac{x-x_m}{h}.
-   $$
-3. **Decide forward vs. backward form**
-   *If $t<0$* (the target lies to the **left** of the centre) → use the **Gauss–forward** polynomial;
-   *if $t>0$* (to the **right**) → use **Gauss–backward**.
+Hence $x_m$ is as close as possible to the table’s midpoint.
 
----
+Reduced argument
 
-#### II. Build the central-difference table
+$$
+t=\dfrac{x-x_m}{h}.
+$$
 
-1. Set up the usual forward-difference triangle for $y_0,y_1,\dots ,y_n$.
-2. Extract the rows you will need:
+**Decide forward vs. backward form**
 
-   | order | forward form uses   | backward form uses  |
-   | ----- | ------------------- | ------------------- |
-   | 1st   | $\Delta y_{m-1}$    | $\nabla y_{m+1}$    |
-   | 2nd   | $\Delta^{2}y_{m-1}$ | $\nabla^{2}y_{m+1}$ |
-   | 3rd   | $\Delta^{3}y_{m-2}$ | $\nabla^{3}y_{m+2}$ |
-   | …     | …                   | …                   |
+* If $t<0$* (the target lies to the **left** of the centre) → use the **Gauss–forward** polynomial;
+* if $t>0$* (to the **right**) → use **Gauss–backward**.
 
-   Only as many orders as you intend to keep are required.
+II. **Build the central-difference table**
 
----
+Set up the usual forward-difference triangle for $y_0,y_1,\dots ,y_n$.
 
-#### III. Insert $t$ and the differences into Gauss’s formula
+Extract the rows you will need:
 
-*Forward ( $t<0$ )*
+| order | forward form uses   | backward form uses  |
+| ----- | ------------------- | ------------------- |
+| 1st   | $\Delta y_{m-1}$    | $\nabla y_{m+1}$    |
+| 2nd   | $\Delta^{2}y_{m-1}$ | $\nabla^{2}y_{m+1}$ |
+| 3rd   | $\Delta^{3}y_{m-2}$ | $\nabla^{3}y_{m+2}$ |
+| …     | …                   | …                   |
+
+Only as many orders as you intend to keep are required.
+
+III. **Insert $t$ and the differences into Gauss’s formula**
+
+Forward ( $t<0$ )
 
 $$
 f(x)\approx
@@ -260,7 +240,7 @@ y_m
 +\cdots
 $$
 
-*Backward ( $t>0$ )*
+Backward ( $t>0$ )
 
 $$
 f(x)\approx
@@ -271,20 +251,18 @@ y_m
 +\cdots
 $$
 
----
+IV. **Accumulate the series to the desired order**
 
-#### IV. Accumulate the series to the desired order
+Evaluate the terms sequentially and keep a running sum.
 
-1. Evaluate the terms sequentially and keep a running sum.
-2. **Stopping criterion options**
+Stopping criterion options:
 
-   * truncate after a pre-chosen order $k$;
-   * or stop when $|\text{next term}|<\varepsilon$ for a tolerance $\varepsilon$.
-3. The resulting sum is the interpolated value $\displaystyle \hat f(x)$.
+* truncate after a pre-chosen order $k$;
+* or stop when $|\text{next term}|<\varepsilon$ for a tolerance $\varepsilon$.
+  
+The resulting sum is the interpolated value $\displaystyle \hat f(x)$.
 
 > **Accuracy tip:** for points with $|t|\le 1$ the first three or four terms usually give error of the same order as the fourth or fifth finite difference, so adding higher orders seldom pays off unless the data are extremely smooth.
-
----
 
 **Output**
 
@@ -294,8 +272,7 @@ $$
 
 This algorithm preserves every assumption explicitly (equal spacing, central index, choice of $t$) and shows exactly where each quantity enters the computation.
 
-
-### Example — fully worked numeric illustration
+### Example
 
 **Given data (step $h=1$)**
 
@@ -307,11 +284,9 @@ This algorithm preserves every assumption explicitly (equal spacing, central ind
 | 3   | 3     | 5.8          |
 | 4   | 4     | 6.0          |
 
-We wish to interpolate $f(1.5)$.
+We wish to interpolate $f(1.5)$
 
----
-
-#### I.  Choose the central row and reduced argument
+I. **Choose the central row and reduced argument**
 
 * Mid-index $m=2\Rightarrowx_m = 2$.
 * Reduced distance from the centre
@@ -322,9 +297,7 @@ $$
 
 Because $t<0$ the **Gauss-forward** (left-hand) polynomial is appropriate.
 
----
-
-#### II.  Construct the needed central differences
+II.  **Construct the needed central differences**
 
 Forward‐difference table (only rows required by the formula are shown):
 
@@ -336,23 +309,16 @@ Forward‐difference table (only rows required by the formula are shown):
 | 3     | $\Delta^{3}y_{m-2}= \Delta^{2}y_{1}-\Delta^{2}y_{0}= -0.7-0$    | $-0.7$ |
 | 4     | $\Delta^{4}y_{m-2}= \Delta^{3}y_{1}-\Delta^{3}y_{0}=0.1-(-0.7)$ | $0.8$  |
 
-*(Full differences: $\Delta y_0=1.5,\ \Delta y_1=1.5,\ \Delta y_2=0.8,\ \Delta y_3=0.2$;
+Full differences: $\Delta y_0=1.5,\ \Delta y_1=1.5,\ \Delta y_2=0.8,\ \Delta y_3=0.2$;
+
 $\Delta^{2}y_0=0,\ \Delta^{2}y_1=-0.7,\ \Delta^{2}y_2=-0.6$;
-$\Delta^{3}y_0=-0.7,\ \Delta^{3}y_1=0.1$.)*
 
----
+$\Delta^{3}y_0=-0.7,\ \Delta^{3}y_1=0.1$.
 
-#### III.  Insert $t$ and differences into the Gauss-forward series
+III.  **Insert $t$ and differences into the Gauss-forward series**
 
 $$
-\begin{aligned}
-f(x) \approx
-& y_m
-+ t\Delta y_{m-1}
-+ \frac{t(t-1)}{2!}\Delta^{2}y_{m-1}\\
-& + \frac{t(t+1)(t-1)}{3!}\Delta^{3}y_{m-2}
-+ \frac{t(t+1)(t-1)(t-2)}{4!}\Delta^{4}y_{m-2}.
-\end{aligned}
+f(x)\approx y_m + t\Delta y_{m-1} + \frac{t(t-1)}{2!}\Delta^2y_{m-1} + \frac{t(t+1)(t-1)}{3!}\Delta^3y_{m-2} + \frac{t(t+1)(t-1)(t-2)}{4!}\Delta^4y_{m-2}
 $$
 
 Plug in $t=-0.5$ and the table values:
@@ -365,20 +331,19 @@ Plug in $t=-0.5$ and the table values:
 | $\dfrac{t(t+1)(t-1)}{6}\Delta^{3}y_{m-2}= \dfrac{(-0.5)(0.5)(-1.5)}{6}(-0.7)$             | $-0.0438$       |
 | $\dfrac{t(t+1)(t-1)(t-2)}{24}\Delta^{4}y_{m-2}= \dfrac{(-0.5)(0.5)(-1.5)(-2.5)}{24}(0.8)$ | $-0.0313$       |
 
-#### IV.  Accumulate the series
+IV. **Accumulate the series**
 
-* Up to 3rd-order term:
+Up to 3rd-order term:
 
-  $$
-  f(1.5)\approx5.0000-0.7500-0.2625-0.0438
-             = 3.9437.
-  $$
+$$
+f(1.5)\approx5.0000-0.7500-0.2625-0.0438 = 3.9437
+$$
 
-* Including the 4th-order term:
+Including the 4th-order term:
 
-  $$
-  f(1.5)\approx3.9437-0.0313= \boxed{3.9124}.
-  $$
+$$
+f(1.5)\approx3.9437-0.0313= \boxed{3.9124}.
+$$
 
 Adding still higher orders would change the value by only a few $10^{-3}$ here, so
 $f(1.5)\approx3.91$ is a good Gaussian-interpolated estimate based on the given table.
