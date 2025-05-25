@@ -12,135 +12,388 @@ Newton’s forward or backward interpolation builds a polynomial starting from o
 
 ### Mathematical Formulation
 
-Assume we have a set of equally spaced data points:
+Assume we have **equally spaced abscissae**
 
-$$x_0, x_1, x_2, \ldots, x_n$$
+$$
+x_0,x_1,x_2,\dots ,x_n, \qquad 
+h = x_{i+1}-x_i (\text{constant step}).
+$$
 
-with spacing $h = x_{i+1} - x_i$. Let the midpoint be $x_m$, where $m \approx n/2$ if $n$ is even. For convenience, we define a shifted variable:
+Let the “mid-table’’ node be $x_m$ where
 
-$$t = \frac{x - x_m}{h}$$
+$$
+m =
+\begin{cases}
+\dfrac{n}{2}, & n\ \text{even},\\
+\dfrac{n-1}{2}, & n\ \text{odd}
+\end{cases}
+$$
 
-The function values are $y_i = f(x_i)$. We then use central (forward and backward) differences around $x_m$ to construct the interpolation polynomial. The polynomial takes a form that involves binomial-type expansions with central differences, such as:
+ Shifted argument
 
-**Gauss’s Forward Interpolation Formula** (for a midpoint chosen to the "left"):
+To measure how far the interpolation point $x$ sits from the centre we introduce the dimensionless variable
 
-$$f(x) \approx f(x_m) + t \Delta f(x_m) + \frac{t(t-1)}{2!}\Delta^2 f(x_{m-1}) + \frac{t(t+1)(t-1)}{3!}\Delta^3 f(x_{m-1}) + \cdots$$
+$$
+\boxed{t=\dfrac{x-x_m}{h}}.
+$$
 
-**Gauss’s Backward Interpolation Formula** (for a midpoint chosen to the "right"):
+Difference operators near the centre
 
-$$f(x) \approx f(x_m) + t \nabla f(x_m) + \frac{t(t+1)}{2!}\nabla^2 f(x_{m+1}) + \frac{t(t+1)(t-1)}{3!}\nabla^3 f(x_{m+1}) + \cdots$$
+*Forward* and *backward* first differences are
 
-Here $\Delta$ and $\nabla$ denote forward and backward difference operators, respectively, and the differences are computed around the central index.
+$$
+\Delta y_i = y_{i+1}-y_i, 
+$$
 
-The exact form depends on whether you use forward or backward differences and how you pick the center. The key point is that the polynomial is expressed in terms of $t$ and central differences, resulting in symmetric factorial factors that resemble the binomial expansions.
+$$
+\nabla y_i = y_i-y_{i-1},
+$$
 
-### Derivation
+with higher‐order differences generated recursively, e.g.
+$\Delta^2 y_i = \Delta(\Delta y_i)=y_{i+2}-2y_{i+1}+y_i$.
 
-I. **Starting from Equally Spaced Points**:  
+For a central scheme we evaluate these differences on the rows immediately **adjacent to** $x_m$:
 
-Given $f(x_0), f(x_1), \ldots, f(x_n)$ at points equally spaced by $h$, define:
+$$
+\Delta y_{m-1}, \Delta y_m,  \Delta^2 y_{m-1}, \nabla y_{m+1},\ldots
+$$
 
-$$\Delta f(x_i) = f(x_{i+1}) - f(x_i)$$
+so that every term in the polynomial is as symmetric about $x_m$ as possible.
 
-and higher-order differences:
+Gauss central formulas
 
-$$\Delta^2 f(x_i) = \Delta f(x_{i+1}) - \Delta f(x_i)$$
+| Variant                                                  | Interpolating polynomial                                                                                                                              |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Gauss forward**<br>(row just **left** of the centre)   | $\displaystyle f(x)\approx y_m + t\Delta y_{m-1} + \frac{t(t-1)}{2!}\Delta^{2} y_{m-1} + \frac{t(t+1)(t-1)}{3!}\Delta^{3} y_{m-2} + \cdots$ |
+| **Gauss backward**<br>(row just **right** of the centre) | $\displaystyle f(x)\approx y_m + t\nabla y_{m+1} + \frac{t(t+1)}{2!}\nabla^{2} y_{m+1} + \frac{t(t+1)(t-1)}{3!}\nabla^{3} y_{m+2} + \cdots$ |
 
-and so forth.
+* The factorial products $t(t\!\pm\!1)(t\!\mp\!1)\ldots$ mirror the binomial coefficients that arise when the Newton forward/backward polynomial is **re-indexed** so that $x_m$ is treated as the origin.
+* Each successive term draws its difference from one step farther away, preserving symmetry and minimising round-off error when $x$ lies near the mid-range.
 
-II. **Choosing a Central Point**:
+By recasting Newton’s formulas about the central node and writing everything in powers of $t$, Gauss’s forward/backward polynomials provide a more accurate—and numerically stable—interpolant whenever the desired $x$ is closer to the middle of the tabulated data than to either end.
 
-Let $x_m$ be the chosen "central" point around which we will build the polynomial. Introduce $t = (x - x_m)/h$ to measure how far $x$ is from $x_m$ in terms of step size $h$.
+### Derivation 
 
-III. **Constructing the Polynomial**:
+I.  **Equally-spaced data and difference operators**
 
-Using Taylor-like expansions of forward or backward differences about the midpoint, you can derive a polynomial that expresses $f(x)$ in terms of $f(x_m)$, the central differences ($\Delta^k f$ or $\nabla^k f$) at points around $x_m$, and binomial-like terms in $t$.
+Nodes and spacing
 
-IV. **Symmetry and Binomial Coefficients**:
+$$
+x_i = x_0 + ih,\qquad h = x_{i+1}-x_i (\text{constant}),\qquad i=0,\dots n
+$$
 
-The resulting terms often involve products like $t(t-1)$, $t(t+1)$, and factorial denominators, mirroring expansions from Newton’s forward interpolation but recentered so that the polynomial captures behavior near the center more accurately.
+Function values
 
-### Algorithm Steps
+$$
+y_i = f(x_i)
+$$
 
-**Input**:
+Forward and backward differences
 
-- A set of equally spaced points $\{x_i\}$ and corresponding values $\{f(x_i)\}$.
-- A target point $x$ at which you want to interpolate.
+$$
+\Delta y_i = y_{i+1}-y_i,
+$$
 
-I. **Identify the Central Point**:
+$$
+\nabla y_i = y_i-y_{i-1}
+$$
 
-- Pick $x_m$ near the midpoint of the data set. If $n$ is even, $m = n/2$; if odd, $m$ is the central index.
-- Compute $t = (x - x_m)/h$.
+with higher orders obtained recursively, e.g.
 
-II. **Compute Central Differences**:
+$$
+\Delta^{2}y_i = \Delta(\Delta y_i)=y_{i+2}-2y_{i+1}+y_i, \quad
+\nabla^{2}y_i = \nabla(\nabla y_i)=y_i-2y_{i-1}+y_{i-2},
+$$
 
-- Form a difference table of $f(x_i)$ values.
-- Compute $\Delta f, \Delta^2 f, \Delta^3 f, \ldots$ (or similarly $\nabla f, \nabla^2 f, \ldots$) centered around $x_m$.
+and so on.
 
-III. **Apply Gaussian Formula**:
+II.  **Choosing the central origin and defining the reduced argument**
 
-Substitute the central differences and the value of $t$ into the chosen Gaussian interpolation formula (forward or backward) to compute $f(x)$.
+Pick the index
 
-IV. **Calculate Interpolated Value**:
+  $$
+  m =
+  \begin{cases}
+     n/2, & n\text{ even},\\[4pt]
+     (n-1)/2, & n\text{ odd},
+  \end{cases}
+  \qquad\Longrightarrow\qquad x_m\approx\text{mid-table}.
+  $$
 
-Sum the terms up to the desired order of approximation. More terms yield higher accuracy.
+* Introduce the dimensionless distance of the target point $x$ from the centre:
 
-### Example
+  $$
+  t = \dfrac{x-x_m}{h}.
+  $$
 
-**Given Data**: Suppose we have points with spacing $h=1$:  
+  > $t=0$ at the centre, $t=\pm1$ exactly one grid step away, etc.
 
-$$x_0=0, x_1=1, x_2=2, x_3=3, x_4=4$$
-and function values:
+III.  **Re-expanding Newton’s forward/backward polynomial about $x_m$**
 
-$$f(0)=2, f(1)=3.5, f(2)=5, f(3)=5.8, f(4)=6$$
+1. **Start from Newton’s forward series with base row $x_{m-1}$ (one step left of the centre):**
 
-Assume we pick $x_2=2$ as the central point ($m=2$). We want to interpolate $f(1.5)$.
+   $$
+   f(x)
+   = y_{m-1}
+     + p\Delta y_{m-1}
+     + \frac{p(p-1)}{2!}\Delta^{2}y_{m-1}
+     + \frac{p(p-1)(p-2)}{3!}\Delta^{3}y_{m-1}
+     + \cdots ,
+   $$
 
-I. Compute differences around $x_2=2$:
+   where $p = \dfrac{x-x_{m-1}}{h}=t+1$.
 
-- $f(x_2)=f(2)=5$
-- $\Delta f(1)=f(2)-f(1)=5-3.5=1.5$
-- $\Delta f(2)=f(3)-f(2)=5.8-5=0.8$
-- Higher differences etc., as needed.
+2. **Rewrite every occurrence of $p$ in terms of $t$.**
+   Because $p = t+1$,
 
-II. Compute $t=(1.5-2)/1=-0.5$.
+   $$
+   \begin{aligned}
+   p &= t+1,\\
+   p(p-1) &= (t+1)t, \\
+   p(p-1)(p-2) &= (t+1)t(t-1),\quad\text{etc.}
+   \end{aligned}
+   $$
 
-III. Apply Gauss’s formula (forward or backward depending on indexing). For simplicity, suppose we choose the formula that best suits points to the left:
+3. **Shift the constant term from $y_{m-1}$ to $y_m$.**
+   Note that $y_m = y_{m-1} + \Delta y_{m-1}$.
+   Substitute $y_{m-1}=y_m-\Delta y_{m-1}$ into the series and regroup.
+   After cancelling like terms one obtains the **Gauss forward central formula**
 
-The polynomial might look like:
+   $$
+   \boxed{%
+   f(x)\approx
+   y_m
+   + t\Delta y_{m-1}
+   + \frac{t(t-1)}{2!}\Delta^{2}y_{m-1}
+   + \frac{t(t+1)(t-1)}{3!}\Delta^{3}y_{m-2}
+   + \cdots }.
+   $$
 
-$$f(1.5) \approx f(2) + t\Delta f(1) + \frac{t(t-1)}{2!}\Delta^2 f(\cdot) + \cdots$$
+4. **Analogous manipulation starting from Newton’s backward series one row to the right of the centre ($x_{m+1}$) yields**
 
-Insert computed differences and $t=-0.5$, then calculate term by term.
+   $$
+   \boxed{%
+   f(x)\approx
+   y_m
+   + t\nabla y_{m+1}
+   + \frac{t(t+1)}{2!}\nabla^{2}y_{m+1}
+   + \frac{t(t+1)(t-1)}{3!}\nabla^{3}y_{m+2}
+   + \cdots }.
+   $$
 
-IV. Evaluate to get an approximate $f(1.5)$.
+These are precisely **Gauss’s forward and backward central-difference polynomials**.
 
-(*Note: The exact numeric example would require a full difference table and careful selection of forward/backward form, but this gives the general idea.*)
+IV.  **Why the factorial products look symmetric**
+
+* Each coefficient in the forward (or backward) series is now a **central factorial** such as
+  $t(t-1), t(t+1)(t-1),\ldots$.
+  These arise automatically when you substitute $p=t\pm1$ and regroup.
+
+* The difference rows used—$\Delta y_{m-1}, \Delta^{2}y_{m-1}, \Delta^{3}y_{m-2}, \ldots$ on the left,
+  or $\nabla y_{m+1}, \nabla^{2}y_{m+1}, \ldots$ on the right—step out symmetrically from the centre, so the truncated polynomial minimises the error for any $x$ with $|t|\lesssim 1$ (i.e.\ near the middle of the table).
+
+* In the limit $t\to0$ both polynomials reduce to $f(x_m)$ as expected; as $|t|$ approaches 1 they smoothly match Newton’s ordinary forward/backward formulas, ensuring continuity across the entire tabulated interval.
+
+
+### Algorithm Steps — fully detailed, one-by-one
+
+---
+
+**Input**
+
+* equally spaced nodes and ordinates
+  $\{(x_i,y_i)\}_{i=0}^{n}, y_i=f(x_i)$ with step $h=x_{i+1}-x_i$;
+* a target abscissa $x$ that lies inside the table.
+
+---
+
+#### I. Identify the central reference row
+
+1. **Locate the mid-index**
+
+   $$
+   m=
+   \begin{cases}
+      n/2, & n\ \text{even},\\[4pt]
+      (n-1)/2, & n\ \text{odd}.
+   \end{cases}
+   $$
+
+   Hence $x_m$ is as close as possible to the table’s midpoint.
+2. **Reduced argument**
+
+   $$
+   t=\dfrac{x-x_m}{h}.
+   $$
+3. **Decide forward vs. backward form**
+   *If $t<0$* (the target lies to the **left** of the centre) → use the **Gauss–forward** polynomial;
+   *if $t>0$* (to the **right**) → use **Gauss–backward**.
+
+---
+
+#### II. Build the central-difference table
+
+1. Set up the usual forward-difference triangle for $y_0,y_1,\dots ,y_n$.
+2. Extract the rows you will need:
+
+   | order | forward form uses   | backward form uses  |
+   | ----- | ------------------- | ------------------- |
+   | 1st   | $\Delta y_{m-1}$    | $\nabla y_{m+1}$    |
+   | 2nd   | $\Delta^{2}y_{m-1}$ | $\nabla^{2}y_{m+1}$ |
+   | 3rd   | $\Delta^{3}y_{m-2}$ | $\nabla^{3}y_{m+2}$ |
+   | …     | …                   | …                   |
+
+   Only as many orders as you intend to keep are required.
+
+---
+
+#### III. Insert $t$ and the differences into Gauss’s formula
+
+*Forward ( $t<0$ )*
+
+$$
+f(x)\approx
+y_m
++t\Delta y_{m-1}
++\frac{t(t-1)}{2!}\Delta^{2}y_{m-1}
++\frac{t(t+1)(t-1)}{3!}\Delta^{3}y_{m-2}
++\cdots
+$$
+
+*Backward ( $t>0$ )*
+
+$$
+f(x)\approx
+y_m
++t\nabla y_{m+1}
++\frac{t(t+1)}{2!}\nabla^{2}y_{m+1}
++\frac{t(t+1)(t-1)}{3!}\nabla^{3}y_{m+2}
++\cdots
+$$
+
+---
+
+#### IV. Accumulate the series to the desired order
+
+1. Evaluate the terms sequentially and keep a running sum.
+2. **Stopping criterion options**
+
+   * truncate after a pre-chosen order $k$;
+   * or stop when $|\text{next term}|<\varepsilon$ for a tolerance $\varepsilon$.
+3. The resulting sum is the interpolated value $\displaystyle \hat f(x)$.
+
+> **Accuracy tip:** for points with $|t|\le 1$ the first three or four terms usually give error of the same order as the fourth or fifth finite difference, so adding higher orders seldom pays off unless the data are extremely smooth.
+
+---
+
+**Output**
+
+$$
+\boxed{ \hat f(x)=\text{sum obtained in Step IV}}
+$$
+
+This algorithm preserves every assumption explicitly (equal spacing, central index, choice of $t$) and shows exactly where each quantity enters the computation.
+
+
+### Example — fully worked numeric illustration
+
+**Given data (step $h=1$)**
+
+| $i$ | $x_i$ | $y_i=f(x_i)$ |
+| --- | ----- | ------------ |
+| 0   | 0     | 2.0          |
+| 1   | 1     | 3.5          |
+| 2   | 2     | 5.0          |
+| 3   | 3     | 5.8          |
+| 4   | 4     | 6.0          |
+
+We wish to interpolate $f(1.5)$.
+
+---
+
+#### I.  Choose the central row and reduced argument
+
+* Mid-index $m=2\Rightarrowx_m = 2$.
+* Reduced distance from the centre
+
+$$
+t=\frac{x-x_m}{h}= \frac{1.5-2}{1}= -0.5.
+$$
+
+Because $t<0$ the **Gauss-forward** (left-hand) polynomial is appropriate.
+
+---
+
+#### II.  Construct the needed central differences
+
+Forward‐difference table (only rows required by the formula are shown):
+
+| order | symbol                                                          | value  |
+| ----- | --------------------------------------------------------------- | ------ |
+| 0     | $y_m$                                                           | $5.0$  |
+| 1     | $\Delta y_{m-1}=y_2-y_1$                                        | $1.5$  |
+| 2     | $\Delta^{2}y_{m-1}= \Delta y_{2}-\Delta y_{1}=0.8-1.5$          | $-0.7$ |
+| 3     | $\Delta^{3}y_{m-2}= \Delta^{2}y_{1}-\Delta^{2}y_{0}= -0.7-0$    | $-0.7$ |
+| 4     | $\Delta^{4}y_{m-2}= \Delta^{3}y_{1}-\Delta^{3}y_{0}=0.1-(-0.7)$ | $0.8$  |
+
+*(Full differences: $\Delta y_0=1.5,\ \Delta y_1=1.5,\ \Delta y_2=0.8,\ \Delta y_3=0.2$;
+$\Delta^{2}y_0=0,\ \Delta^{2}y_1=-0.7,\ \Delta^{2}y_2=-0.6$;
+$\Delta^{3}y_0=-0.7,\ \Delta^{3}y_1=0.1$.)*
+
+---
+
+#### III.  Insert $t$ and differences into the Gauss-forward series
+
+$$
+\begin{aligned}
+f(x) \approx
+& y_m
++ t\Delta y_{m-1}
++ \frac{t(t-1)}{2!}\Delta^{2}y_{m-1}\\
+& + \frac{t(t+1)(t-1)}{3!}\Delta^{3}y_{m-2}
++ \frac{t(t+1)(t-1)(t-2)}{4!}\Delta^{4}y_{m-2}.
+\end{aligned}
+$$
+
+Plug in $t=-0.5$ and the table values:
+
+| term                                                                                        | numerical value |
+| ------------------------------------------------------------------------------------------- | --------------- |
+| $y_m$                                                                                       | $5.0000$        |
+| $t\Delta y_{m-1}=(-0.5)(1.5)$                                                             | $-0.7500$       |
+| $\dfrac{t(t-1)}{2}\Delta^{2}y_{m-1}= \dfrac{(-0.5)(-1.5)}{2}(-0.7)$                       | $-0.2625$       |
+| $\dfrac{t(t+1)(t-1)}{6}\Delta^{3}y_{m-2}= \dfrac{(-0.5)(0.5)(-1.5)}{6}(-0.7)$             | $-0.0438$       |
+| $\dfrac{t(t+1)(t-1)(t-2)}{24}\Delta^{4}y_{m-2}= \dfrac{(-0.5)(0.5)(-1.5)(-2.5)}{24}(0.8)$ | $-0.0313$       |
+
+#### IV.  Accumulate the series
+
+* Up to 3rd-order term:
+
+  $$
+  f(1.5)\approx5.0000-0.7500-0.2625-0.0438
+             = 3.9437.
+  $$
+
+* Including the 4th-order term:
+
+  $$
+  f(1.5)\approx3.9437-0.0313= \boxed{3.9124}.
+  $$
+
+Adding still higher orders would change the value by only a few $10^{-3}$ here, so
+$f(1.5)\approx3.91$ is a good Gaussian-interpolated estimate based on the given table.
+
+> **Check:**  The estimate lies between the tabulated $f(1)=3.5$ and $f(2)=5.0$, closer to the latter—as expected for $x=1.5$.
 
 ### Advantages
 
-I. **Improved Accuracy Near the Center**:  
+* **Higher accuracy near the table centre** – because the polynomial is built sym­metrically around the midpoint, truncation error is smaller whenever the target $x$ lies roughly one step to either side of that centre, often outperforming Newton’s end-based forward/backward formulas.
+* **Better numerical stability** – central factorial terms such as $t(t\!\pm\!1)$ keep successive coefficients similar in magnitude, reducing round-off amplification compared with the large binomial factors that appear when you measure everything from an end point.
+* **Seamless extension of Newton’s schemes** – the table of ordinary forward differences can be reused; you merely “fold” it around the middle row and read off the required $\Delta$ or $\nabla$ values, so implementation effort is modest if a difference table already exists.
 
-When the interpolation point $x$ is near the midpoint, Gaussian interpolation often yields less error compared to simple forward or backward Newton interpolation from the endpoints.
+### Disadvantages
 
-II. **Symmetric Structure**:  
-
-The formula’s symmetric form around a central point can produce more stable numerical results.
-
-III. **Adaptable**:  
-
-You can choose which direction (forward/backward) and how many terms to include, balancing complexity and accuracy.
-
-### Limitations
-
-I. **Requires Equally Spaced Points**:  
-
-Gaussian interpolation formulas are traditionally derived for equally spaced data. If spacing is uneven, this method is not directly applicable.
-
-II. **More Complex Setup**:  
-
-Determining the central point and computing central differences can be more involved than direct Newton forward/backward interpolation.
-
-III. **Limited Gain if Not Near Center**:  
-
-If the interpolation point is not near the data set’s midpoint, there may be no significant advantage over standard methods.
+* **Requires equal spacing** – the classic Gauss forward/backward formulas rely on a constant step $h$; with uneven $x_i$ the method does not apply without re-derivation or switching to divided-difference polynomials.
+* **Extra bookkeeping** – one must identify the correct central row, decide forward vs. backward form, and track which difference (e.g.\ $\Delta^{3}y_{m-2}$ or $\nabla^{3}y_{m+2}$) feeds each term; this is more fiddly than the straight left-to-right pattern of Newton’s forward series.
+* **No particular benefit away from the centre** – if the target $x$ is closer to an end of the table $(|t|\gg1)$, Gauss’s central formula reverts in effect to the ordinary Newton formulas but with more complicated indexing, so you gain little (and may lose stability if you retain unnecessary terms).
+t, there may be no significant advantage over standard methods.
