@@ -80,3 +80,43 @@ def test_bisection_close_to_root():
     root = bisection_search(f, a, b)
     expected = np.sqrt(2)
     assert np.isclose(root, expected, atol=1e-8)
+
+
+def test_bisection_negative_interval():
+    f = lambda x: x + 2
+    a, b = -5, 0
+    root = bisection_search(f, a, b)
+    expected = -2.0
+    assert np.isclose(root, expected)
+
+
+def test_bisection_cubic():
+    f = lambda x: x ** 3 - 2
+    a, b = 1, 2
+    root = bisection_search(f, a, b)
+    expected = 2 ** (1.0 / 3)
+    assert np.isclose(root, expected, atol=1e-6)
+
+
+def test_bisection_exponential():
+    f = lambda x: np.exp(x) - 2
+    a, b = 0, 1
+    root = bisection_search(f, a, b)
+    expected = np.log(2)
+    assert np.isclose(root, expected, atol=1e-6)
+
+
+def test_bisection_left_endpoint_root():
+    f = lambda x: x
+    a, b = 0, 5
+    root = bisection_search(f, a, b)
+    expected = 0.0
+    assert np.isclose(root, expected)
+
+
+def test_bisection_tight_tolerance():
+    f = lambda x: x ** 2 - 3
+    a, b = 1, 2
+    root = bisection_search(f, a, b, tol=1e-12)
+    expected = np.sqrt(3)
+    assert np.isclose(root, expected, atol=1e-12)
