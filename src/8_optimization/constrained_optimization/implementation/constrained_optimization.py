@@ -139,7 +139,10 @@ def lagrange_multiplier_minimize(
         # Build KKT system
         # [H   J_h^T] [dx  ]   [-grad_f - J_h^T lam]
         # [J_h   0  ] [dlam] = [-h(x)              ]
-        H = np.eye(n)  # Use identity as Hessian approximation for robustness
+        # Use identity as Hessian approximation for robustness. This trades
+        # convergence speed for stability; supply the actual Hessian via a
+        # wrapper if faster convergence is needed.
+        H = np.eye(n)
         KKT = np.block([
             [H, Jh.T],
             [Jh, np.zeros((p, p))]

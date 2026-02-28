@@ -149,7 +149,9 @@ def bfgs(
         if ys > 1e-10:
             rho = 1.0 / ys
             I = np.eye(n)
-            H = (I - rho * np.outer(s, y)) @ H @ (I - rho * np.outer(y, s)) + rho * np.outer(s, s)
+            V1 = I - rho * np.outer(s, y)
+            V2 = I - rho * np.outer(y, s)
+            H = V1 @ H @ V2 + rho * np.outer(s, s)
 
         x = x_new
         g = g_new
