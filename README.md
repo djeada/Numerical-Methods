@@ -99,12 +99,12 @@ Method | Notes | Implementation | Examples
 
 ### Optimization
 
-Topic | Notes
------ | -----
-| Convex Optimization | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/convex_optimization.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> |
-| Global Optimization | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/global_optimization.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> |
-| Local Optimization | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/local_optimization.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> |
-| Constrained Optimization | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/constrained_optimization.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> |
+Method | Notes | Implementation | Examples
+------ | ----- | -------------- | --------
+| Convex Optimization | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/convex_optimization.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/8_optimization/convex_optimization/implementation/convex_optimization.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/8_optimization/convex_optimization/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Global Optimization | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/global_optimization.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/8_optimization/global_optimization/implementation/global_optimization.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/8_optimization/global_optimization/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Local Optimization | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/local_optimization.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/8_optimization/local_optimization/implementation/local_optimization.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/8_optimization/local_optimization/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
+| Constrained Optimization | <a href="https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/constrained_optimization.md"><img src="https://img.icons8.com/color/344/markdown.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/8_optimization/constrained_optimization/implementation/constrained_optimization.py"><img src="https://img.icons8.com/color/344/python.png" height="50" /> </a> | <a href="https://github.com/djeada/Numerical-Methods/blob/master/src/8_optimization/constrained_optimization/examples/example.ipynb"><img src="https://img.icons8.com/fluency/344/jupyter.png" height="50" /> </a> |
 
 ## References
 
