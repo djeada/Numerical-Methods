@@ -16,6 +16,10 @@ This formula is derived from the average of the forward and backward difference 
 
 Let's start with Taylor's formula. For some $\xi_1\in(x,x+h)$ and $\xi_2\in(x-h,x)$, Taylor’s theorem gives
 
+> **Note on $\xi_1,\xi_2$**  
+> Here we use the **Lagrange remainder** form of Taylor’s theorem. The derivatives in the polynomial part are evaluated at $x$, but the remainder term is evaluated at an intermediate point $\xi$ between expansion point and evaluation point. In general, replacing $\xi$ by $x$ is not valid (it would only be exact in special cases, e.g., when higher derivatives are constant).
+> For a quick refresher on this notation, see [Taylor Series](taylor_series.md).
+
 $$
 f(x+h) = f(x) + hf'(x) + \frac{h^2}{2}f''(x) + \frac{h^3}{6}f^{(3)}(\xi_1)
 $$

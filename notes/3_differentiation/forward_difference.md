@@ -16,6 +16,8 @@ This formula is derived from the fundamental definition of the derivative, which
 
 The simplicity of the forward difference formula allows for easy implementation in computational algorithms. On the flip side this method introduces an approximation error, which is influenced by the choice of the step size $h$. Selecting an appropriate $h$ is crucial to balancing accuracy and numerical stability in derivative approximations.
 
+When this error is derived via Taylor’s theorem, the remainder can be written explicitly in Lagrange form using an intermediate point $\xi\in(x,x+h)$ (rather than reusing $x$ in that last term). This explicit remainder form is equivalent to the compact $\mathcal{O}(h)$ notation used above.
+
 ### Example
 
 Consider the function $f(x) = x^2$. We aim to approximate the derivative of this function at the point $x = 2$ using the forward difference method with a step size $h = 0.01$. Applying the forward difference formula, we perform the following calculation:

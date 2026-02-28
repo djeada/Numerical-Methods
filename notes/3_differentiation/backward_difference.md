@@ -12,6 +12,8 @@ $$
 
 This formula is derived from the fundamental definition of the derivative, which represents the rate of change of a function at a specific point. In the context of finite differences, the backward difference method estimates this rate by calculating the difference in function values between the point $x$ and a preceding point $x - h$, then dividing by the step size $h$. Geometrically, this approximation corresponds to the slope of the secant line that connects the points $(x - h, f(x - h))$ and $(x, f(x))$. By focusing on the interval leading up to $x$, the backward difference method provides an estimate of the derivative based solely on past information, making it suitable for situations where future data points are not accessible.
 
+When derived using Taylor’s theorem, the truncation error can also be written with an explicit Lagrange remainder evaluated at an intermediate point $\xi\in(x-h,x)$; this is equivalent to the compact $\mathcal{O}(h)$ error statement.
+
 ### Example
 
 Consider the function $f(x) = x^2$. We aim to approximate the derivative of this function at the point $x = 2$ using the backward difference method with a step size $h = 0.01$. Applying the backward difference formula, we perform the following calculation:

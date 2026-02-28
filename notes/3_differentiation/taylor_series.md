@@ -21,6 +21,15 @@ where:
 
 If the series converges to $f(x)$ for all $x$ in some interval around $a$, then the Taylor series provides an exact representation of the function in that interval.
 
+For numerical methods, we often use a **finite-order Taylor expansion with remainder**:
+
+$$
+f(x)=\sum_{k=0}^{n}\frac{f^{(k)}(a)}{k!}(x-a)^k + \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-a)^{n+1},
+\qquad \xi\in(a,x).
+$$
+
+Here, derivatives in the polynomial part are evaluated at $a$, while the remainder is evaluated at some intermediate point $\xi$. This is the Lagrange form of the remainder and explains why many derivations use $\xi$ instead of reusing $a$ or $x$ in the last term.
+
 ### Practical Use
 
 The Taylor series is not only a theoretical construct. It has numerous practical applications:
