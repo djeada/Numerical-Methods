@@ -118,7 +118,7 @@ def test_gauss_seidel_negative_rhs():
     assert np.allclose(x, expected, atol=1e-6)
 
 
-def test_inverse_matrix_3x3():
+def test_inverse_matrix_3x3_gauss_seidel():
     A = np.array([[1, 2, 3], [0, 1, 4], [5, 6, 0]], dtype=float)
     A_inv = inverse_matrix(A)
     assert np.allclose(A @ A_inv, np.eye(3), atol=1e-10)
