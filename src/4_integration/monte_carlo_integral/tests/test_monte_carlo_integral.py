@@ -83,3 +83,42 @@ def test_monte_carlo_integral_multidim_zero_samples():
     bounds = ((0.0, 1.0),)
     with pytest.raises(ValueError):
         monte_carlo_integral_multidim(f, bounds, num_samples=0)
+
+
+def test_monte_carlo_integral_negative_bounds():
+    f = lambda x: x ** 2
+    a, b = -2.0, 2.0
+    result = monte_carlo_integral(f, a, b, num_samples=1000000)
+    expected = 2 * (2.0 ** 3) / 3
+    assert np.isclose(result, expected, rtol=0.1)
+
+
+def test_monte_carlo_integral_narrow_range():
+    f = lambda x: 1.0
+    a, b = 0.0, 0.01
+    result = monte_carlo_integral(f, a, b, num_samples=10000)
+    expected = 0.01
+    assert np.isclose(result, expected, rtol=1e-2)
+
+
+def test_monte_carlo_integral_exponential():
+    f = lambda x: np.exp(x)
+    a, b = 0.0, 1.0
+    result = monte_carlo_integral(f, a, b, num_samples=1000000)
+    expected = np.e - 1
+    assert np.isclose(result, expected, rtol=0.01)
+
+
+def test_monte_carlo_integral_negative_samples():
+    f = lambda x: x
+    a, b = 0.0, 1.0
+    with pytest.raises(ValueError):
+        monte_carlo_integral(f, a, b, num_samples=-1)
+
+
+def test_monte_carlo_integral_multidim_3d():
+    f = lambda x: 1.0
+    bounds = ((0.0, 1.0), (0.0, 1.0), (0.0, 1.0))
+    result = monte_carlo_integral_multidim(f, bounds, num_samples=100000)
+    expected = 1.0
+    assert np.isclose(result, expected, rtol=1e-2)

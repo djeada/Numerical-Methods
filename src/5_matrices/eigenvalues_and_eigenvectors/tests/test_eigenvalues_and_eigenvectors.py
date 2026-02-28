@@ -139,3 +139,44 @@ def test_eigen_decomposition_large_matrix():
             np.sort(np.abs(expected_eigenvectors[:, i])),
             atol=0.5,
         )
+
+
+def test_eigenvalues_negative_matrix():
+    A = np.array([[-1, 0], [0, -2]], dtype=float)
+    eigenvalues = find_eigenvalues(A)
+    expected = np.array([-2, -1])
+    assert np.allclose(np.sort(np.real(eigenvalues)), np.sort(expected))
+
+
+def test_eigenvalues_upper_triangular():
+    A = np.array([[1, 3, 5], [0, 2, 4], [0, 0, 3]], dtype=float)
+    eigenvalues = find_eigenvalues(A)
+    expected = np.array([1, 2, 3])
+    assert np.allclose(np.sort(np.real(eigenvalues)), np.sort(expected), atol=1e-3)
+
+
+def test_eigenvectors_diagonal():
+    A = np.diag([5.0, 10.0])
+    eigenvectors = find_eigenvectors(A)
+    for i in range(2):
+        v = eigenvectors[:, i]
+        assert np.linalg.norm(v) > 0
+
+
+def test_eigenvalues_1x1():
+    A = np.array([[7.0]])
+    eigenvalues = find_eigenvalues(A)
+    assert np.allclose(eigenvalues, np.array([7.0]))
+
+
+def test_eigenvectors_verify_equation():
+    A = np.array([[4, 1], [2, 3]], dtype=float)
+    eigenvalues = find_eigenvalues(A)
+    eigenvectors = find_eigenvectors(A)
+    for i in range(A.shape[0]):
+        lam = eigenvalues[i]
+        v = eigenvectors[:, i]
+        if np.linalg.norm(v) > 1e-10:
+            Av = A @ v
+            lv = lam * v
+            assert np.allclose(Av, lv, atol=0.5)

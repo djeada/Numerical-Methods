@@ -131,3 +131,41 @@ def test_svd_reduced_rank_deficient():
     assert np.allclose(reconstructed, A), "Reconstruction failed"
     non_zero_singular_values = np.sum(np.diag(S) > 1e-10)
     assert non_zero_singular_values == 1, "Incorrect number of non-zero singular values"
+
+
+def test_svd_1x1():
+    A = np.array([[5.0]])
+    U, S, Vt = singular_value_decomposition(A)
+    reconstructed = U @ S @ Vt
+    assert np.allclose(reconstructed, A)
+
+
+def test_svd_negative_values():
+    A = np.array([[-1, -2], [-3, -4]], dtype=float)
+    U, S, Vt = singular_value_decomposition(A)
+    reconstructed = U @ S @ Vt
+    assert np.allclose(reconstructed, A, atol=1e-10)
+    assert np.all(np.diag(S) >= 0)
+
+
+def test_svd_singular_values_descending():
+    np.random.seed(3)
+    A = np.random.rand(4, 3)
+    U, S, Vt = singular_value_decomposition(A)
+    singular_vals = np.diag(S[:3, :3])
+    for i in range(len(singular_vals) - 1):
+        assert singular_vals[i] >= singular_vals[i + 1]
+
+
+def test_svd_orthogonality_u():
+    np.random.seed(4)
+    A = np.random.rand(5, 3)
+    U, S, Vt = singular_value_decomposition(A)
+    assert np.allclose(U.T @ U, np.eye(U.shape[1]), atol=1e-10)
+
+
+def test_svd_reduced_square():
+    A = np.array([[1, 2], [3, 4]], dtype=float)
+    U, S, Vt = singular_value_decomposition_reduced(A)
+    reconstructed = U @ S @ Vt
+    assert np.allclose(reconstructed, A, atol=1e-10)

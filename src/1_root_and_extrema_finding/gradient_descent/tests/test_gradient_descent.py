@@ -118,3 +118,38 @@ def test_gradient_descent_function_with_noise():
     x = gradient_descent(f, grad_f, x0, learning_rate=0.1, tol=1e-6)
     expected = np.array([3.0])
     assert np.isclose(x, expected, atol=1e-3)
+
+
+def test_gradient_descent_linear_function():
+    f = lambda x: 2 * x[0] + 3
+    grad_f = lambda x: np.array([2.0])
+    x0 = np.array([0.0])
+    with pytest.raises(ValueError):
+        gradient_descent(f, grad_f, x0, learning_rate=0.1, tol=1e-6, max_iterations=100)
+
+
+def test_gradient_descent_sum_of_squares():
+    f = lambda x: np.sum((x - 1) ** 2)
+    grad_f = lambda x: 2 * (x - 1)
+    x0 = np.array([5.0, -3.0, 7.0])
+    x = gradient_descent(f, grad_f, x0, learning_rate=0.1, tol=1e-6)
+    expected = np.array([1.0, 1.0, 1.0])
+    assert np.allclose(x, expected, atol=1e-5)
+
+
+def test_gradient_descent_custom_learning_rate():
+    f = lambda x: (x - 5) ** 2
+    grad_f = lambda x: 2 * (x - 5)
+    x0 = np.array([0.0])
+    x = gradient_descent(f, grad_f, x0, learning_rate=0.4, tol=1e-6)
+    expected = np.array([5.0])
+    assert np.allclose(x, expected, atol=1e-5)
+
+
+def test_gradient_descent_already_at_minimum():
+    f = lambda x: np.sum(x ** 2)
+    grad_f = lambda x: 2 * x
+    x0 = np.array([0.0, 0.0])
+    x = gradient_descent(f, grad_f, x0, learning_rate=0.1, tol=1e-6)
+    expected = np.array([0.0, 0.0])
+    assert np.allclose(x, expected, atol=1e-6)
