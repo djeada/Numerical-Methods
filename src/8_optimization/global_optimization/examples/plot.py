@@ -44,7 +44,8 @@ def simulated_annealing(f, bounds, x0=None, T0=10.0, cooling_rate=0.95,
         f_new = f(x_new)
         delta = f_new - f_x
 
-        if delta < 0 or rng.random() < np.exp(-delta / max(T, 1e-300)):
+        MIN_TEMPERATURE = 1e-300
+        if delta < 0 or rng.random() < np.exp(-delta / max(T, MIN_TEMPERATURE)):
             x = x_new
             f_x = f_new
             if f_x < best_f:

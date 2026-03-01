@@ -64,8 +64,6 @@ if __name__ == "__main__":
     ax.plot(x_range, (8 - x_range) / 2, "b-", label="$x + 2y \\leq 8$")
 
     # Shade feasible region
-    vertices = np.array([[0, 0], [4, 0], [4, 2], [0, 4]])
-    # Recompute feasible polygon vertices in order
     corners = [[0, 0], [4, 0], [4, 2], [0, 4]]
     polygon = Polygon(corners, alpha=0.2, color="skyblue", label="Feasible region")
     ax.add_patch(polygon)
