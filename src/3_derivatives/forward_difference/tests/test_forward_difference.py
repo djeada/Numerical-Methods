@@ -111,7 +111,7 @@ def test_forward_difference_gradient_zero_vector():
     x = np.zeros(5)
     result = forward_difference_gradient(f, x)
     expected = np.zeros(5)
-    assert np.allclose(result, expected, rtol=1e-3)
+    assert np.allclose(result, expected, atol=1e-4)
 
 
 def test_forward_difference_gradient_single_element():
@@ -130,7 +130,7 @@ def test_forward_difference_gradient_non_differentiable():
 
     x = np.array([0.0])
     result = forward_difference_gradient(f, x, h=1e-5)
-    expected = 0.0
+    expected = 1.0
     assert np.isclose(result, expected, rtol=1e-3)
 
 
@@ -150,7 +150,7 @@ def test_forward_difference_gradient_negative_values():
 
     x = np.array([-1.0, -2.0])
     result = forward_difference_gradient(f, x)
-    expected = np.array([-3.0, -4.0])
+    expected = np.array([3.0, 4.0])
     assert np.allclose(result, expected, rtol=1e-3)
 
 

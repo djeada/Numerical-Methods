@@ -111,7 +111,7 @@ def test_backward_difference_gradient_zero_vector():
     x = np.zeros(5)
     result = backward_difference_gradient(f, x)
     expected = np.zeros_like(x)
-    assert np.allclose(result, expected, rtol=1e-2)
+    assert np.allclose(result, expected, atol=1e-4)
 
 
 def test_backward_difference_gradient_single_element():
@@ -130,7 +130,7 @@ def test_backward_difference_gradient_non_differentiable():
 
     x = np.array([0.0])
     result = backward_difference_gradient(f, x, h=1e-5)
-    expected = np.array([0.0])
+    expected = np.array([-1.0])
     assert np.isclose(result, expected, rtol=1e-3)
 
 

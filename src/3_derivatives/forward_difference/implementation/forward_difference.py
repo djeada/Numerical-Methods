@@ -15,4 +15,4 @@ def forward_difference_gradient(
         x_forward = x.copy()
         x_forward[i] += h
         gradient[i] = (f(x_forward) - f(x)) / h
-    return gradient * np.sign(x)
+    return gradient

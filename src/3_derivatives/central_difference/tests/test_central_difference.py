@@ -150,7 +150,7 @@ def test_central_difference_gradient_negative_values():
 
     x = np.array([-1.0, -2.0])
     result = central_difference_gradient(f, x)
-    expected = np.array([-3.0, -4.0])
+    expected = np.array([3.0, 4.0])
     assert np.allclose(result, expected, rtol=1e-3)
 
 
