@@ -76,7 +76,7 @@ with $M_0=M_n=0$, where $h_i=x_{i+1}-x_i$.
 Each piece is then
 
 $$
-S_i(x)=\frac{M_{i+1}(x-x_i)^3+M_i(x_{i+1}-x)^3}{6h_i}
+S_i(x)=\frac{M_i(x_{i+1}-x)^3+M_{i+1}(x-x_i)^3}{6h_i}
 +\left(\frac{y_{i+1}}{h_i}-\frac{M_{i+1}\,h_i}{6}\right)(x-x_i)
 +\left(\frac{y_i}{h_i}-\frac{M_i\,h_i}{6}\right)(x_{i+1}-x).
 $$
