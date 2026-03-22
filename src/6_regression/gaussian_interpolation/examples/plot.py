@@ -1,63 +1,33 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
+from scipy.interpolate import BarycentricInterpolator
+import sys
+import os
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.pardir))
+from implementation.gaussian_interpolation import gaussian_interpolation
 
 
-def gaussian_process_regression(data_x, data_y, target_x):
+def plot_gaussian_interpolation(data_x, data_y, target_x):
     """
-    Perform Gaussian Process Regression on a given dataset.
+    Plot Gaussian central-difference interpolation alongside the scipy
+    polynomial interpolant (BarycentricInterpolator) for verification.
 
     Parameters:
-        data_x (numpy.ndarray): x values (1D array).
+        data_x (numpy.ndarray): Equally-spaced x values.
         data_y (numpy.ndarray): Corresponding y values.
-        target_x (numpy.ndarray): The x values to predict.
-
-    Returns:
-        y_pred (numpy.ndarray): Predicted values at target_x.
-        sigma (numpy.ndarray): Standard deviations of the predictions.
+        target_x (numpy.ndarray): Dense x grid for the interpolated curve.
     """
-    # Reshape data for sklearn
-    X = np.atleast_2d(data_x).T
-    target_X = np.atleast_2d(target_x).T
+    y_gauss = np.array(
+        [gaussian_interpolation(data_x, data_y, x) for x in target_x]
+    )
+    y_scipy = BarycentricInterpolator(data_x, data_y)(target_x)
 
-    # Define the kernel
-    kernel = C(1.0, (1e-3, 1e3)) * RBF(1, (1e-2, 1e2))
-
-    # Create and fit Gaussian Process Regressor
-    gp = GaussianProcessRegressor(kernel=kernel, n_restarts_optimizer=10)
-    gp.fit(X, data_y)
-
-    # Predict on target points
-    y_pred, sigma = gp.predict(target_X, return_std=True)
-    return y_pred, sigma
-
-
-def plot_gaussian_process(data_x, data_y, target_x):
-    """
-    Plot the Gaussian Process Regression results along with original data points.
-
-    Parameters:
-        data_x (numpy.ndarray): Original x values.
-        data_y (numpy.ndarray): Original y values.
-        target_x (numpy.ndarray): The x values to predict.
-    """
-    # Perform Gaussian Process Regression
-    y_pred, sigma = gaussian_process_regression(data_x, data_y, target_x)
-
-    # Plot results
     plt.figure(figsize=(10, 6))
     plt.plot(data_x, data_y, "o", label="Data points", markersize=8)
-    plt.plot(target_x, y_pred, "b-", label="Prediction")
-    plt.fill_between(
-        target_x,
-        y_pred - 1.96 * sigma,
-        y_pred + 1.96 * sigma,
-        alpha=0.2,
-        color="gray",
-        label="95% Confidence Interval",
-    )
-    plt.title("Gaussian Process Regression")
+    plt.plot(target_x, y_gauss, "b-", label="Gauss central-difference interp.")
+    plt.plot(target_x, y_scipy, "r--", label="scipy BarycentricInterpolator", alpha=0.7)
+    plt.title("Gaussian Interpolation vs. scipy Polynomial Interpolant")
     plt.xlabel("x")
     plt.ylabel("f(x)")
     plt.legend()
@@ -66,12 +36,9 @@ def plot_gaussian_process(data_x, data_y, target_x):
 
 
 if __name__ == "__main__":
-    # Example dataset
     data_x = np.array([0, 1, 2, 3, 4], dtype=float)
     data_y = np.array([2, 3.5, 5, 5.8, 6], dtype=float)
 
-    # Target points to interpolate/predict
-    target_x = np.linspace(0, 4, 100)
+    target_x = np.linspace(0, 4, 200)
 
-    # Perform and plot Gaussian Process Regression
-    plot_gaussian_process(data_x, data_y, target_x)
+    plot_gaussian_interpolation(data_x, data_y, target_x)

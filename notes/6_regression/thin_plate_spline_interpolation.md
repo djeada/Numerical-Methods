@@ -375,6 +375,8 @@ By symmetry of the data the midpoint value is exactly $\frac{1}{2}$.
 | **Complexity**            | Solve once in $O(N^3)$; thereafter evaluations are $O(N)$.  For $N\gtrsim2000$ use fast methods (partition of unity, K-D trees, or the O(N) fast-TPS of Beatson & Light). |
 | **Higher dimensions**     | In $d$-D the “thin-plate” energy changes and  $\phi(r)$ becomes $r^2\ln r$ only for $d=2$.  In $d=3$ one has $\phi(r)=r$.                                                 |
 | **Derivative continuity** | The TPS interpolant is $C^1$ and its second derivatives are square-integrable; ideal for smoothly warping images or terrain surfaces.                                     |
+| **Kernel convention**     | Some implementations use $\phi(r)=r^2\ln(r^2)=2r^2\ln r$.  Because the factor of 2 is absorbed by the weights ($w'_i=w_i/2$), the interpolation surface is identical; only the individual weight values change. |
+| **Verification**          | The implementation matches `scipy.interpolate.RBFInterpolator(coords, z, kernel='thin_plate_spline', degree=1)` to machine precision. |
 
 ### Advantages
 

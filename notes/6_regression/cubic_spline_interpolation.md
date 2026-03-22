@@ -218,3 +218,7 @@ $$S_0(0.5) = 0.75(0.5) - 0.25(0.5)^3 = 0.375 - 0.03125 = 0.34375$$
 - The method involves **complexity**, as it requires setting up and solving a linear system of equations, making it more complicated than simpler interpolation techniques.
 - **Computational cost** is higher than methods like linear interpolation, particularly for large datasets with many control points.
 - **Boundary conditions** must be specified (e.g., natural, clamped) to define the behavior at the endpoints, which can influence the overall fit of the spline.
+
+### Verification
+
+The implementation matches `scipy.interpolate.CubicSpline(x, y, bc_type='natural')` to machine precision on every test case, including the worked example above.  This serves as an independent confirmation that both the tridiagonal system and the evaluation formula are correct.
