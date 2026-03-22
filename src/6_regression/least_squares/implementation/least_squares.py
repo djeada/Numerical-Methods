@@ -1,5 +1,6 @@
 import numpy as np
 from numpy.linalg import LinAlgError
+from typing import Tuple
 
 
 def solve_linear_system(A: np.ndarray, b: np.ndarray) -> np.ndarray:
@@ -36,9 +37,15 @@ def least_squares(A: np.ndarray, b: np.ndarray) -> np.ndarray:
         raise ValueError("Matrix A does not have full column rank.")
     A = A.astype(float)
     b = b.astype(float)
+    At = A.T
+    AtA = At @ A
+    Atb = At @ b
     try:
-        # lstsq is more numerically stable than solving the normal equations.
-        x = np.linalg.lstsq(A, b, rcond=None)[0]
+        U, s, Vt = np.linalg.svd(AtA, full_matrices=False)
+        tol = max(AtA.shape) * np.finfo(s.dtype).eps * max(s)
+        s_inv = np.diag([1 / si if si > tol else 0 for si in s])
+        AtA_pseudo_inv = Vt.T @ s_inv @ U.T
+        x = AtA_pseudo_inv @ Atb
     except LinAlgError:
         raise ValueError(
             "Singular matrix encountered during least squares computation."
