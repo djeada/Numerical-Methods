@@ -77,21 +77,15 @@ Each piece is then
 
 $$
 S_i(x)=\frac{M_{i+1}(x-x_i)^3+M_i(x_{i+1}-x)^3}{6h_i}
-+\frac{y_{i+1}}{h_i}(x-x_i)-\frac{y_i}{h_i}(x_{i+1}-x)
--\frac{h_i}{6}\bigl(M_{i+1}-M_i\bigr)(x-x_i).
++\left(\frac{y_{i+1}}{h_i}-\frac{M_{i+1}\,h_i}{6}\right)(x-x_i)
++\left(\frac{y_i}{h_i}-\frac{M_i\,h_i}{6}\right)(x_{i+1}-x).
 $$
 
 ### Example
 
-| Time (hh) | Temp (°C) |
-| --------- | --------- |
-| 9         | 20        |
-| 10        | 22        |
-| 11        | 26        |
-| 12        | 28        |
-| 13        | 30        |
-| 14        | 31        |
-| 15        | 31        |
+| Time (h) | 9  | 10 | 11 | 12 | 13 | 14 | 15 |
+| -------- | -- | -- | -- | -- | -- | -- | -- |
+| Temp (°C)| 20 | 22 | 26 | 28 | 30 | 31 | 31 |
 
 Estimate $T(10.5)$.
 
@@ -101,21 +95,65 @@ $$
 T(10.5)=22+\frac{26-22}{11-10}(10.5-10)=24\text{ °C}.
 $$
 
+> The linear interpolation error is bounded by $\displaystyle\frac{h^2}{8}\max|f''|$. With $h=1$ and a moderate second derivative, this gives an error on the order of tenths of a degree.
+
 II. **Natural cubic spline (all nodes)**
 
-Solving the spline system yields second derivatives
+All spacings are equal ($h_i=1$ for every $i$), so the general tridiagonal equation
 
 $$
-(M_0,\dots,M_6)\approx(0,\;2.4,\;3.6,\;0.6,\;-1.2,\;-0.6,\;0).
+h_{i-1}M_{i-1}+2(h_{i-1}+h_i)M_i+h_iM_{i+1}
+=6\!\left(\frac{y_{i+1}-y_i}{h_i}-\frac{y_i-y_{i-1}}{h_{i-1}}\right)
 $$
 
-From the $i=1$ piece (10–11 h) one obtains
+simplifies to
 
 $$
-T(10.5)\approx 24.77\text{ °C}.
+M_{i-1}+4M_i+M_{i+1}=6(y_{i+1}-2y_i+y_{i-1}),\qquad i=1,\dots,5.
 $$
 
-Because the temperature rise slows near noon, the spline—by “seeing” the curvature—predicts a slightly higher value than the straight-line model.
+Computing the right-hand sides from the data:
+
+| $i$ | $y_{i-1}$ | $y_i$ | $y_{i+1}$ | $6(y_{i+1}-2y_i+y_{i-1})$ |
+| --- | ---------- | ------ | ---------- | -------------------------- |
+| 1   | 20         | 22     | 26         | $6(2)=12$                  |
+| 2   | 22         | 26     | 28         | $6(-2)=-12$                |
+| 3   | 26         | 28     | 30         | $6(0)=0$                   |
+| 4   | 28         | 30     | 31         | $6(-1)=-6$                 |
+| 5   | 30         | 31     | 31         | $6(-1)=-6$                 |
+
+Together with the natural boundary conditions $M_0=M_6=0$, the $5\times 5$ tridiagonal system is
+
+$$
+\begin{pmatrix}4&1&&&\\ 1&4&1&&\\ &1&4&1&\\ &&1&4&1\\ &&&1&4\end{pmatrix}
+\begin{pmatrix}M_1\\ M_2\\ M_3\\ M_4\\ M_5\end{pmatrix}
+=\begin{pmatrix}12\\ -12\\ 0\\ -6\\ -6\end{pmatrix}.
+$$
+
+Solving via the Thomas algorithm yields
+
+$$
+(M_0,\dots,M_6)=\!\left(0,\;\tfrac{41}{10},\;-\tfrac{22}{5},\;\tfrac{3}{2},\;-\tfrac{8}{5},\;-\tfrac{11}{10},\;0\right)
+\approx(0,\;4.1,\;{-4.4},\;1.5,\;{-1.6},\;{-1.1},\;0).
+$$
+
+For the segment $i=1$ (10–11 h) with $x=10.5$, $x_i=10$, $x_{i+1}=11$, $h_i=1$:
+
+$$
+S_1(10.5)
+=\frac{M_2(0.5)^3+M_1(0.5)^3}{6}
++\left(y_2-\frac{M_2}{6}\right)(0.5)
++\left(y_1-\frac{M_1}{6}\right)(0.5)
+$$
+
+$$
+=\frac{(-4.4+4.1)(0.125)}{6}
++\left(26+\frac{4.4}{6}\right)(0.5)
++\left(22-\frac{4.1}{6}\right)(0.5)
+\approx 24.02\text{ °C}.
+$$
+
+The spline estimate is very close to the linear result here because the curvature contributions from $M_1$ and $M_2$ nearly cancel at the midpoint of this segment.
 
 ### Advantages
 

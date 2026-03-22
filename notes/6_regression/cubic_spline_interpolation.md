@@ -80,28 +80,37 @@ This form ensures the correct boundary conditions and continuity of derivatives 
 
 III. **System of Equations for $M_i$:**
 
-Using the conditions for continuity of first and second derivatives, one obtains a tridiagonal system of equations in terms of the unknown second derivatives $M_i$. For natural splines, we have:
+Requiring continuity of the first derivative at each interior knot ($S_{i-1}'(x_i) = S_i'(x_i)$) and substituting the second-derivative form from step II yields a tridiagonal system for the unknown $M_i$. For natural splines the boundary values are:
 
 $$M_0 = 0, \quad M_n = 0.$$
 
-The remaining $M_i$'s (for $i=1,\ldots,n-1$) are found by solving this system:
+The remaining $M_i$'s (for $i=1,\ldots,n-1$) satisfy:
+
+$$h_{i-1}M_{i-1} + 2(h_{i-1}+h_i)M_i + h_i M_{i+1} = 6\left(\frac{y_{i+1}-y_i}{h_i} - \frac{y_i - y_{i-1}}{h_{i-1}}\right)$$
+
+Dividing through by $(h_{i-1}+h_i)$ gives the compact form often seen in textbooks:
 
 $$\mu_i M_{i-1} + 2M_i + \lambda_i M_{i+1} = d_i,$$
-where $\mu_i, \lambda_i, d_i$ depend on the data points and $h_i$.
+
+where
+
+$$\mu_i = \frac{h_{i-1}}{h_{i-1}+h_i}, \quad \lambda_i = \frac{h_i}{h_{i-1}+h_i} = 1-\mu_i, \quad d_i = \frac{6}{h_{i-1}+h_i}\left(\frac{y_{i+1}-y_i}{h_i} - \frac{y_i - y_{i-1}}{h_{i-1}}\right).$$
 
 IV. **Once $M_i$ are determined**, the coefficients $a_i, b_i, c_i, d_i$ of the cubic spline in the standard form:
 
 $$S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3$$
 
-can be computed directly:
+can be read off by expanding the second-derivative form from step II about $x = x_i$:
 
 $$a_i = y_i$$
 
-$$b_i = \frac{y_{i+1}-y_i}{h_i} - \frac{h_i}{3}(2M_i + M_{i+1})$$
+$$b_i = \frac{y_{i+1}-y_i}{h_i} - \frac{h_i}{6}(2M_i + M_{i+1})$$
 
-$$c_i = M_i$$
+$$c_i = \frac{M_i}{2}$$
 
-$$d_i = \frac{M_{i+1} - M_i}{3h_i}.$$
+$$d_i = \frac{M_{i+1} - M_i}{6h_i}$$
+
+One can verify that $S_i''(x_i) = 2c_i = M_i$ and $S_i''(x_{i+1}) = 2c_i + 6d_i h_i = M_{i+1}$, confirming consistency with the definition $M_i = S''(x_i)$.
 
 ### Algorithm Steps
 
@@ -118,19 +127,17 @@ $$M_0 = 0, \quad M_n = 0$$
 
 For $i=1,\ldots,n-1$:
 
-$$h_{i-1}M_{i-1} + 2(h_{i-1}+h_i)M_i + h_i M_{i+1} = 3\left(\frac{y_{i+1}-y_i}{h_i} - \frac{y_i - y_{i-1}}{h_{i-1}}\right)$$
+$$h_{i-1}M_{i-1} + 2(h_{i-1}+h_i)M_i + h_i M_{i+1} = 6\left(\frac{y_{i+1}-y_i}{h_i} - \frac{y_i - y_{i-1}}{h_{i-1}}\right)$$
 
 III. **Solve the Tridiagonal System:**
 
-Use an efficient method (like the Thomas algorithm) to solve for $M_1, M_2,\ldots,M_{n-1}$.
+Use the Thomas algorithm (tridiagonal matrix algorithm) to solve for $M_1, M_2,\ldots,M_{n-1}$. Because the coefficient matrix is tridiagonal, the Thomas algorithm solves the system in $O(n)$ time using a single forward-elimination and back-substitution pass.
 
 IV. **Calculate the Coefficients:**
 
-With $M_i$ known, compute:
+With $M_i$ known, compute for each segment $i = 0, 1, \ldots, n-1$:
 
-$$a_i = y_i, \quad b_i, \quad c_i = M_i, \quad d_i$$
-
-as described above.
+$$a_i = y_i, \quad b_i = \frac{y_{i+1}-y_i}{h_i} - \frac{h_i}{6}(2M_i + M_{i+1}), \quad c_i = \frac{M_i}{2}, \quad d_i = \frac{M_{i+1}-M_i}{6h_i}$$
 
 V. **Interpolation:**
 
@@ -140,30 +147,65 @@ $$S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3$$
 
 ### Example
 
-Consider three points: $(0,0), (1,0.5), (2,0)$.
+Consider three points: $(0,0),\;(1,0.5),\;(2,0)$.
 
-- $h_0 = 1, h_1=1$.
-- Boundary conditions: $M_0=M_2=0$.
+**Setup:**
 
-We form the equation for $i=1$:
+- $h_0 = x_1 - x_0 = 1,\quad h_1 = x_2 - x_1 = 1$.
+- Natural boundary conditions: $M_0 = 0,\; M_2 = 0$.
 
-$$1 \cdot M_0 + 2(1+1)M_1 + 1 \cdot M_2 = 3((0-0.5)/1 - (0.5-0)/1) = 3(-0.5-0.5)= -3.$$
+**Solving for $M_1$:**
 
-Since $M_0=M_2=0$:
+The tridiagonal equation for $i=1$:
 
-$$4M_1 = -3 \implies M_1 = -0.75$$
+$$h_0 M_0 + 2(h_0+h_1)M_1 + h_1 M_2 = 6\left(\frac{y_2-y_1}{h_1} - \frac{y_1-y_0}{h_0}\right)$$
 
-Then:
+$$1\cdot 0 + 2(1+1)M_1 + 1\cdot 0 = 6\left(\frac{0-0.5}{1} - \frac{0.5-0}{1}\right) = 6(-0.5 - 0.5) = -6$$
 
-$$a_0 = y_0=0, \quad c_0=M_0=0$$
+$$4M_1 = -6 \implies M_1 = -1.5$$
 
-$$b_0 = (y_1 - y_0)/h_0 - h_0(2M_0+M_1)/3 = 0.5/1 - (2\cdot 0 + (-0.75))/3 = 0.5 +0.25 =0.75$$
+**Segment 0** ($[x_0,x_1] = [0,1]$):
 
-$$d_0 = (M_1 - M_0)/(3h_0)=(-0.75 -0)/3= -0.25$$
+$$a_0 = y_0 = 0$$
 
-And similarly for $i=1$.
+$$b_0 = \frac{y_1 - y_0}{h_0} - \frac{h_0}{6}(2M_0 + M_1) = \frac{0.5}{1} - \frac{1}{6}(0 + (-1.5)) = 0.5 + 0.25 = 0.75$$
 
-This gives piecewise polynomials smoothly interpolating the given points.
+$$c_0 = \frac{M_0}{2} = 0$$
+
+$$d_0 = \frac{M_1 - M_0}{6h_0} = \frac{-1.5}{6} = -0.25$$
+
+$$S_0(x) = 0.75x - 0.25x^3$$
+
+**Segment 1** ($[x_1,x_2] = [1,2]$):
+
+$$a_1 = y_1 = 0.5$$
+
+$$b_1 = \frac{y_2 - y_1}{h_1} - \frac{h_1}{6}(2M_1 + M_2) = \frac{-0.5}{1} - \frac{1}{6}(2(-1.5)+0) = -0.5 + 0.5 = 0$$
+
+$$c_1 = \frac{M_1}{2} = -0.75$$
+
+$$d_1 = \frac{M_2 - M_1}{6h_1} = \frac{1.5}{6} = 0.25$$
+
+$$S_1(x) = 0.5 - 0.75(x-1)^2 + 0.25(x-1)^3$$
+
+**Verification at the knots:**
+
+| Check | Value |
+|---|---|
+| $S_0(0) = 0$ | $= y_0$ ✓ |
+| $S_0(1) = 0.75 - 0.25 = 0.5$ | $= y_1$ ✓ |
+| $S_1(1) = 0.5$ | $= y_1$ ✓ |
+| $S_1(2) = 0.5 - 0.75 + 0.25 = 0$ | $= y_2$ ✓ |
+| $S_0'(x) = 0.75 - 0.75x^2,\; S_0'(1) = 0$ | First derivative continuous ✓ |
+| $S_1'(x) = -1.5(x-1)+0.75(x-1)^2,\; S_1'(1) = 0$ | ✓ |
+| $S_0''(x) = -1.5x,\; S_0''(1) = -1.5$ | Second derivative continuous ✓ |
+| $S_1''(x) = -1.5+1.5(x-1),\; S_1''(1) = -1.5$ | ✓ |
+
+**Evaluating at a query point $x = 0.5$:**
+
+Since $0.5 \in [0,1]$, we use $S_0$:
+
+$$S_0(0.5) = 0.75(0.5) - 0.25(0.5)^3 = 0.375 - 0.03125 = 0.34375$$
 
 ### Advantages
 
@@ -176,3 +218,7 @@ This gives piecewise polynomials smoothly interpolating the given points.
 - The method involves **complexity**, as it requires setting up and solving a linear system of equations, making it more complicated than simpler interpolation techniques.
 - **Computational cost** is higher than methods like linear interpolation, particularly for large datasets with many control points.
 - **Boundary conditions** must be specified (e.g., natural, clamped) to define the behavior at the endpoints, which can influence the overall fit of the spline.
+
+### Verification
+
+The implementation matches `scipy.interpolate.CubicSpline(x, y, bc_type='natural')` to machine precision on every test case, including the worked example above.  This serves as an independent confirmation that both the tridiagonal system and the evaluation formula are correct.

@@ -1,141 +1,165 @@
 # test_thin_plate_spline_interpolation.py
 import pytest
 import numpy as np
+from scipy.interpolate import RBFInterpolator
 from ..implementation.thin_plate_spline_interpolation import (
     thin_plate_spline_interpolation,
 )
 
 
+def _scipy_tps(x, y, z, point):
+    """Reference TPS using scipy.interpolate.RBFInterpolator."""
+    coords = np.column_stack([x, y])
+    rbf = RBFInterpolator(coords, z, kernel="thin_plate_spline", degree=1)
+    return float(rbf(np.array([point]))[0])
+
+
 def test_tps_basic():
-    x = np.array([0, 1, 2])
-    y = np.array([0, 1, 0])
-    z = np.array([0, 1, 0])
-    point = (1, 0.5)
-    result = thin_plate_spline_interpolation(x, y, z, point)
-    expected = 0.5
-    assert np.isclose(result, expected, atol=0.1)
+    """Non-collinear triangle."""
+    x = np.array([0.0, 1.0, 2.0])
+    y = np.array([0.0, 1.0, 0.0])
+    z = np.array([0.0, 1.0, 0.0])
+    pt = (1.0, 0.5)
+    result = thin_plate_spline_interpolation(x, y, z, pt)
+    expected = _scipy_tps(x, y, z, pt)
+    assert np.isclose(result, expected, atol=1e-10)
 
 
 def test_tps_single_point():
     x = np.array([2])
     y = np.array([3])
     z = np.array([5])
-    point = (2, 3)
     with pytest.raises(ValueError):
-        thin_plate_spline_interpolation(x, y, z, point)
+        thin_plate_spline_interpolation(x, y, z, (2, 3))
 
 
 def test_tps_exact_match():
-    x = np.array([0, 1, 2, 3])
-    y = np.array([0, 1, 4, 9])
-    z = np.array([0, 1, 4, 9])
-    point = (2, 4)
-    result = thin_plate_spline_interpolation(x, y, z, point)
-    expected = 4.0
-    assert np.isclose(result, expected, atol=1e-6)
+    """Evaluating at a data point must return the data value."""
+    x = np.array([0.0, 1.0, 0.0, 1.0])
+    y = np.array([0.0, 0.0, 1.0, 1.0])
+    z = np.array([0.0, 1.0, 4.0, 9.0])
+    result = thin_plate_spline_interpolation(x, y, z, (1.0, 0.0))
+    assert np.isclose(result, 1.0, atol=1e-8)
 
 
-def test_tps_out_of_bounds():
-    x = np.array([1, 2, 3])
-    y = np.array([1, 2, 3])
-    z = np.array([2, 4, 6])
-    point = (4, 4)
-    result = thin_plate_spline_interpolation(x, y, z, point)
-    expected = 8
-    assert np.isclose(result, expected, atol=0.1)
+def test_tps_extrapolation():
+    """TPS can extrapolate outside the convex hull of data points."""
+    x = np.array([0.0, 1.0, 0.0, 1.0])
+    y = np.array([0.0, 0.0, 1.0, 1.0])
+    z = np.array([0.0, 1.0, 1.0, 2.0])  # planar: z = x + y
+    pt = (2.0, 2.0)
+    result = thin_plate_spline_interpolation(x, y, z, pt)
+    assert np.isclose(result, 4.0, atol=1e-8)
 
 
 def test_tps_non_equal_lengths():
     x = np.array([0, 1, 2])
     y = np.array([0, 1])
     z = np.array([0, 1, 4])
-    point = (1, 1)
     with pytest.raises(ValueError):
-        thin_plate_spline_interpolation(x, y, z, point)
+        thin_plate_spline_interpolation(x, y, z, (1, 1))
 
 
 def test_tps_insufficient_points():
-    x = np.array([0, 1])
-    y = np.array([0, 1])
-    z = np.array([0, 1])
-    point = (0.5, 0.5)
+    x = np.array([0.0, 1.0])
+    y = np.array([0.0, 1.0])
+    z = np.array([0.0, 1.0])
     with pytest.raises(ValueError):
-        thin_plate_spline_interpolation(x, y, z, point)
+        thin_plate_spline_interpolation(x, y, z, (0.5, 0.5))
 
 
 def test_tps_duplicate_points():
-    x = np.array([0, 1, 1, 2])
-    y = np.array([0, 1, 1, 2])
-    z = np.array([0, 1, 1, 4])
-    point = (1, 1)
+    x = np.array([0.0, 1.0, 1.0, 2.0])
+    y = np.array([0.0, 1.0, 1.0, 2.0])
+    z = np.array([0.0, 1.0, 1.0, 4.0])
     with pytest.raises(ValueError):
-        thin_plate_spline_interpolation(x, y, z, point)
+        thin_plate_spline_interpolation(x, y, z, (1, 1))
 
 
-def test_tps_negative_values():
-    x = np.array([-2, -1, 0, 1])
-    y = np.array([-2, -1, 0, 1])
-    z = np.array([4, 1, 0, 1])
-    point = (-1.5, -1.5)
-    result = thin_plate_spline_interpolation(x, y, z, point)
-    expected = 2.25
-    assert np.isclose(result, expected, atol=0.2)
+def test_tps_negative_coordinates():
+    """2-D scattered data with negative coordinates."""
+    x = np.array([-2.0, -1.0, 0.0, 1.0, -1.0])
+    y = np.array([0.0, -1.0, 0.0, 1.0, 1.0])
+    z = x**2 + y**2
+    pt = (-1.5, 0.5)
+    result = thin_plate_spline_interpolation(x, y, z, pt)
+    expected = _scipy_tps(x, y, z, pt)
+    assert np.isclose(result, expected, atol=1e-8)
 
 
 def test_tps_float_precision():
-    x = np.array([0.0, 1.0, 2.0])
-    y = np.array([0.0, 1.0, 2.0])
-    z = np.array([0.0, 1.0, 4.0])
-    point = (1.999999, 1.999999)
-    result = thin_plate_spline_interpolation(x, y, z, point)
-    expected = 4.0
-    assert np.isclose(result, expected, atol=1e-4)
+    """Evaluate very close to a data point."""
+    x = np.array([0.0, 1.0, 0.0, 1.0])
+    y = np.array([0.0, 0.0, 1.0, 1.0])
+    z = np.array([0.0, 1.0, 1.0, 2.0])  # z = x + y
+    pt = (0.999999, 0.999999)
+    result = thin_plate_spline_interpolation(x, y, z, pt)
+    assert np.isclose(result, 2.0, atol=1e-4)
 
 
-def test_tps_multiple_segments():
-    x = np.linspace(0, 10, 11)
-    y = np.linspace(0, 10, 11)
-    z = x ** 2 + y ** 2
-    point = (7.3, 7.3)
-    result = thin_plate_spline_interpolation(x, y, z, point)
-    expected = 7.3 ** 2 + 7.3 ** 2
-    assert np.isclose(result, expected, atol=0.1)
+def test_tps_grid_data():
+    """Scattered grid points (non-collinear)."""
+    gx = np.array([0.0, 2.0, 4.0, 6.0])
+    gy = np.array([0.0, 3.0, 6.0])
+    X, Y = np.meshgrid(gx, gy)
+    x = X.ravel()
+    y = Y.ravel()
+    z = x + 2 * y  # planar data
+    pt = (3.0, 4.5)
+    result = thin_plate_spline_interpolation(x, y, z, pt)
+    assert np.isclose(result, 3.0 + 2 * 4.5, atol=1e-6)
 
 
-@pytest.mark.skip("takes too long")
-def test_tps_large_dataset():
-    x = np.linspace(-100, 100, 201)
-    y = np.linspace(-100, 100, 201)
-    X, Y = np.meshgrid(x, y)
-    Z = np.sin(X) + np.cos(Y)
-    point = (23.456, -45.678)
-    result = thin_plate_spline_interpolation(x, y, Z.flatten(), point)
-    expected = np.sin(23.456) + np.cos(-45.678)
-    assert np.isclose(result, expected, atol=1e-2)
+def test_tps_exact_match_all_corners():
+    """Verify interpolation reproduces all data points exactly."""
+    x = np.array([0.0, 1.0, 0.0, 1.0])
+    y = np.array([0.0, 0.0, 1.0, 1.0])
+    z = np.array([1.0, 0.0, 0.0, 1.0])
+    for xi, yi, zi in zip(x, y, z):
+        result = thin_plate_spline_interpolation(x, y, z, (xi, yi))
+        assert np.isclose(result, zi, atol=1e-8), (
+            f"Mismatch at ({xi},{yi}): got {result}, expected {zi}"
+        )
 
 
-def test_tps_exact_match_middle():
-    x = np.array([0, 1, 2, 3, 4])
-    y = np.array([0, 1, 4, 9, 16])
-    z = np.array([0, 1, 4, 9, 16])
-    point = (2, 4)
-    result = thin_plate_spline_interpolation(x, y, z, point)
-    expected = 4.0
-    assert np.isclose(result, expected, atol=1e-6)
+def test_tps_notes_example_planar():
+    """Notes Example 1: data lies on the plane z = x + y."""
+    x = np.array([0.0, 1.0, 0.0, 1.0])
+    y = np.array([0.0, 0.0, 1.0, 1.0])
+    z = np.array([0.0, 1.0, 1.0, 2.0])
+    for pt in [(0.5, 0.5), (0.25, 0.75), (0.3, 0.7)]:
+        result = thin_plate_spline_interpolation(x, y, z, pt)
+        assert np.isclose(result, pt[0] + pt[1], atol=1e-8), (
+            f"Planar mismatch at {pt}: got {result}, expected {pt[0]+pt[1]}"
+        )
 
 
-@pytest.mark.skip("todo: fix")
-def test_tps_multiple_queries():
-    x = np.array([0, 1, 2, 3, 4])
-    y = np.array([0, 1, 4, 9, 16])
-    z = np.array([0, 1, 4, 9, 16])
-    points = [(0.5, 0.5), (1.5, 2.5), (2.5, 6.5), (3.5, 12.5)]
-    expected = [
-        0.5 ** 2 + 0.5 ** 2,
-        1.5 ** 2 + 2.5 ** 2,
-        2.5 ** 2 + 6.5 ** 2,
-        3.5 ** 2 + 12.5 ** 2,
-    ]
-    results = [thin_plate_spline_interpolation(x, y, z, p) for p in points]
-    for res, exp in zip(results, expected):
-        assert np.isclose(res, exp, atol=1e-2)
+def test_tps_notes_example_nonplanar():
+    """Notes Example 2: non-planar saddle-like data."""
+    x = np.array([0.0, 1.0, 0.0, 1.0])
+    y = np.array([0.0, 0.0, 1.0, 1.0])
+    z = np.array([1.0, 0.0, 0.0, 1.0])
+    # Midpoint value = 0.5 by symmetry (verified in notes)
+    assert np.isclose(
+        thin_plate_spline_interpolation(x, y, z, (0.5, 0.5)), 0.5, atol=1e-8
+    )
+    # Other points verified against scipy
+    for pt in [(0.25, 0.75), (0.3, 0.1)]:
+        result = thin_plate_spline_interpolation(x, y, z, pt)
+        expected = _scipy_tps(x, y, z, pt)
+        assert np.isclose(result, expected, atol=1e-8)
+
+
+def test_tps_matches_scipy_scattered():
+    """Larger scattered dataset verified against scipy."""
+    np.random.seed(42)
+    N = 10
+    x = np.random.rand(N) * 4
+    y = np.random.rand(N) * 4
+    z = np.sin(x) * np.cos(y)
+    for pt in [(1.0, 1.0), (2.0, 3.0), (0.5, 2.5)]:
+        result = thin_plate_spline_interpolation(x, y, z, pt)
+        expected = _scipy_tps(x, y, z, pt)
+        assert np.isclose(result, expected, atol=1e-8), (
+            f"Mismatch at {pt}: got {result}, expected {expected}"
+        )

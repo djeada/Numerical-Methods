@@ -67,6 +67,8 @@ $$L(x_k) = \sum_{i=0}^{n} y_i P_i(x_k) = y_k,$$
 
 since $P_k(x_k)=1$ and $P_i(x_k)=0$ for $i \neq k$.
 
+**Uniqueness**: The Lagrange interpolating polynomial is the *unique* polynomial of degree at most $n$ that passes through the given $(n+1)$ points. To see why, suppose two polynomials $L(x)$ and $M(x)$, both of degree at most $n$, agree at $n+1$ distinct points. Their difference $D(x) = L(x) - M(x)$ is a polynomial of degree at most $n$ with $n+1$ roots. By the Fundamental Theorem of Algebra, $D(x)$ must be identically zero, so $L(x) = M(x)$. Therefore, regardless of the method used to construct it, the interpolating polynomial of degree at most $n$ is unique.
+
 ### Algorithm Steps
 
 I. **Input**: 
@@ -126,7 +128,55 @@ Substitute $(y_0, y_1, y_2) = (1,3,5)$:
 
 $$L(x) = 1 \cdot \frac{(x - 2)(x - 3)}{12} + 3 \cdot \left(-\frac{(x+1)(x - 3)}{3}\right) + 5 \cdot \frac{(x+1)(x-2)}{4}$$
 
-This polynomial will exactly fit the three given points.
+**Simplify to standard polynomial form**:
+
+$$L(x) = \frac{1}{12}(x-2)(x-3) - (x+1)(x-3) + \frac{5}{4}(x+1)(x-2)$$
+
+Expand each term:
+
+$$\frac{1}{12}(x^2 - 5x + 6) = \frac{x^2}{12} - \frac{5x}{12} + \frac{1}{2}$$
+
+$$-(x^2 - 2x - 3) = -x^2 + 2x + 3$$
+
+$$\frac{5}{4}(x^2 - x - 2) = \frac{5x^2}{4} - \frac{5x}{4} - \frac{5}{2}$$
+
+Sum the coefficients for each power of $x$:
+
+$$x^2: \quad \frac{1}{12} - 1 + \frac{5}{4} = \frac{1}{12} - \frac{12}{12} + \frac{15}{12} = \frac{4}{12} = \frac{1}{3}$$
+
+$$x: \quad -\frac{5}{12} + 2 - \frac{5}{4} = -\frac{5}{12} + \frac{24}{12} - \frac{15}{12} = \frac{4}{12} = \frac{1}{3}$$
+
+$$\text{constant}: \quad \frac{1}{2} + 3 - \frac{5}{2} = \frac{1}{2} - \frac{5}{2} + 3 = -2 + 3 = 1$$
+
+Therefore:
+
+$$L(x) = \frac{1}{3}x^2 + \frac{1}{3}x + 1$$
+
+**Verify at the data points**:
+
+$$L(-1) = \frac{1}{3}(1) + \frac{1}{3}(-1) + 1 = \frac{1}{3} - \frac{1}{3} + 1 = 1 \; \checkmark$$
+
+$$L(2) = \frac{1}{3}(4) + \frac{1}{3}(2) + 1 = \frac{4}{3} + \frac{2}{3} + 1 = 2 + 1 = 3 \; \checkmark$$
+
+$$L(3) = \frac{1}{3}(9) + \frac{1}{3}(3) + 1 = 3 + 1 + 1 = 5 \; \checkmark$$
+
+**Evaluate at query points**:
+
+At $x = 0$:
+
+$$L(0) = \frac{1}{3}(0) + \frac{1}{3}(0) + 1 = 1$$
+
+At $x = 1$:
+
+$$L(1) = \frac{1}{3}(1) + \frac{1}{3}(1) + 1 = \frac{2}{3} + 1 = \frac{5}{3} \approx 1.667$$
+
+**Error Bound**:
+
+If the data points are sampled from a function $f \in C^3[-1,3]$ (i.e., $f$ has a continuous third derivative on the interval), then the interpolation error at any point $x$ in that interval is bounded by:
+
+$$|f(x) - L(x)| = \frac{|f'''(\xi)|}{3!} \cdot |(x+1)(x-2)(x-3)|$$
+
+for some $\xi$ in the interval $[-1,3]$ that depends on $x$. More generally, for $n+1$ data points the error involves the $(n+1)$-th derivative and the product $\prod_{i=0}^{n}(x - x_i)$.
 
 ### Advantages
 
@@ -150,7 +200,7 @@ Works for any set of points with distinct $x_i$.
 
 I. **Runge’s Phenomenon:**  
 
-For a large number of interpolation points, Lagrange interpolation may cause oscillations between the points, especially if the points are unevenly spaced.
+For a large number of interpolation points, Lagrange interpolation may cause oscillations between the points, especially if the points are unevenly spaced. Using Chebyshev nodes instead of equally spaced points can mitigate this effect.
 
 II. **Recalculation for Added Points:**  
 
@@ -158,4 +208,12 @@ If a new point is added, the entire polynomial must be recomputed from scratch, 
 
 III. **Computational Cost:**  
 
-Evaluating Lagrange polynomials directly can be computationally intensive for large $n$ due to the product terms, though this can be mitigated with more efficient evaluation strategies.
+Direct evaluation of $L(x)$ at a single point costs $O(n^2)$ multiplications because each of the $n+1$ basis polynomials requires $O(n)$ work. The **barycentric Lagrange form** reduces this to $O(n)$ by precomputing a set of weights, making it the preferred approach in practice.
+
+IV. **Numerical Instability for Large $n$:**  
+
+For high-degree interpolation, the individual basis polynomials $P_i(x)$ can attain very large values of alternating sign that nearly cancel when summed. This catastrophic cancellation leads to significant floating-point errors. The **barycentric form** of Lagrange interpolation avoids this issue and is numerically stable, making it the recommended implementation for practical use.
+
+### Verification
+
+The implementation matches `scipy.interpolate.lagrange` to machine precision on every test case, including the worked example above.  This serves as an independent confirmation that both the formula and the code are correct.

@@ -72,6 +72,14 @@ $$\beta = (X^\top X)^{-1} X^\top Y$$
 
 This formula provides a closed-form solution for the ordinary least squares estimator $\beta$.
 
+V. **Confirming the Minimum (Second-Derivative Check)**:
+
+The Hessian (second derivative) of $RSS$ with respect to $\beta$ is:
+
+$$\frac{\partial^2 RSS}{\partial \beta^2} = 2X^\top X$$
+
+Since $X^\top X$ is positive semi-definite (and positive definite when $X$ has full column rank), the critical point found in step III is indeed a global minimum.
+
 ### Algorithm Steps
 
 I. **Data Preparation**:
@@ -106,33 +114,74 @@ $$\hat{y}_{\text{new}} = x_{\text{new}}^\top \beta$$
 
 **Step-by-step**:
 
-I. Add an intercept term:
+I. Add an intercept term (column of ones):
 
 $$X = \begin{bmatrix}
 1 & 1 \\
 1 & 2 \\
 1 & 3 \\
-\end{bmatrix}$$ 
+\end{bmatrix}, \quad
+Y=\begin{bmatrix}1 \\ 2 \\ 2\end{bmatrix}$$
 
-$$Y=\begin{bmatrix}1 \\ 2 \\ 2\end{bmatrix}$$
+II. Compute $X^\top X$ and $X^\top Y$:
 
-II. Compute:
+$$X^\top X = \begin{bmatrix} 1+1+1 & 1+2+3 \\ 1+2+3 & 1+4+9 \end{bmatrix} = \begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix}$$
 
-$$X^\top X = \begin{bmatrix} 3 & 6 \\ 6 &14 \end{bmatrix}$$
-
-$$X^\top Y = \begin{bmatrix} 5 \\ 12 \end{bmatrix}$$
+$$X^\top Y = \begin{bmatrix} 1 \cdot 1 + 1 \cdot 2 + 1 \cdot 2 \\ 1 \cdot 1 + 2 \cdot 2 + 3 \cdot 2 \end{bmatrix} = \begin{bmatrix} 5 \\ 11 \end{bmatrix}$$
 
 III. Invert $X^\top X$:
 
-$$(X^\top X)^{-1} = \begin{bmatrix} 2 & -1 \\ -1 & 0.5 \end{bmatrix}$$
+Compute the determinant:
+
+$$\det(X^\top X) = 3 \cdot 14 - 6 \cdot 6 = 42 - 36 = 6$$
+
+Compute the adjugate (swap diagonal entries and negate off-diagonal entries):
+
+$$\text{adj}(X^\top X) = \begin{bmatrix} 14 & -6 \\ -6 & 3 \end{bmatrix}$$
+
+Apply the inverse formula $A^{-1} = \frac{1}{\det(A)}\text{adj}(A)$:
+
+$$(X^\top X)^{-1} = \frac{1}{6}\begin{bmatrix} 14 & -6 \\ -6 & 3 \end{bmatrix} = \begin{bmatrix} \frac{7}{3} & -1 \\ -1 & \frac{1}{2} \end{bmatrix}$$
 
 IV. Compute $\beta$:
 
-$$\beta = (X^\top X)^{-1}X^\top Y = \begin{bmatrix} 0.5 \\ 0.5 \end{bmatrix}$$
+$$\beta = (X^\top X)^{-1}X^\top Y = \frac{1}{6}\begin{bmatrix} 14 & -6 \\ -6 & 3 \end{bmatrix}\begin{bmatrix} 5 \\ 11 \end{bmatrix} = \frac{1}{6}\begin{bmatrix} 70 - 66 \\ -30 + 33 \end{bmatrix} = \frac{1}{6}\begin{bmatrix} 4 \\ 3 \end{bmatrix} = \begin{bmatrix} \frac{2}{3} \\[4pt] \frac{1}{2} \end{bmatrix}$$
 
 Thus, the fitted line is:
 
-$$\hat{y} = 0.5 + 0.5x$$
+$$\hat{y} = \frac{2}{3} + \frac{1}{2}\,x$$
+
+V. Verify at data points and compute residuals:
+
+| $x$ | $y$ | $\hat{y}$ | Residual $(y - \hat{y})$ |
+|-----|-----|-----------|--------------------------|
+| 1 | 1 | $\frac{2}{3} + \frac{1}{2} = \frac{7}{6} \approx 1.167$ | $-\frac{1}{6} \approx -0.167$ |
+| 2 | 2 | $\frac{2}{3} + 1 = \frac{5}{3} \approx 1.667$ | $\phantom{-}\frac{1}{3} \approx 0.333$ |
+| 3 | 2 | $\frac{2}{3} + \frac{3}{2} = \frac{13}{6} \approx 2.167$ | $-\frac{1}{6} \approx -0.167$ |
+
+VI. Compute the coefficient of determination ($R^2$):
+
+Mean of observed values:
+
+$$\bar{y} = \frac{1 + 2 + 2}{3} = \frac{5}{3}$$
+
+Total Sum of Squares:
+
+$$TSS = \sum_{i=1}^{3}(y_i - \bar{y})^2 = \left(1 - \frac{5}{3}\right)^2 + \left(2 - \frac{5}{3}\right)^2 + \left(2 - \frac{5}{3}\right)^2 = \frac{4}{9} + \frac{1}{9} + \frac{1}{9} = \frac{2}{3}$$
+
+Residual Sum of Squares:
+
+$$RSS = \sum_{i=1}^{3}(y_i - \hat{y}_i)^2 = \left(\frac{1}{6}\right)^2 + \left(\frac{1}{3}\right)^2 + \left(\frac{1}{6}\right)^2 = \frac{1}{36} + \frac{1}{9} + \frac{1}{36} = \frac{1}{6}$$
+
+$$R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{1/6}{2/3} = 1 - \frac{1}{4} = \frac{3}{4} = 0.75$$
+
+This means 75% of the variance in $Y$ is explained by the linear model.
+
+VII. Prediction for a new input:
+
+For $x_{\text{new}} = 4$:
+
+$$\hat{y} = \frac{2}{3} + \frac{1}{2} \cdot 4 = \frac{2}{3} + 2 = \frac{8}{3} \approx 2.667$$
 
 ### Advantages
 

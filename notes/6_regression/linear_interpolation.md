@@ -54,6 +54,22 @@ Simplifying:
 
 $$y = y_i + \frac{(y_{i+1} - y_i)}{x_{i+1}-x_i} (x - x_i).$$
 
+### Alternative Form
+
+The interpolation formula can be rewritten as a weighted average of the two $y$-values:
+
+$$y = \frac{x_{i+1} - x}{x_{i+1} - x_i} \, y_i + \frac{x - x_i}{x_{i+1} - x_i} \, y_{i+1}.$$
+
+The two weights sum to one and are non-negative for $x \in [x_i, x_{i+1}]$, so the result is a **convex combination** of $y_i$ and $y_{i+1}$. At $x = x_i$ the first weight is 1, recovering $y_i$; at $x = x_{i+1}$ the second weight is 1, recovering $y_{i+1}$.
+
+### Error Analysis
+
+If the function $f$ being interpolated has a continuous second derivative on $[x_i, x_{i+1}]$ (i.e. $f \in C^2[x_i, x_{i+1}]$), the interpolation error is bounded by:
+
+$$|f(x) - y| \leq \frac{1}{8} h^2 \max_{\xi \in [x_i, x_{i+1}]} |f''(\xi)|,$$
+
+where $h = x_{i+1} - x_i$ is the interval width. Because the error is $O(h^2)$, halving the spacing between data points reduces the maximum error by a factor of four.
+
 ### Algorithm Steps
 
 I. Identify the interval $[x_i, x_{i+1}]$ that contains the target $x$.
@@ -82,14 +98,51 @@ $$y = 0 + 0.5 (1 - (-2)) = 0.5 \times 3 = 1.5.$$
 
 So, the line passing through $(-2,0)$ and $(2,2)$ gives $y=1.5$ when $x=1$.
 
+**Verification at the endpoints:**
+
+- At $x = -2$: $y = 0 + 0.5(-2 - (-2)) = 0 + 0 = 0$ ✓
+- At $x = 2$: $y = 0 + 0.5(2 - (-2)) = 0.5 \times 4 = 2$ ✓
+
+**Error bound:** If we know only that $|f''(\xi)| \leq M$ for all $\xi \in [-2, 2]$, then $h = 2 - (-2) = 4$ and the maximum interpolation error is:
+
+$$|f(x) - y| \leq \frac{1}{8}(4)^2 M = 2M.$$
+
+### Example 2
+
+**Estimating $\sin(\pi/4)$ from two known values of $\sin(x)$.**
+
+Known points: $(0,\, 0)$ and $(\pi/2,\, 1)$, since $\sin(0) = 0$ and $\sin(\pi/2) = 1$. Estimate $f(\pi/4) = \sin(\pi/4)$.
+
+I. Compute the slope:
+
+$$\alpha = \frac{1 - 0}{\pi/2 - 0} = \frac{2}{\pi} \approx 0.6366.$$
+
+II. Substitute $x = \pi/4$:
+
+$$y = 0 + \frac{2}{\pi}\left(\frac{\pi}{4} - 0\right) = \frac{2}{\pi} \cdot \frac{\pi}{4} = \frac{1}{2} = 0.5.$$
+
+III. Compare with the exact value:
+
+$$\sin\!\left(\frac{\pi}{4}\right) = \frac{\sqrt{2}}{2} \approx 0.7071.$$
+
+The absolute error is $|0.7071 - 0.5| = 0.2071$.
+
+IV. Check against the error bound. Here $h = \pi/2$ and $|f''(x)| = |\!-\!\sin(x)| \leq 1$ on $[0, \pi/2]$, so:
+
+$$\text{max error} \leq \frac{1}{8}\left(\frac{\pi}{2}\right)^2 \cdot 1 \approx 0.3084.$$
+
+Indeed $0.2071 < 0.3084$ ✓. This illustrates that for highly curved functions, linear interpolation can have significant error even though the bound is still respected.
+
 ### Advantages
 
 - The method offers **simplicity**, as the calculation involves straightforward arithmetic, making it easy and quick to apply.
 - **Minimal data requirements** make it practical, needing only two data points to estimate intermediate values.
 - It provides a **local approximation**, working well when the function is nearly linear within the specified interval.
+- When applied piecewise over consecutive intervals, the result is a **continuous interpolant** (a connected chain of line segments).
 
 ### Limitations
 
 - The **linear assumption** can lead to poor results if the actual relationship between points is not close to linear.
 - Linear interpolation uses **no derivative information**, ignoring the slope or curvature of the function, which could enhance accuracy.
 - **Accuracy diminishes** as the interval between points increases or as the function becomes more non-linear, leading to potential errors in approximation.
+- The piecewise-linear interpolant is **not differentiable at the knot points** (the data points), producing "kinks" where adjacent line segments meet.
