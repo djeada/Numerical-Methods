@@ -9,7 +9,11 @@ F(7, 11)
 """
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.interpolate
+import os
+import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.pardir))
+from implementation.polynomial_regression import polynomial_regression
 
 
 # Define the data
@@ -25,11 +29,17 @@ plt.ylabel("y")
 x_domain = np.linspace(1.1 * min(x), 1.1 * max(x), 100)
 
 # Create the model and show the predictions for djeada implementation
+coefficients = polynomial_regression(x, y, 3)
+y_prediction = sum(
+    coefficient * x_domain**power
+    for power, coefficient in enumerate(coefficients)
+)
+plt.plot(x_domain, y_prediction, label="Polynomial regression implementation")
 
 # Create the model and show the predictions for numpy implementation
 model = np.poly1d(np.polyfit(x, y, 3))
-y_prediction = model(x_domain)
-plt.plot(x_domain, y_prediction, label="Polynomial regression numpy")
+y_prediction_numpy = model(x_domain)
+plt.plot(x_domain, y_prediction_numpy, "--", label="Polynomial regression numpy")
 
 # Add a legend and show the plot
 plt.legend(loc="best")

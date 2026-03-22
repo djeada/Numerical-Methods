@@ -67,6 +67,15 @@ def test_least_squares_single_variable():
     assert np.allclose(x, expected, atol=0.1)
 
 
+def test_least_squares_with_intercept_design_matrix():
+    x = np.linspace(0, 10, 11)
+    A = np.column_stack((np.ones_like(x), x))
+    b = 2 + 0.5 * x
+    coefficients = least_squares(A, b)
+    expected = np.array([2.0, 0.5])
+    assert np.allclose(coefficients, expected, atol=1e-10)
+
+
 def test_least_squares_negative_values():
     A = np.array([[1, -1], [-1, 1], [1, 1]])
     b = np.array([0, 0, 2])
