@@ -1,8 +1,8 @@
 ## Gaussian Interpolation
 
-**Gaussian Interpolation**, often associated with **Gauss’s forward and backward interpolation formulas**, is a technique that refines the approach of polynomial interpolation when data points are equally spaced. Instead of using the Newton forward or backward interpolation formulas directly from one end of the data interval, Gaussian interpolation centers the interpolation around a midpoint of the data set. This approach can provide better accuracy when the point at which we need to interpolate lies somewhere in the "interior" of the given data points rather than near the boundaries.
+**Gaussian Interpolation**, often associated with **Gauss’s forward and backward interpolation formulas**, is a technique that refines polynomial interpolation for equally spaced data points. Rather than building the interpolating polynomial from one end of the data interval (as Newton’s forward or backward formulas do), Gaussian interpolation centres the construction around a midpoint. This yields better accuracy when the target $x$ lies in the interior of the tabulated range rather than near its boundaries.
 
-In essence, Gaussian interpolation is a variant of Newton’s divided difference interpolation but employs a "central" reference point and finite differences structured around a central node. By choosing a midpoint as a reference and using appropriately shifted indices, Gaussian interpolation formulas often yield more stable and accurate approximations for values near the center of the data set.
+In essence, it is a re-indexing of Newton’s finite-difference interpolation that uses a “central” reference node and differences arranged symmetrically around it. By choosing the midpoint as the origin and shifting indices accordingly, the resulting formulas often produce more stable and accurate approximations for values near the centre of the data set.
 
 Imagine you have a set of equally spaced points and corresponding function values:
 
@@ -115,8 +115,8 @@ Pick the index
 $$
 m =
 \begin{cases}
-   n/2, & n\text{ even}
-   (n-1)/2, & n\text{ odd},
+   n/2, & n\text{ even},\\[4pt]
+   (n-1)/2, & n\text{ odd}.
 \end{cases}
 \qquad\Longrightarrow\qquad x_m\approx\text{mid-table}
 $$
@@ -171,6 +171,12 @@ $$
 
 These are precisely **Gauss’s forward and backward central-difference polynomials**.
 
+**Complexity and error**
+
+* **Computational cost.** Building the full difference table for $n+1$ points requires $O(n^{2})$ additions. Evaluating the truncated series to order $k$ then takes $O(k)$ multiplications and additions, so the total work is dominated by the table construction.
+* **Truncation error.** If the series is truncated after the $k$-th difference term, the remainder has the same form as in Newton’s formula: $R_k=O(h^{k+1}f^{(k+1)}(\xi))$ for some $\xi$ in the data interval. Because the differences are centred, the leading error coefficient is typically smaller than for the end-based Newton formulas when $|t|<1$.
+* **Round-off.** Central factorial products $t(t\!\pm\!1)(t\!\mp\!1)\cdots$ stay moderate in magnitude for $|t|\le 1$, so subtractive cancellation is less severe than when large binomial-like coefficients multiply small differences.
+
 IV.  **Why the factorial products look symmetric**
 
 * Each coefficient in the forward (or backward) series is now a **central factorial** such as $t(t-1), t(t+1)(t-1),\ldots$. These arise automatically when you substitute $p=t\pm1$ and regroup.
@@ -183,9 +189,9 @@ IV.  **Why the factorial products look symmetric**
 
 Equally spaced nodes and ordinates
 
-$${(x_i,y_i)}{i=0}^{n}, y_i=f(x_i)$$
+$$\{(x_i,y_i)\}_{i=0}^{n},\quad y_i=f(x_i)$$
 
-with step $h=x{i+1}-x_i$ and a target abscissa $x$ that lies inside the table.
+with step $h=x_{i+1}-x_i$ and a target abscissa $x$ that lies inside the table.
 
 I. **Identify the central reference row**
 
@@ -194,8 +200,8 @@ Locate the mid-index**
 $$
 m=
 \begin{cases}
-   n/2, & n\ \text{even}
-   (n-1)/2, & n\ \text{odd}
+   n/2, & n\ \text{even},\\[4pt]
+   (n-1)/2, & n\ \text{odd}.
 \end{cases}
 $$
 
@@ -350,6 +356,16 @@ $f(1.5)\approx3.91$ is a good Gaussian-interpolated estimate based on the given 
 
 > **Check:**  The estimate lies between the tabulated $f(1)=3.5$ and $f(2)=5.0$, closer to the latter—as expected for $x=1.5$.
 
+**Comparison with simple linear interpolation**
+
+Using only the two nearest neighbours $f(1)=3.5$ and $f(2)=5.0$:
+
+$$
+f_{\text{linear}}(1.5)=\frac{3.5+5.0}{2}=4.25.
+$$
+
+The Gaussian result $f(1.5)\approx3.91$ is noticeably lower because the higher-order differences capture the concavity of the data (the increments $\Delta y_i$ are decreasing). Linear interpolation ignores this curvature entirely, illustrating why a central-difference polynomial can be substantially more accurate when more data points are available.
+
 ### Advantages
 
 * **Higher accuracy near the table centre** – because the polynomial is built sym­metrically around the midpoint, truncation error is smaller whenever the target $x$ lies roughly one step to either side of that centre, often outperforming Newton’s end-based forward/backward formulas.
@@ -361,4 +377,3 @@ $f(1.5)\approx3.91$ is a good Gaussian-interpolated estimate based on the given 
 * **Requires equal spacing** – the classic Gauss forward/backward formulas rely on a constant step $h$; with uneven $x_i$ the method does not apply without re-derivation or switching to divided-difference polynomials.
 * **Extra bookkeeping** – one must identify the correct central row, decide forward vs. backward form, and track which difference (e.g.\ $\Delta^{3}y_{m-2}$ or $\nabla^{3}y_{m+2}$) feeds each term; this is more fiddly than the straight left-to-right pattern of Newton’s forward series.
 * **No particular benefit away from the centre** – if the target $x$ is closer to an end of the table $(|t|\gg1)$, Gauss’s central formula reverts in effect to the ordinary Newton formulas but with more complicated indexing, so you gain little (and may lose stability if you retain unnecessary terms).
-t, there may be no significant advantage over standard methods.

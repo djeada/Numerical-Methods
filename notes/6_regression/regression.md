@@ -150,7 +150,7 @@ This loss is generally non-convex; standard solvers include Levenberg–Marquard
 5. **Non-linear Regression (NLS)** – Use gradient-based optimisers; asymptotic theory requires identifiability and regularity.
 6. **Robust Regression** – M-estimators with Huber or Tukey bisquare $\rho$-functions; minimises $\sum\_{i}\rho(r\_i/\hat\sigma)$.
 7. **Quantile Regression** – Minimises asymmetric absolute loss $\sum\_{i}\rho\_\tau(r\_i)$ with $\rho\_\tau(u)=u(\tau-\mathbb 1\_{u<0})$.
-8. **Bayesian Regression** – Places prior $p(\boldsymbol\beta)$, outputs posterior $p(\boldsymbol\beta\mid\mathbf y)\propto L(\boldsymbol\beta),p(\boldsymbol\beta)$; predictive distribution integrates over posterior.
+8. **Bayesian Regression** – Places prior $p(\boldsymbol\beta)$, outputs posterior $p(\boldsymbol\beta\mid\mathbf y)\propto L(\boldsymbol\beta)\,p(\boldsymbol\beta)$; predictive distribution integrates over posterior.
 
 > **Computational Note.**  High-dimensional ($p\gg N$) problems demand numerical linear-algebra tricks: Woodbury identity, iterative conjugate gradient, stochastic gradient descent (SGD), or variance-reduced methods (SVRG, SAGA).
 
@@ -210,27 +210,92 @@ X^\top y
 \end{bmatrix}.
 $$
 
+First compute the determinant:
+
+$$
+\det(X^\top X) = 5 \times 20.45 - 9.3^2 = 102.25 - 86.49 = 15.76.
+$$
+
+Then invert:
+
+$$
+(X^\top X)^{-1}
+= \frac{1}{15.76}
+\begin{bmatrix}
+20.45 & -9.30\\
+-9.30 & 5
+\end{bmatrix}
+\approx
+\begin{bmatrix}
+1.2976 & -0.5901\\
+-0.5901 & 0.3173
+\end{bmatrix}.
+$$
+
+Multiplying out $\hat\beta = (X^\top X)^{-1} X^\top y$ entry-by-entry:
+
+$$
+\hat\beta_0
+= \frac{20.45 \times 15.20 \;-\; 9.30 \times 33.79}{15.76}
+= \frac{310.84 - 314.25}{15.76}
+= \frac{-3.41}{15.76}
+\approx -0.216,
+$$
+
+$$
+\hat\beta_1
+= \frac{-9.30 \times 15.20 \;+\; 5 \times 33.79}{15.76}
+= \frac{-141.36 + 168.95}{15.76}
+= \frac{27.59}{15.76}
+\approx 1.751.
+$$
+
 Hence
 
 $$
 \hat\beta
 = \begin{pmatrix}\hat\beta_0\\\hat\beta_1\end{pmatrix}
 \approx
-\begin{pmatrix}-0.236, 1.751\end{pmatrix}.
+\begin{pmatrix}-0.216\\1.751\end{pmatrix}.
 $$
 
 The fitted line is
 
 $$
-\hat y = -0.236 + 1.751\,x.
+\hat y = -0.216 + 1.751\,x.
 $$
 
-To assess fit, let $\bar y=15.20/5=3.04$. Then
+To assess fit, let $\bar y=15.20/5=3.04$ and tabulate the fitted values and residuals:
+
+| $i$ | $x_i$ | $y_i$ | $\hat y_i$ | $r_i = y_i - \hat y_i$ |
+|-----|--------|--------|-------------|-------------------------|
+| 1   | 0.8    | 1.2    | 1.185       | 0.015                   |
+| 2   | 1.2    | 1.9    | 1.885       | 0.015                   |
+| 3   | 1.9    | 3.1    | 3.111       | −0.011                  |
+| 4   | 2.4    | 3.9    | 3.986       | −0.086                  |
+| 5   | 3.0    | 5.1    | 5.037       | 0.063                   |
+
+Then
+
+$$
+\mathrm{RSS}
+= \sum_i r_i^2
+\approx 0.015^2 + 0.015^2 + 0.011^2 + 0.086^2 + 0.063^2
+\approx 0.012,
+$$
+
+$$
+\mathrm{TSS}
+= \sum_i (y_i - \bar y)^2
+= (1.2{-}3.04)^2 + (1.9{-}3.04)^2 + (3.1{-}3.04)^2 + (3.9{-}3.04)^2 + (5.1{-}3.04)^2
+\approx 9.672,
+$$
 
 $$
 R^2
-= 1 - \frac{\sum_i (y_i - \hat y_i)^2}{\sum_i (y_i - \bar y)^2}
-\approx 0.998.
+= 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}}
+= 1 - \frac{0.012}{9.672}
+\approx 0.999.
 $$
 
 #### Example 2 – Logistic Regression, MLE Derivatives
@@ -255,6 +320,49 @@ $$
 $$
 
 Newton iteration: $\boldsymbol\beta^{(t+1)}=\boldsymbol\beta^{(t)}-(\nabla^2\ell)^{-1}\nabla\ell$.
+
+**Numerical illustration.** Take $N=3$ observations with one feature (plus intercept):
+
+$$
+X = \begin{bmatrix}1 & -1\\1 & 0\\1 & 1\end{bmatrix},
+\quad
+y = \begin{pmatrix}0\\0\\1\end{pmatrix},
+\quad
+\beta^{(0)} = \begin{pmatrix}0\\0\end{pmatrix}.
+$$
+
+At $\beta^{(0)}=(0,0)^\top$ every linear predictor is zero, so $\pi_i=\sigma(0)=0.5$ for all $i$.
+
+Gradient:
+
+$$
+\nabla\ell
+= X^\top(y-\pi)
+= \begin{bmatrix}1&1&1\\-1&0&1\end{bmatrix}
+  \begin{pmatrix}-0.5\\-0.5\\0.5\end{pmatrix}
+= \begin{pmatrix}-0.5\\1.0\end{pmatrix}.
+$$
+
+Weight matrix $W=\operatorname{diag}\bigl(\pi\circ(1-\pi)\bigr)=0.25\,I_3$, so the Hessian is
+
+$$
+\nabla^2\ell
+= -X^\top W X
+= -\begin{bmatrix}0.75&0\\0&0.50\end{bmatrix}.
+$$
+
+Newton update:
+
+$$
+\beta^{(1)}
+= \beta^{(0)} - (\nabla^2\ell)^{-1}\nabla\ell
+= \begin{pmatrix}0\\0\end{pmatrix}
+  + \begin{bmatrix}\tfrac{4}{3}&0\\0&2\end{bmatrix}
+    \begin{pmatrix}-0.5\\1.0\end{pmatrix}
+= \begin{pmatrix}-0.667\\2.000\end{pmatrix}.
+$$
+
+After this single step the model already predicts $P(y{=}1\mid x{=}1)\approx\sigma(-0.667+2.0)=\sigma(1.333)\approx0.79$.
 
 ### Applications
 
@@ -282,11 +390,11 @@ IV. **Multicollinearity:**
 
 Near–linear dependence among columns of $X$ inflates $Var(\hat\beta_j)$; ridge regression can shrink the condition number.
 
-V. **High Use & Outliers:**
+V. **High Leverage & Outliers:**
 
 Cook’s distance
 
-$$D_i = \frac{r_i^2,h_{ii}}{p,\hat\sigma^2,(1 - h_{ii})^2}$$
+$$D_i = \frac{r_i^2 \, h_{ii}}{p \, \hat\sigma^2 \, (1 - h_{ii})^2}$$
 
 identifies influential points; strong M–estimators mitigate their effect.
 

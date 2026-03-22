@@ -6,7 +6,7 @@ While polynomials or other radial‑basis interpolants can achieve the same poin
 
 ### Conceptual Illustration
 
-Imagine you have a set of control points $(x\_i,y\_i,z\_i)$ in 3D space, where $(x\_i,y\_i)$ represent spatial coordinates and $z\_i$ is the function value at that location. Thin plate spline interpolation finds a surface $z=f(x,y)$ that exactly passes through all these points. If you imagine the surface as a thin metal sheet pinned at these points, the TPS solution is the shape the sheet would naturally take if it were free to bend but not stretch, minimizing the total bending energy:
+Imagine you have a set of control points $(x_i,y_i,z_i)$ in 3D space, where $(x_i,y_i)$ represent spatial coordinates and $z_i$ is the function value at that location. Thin plate spline interpolation finds a surface $z=f(x,y)$ that exactly passes through all these points. If you imagine the surface as a thin metal sheet pinned at these points, the TPS solution is the shape the sheet would naturally take if it were free to bend but not stretch, minimizing the total bending energy:
 
 ![output](https://github.com/user-attachments/assets/7eac6046-7538-45a2-8ac2-f9893ae7ffb4)
 
@@ -14,20 +14,20 @@ The resulting surface is smooth, continuous in its derivatives, and tends to fla
 
 ### Mathematical Formulation
 
-Given a set of $N$ data points ${(x\_i,y\_i,z\_i)}\_{i=1}^N$, where no two points coincide, we want to find a function:
+Given a set of $N$ data points $\{(x_i,y_i,z_i)\}_{i=1}^N$, where no two points coincide, we want to find a function:
 
 $f(x,y) = \alpha_0 + \alpha_1 x + \alpha_2 y + \sum_{i=1}^N w_i \phi(\| (x,y)-(x_i,y_i) \|)$
 
 that interpolates the given data. Here:
 
-* The $\alpha\_0, \alpha\_1, \alpha\_2$ terms represent a polynomial of degree 1 (a plane) that gives the global trend.
+* The $\alpha_0, \alpha_1, \alpha_2$ terms represent a polynomial of degree 1 (a plane) that gives the global trend.
 * The function $\phi(r)$ is a radial basis function chosen as:
 
 $\phi(r) = r^2 \ln(r)$
 
 which is the fundamental solution associated with the thin plate spline bending energy in 2D.
 
-* The $w\_i$ are the coefficients for the radial basis part.
+* The $w_i$ are the coefficients for the radial basis part.
 
 This $f(x,y)$ must satisfy the interpolation conditions:
 
@@ -37,7 +37,7 @@ Additionally, to ensure a unique solution and remove degeneracies, $f(x,y)$ must
 
 $\sum_{i=1}^N w_i = \sum_{i=1}^N w_i x_i = \sum_{i=1}^N w_i y_i = 0$
 
-This leads to a linear system for the unknown parameters $\alpha\_0,\alpha\_1,\alpha\_2,w\_1,\ldots,w\_N$
+This leads to a linear system for the unknown parameters $\alpha_0,\alpha_1,\alpha_2,w_1,\ldots,w_N$
 
 ### Derivation
 
@@ -46,7 +46,7 @@ I. **Energy Minimization**:
 Thin plate splines arise from minimizing a bending energy functional:
 
 $J[f] = \int\int \left(\frac{\partial^2 f}{\partial x^2}\right)^2 + 2\left(\frac{\partial^2 f}{\partial x \partial y}\right)^2 + \left(\frac{\partial^2 f}{\partial y^2}\right)^2 \, dx dy,$
-subject to the interpolation constraints $f(x\_i,y\_i)=z\_i$.
+subject to the interpolation constraints $f(x_i,y_i)=z_i$.
 
 II. **Variational Problem**:
 
@@ -54,13 +54,13 @@ Solving the Euler-Lagrange equations associated with the energy minimization und
 
 III. **Linear System**:
 
-Substitute $f(x,y)$ into the interpolation conditions. This produces a system of $N+3$ linear equations (for $w\_i, \alpha\_0,\alpha\_1,\alpha\_2$):
+Substitute $f(x,y)$ into the interpolation conditions. This produces a system of $N+3$ linear equations (for $w_i, \alpha_0,\alpha_1,\alpha_2$):
 
 $$\begin{bmatrix}
-0 & P^\top \\ P & K
+K & P \\ P^\top & 0
 \end{bmatrix}
-\begin{bmatrix} \alpha \\ w \end{bmatrix}
-=\begin{bmatrix} 0 \\ z \end{bmatrix}$$
+\begin{bmatrix} w \\ \alpha \end{bmatrix}
+=\begin{bmatrix} z \\ 0 \end{bmatrix}$$
 
 where:
 
@@ -152,16 +152,16 @@ Compute $\phi(r)=r^2\ln r$:
 
 * $\phi(0)=0$.
 * $\phi(1)=1\cdot\ln 1=0$.
-* $\phi(\sqrt2)=2\ln(\sqrt2)=2\cdot0.69314718=0.69314718$.
+* $\phi(\sqrt2)=2\ln(\sqrt2)=\ln 2\approx 0.6931$.
 
 Thus
 
 $$
 K=\begin{bmatrix}
-0 & 0 & 0 & 0.69314718\\
-0 & 0 & 0.69314718 & 0\\
-0 & 0.69314718 & 0 & 0\\
-0.69314718 & 0 & 0 & 0
+0 & 0 & 0 & \ln 2\\
+0 & 0 & \ln 2 & 0\\
+0 & \ln 2 & 0 & 0\\
+\ln 2 & 0 & 0 & 0
 \end{bmatrix}
 $$
 
@@ -243,6 +243,130 @@ $$
 
 so the bending-energy minimiser needs **no** non-linear kernel part ($\mathbf w=0$).
 
+### Example 2: non-planar data
+
+I. Data
+
+$$
+\bigl(0,0,1\bigr),
+\bigl(1,0,0\bigr),
+\bigl(0,1,0\bigr),
+\bigl(1,1,1\bigr)
+\qquad(N=4)
+$$
+
+These four points do **not** lie on a plane: the only candidate is $1 - x - y$, which gives $1-1-1=-1\neq1$ at $(1,1)$.
+
+II. Kernel matrix $K$
+
+The distance matrix is identical to Example 1:
+
+$$
+\begin{array}{c|cccc}
+ & 1 & 2 & 3 & 4\\\hline
+1 & 0 & 1 & 1 & \sqrt2\\
+2 & 1 & 0 & \sqrt2 & 1\\
+3 & 1 & \sqrt2 & 0 & 1\\
+4 & \sqrt2 & 1 & 1 & 0
+\end{array}
+$$
+
+so $K$ is the same as before:
+
+$$
+K=\begin{bmatrix}
+0 & 0 & 0 & \ln 2\\
+0 & 0 & \ln 2 & 0\\
+0 & \ln 2 & 0 & 0\\
+\ln 2 & 0 & 0 & 0
+\end{bmatrix}
+$$
+
+III. Polynomial matrix $P$
+
+$$
+P=\begin{bmatrix}
+1 & 0 & 0\\
+1 & 1 & 0\\
+1 & 0 & 1\\
+1 & 1 & 1
+\end{bmatrix}
+$$
+
+IV. Augmented system
+
+$$
+A=\begin{bmatrix}
+K & P\\ P^{\!\mathsf T} & 0_{3\times3}
+\end{bmatrix},
+\qquad
+\mathbf b = \begin{bmatrix}
+1 \\ 
+0 \\ 
+0 \\ 
+1 \\ 
+0 \\ 
+0 \\ 
+0
+\end{bmatrix}
+$$
+
+V. Solution
+
+The orthogonality constraint $P^{\!\mathsf T}\mathbf w=\mathbf 0$ gives three equations:
+
+$$
+w_1+w_2+w_3+w_4=0,\quad w_2+w_4=0,\quad w_3+w_4=0.
+$$
+
+Setting $w_4=w$ we get $w_1=w,\;w_2=-w,\;w_3=-w$.
+
+Substituting into $K\mathbf w+P\alpha=\mathbf z$ and solving yields
+
+$$
+w=\frac{1}{2\ln 2}\approx0.7213,
+\qquad
+\alpha_0=\tfrac{1}{2},\;\alpha_1=0,\;\alpha_2=0.
+$$
+
+Therefore
+
+$$
+\mathbf w=\frac{1}{2\ln 2}
+\begin{bmatrix}1\\-1\\-1\\1\end{bmatrix},
+\qquad
+\alpha=\begin{bmatrix}\tfrac12\\0\\0\end{bmatrix}.
+$$
+
+Interpretation: the polynomial part is the constant $\frac{1}{2}$, and the non-linear kernel is needed to pull the surface up at corners $(0,0)$ and $(1,1)$ and down at $(1,0)$ and $(0,1)$.
+
+VI. Evaluation at $(0.5,\,0.5)$
+
+All four distances are equal:
+
+$$
+r_k = \lVert(0.5,0.5)-\mathbf x_k\rVert = \tfrac{1}{\sqrt2},
+\quad k=1,\dots,4.
+$$
+
+$$
+\phi\!\left(\tfrac{1}{\sqrt2}\right) = \tfrac{1}{2}\ln\tfrac{1}{\sqrt2} = -\tfrac{\ln 2}{4}.
+$$
+
+Because $w_1+w_2+w_3+w_4=0$ and all $\phi$ values are identical, the kernel sum vanishes:
+
+$$
+\sum_{i=1}^{4}w_i\,\phi(r_i)=(w_1+w_2+w_3+w_4)\!\left(-\tfrac{\ln 2}{4}\right)=0.
+$$
+
+Therefore
+
+$$
+f(0.5,0.5)=\tfrac{1}{2}+0\cdot0.5+0\cdot0.5+0=\frac{1}{2}.
+$$
+
+By symmetry of the data the midpoint value is exactly $\frac{1}{2}$.
+
 ### Remarks and extensions
 
 | Topic                     | Notes                                                                                                                                                               |
@@ -258,9 +382,11 @@ so the bending-energy minimiser needs **no** non-linear kernel part ($\mathbf w=
 - The method exactly passes through all given data **points**.
 - TPS works with scattered data without needing a regular **grid**.
 - It generalizes easily to higher dimensions by changing the form of $\phi(r)$, making it **extensible**.
+- TPS is **invariant** under rotations and translations of the data, so the fitted surface does not depend on the choice of coordinate system.
 
 ### Limitations
 
 - TPS requires solving a $(N+3) \times (N+3)$ linear system, which can be **expensive** for large $N$.
+- Storing the kernel matrix costs $O(N^2)$ **memory**, which can become prohibitive for very large point sets.
 - The system matrix may become ill-conditioned with many close points, often necessitating regularization like TPS smoothing **splines**.
 - Changing or adding one point affects the entire solution, as TPS is a **global** method, lacking local control like piecewise methods unless combined with domain decomposition techniques.
