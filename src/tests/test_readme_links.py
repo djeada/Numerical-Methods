@@ -3,6 +3,7 @@ from pathlib import Path
 
 
 README_PATH = Path(__file__).resolve().parents[2] / "README.md"
+REPO_ROOT = README_PATH.parent
 REPO_LINK_PREFIX = "https://github.com/djeada/Numerical-Methods/"
 
 
@@ -28,7 +29,7 @@ def test_readme_repo_links_point_to_existing_paths():
             href,
         )
 
-        if relative_path and not (README_PATH.parent / relative_path).exists():
+        if relative_path and not (REPO_ROOT / relative_path).exists():
             missing_paths.append(relative_path)
 
     assert not missing_paths
