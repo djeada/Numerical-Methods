@@ -36,8 +36,8 @@ def least_squares(A: np.ndarray, b: np.ndarray) -> np.ndarray:
         raise ValueError("Matrix A does not have full column rank.")
     A = A.astype(float)
     b = b.astype(float)
-    At = A.T
     try:
+        # lstsq is more numerically stable than solving the normal equations.
         x = np.linalg.lstsq(A, b, rcond=None)[0]
     except LinAlgError:
         raise ValueError(
