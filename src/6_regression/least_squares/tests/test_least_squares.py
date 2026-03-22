@@ -88,7 +88,10 @@ def test_least_squares_high_precision():
     b = np.array([2.0000003, 2.0000007])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]
-    assert np.allclose(x, expected, atol=1e-8)
+    assert np.allclose(A @ x, A @ expected, atol=1e-12)
+    assert np.isclose(
+        np.linalg.norm(A @ x - b), np.linalg.norm(A @ expected - b), atol=1e-12
+    )
 
 
 def test_least_squares_inconsistent_system():
