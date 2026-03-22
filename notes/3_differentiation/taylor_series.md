@@ -12,7 +12,7 @@ $$f(x) = f(a) + f'(a)(x - a) + \frac{f''(a)}{2!}(x - a)^2 + \frac{f'''(a)}{3!}(x
 
 More compactly, we write:
 
-$$f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!}(x - a)^n,$$
+$$f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!}(x - a)^n$$
 
 where:
 
@@ -25,7 +25,7 @@ For numerical methods, we often use a **finite-order Taylor expansion with remai
 
 $$
 f(x)=\sum_{k=0}^{n}\frac{f^{(k)}(a)}{k!}(x-a)^k + \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-a)^{n+1},
-\qquad \xi\in(a,x).
+\qquad \xi\in(a,x)
 $$
 
 Here, derivatives in the polynomial part are evaluated at $a$, while the remainder is evaluated at some intermediate point $\xi$. This is the Lagrange form of the remainder and explains why many derivations use $\xi$ instead of reusing $a$ or $x$ in the last term.
