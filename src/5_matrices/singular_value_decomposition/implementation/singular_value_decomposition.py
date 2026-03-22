@@ -17,7 +17,9 @@ def singular_value_decomposition(
     return U, S_matrix, Vt
 
 
-def singular_value_decomposition_reduced(A: np.ndarray):
+def singular_value_decomposition_reduced(
+    A: np.ndarray,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     U, S, Vt = np.linalg.svd(A, full_matrices=False)
     S = _truncate_small_singular_values(A, S)
     S_matrix = np.diag(S)  # Compact diagonal matrix
