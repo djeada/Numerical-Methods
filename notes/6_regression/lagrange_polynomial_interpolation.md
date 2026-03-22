@@ -8,7 +8,7 @@ Instead of solving a system of linear equations (as would be required if we used
 
 **Conceptual Illustration**:
 
-Imagine that you have three points $(x_0, y_0), (x_1, y_1), (x_2, y_2)$. The Lagrange form builds a polynomial that goes exactly through these points. Each Lagrange basis polynomial $P_i(x)$ is constructed to be zero at all $x_j$ except $x_i$. By taking a suitable linear combination of these basis polynomials with weights given by $y_i$, we get an interpolating polynomial $L(x)$.
+Imagine that you have three points $(x_0, y_0), (x_1, y_1), (x_2, y_2)$. The Lagrange form builds a polynomial that goes exactly through these points. Each Lagrange basis polynomial $\ell_i(x)$ is constructed to be zero at all $x_j$ except $x_i$. By taking a suitable linear combination of these basis polynomials with weights given by $y_i$, we get an interpolating polynomial $L(x)$.
 
 ![Lagrange Polynomial Plot](https://user-images.githubusercontent.com/37275728/188961030-379f428f-a0c4-403a-a6bd-e4a5393f38e0.png)
 
@@ -20,13 +20,13 @@ Given $(n+1)$ distinct points $(x_0, y_0), (x_1, y_1), \ldots, (x_n, y_n)$, the 
 
 I. **Lagrange Basis Polynomials:**
 
-For each $i$ in $\{0,1,\ldots,n\}$, define the $i$-th Lagrange basis polynomial $P_i(x)$ by:
+For each $i$ in $\{0,1,\ldots,n\}$, define the $i$-th Lagrange basis polynomial $\ell_i(x)$ by:
 
-$$P_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n} \frac{x - x_j}{x_i - x_j}$$
+$$\ell_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n} \frac{x - x_j}{x_i - x_j}$$
 
-Notice that $P_i(x_k) = \delta_{ik}$, where $\delta_{ik}$ is the Kronecker delta. In other words:
+Notice that $\ell_i(x_k) = \delta_{ik}$, where $\delta_{ik}$ is the Kronecker delta. In other words:
 
-$$P_i(x_k) =
+$$\ell_i(x_k) =
 \begin{cases}
 1 & \text{if } i=k,\\
 0 & \text{if } i \neq k.
@@ -34,9 +34,9 @@ $$P_i(x_k) =
 
 II. **Lagrange Interpolating Polynomial:**
 
-Once we have the $P_i(x)$, the interpolating polynomial $L(x)$ is given by:
+Once we have the $\ell_i(x)$, the interpolating polynomial $L(x)$ is given by:
 
-$$L(x) = \sum_{i=0}^{n} y_i P_i(x)$$
+$$L(x) = \sum_{i=0}^{n} y_i \ell_i(x)$$
 
 By construction, $L(x_j) = y_j$ for all $j$. The degree of $L(x)$ is at most $n$.
 
@@ -46,26 +46,26 @@ Starting from the requirement that $L(x)$ matches all data points:
 
 $$L(x_i) = y_i \quad \text{for } i=0,1,\ldots,n$$
 
-Consider polynomials $P_i(x)$ defined as:
+Consider polynomials $\ell_i(x)$ defined as:
 
-$$P_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n} \frac{x - x_j}{x_i - x_j}$$
+$$\ell_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n} \frac{x - x_j}{x_i - x_j}$$
 
 This construction ensures that for each fixed $i$:
 
-- When $x = x_i$, the numerator in $P_i(x)$ contains all factors $(x_i - x_j)$ for $j \neq i$, which exactly cancel with the denominator $(x_i - x_j)$. Thus, $P_i(x_i)=1$.
-- For $x = x_k$ with $k \neq i$, the factor $(x_k - x_k)$ in the numerator makes $P_i(x_k)=0$.
+- When $x = x_i$, the numerator in $\ell_i(x)$ contains all factors $(x_i - x_j)$ for $j \neq i$, which exactly cancel with the denominator $(x_i - x_j)$. Thus, $\ell_i(x_i)=1$.
+- For $x = x_k$ with $k \neq i$, the factor $(x_k - x_k)$ in the numerator makes $\ell_i(x_k)=0$.
 
-Hence $P_i(x)$ acts like a "selector" polynomial that equals 1 at $x_i$ and 0 at every other $x_j$.
+Hence $\ell_i(x)$ acts like a "selector" polynomial that equals 1 at $x_i$ and 0 at every other $x_j$.
 
 To construct $L(x)$ that passes through all points, we form:
 
-$$L(x) = \sum_{i=0}^{n} y_i P_i(x)$$
+$$L(x) = \sum_{i=0}^{n} y_i \ell_i(x)$$
 
 Evaluating at $x = x_k$:
 
-$$L(x_k) = \sum_{i=0}^{n} y_i P_i(x_k) = y_k,$$
+$$L(x_k) = \sum_{i=0}^{n} y_i \ell_i(x_k) = y_k,$$
 
-since $P_k(x_k)=1$ and $P_i(x_k)=0$ for $i \neq k$.
+since $\ell_k(x_k)=1$ and $\ell_i(x_k)=0$ for $i \neq k$.
 
 **Uniqueness**: The Lagrange interpolating polynomial is the *unique* polynomial of degree at most $n$ that passes through the given $(n+1)$ points. To see why, suppose two polynomials $L(x)$ and $M(x)$, both of degree at most $n$, agree at $n+1$ distinct points. Their difference $D(x) = L(x) - M(x)$ is a polynomial of degree at most $n$ with $n+1$ roots. By the Fundamental Theorem of Algebra, $D(x)$ must be identically zero, so $L(x) = M(x)$. Therefore, regardless of the method used to construct it, the interpolating polynomial of degree at most $n$ is unique.
 
@@ -83,16 +83,16 @@ III. **Compute Lagrange Basis Polynomials**:
 
 For each $i=0,1,\ldots,n$:
 
-- Initialize $P_i(x)=1$.
+- Initialize $\ell_i(x)=1$.
 - For each $j=0,1,\ldots,n$ with $j \neq i$:
 
-$$P_i(x) = P_i(x) \cdot \frac{x - x_j}{x_i - x_j}$$
+$$\ell_i(x) = \ell_i(x) \cdot \frac{x - x_j}{x_i - x_j}$$
 
 IV. **Form the Interpolating Polynomial**:
 
 Compute:
 
-$$L(x) = \sum_{i=0}^{n} y_i P_i(x)$$
+$$L(x) = \sum_{i=0}^{n} y_i \ell_i(x)$$
 
 **Result**:
 
@@ -108,21 +108,21 @@ $$A(-1,1), \quad B(2,3), \quad C(3,5)$$
 
 We have $n=2$ (since there are 3 points), and thus the polynomial $L(x)$ will be of degree at most 2.
 
-**Compute $P_0(x)$** for the point $A(-1, 1)$:
+**Compute $\ell_0(x)$** for the point $A(-1, 1)$:
 
-$$P_0(x) = \frac{(x - x_1)(x - x_2)}{(x_0-x_1)(x_0-x_2)} = \frac{(x - 2)(x - 3)}{(-1 -2)(-1 -3)} = \frac{(x - 2)(x - 3)}{(-3)(-4)} = \frac{(x - 2)(x - 3)}{12}$$
+$$\ell_0(x) = \frac{(x - x_1)(x - x_2)}{(x_0-x_1)(x_0-x_2)} = \frac{(x - 2)(x - 3)}{(-1 -2)(-1 -3)} = \frac{(x - 2)(x - 3)}{(-3)(-4)} = \frac{(x - 2)(x - 3)}{12}$$
 
-**Compute $P_1(x)$** for the point $B(2,3)$:
+**Compute $\ell_1(x)$** for the point $B(2,3)$:
 
-$$P_1(x) = \frac{(x - x_0)(x - x_2)}{(x_1 - x_0)(x_1 - x_2)} = \frac{(x +1)(x - 3)}{(2 + 1)(2 - 3)} = \frac{(x+1)(x - 3)}{3 \cdot (-1)} = -\frac{(x+1)(x-3)}{3}$$
+$$\ell_1(x) = \frac{(x - x_0)(x - x_2)}{(x_1 - x_0)(x_1 - x_2)} = \frac{(x +1)(x - 3)}{(2 + 1)(2 - 3)} = \frac{(x+1)(x - 3)}{3 \cdot (-1)} = -\frac{(x+1)(x-3)}{3}$$
 
-**Compute $P_2(x)$** for the point $C(3,5)$:
+**Compute $\ell_2(x)$** for the point $C(3,5)$:
 
-$$P_2(x) = \frac{(x - x_0)(x - x_1)}{(x_2 - x_0)(x_2 - x_1)} = \frac{(x +1)(x - 2)}{(3 + 1)(3 - 2)} = \frac{(x+1)(x - 2)}{4}$$
+$$\ell_2(x) = \frac{(x - x_0)(x - x_1)}{(x_2 - x_0)(x_2 - x_1)} = \frac{(x +1)(x - 2)}{(3 + 1)(3 - 2)} = \frac{(x+1)(x - 2)}{4}$$
 
 Now, plug these into $L(x)$:
 
-$$L(x) = y_0 P_0(x) + y_1 P_1(x) + y_2 P_2(x)$$
+$$L(x) = y_0 \ell_0(x) + y_1 \ell_1(x) + y_2 \ell_2(x)$$
 
 Substitute $(y_0, y_1, y_2) = (1,3,5)$:
 
@@ -212,7 +212,7 @@ Direct evaluation of $L(x)$ at a single point costs $O(n^2)$ multiplications bec
 
 IV. **Numerical Instability for Large $n$:**  
 
-For high-degree interpolation, the individual basis polynomials $P_i(x)$ can attain very large values of alternating sign that nearly cancel when summed. This catastrophic cancellation leads to significant floating-point errors. The **barycentric form** of Lagrange interpolation avoids this issue and is numerically stable, making it the recommended implementation for practical use.
+For high-degree interpolation, the individual basis polynomials $\ell_i(x)$ can attain very large values of alternating sign that nearly cancel when summed. This catastrophic cancellation leads to significant floating-point errors. The **barycentric form** of Lagrange interpolation avoids this issue and is numerically stable, making it the recommended implementation for practical use.
 
 ### Verification
 

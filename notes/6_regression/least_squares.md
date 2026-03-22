@@ -32,6 +32,8 @@ $$\beta = (X^\top X)^{-1} X^\top Y$$
 
 This $\beta$ is the least squares estimate of the coefficient vector, ensuring that the fitted line (or hyperplane, in the multi-dimensional case) is the best fit in the least squares sense.
 
+> In this repository's implementation, the input must already be the full **design matrix** $X$ (including any intercept column), and the routine requires $X$ to have full column rank. Rank-deficient or underdetermined systems raise `ValueError` instead of silently returning a minimum-norm pseudo-inverse solution.
+
 ### Derivation
 
 I. **Set up the Problem**:
@@ -93,10 +95,11 @@ II. **Compute Matrices**:
 
 Compute $X^\top X$ and $X^\top Y$.
 
-III. **Check Invertibility**:
+III. **Check Full Column Rank**:
 
-- Ensure $X^\top X$ is invertible (or use a pseudo-inverse if not).
-- If $X^\top X$ is not invertible, it may be due to multicollinearity. Consider removing or combining features, or use regularization methods (like Ridge or Lasso).
+- Ensure that $X$ has full column rank so that $X^\top X$ is invertible.
+- In the implementation shipped with this repository, rank-deficient systems are treated as invalid input and raise an exception.
+- If $X^\top X$ is singular in practice, it may be due to multicollinearity. Consider removing or combining features, or switching to a more robust solver such as QR/SVD-based least squares or regularized regression.
 
 IV. **Solve for $\beta$**:
 
