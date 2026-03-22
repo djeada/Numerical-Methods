@@ -1,6 +1,5 @@
 import numpy as np
 from numpy.linalg import LinAlgError
-from typing import Tuple
 
 
 def solve_linear_system(A: np.ndarray, b: np.ndarray) -> np.ndarray:
@@ -41,10 +40,12 @@ def least_squares(A: np.ndarray, b: np.ndarray) -> np.ndarray:
     AtA = At @ A
     Atb = At @ b
     try:
+        # Use the normal equations explicitly to keep the implementation educational,
+        # even though solving from A directly is usually more numerically stable.
         U, s, Vt = np.linalg.svd(AtA, full_matrices=False)
         tol = max(AtA.shape) * np.finfo(s.dtype).eps * max(s)
-        s_inv = np.diag([1 / si if si > tol else 0 for si in s])
-        AtA_pseudo_inv = Vt.T @ s_inv @ U.T
+        s_inv = np.where(s > tol, 1 / s, 0.0)
+        AtA_pseudo_inv = Vt.T @ (s_inv[:, np.newaxis] * U.T)
         x = AtA_pseudo_inv @ Atb
     except LinAlgError:
         raise ValueError(
