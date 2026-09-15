@@ -11,8 +11,7 @@ $$
 with $x_0\ne x_1$, the interpolated value at a query $x$ is
 
 $$
-L(x)
-=
+L(x) =
 y_0+\frac{x-x_0}{x_1-x_0}(y_1-y_0).
 $$
 
@@ -146,8 +145,7 @@ For a smooth function, shorter intervals usually make the straight-line approxim
 If $f$ is twice continuously differentiable on $[x_i,x_{i+1}]$, the interpolation error satisfies
 
 $$
-f(x)-L_i(x)
-=
+f(x)-L_i(x) =
 \frac{f''(\xi_x)}{2}
 (x-x_i)(x-x_{i+1})
 $$
@@ -182,16 +180,21 @@ This explains the familiar second-order behavior: if the maximum interval width 
 
 For a single query in sorted data:
 
-1. verify that the query lies in the permitted range;
-2. locate the interval $[x_i,x_{i+1}]$ containing the query;
-3. compute
-   $$
-   t=\frac{x-x_i}{x_{i+1}-x_i};
-   $$
-4. return
-   $$
-   (1-t)y_i+t y_{i+1}.
-   $$
+I. verify that the query lies in the permitted range;
+
+II. locate the interval $[x_i,x_{i+1}]$ containing the query;
+
+III. compute
+
+$$
+t=\frac{x-x_i}{x_{i+1}-x_i};
+$$
+
+IV. return
+
+$$
+(1-t)y_i+t y_{i+1}.
+$$
 
 A binary search locates the interval in $O(\log n)$ time. The interpolation itself is constant-time work.
 
@@ -246,13 +249,3 @@ Linear interpolation is attractive because it is:
 Its main limitation is smoothness. The interpolant is only piecewise linear, so corners appear at most interior nodes. If derivatives are important, a cubic spline or another smooth method may be a better choice.
 
 Linear interpolation also ignores curvature inside an interval. A long interval over a highly curved function can produce a noticeable error even though the endpoint values are exact.
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/6_regression/resources/plot_linear_interpolation.py
-```
-
-The script generates both SVG figures used above.
