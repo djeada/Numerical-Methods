@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+<rect width="100%" height="100%" fill="white"/>
+<text x="400.0" y="28" text-anchor="middle" font-family="sans-serif" font-size="18">Lagrange basis: one at its node, zero at the others</text>
+<line x1="82.00" y1="54" x2="82.00" y2="382" stroke="#e5e7eb"/>
+<line x1="82" y1="382.00" x2="772" y2="382.00" stroke="#e5e7eb"/>
+<text x="82.00" y="404" text-anchor="middle" font-family="sans-serif" font-size="11">-1.46</text>
+<text x="72" y="386.00" text-anchor="end" font-family="sans-serif" font-size="11">-1.16</text>
+<line x1="254.50" y1="54" x2="254.50" y2="382" stroke="#e5e7eb"/>
+<line x1="82" y1="300.00" x2="772" y2="300.00" stroke="#e5e7eb"/>
+<text x="254.50" y="404" text-anchor="middle" font-family="sans-serif" font-size="11">-0.48</text>
+<text x="72" y="304.00" text-anchor="end" font-family="sans-serif" font-size="11">-0.427</text>
+<line x1="427.00" y1="54" x2="427.00" y2="382" stroke="#e5e7eb"/>
+<line x1="82" y1="218.00" x2="772" y2="218.00" stroke="#e5e7eb"/>
+<text x="427.00" y="404" text-anchor="middle" font-family="sans-serif" font-size="11">0.5</text>
+<text x="72" y="222.00" text-anchor="end" font-family="sans-serif" font-size="11">0.305</text>
+<line x1="599.50" y1="54" x2="599.50" y2="382" stroke="#e5e7eb"/>
+<line x1="82" y1="136.00" x2="772" y2="136.00" stroke="#e5e7eb"/>
+<text x="599.50" y="404" text-anchor="middle" font-family="sans-serif" font-size="11">1.48</text>
+<text x="72" y="140.00" text-anchor="end" font-family="sans-serif" font-size="11">1.04</text>
+<line x1="772.00" y1="54" x2="772.00" y2="382" stroke="#e5e7eb"/>
+<line x1="82" y1="54.00" x2="772" y2="54.00" stroke="#e5e7eb"/>
+<text x="772.00" y="404" text-anchor="middle" font-family="sans-serif" font-size="11">2.46</text>
+<text x="72" y="58.00" text-anchor="end" font-family="sans-serif" font-size="11">1.77</text>
+<line x1="82" y1="54" x2="82" y2="382" stroke="#111827" stroke-width="1.2"/>
+<line x1="82" y1="382" x2="772" y2="382" stroke="#111827" stroke-width="1.2"/>
+<text x="427.0" y="432" text-anchor="middle" font-family="sans-serif" font-size="13">x</text>
+<text x="20" y="218.0" transform="rotate(-90 20 218.0)" text-anchor="middle" font-family="sans-serif" font-size="13">basis value</text>
+<polyline points="118.96,81.33 144.74,117.52 170.52,148.64 198.87,177.46 224.65,199.10 250.43,216.79 278.78,232.07 304.56,242.57 332.91,250.81 358.69,255.67 384.47,258.40 412.82,259.36 438.60,258.75 466.95,256.89 492.73,254.49 518.51,251.80 546.86,248.90 572.64,246.70 601.00,245.22 626.77,245.08 652.55,246.48 680.90,250.20 706.68,255.95 735.04,265.31" fill="none" stroke="#2563eb" stroke-width="2.2"/>
+<polyline points="118.96,354.67 144.74,290.07 170.52,238.25 198.87,194.74 224.65,166.29 250.43,147.35 278.78,136.22 304.56,133.77 332.91,138.23 358.69,147.63 384.47,161.03 412.82,179.14 438.60,197.51 466.95,218.51 492.73,237.19 518.51,254.37 546.86,270.29 572.64,280.90 601.00,287.03 626.77,286.41 652.55,278.81 680.90,261.11 706.68,235.40 735.04,195.22" fill="none" stroke="#dc2626" stroke-width="2.2"/>
+<polyline points="118.96,195.22 144.74,232.28 170.52,258.97 198.87,277.62 224.65,285.98 250.43,287.25 278.78,281.72 304.56,271.54 332.91,255.97 358.69,238.99 384.47,220.42 412.82,199.40 438.60,180.91 466.95,162.55 492.73,148.81 518.51,138.96 546.86,133.89 572.64,135.66 601.00,145.94 626.77,163.99 652.55,191.43 680.90,233.73 706.68,284.33 735.04,354.67" fill="none" stroke="#059669" stroke-width="2.2"/>
+<polyline points="118.96,265.31 144.74,256.66 170.52,250.67 198.87,246.72 224.65,245.15 250.43,245.14 278.78,246.52 304.56,248.65 332.91,251.52 358.69,254.23 384.47,256.67 412.82,258.63 438.60,259.36 466.95,258.57 492.73,256.04 518.51,251.40 546.86,243.46 572.64,233.26 601.00,218.35 626.77,201.05 652.55,179.81 680.90,151.49 706.68,120.85 735.04,81.33" fill="none" stroke="#7c3aed" stroke-width="2.2"/>
+<circle cx="162.97" cy="252.17" r="4" fill="#d97706" stroke="white" stroke-width="1"/>
+<circle cx="338.99" cy="252.17" r="4" fill="#d97706" stroke="white" stroke-width="1"/>
+<circle cx="515.01" cy="252.17" r="4" fill="#d97706" stroke="white" stroke-width="1"/>
+<circle cx="691.03" cy="252.17" r="4" fill="#d97706" stroke="white" stroke-width="1"/>
+<rect x="554" y="46" width="210" height="130" rx="4" fill="white" fill-opacity=".88" stroke="#d1d5db"/>
+<line x1="562" y1="62" x2="588" y2="62" stroke="#2563eb" stroke-width="2.2"/>
+<text x="596" y="66" font-family="sans-serif" font-size="11">L0(x)</text>
+<line x1="562" y1="86" x2="588" y2="86" stroke="#dc2626" stroke-width="2.2"/>
+<text x="596" y="90" font-family="sans-serif" font-size="11">L1(x)</text>
+<line x1="562" y1="110" x2="588" y2="110" stroke="#059669" stroke-width="2.2"/>
+<text x="596" y="114" font-family="sans-serif" font-size="11">L2(x)</text>
+<line x1="562" y1="134" x2="588" y2="134" stroke="#7c3aed" stroke-width="2.2"/>
+<text x="596" y="138" font-family="sans-serif" font-size="11">L3(x)</text>
+<line x1="562" y1="158" x2="588" y2="158" stroke="#d97706" stroke-width="2.2"/>
+<text x="596" y="162" font-family="sans-serif" font-size="11">node positions</text>
+</svg>

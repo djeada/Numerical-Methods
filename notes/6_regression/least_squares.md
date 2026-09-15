@@ -1,174 +1,414 @@
-## Least Squares Regression
+## Least Squares
 
-Least squares chooses model coefficients to minimize the sum of squared residuals, where a residual is an observed value minus its fitted value. Unlike interpolation, the fitted model need not pass through every observation.
+Least squares fits a model to data by minimizing the sum of squared residuals.
 
-This note derives linear least squares, explains how to solve it numerically, and works through a line fit with a prediction and residual checks.
+For a linear model
 
-### Inputs and Goal
+$$
+\mathbf y\approx X\boldsymbol{\beta},
+$$
 
-**Inputs:** a finite design matrix $X\in\mathbb R^{N\times p}$ and response vector $y\in\mathbb R^N$. Here $N$ counts observations and $p$ counts coefficients, including an intercept if used. **Goal:** find $\hat\beta$ minimizing the residual sum of squares and predict at a new design vector $v_*$.
+the residual vector is
 
-For a line, row $i$ is $[1,x_i]$; for a quadratic it is $[1,x_i,x_i^2]$. The model is linear in its coefficients, even when columns are nonlinear transformations of the original inputs. See the [regression overview](regression.md) for statistical assumptions and model selection.
+$$
+\mathbf r
+=
+\mathbf y-X\boldsymbol{\beta}.
+$$
 
-### Derivation of the Normal Equations
+Ordinary least squares chooses coefficients that minimize
 
-Write the residual vector as $r=y-X\beta$. Expanding its squared norm gives
+$$
+\mathrm{RSS}(\boldsymbol{\beta})
+=
+\|\mathbf y-X\boldsymbol{\beta}\|_2^2
+=
+\sum_{i=1}^{N}r_i^2.
+$$
+
+Equivalently,
+
+$$
+\hat{\boldsymbol{\beta}}
+=
+\underset{\boldsymbol{\beta}}{\mathrm{arg\,min}}
+\;
+\mathrm{RSS}(\boldsymbol{\beta}).
+$$
+
+Unlike interpolation, least squares does not generally require the fitted model to pass through every data point.
+
+![Least-squares line and its residuals](resources/plots/least_squares_residuals.svg)
+
+### Design matrix formulation
+
+Suppose a straight line is modeled as
+
+$$
+y\approx\beta_0+\beta_1x.
+$$
+
+For measurements $(x_i,y_i)$, the design matrix is
+
+$$
+X
+=
+\begin{bmatrix}
+1 & x_1\\
+1 & x_2\\
+\vdots & \vdots\\
+1 & x_N
+\end{bmatrix},
+$$
+
+the coefficient vector is
+
+$$
+\boldsymbol{\beta}
+=
+\begin{bmatrix}
+\beta_0\\
+\beta_1
+\end{bmatrix},
+$$
+
+and the observed values are
+
+$$
+\mathbf y
+=
+\begin{bmatrix}
+y_1\\
+y_2\\
+\vdots\\
+y_N
+\end{bmatrix}.
+$$
+
+The same framework handles polynomial regression and any model that is linear in its unknown coefficients.
+
+### Deriving the normal equations
+
+Expand the objective:
 
 $$
 \begin{aligned}
-\operatorname{RSS}(\beta)&=(y-X\beta)^\top(y-X\beta)\\
-&=y^\top y-2\beta^\top X^\top y+\beta^\top X^\top X\beta.
+\mathrm{RSS}(\boldsymbol{\beta})
+&=
+(\mathbf y-X\boldsymbol{\beta})^\top
+(\mathbf y-X\boldsymbol{\beta})\\
+&=
+\mathbf y^\top\mathbf y
+-
+2\boldsymbol{\beta}^\top X^\top\mathbf y
++
+\boldsymbol{\beta}^\top X^\top X\boldsymbol{\beta}.
 \end{aligned}
 $$
 
-Differentiate with respect to the coefficients:
+Differentiate with respect to $\boldsymbol{\beta}$:
 
 $$
-\nabla\operatorname{RSS}=-2X^\top y+2X^\top X\beta.
+\nabla \mathrm{RSS}
+=
+-2X^\top\mathbf y
++
+2X^\top X\boldsymbol{\beta}.
 $$
 
-Setting the gradient to zero yields
+At a minimizer,
 
 $$
-X^\top X\hat\beta=X^\top y.
+\nabla\mathrm{RSS}=0,
 $$
 
-The Hessian is $2X^\top X$. For every vector $v$,
+which gives the **normal equations**
 
 $$
-v^\top(2X^\top X)v=2\|Xv\|_2^2\ge0.
+X^\top X\hat{\boldsymbol{\beta}}
+=
+X^\top\mathbf y.
 $$
 
-Thus every solution of the normal equations is a global minimum. If $X$ has full column rank, the Hessian is positive definite and the coefficients are unique. Otherwise, different coefficient vectors can have the same fitted vector $X\hat\beta$; an SVD solver can select the minimum-norm solution. Rank deficiency does not mean a least-squares minimizer fails to exist.
+If the columns of $X$ are linearly independent, $X^\top X$ is positive definite and the solution is unique.
 
-### Numerical Algorithm
+### Geometric interpretation
 
-1. Construct $X$ and $y$, including a column of ones if an intercept is intended. Check dimensions, finite values, and scaling.
-2. Solve least squares directly using QR or SVD. With a full-rank reduced QR factorization $X=QR$, solve $R\hat\beta=Q^\top y$ by back-substitution.
-3. Compute $\hat y=X\hat\beta$ and $r=y-\hat y$. Check $X^\top r\approx0$, allowing for floating-point roundoff.
-4. Predict using the same feature construction: $\hat y_*=v_*^\top\hat\beta$.
-
-The identity $\hat\beta=(X^\top X)^{-1}X^\top y$ is useful for algebra but is not the recommended numerical algorithm. For full-rank $X$, $\kappa_2(X^\top X)=\kappa_2(X)^2$: forming the normal equations worsens conditioning. Applying SVD to the already formed $X^\top X$ does not undo that loss.
-
-The repository's educational `least_squares` routine expects the full design matrix, forms the normal equations, and rejects underdetermined or rank-deficient inputs (and zero rows). Those are implementation restrictions, not restrictions on the existence of least-squares solutions. For a direct solver, [NumPy's `lstsq`](https://numpy.org/doc/stable/reference/generated/numpy.linalg.lstsq.html) also reports rank and singular values.
-
-### Worked Example: Fit, Check, and Predict
-
-**Inputs:** $(x,y)=(1,1),(2,2),(3,2)$ and query $x_*=4$. **Goal:** fit a line with an intercept, calculate its residuals and training $R^2$, and predict the response at the query.
-
-**Step-by-step**:
-
-I. Add an intercept term (column of ones):
+The fitted vector
 
 $$
-X = \begin{bmatrix}
-1 & 1 \\
-1 & 2 \\
-1 & 3 \\
-\end{bmatrix}, \quad
-y=\begin{bmatrix}1 \\ 2 \\ 2\end{bmatrix}
+\hat{\mathbf y}
+=
+X\hat{\boldsymbol{\beta}}
 $$
 
-II. Compute $X^\top X$ and $X^\top y$:
+belongs to the column space of $X$.
+
+The normal equations can be rewritten as
 
 $$
-X^\top X = \begin{bmatrix} 1+1+1 & 1+2+3 \\ 1+2+3 & 1+4+9 \end{bmatrix} = \begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix}
+X^\top
+(\mathbf y-X\hat{\boldsymbol{\beta}})
+=
+0.
 $$
 
-$$
-X^\top y = \begin{bmatrix} 1 \cdot 1 + 1 \cdot 2 + 1 \cdot 2 \\ 1 \cdot 1 + 2 \cdot 2 + 3 \cdot 2 \end{bmatrix} = \begin{bmatrix} 5 \\ 11 \end{bmatrix}
-$$
-
-III. Solve the two normal equations:
+Therefore,
 
 $$
-3\hat\beta_0+6\hat\beta_1=5,\qquad
-6\hat\beta_0+14\hat\beta_1=11.
+X^\top\mathbf r=0.
 $$
 
-Subtract twice the first equation from the second:
+The residual vector is orthogonal to every column of $X$. Geometrically, the least-squares fit is the orthogonal projection of $\mathbf y$ onto the column space of the design matrix.
+
+This interpretation is more general than the familiar picture of a best-fit line.
+
+### Worked example
+
+Fit a line to
 
 $$
-(14-12)\hat\beta_1=11-10
-\implies\hat\beta_1=\frac12.
+(0,1),\qquad
+(1,2),\qquad
+(2,2),\qquad
+(3,4).
 $$
 
-IV. Back-substitute for the intercept:
+The model is
 
 $$
-3\hat\beta_0=5-6\left(\frac12\right)=2
-\implies\hat\beta_0=\frac23.
+y\approx\beta_0+\beta_1x.
 $$
 
-The determinant $3(14)-6^2=6>0$ confirms that this two-variable system has a unique solution.
-
-Thus, the fitted line is:
+The design matrix and response vector are
 
 $$
-\hat{y} = \frac{2}{3} + \frac{1}{2}\,x
+X
+=
+\begin{bmatrix}
+1&0\\
+1&1\\
+1&2\\
+1&3
+\end{bmatrix},
+\qquad
+\mathbf y
+=
+\begin{bmatrix}
+1\\2\\2\\4
+\end{bmatrix}.
 $$
 
-V. Verify at data points and compute residuals:
-
-| $x$ | $y$ | $\hat{y}$ | Residual $(y - \hat{y})$ |
-|-----|-----|-----------|--------------------------|
-| 1 | 1 | $\frac{2}{3} + \frac{1}{2} = \frac{7}{6} \approx 1.167$ | $-\frac{1}{6} \approx -0.167$ |
-| 2 | 2 | $\frac{2}{3} + 1 = \frac{5}{3} \approx 1.667$ | $\phantom{-}\frac{1}{3} \approx 0.333$ |
-| 3 | 2 | $\frac{2}{3} + \frac{3}{2} = \frac{13}{6} \approx 2.167$ | $-\frac{1}{6} \approx -0.167$ |
-
-A separate optimality check uses the unrounded residuals:
+The normal equations are
 
 $$
-\sum r_i=-\frac16+\frac13-\frac16=0,
-\qquad\sum x_ir_i=-\frac16+\frac23-\frac36=0.
+\begin{bmatrix}
+4&6\\
+6&14
+\end{bmatrix}
+\begin{bmatrix}
+\beta_0\\
+\beta_1
+\end{bmatrix}
+=
+\begin{bmatrix}
+9\\18
+\end{bmatrix}.
 $$
 
-Thus $X^\top r=0$, as required by the normal equations.
-
-VI. Compute the coefficient of determination ($R^2$):
-
-Mean of observed values:
+Solving gives
 
 $$
-\bar{y} = \frac{1 + 2 + 2}{3} = \frac{5}{3}
+\hat\beta_0=0.9,
+\qquad
+\hat\beta_1=0.9.
 $$
 
-Total Sum of Squares:
+The fitted line is
 
 $$
-TSS = \sum_{i=1}^{3}(y_i - \bar{y})^2 = \left(1 - \frac{5}{3}\right)^2 + \left(2 - \frac{5}{3}\right)^2 + \left(2 - \frac{5}{3}\right)^2 = \frac{4}{9} + \frac{1}{9} + \frac{1}{9} = \frac{2}{3}
+\boxed{\hat y=0.9+0.9x}.
 $$
 
-Residual Sum of Squares:
+The predictions are
 
 $$
-RSS = \sum_{i=1}^{3}(y_i - \hat{y}_i)^2 = \left(\frac{1}{6}\right)^2 + \left(\frac{1}{3}\right)^2 + \left(\frac{1}{6}\right)^2 = \frac{1}{36} + \frac{1}{9} + \frac{1}{36} = \frac{1}{6}
+0.9,\quad1.8,\quad2.7,\quad3.6,
 $$
 
-$$
-R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{1/6}{2/3} = 1 - \frac{1}{4} = \frac{3}{4} = 0.75
-$$
-
-The fitted line reduces the training sum of squared errors by 75% relative to predicting the sample mean. This is not an out-of-sample accuracy guarantee.
-
-VII. Prediction for a new input:
-
-For $x_{\text{new}} = 4$:
+and the residuals are
 
 $$
-\hat{y} = \frac{2}{3} + \frac{1}{2} \cdot 4 = \frac{2}{3} + 2 = \frac{8}{3} \approx 2.667
+0.1,\quad0.2,\quad-0.7,\quad0.4.
 $$
 
-The prediction at $x_*=4$ is an **extrapolation**, because the observed inputs range from 1 to 3. The algebra provides a value, but the data alone do not validate the linear trend beyond that range.
+Their sum is zero because the model includes an intercept, and they are orthogonal to the predictor column as required by the normal equations.
 
-### Advantages
+### The objective is convex
 
-- **Closed-Form Solution**: Provides an explicit formula for the optimal parameters, enabling direct interpretation.
-- **Efficient for Small Problems**: Works well with relatively small datasets and few features.
-- **Foundational Method**: Forms the basis for many advanced regression techniques and regularized models.
+For a linear least-squares problem,
 
-### Limitations
+$$
+\mathrm{RSS}(\boldsymbol{\beta})
+$$
 
-- **Model choice**: Linear least squares assumes a model linear in its coefficients. Polynomial and other fixed basis functions are allowed, but an unsuitable basis can miss the underlying pattern.
-- **Sensitive to Outliers**: Squared errors emphasize large errors more heavily, making the model sensitive to outliers.
-- **Rank and conditioning**: Dependent columns prevent unique coefficient identification; nearly dependent columns amplify perturbations. Use a direct QR/SVD solver, reconsider features, or introduce justified regularization.
+is a quadratic function of the coefficients.
+
+![Contours of the least-squares objective](resources/plots/least_squares_objective_contours.svg)
+
+When $X$ has full column rank, the quadratic bowl has one unique minimum. If the columns of $X$ are linearly dependent, there are multiple coefficient vectors that produce the same fitted values unless an additional criterion is imposed.
+
+### Why solving the normal equations directly can be risky
+
+The normal equations are important theoretically, but explicitly forming
+
+$$
+X^\top X
+$$
+
+can worsen numerical conditioning.
+
+In the 2-norm,
+
+$$
+\kappa_2(X^\top X)
+=
+\kappa_2(X)^2
+$$
+
+when $X$ has full column rank.
+
+So a moderately ill-conditioned design matrix can become much harder to solve accurately after squaring the condition number.
+
+For numerical work, prefer:
+
+- **QR factorization** for a robust general least-squares solve;
+- **SVD** when rank deficiency or severe ill-conditioning is a concern.
+
+Normal equations can still be acceptable for small, well-conditioned educational examples.
+
+### QR factorization
+
+If
+
+$$
+X=QR,
+$$
+
+where $Q$ has orthonormal columns and $R$ is upper triangular, then
+
+$$
+\|X\boldsymbol{\beta}-\mathbf y\|_2
+=
+\|R\boldsymbol{\beta}-Q^\top\mathbf y\|_2
+$$
+
+up to a residual component orthogonal to the column space.
+
+The coefficient vector can be obtained by solving
+
+$$
+R\hat{\boldsymbol{\beta}}
+=
+Q^\top\mathbf y.
+$$
+
+This avoids explicitly forming $X^\top X$.
+
+### Rank deficiency
+
+If the columns of $X$ are linearly dependent, the coefficient vector is not uniquely determined.
+
+The SVD
+
+$$
+X=U\Sigma V^\top
+$$
+
+makes the numerical rank explicit through the singular values in $\Sigma$.
+
+A common choice is the minimum-norm least-squares solution computed with the pseudoinverse:
+
+$$
+\hat{\boldsymbol{\beta}}
+=
+X^+\mathbf y.
+$$
+
+In practice, library routines use a tolerance to decide which singular values are treated as effectively zero.
+
+### Scaling and centering
+
+Polynomial and multivariable design matrices can be poorly scaled.
+
+Useful preprocessing includes:
+
+- centering predictors around zero;
+- scaling columns to comparable magnitudes;
+- using orthogonal polynomial bases instead of raw powers when degree is high.
+
+Scaling changes the numerical representation, not the underlying fitted relationship, provided coefficients are interpreted or transformed appropriately afterward.
+
+### Weighted least squares
+
+If observations have different known reliabilities, use weights
+
+$$
+w_i>0
+$$
+
+and minimize
+
+$$
+\sum_{i=1}^{N}
+w_i r_i^2.
+$$
+
+With diagonal matrix
+
+$$
+W=\mathrm{diag}(w_1,\ldots,w_N),
+$$
+
+the objective becomes
+
+$$
+(\mathbf y-X\boldsymbol{\beta})^\top
+W
+(\mathbf y-X\boldsymbol{\beta}).
+$$
+
+The corresponding normal equations are
+
+$$
+X^\top W X\hat{\boldsymbol{\beta}}
+=
+X^\top W\mathbf y.
+$$
+
+### Least squares is sensitive to outliers
+
+Squaring residuals gives large errors disproportionately high influence. A single extreme outlier can move an ordinary least-squares fit substantially.
+
+Robust regression methods replace the squared loss or iteratively reweight observations so that extreme residuals have less influence.
+
+### Practical checks
+
+For an important least-squares model:
+
+1. inspect the rank of the design matrix;
+2. inspect predictor scaling;
+3. prefer QR or SVD to a hand-built inverse;
+4. examine residuals rather than reporting coefficients alone;
+5. check for outliers and leverage points;
+6. separate numerical fit quality from predictive validity.
+
+### Reproducing the figures
+
+Run:
+
+```bash
+python notes/6_regression/resources/plot_least_squares.py
+```
+
+The script generates the residual and objective-contour figures.

@@ -1,288 +1,355 @@
 ## Cubic Spline Interpolation
 
-A cubic spline joins low-degree polynomial pieces into one interpolating curve. Adjacent pieces have matching values, first derivatives, and second derivatives at their shared nodes. This gives a smooth curve without using one high-degree polynomial over the whole interval.
+A cubic spline interpolates data with a sequence of cubic polynomials rather than one high-degree polynomial across the entire interval.
 
-Smoothness does not guarantee monotonicity or prevent overshoot. Endpoint conditions are part of the model and can affect the entire curve.
+For ordered nodes
 
-### Inputs and Goal
-
-**Inputs:** at least two finite data pairs with strictly increasing nodes, a query $x_*$, and two endpoint conditions. **Goal:** build the piecewise cubic interpolant and evaluate the segment containing $x_*$. Equal spacing is not required.
-
-This note derives the natural spline, whose endpoint second derivatives vanish. Clamped splines instead prescribe endpoint slopes; periodic and not-a-knot conditions define other splines. A natural condition does not mean the endpoint slope is zero.
-
-### Mathematical Formulation
+$$
+x_0<x_1<\cdots<x_n,
+$$
 
-We start with a set of $n+1$ data points:
+one cubic is used on each interval
 
 $$
-(x_0, y_0), (x_1, y_1), \ldots, (x_n, y_n)
+[x_i,x_{i+1}].
 $$
 
-with $x_0 < x_1 < \cdots < x_n$.
+The pieces are joined so that the function, first derivative, and second derivative are continuous at every interior knot. The result is a smooth curve with local low-degree behavior.
 
-A **cubic spline** is a function $S(x)$ defined piecewise on each interval $[x_i, x_{i+1}]$, $i = 0, 1, \ldots, n-1$:
+![Natural cubic spline through irregularly spaced knots](resources/plots/cubic_spline_piecewise_curve.svg)
 
-$$
-S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3
-$$
+### Why use piecewise cubics?
+
+A straight-line interpolant is simple and local, but it has slope discontinuities at the nodes. A single high-degree polynomial is smooth, but it can oscillate strongly and becomes increasingly sensitive as the number of nodes grows.
 
-where $a_i, b_i, c_i, d_i$ are the unknown coefficients for the cubic polynomial on the interval $[x_i, x_{i+1}]$.
+Cubic splines occupy a useful middle ground:
 
-**Key Requirements:**
+- each segment has low degree;
+- the full interpolant is smooth;
+- the linear system has a sparse tridiagonal structure;
+- after setup, evaluating one query requires only one cubic segment.
 
-I. **Interpolation Condition:**
+### Segment definition
 
-Each segment must pass through the given data points:
+On interval $[x_i,x_{i+1}]$, write
 
 $$
-S_i(x_i) = y_i, \quad S_i(x_{i+1}) = y_{i+1}.
+S_i(x)
+=
+a_i+b_i(x-x_i)+c_i(x-x_i)^2+d_i(x-x_i)^3.
 $$
 
-II. **Continuity of the Spline:**
+For $n$ intervals there are $4n$ segment coefficients.
 
-The function $S(x)$ must be continuous at the interior points:
+They are determined by four types of conditions.
 
+#### 1. Interpolation
+
+Each segment matches its endpoint values:
+
 $$
-S_i(x_{i+1}) = S_{i+1}(x_{i+1}).
+S_i(x_i)=y_i,
+\qquad
+S_i(x_{i+1})=y_{i+1}.
 $$
 
-III. **Continuity of First Derivative:**
+#### 2. First-derivative continuity
 
-The first derivatives of adjacent segments must match:
+At an interior knot,
 
 $$
-S_i'(x_{i+1}) = S_{i+1}'(x_{i+1}).
+S_{i-1}'(x_i)=S_i'(x_i).
 $$
 
-IV. **Continuity of Second Derivative:**
+#### 3. Second-derivative continuity
 
-Similarly, the second derivatives must also be continuous:
+Also require
 
 $$
-S_i''(x_{i+1}) = S_{i+1}''(x_{i+1}).
+S_{i-1}''(x_i)=S_i''(x_i).
 $$
+
+#### 4. Two boundary conditions
 
-V. **Boundary Conditions:**
+The interior conditions alone do not uniquely determine the spline. Two endpoint conditions are required.
 
-For a **natural cubic spline**, the second derivatives at the boundaries are set to zero:
+This note focuses on the **natural spline**:
 
 $$
-S_0''(x_0) = 0, \quad S_{n-1}''(x_n) = 0.
+S''(x_0)=0,
+\qquad
+S''(x_n)=0.
 $$
 
-For $n$ intervals there are $4n$ coefficients: the $2n$ endpoint interpolation conditions, $2(n-1)$ derivative matching conditions, and two boundary conditions determine them. Function continuity is already implied by matching the shared data values; it is not an extra independent condition.
+Other common choices are clamped, periodic, and not-a-knot boundary conditions.
 
-### Derivation of the Coefficients
+A natural boundary condition sets the endpoint **curvature** to zero; it does not set the endpoint slope to zero.
 
-I. **Step Sizes and Secant Slopes:**
+### Solving with knot second derivatives
 
-Let the spacing between consecutive points be:
+A convenient derivation introduces
 
 $$
-h_i = x_{i+1} - x_i, \quad i=0,1,\ldots,n-1
+M_i=S''(x_i).
 $$
 
-II. **Formulation in Terms of Second Derivatives:**
+Let
 
-Let $M_i = S''(x_i)$. If we can determine $M_i$ for all $i$, we can write each piece $S_i(x)$ as:
-
 $$
-\begin{aligned}
-S_i(x) ={}& M_{i}\frac{(x_{i+1}-x)^3}{6h_i} + M_{i+1}\frac{(x - x_i)^3}{6h_i} \\
-&+ \left(y_i - \frac{M_i h_i^2}{6}\right)\frac{x_{i+1}-x}{h_i} \\
-&+ \left(y_{i+1} - \frac{M_{i+1}h_i^2}{6}\right)\frac{x - x_i}{h_i}.
-\end{aligned}
+h_i=x_{i+1}-x_i.
 $$
-
-This form matches the endpoint values and prescribed endpoint second derivatives of each piece. The system below enforces first-derivative continuity, and the endpoint choices impose the boundary conditions.
-
-III. **System of Equations for $M_i$:**
 
-Requiring continuity of the first derivative at each interior knot ($S_{i-1}'(x_i) = S_i'(x_i)$) and substituting the second-derivative form from step II yields a tridiagonal system for the unknown $M_i$. For natural splines the boundary values are:
+For a natural spline,
 
 $$
-M_0 = 0, \quad M_n = 0.
+M_0=0,
+\qquad
+M_n=0.
 $$
 
-The remaining $M_i$'s (for $i=1,\ldots,n-1$) satisfy:
+The interior second derivatives satisfy the tridiagonal equations
 
 $$
-h_{i-1}M_{i-1} + 2(h_{i-1}+h_i)M_i + h_i M_{i+1} = 6\left(\frac{y_{i+1}-y_i}{h_i} - \frac{y_i - y_{i-1}}{h_{i-1}}\right)
+h_{i-1}M_{i-1}
++
+2(h_{i-1}+h_i)M_i
++
+h_iM_{i+1}
+=
+6
+\left[
+\frac{y_{i+1}-y_i}{h_i}
+-
+\frac{y_i-y_{i-1}}{h_{i-1}}
+\right]
 $$
 
-IV. **Once $M_i$ are determined**, the coefficients $a_i, b_i, c_i, d_i$ of the cubic spline in the standard form:
+for
 
 $$
-S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3
+i=1,\ldots,n-1.
 $$
 
-can be read off by expanding the second-derivative form from step II about $x = x_i$:
+The right-hand side measures the change in neighboring secant slopes. If the data are locally close to a straight line, that difference is small; if the slope changes strongly, the spline needs more curvature.
 
-$$
-a_i = y_i
-$$
+### Recovering the cubic coefficients
+
+Once the $M_i$ values are known,
 
 $$
-b_i = \frac{y_{i+1}-y_i}{h_i} - \frac{h_i}{6}(2M_i + M_{i+1})
+a_i=y_i,
 $$
 
 $$
-c_i = \frac{M_i}{2}
+b_i
+=
+\frac{y_{i+1}-y_i}{h_i}
+-
+\frac{h_i}{6}(2M_i+M_{i+1}),
 $$
 
 $$
-d_i = \frac{M_{i+1} - M_i}{6h_i}
+c_i=\frac{M_i}{2},
 $$
 
-One can verify that $S_i''(x_i) = 2c_i = M_i$ and $S_i''(x_{i+1}) = 2c_i + 6d_i h_i = M_{i+1}$, confirming consistency with the definition $M_i = S''(x_i)$.
+and
 
-### Algorithm Steps
-
-I. **Data Preparation:**
-
-- Sort the data points $(x_i,y_i)$ in ascending order by $x_i$.
-- Compute $h_i = x_{i+1}-x_i$ for $i=0,\ldots,n-1$.
-
-II. **Form the Equations:**
-
-Set up the linear system to solve for the second derivatives $M_i$. For a natural spline:
-
 $$
-M_0 = 0, \quad M_n = 0
+d_i
+=
+\frac{M_{i+1}-M_i}{6h_i}.
 $$
 
-For $i=1,\ldots,n-1$:
+Thus
 
 $$
-h_{i-1}M_{i-1} + 2(h_{i-1}+h_i)M_i + h_i M_{i+1} = 6\left(\frac{y_{i+1}-y_i}{h_i} - \frac{y_i - y_{i-1}}{h_{i-1}}\right)
+S_i(x)
+=
+a_i+b_i\Delta x+c_i\Delta x^2+d_i\Delta x^3,
+\qquad
+\Delta x=x-x_i.
 $$
-
-III. **Solve the Tridiagonal System:**
 
-Use the Thomas algorithm (tridiagonal matrix algorithm) to solve for $M_1, M_2,\ldots,M_{n-1}$. Because the coefficient matrix is tridiagonal, the Thomas algorithm solves the system in $O(n)$ time using a single forward-elimination and back-substitution pass.
+### Why the joins are smooth
 
-IV. **Calculate the Coefficients:**
+The second derivative on a segment is
 
-With $M_i$ known, compute for each segment $i = 0, 1, \ldots, n-1$:
-
 $$
-a_i = y_i, \quad b_i = \frac{y_{i+1}-y_i}{h_i} - \frac{h_i}{6}(2M_i + M_{i+1}), \quad c_i = \frac{M_i}{2}, \quad d_i = \frac{M_{i+1}-M_i}{6h_i}
+S_i''(x)=2c_i+6d_i(x-x_i).
 $$
 
-V. **Interpolation:**
+At the left endpoint,
 
-For a given $x$, find the interval $[x_i, x_{i+1}]$ such that $x_i \leq x \leq x_{i+1}$ and evaluate:
-
 $$
-S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3
+S_i''(x_i)=2c_i=M_i.
 $$
 
-### Example
+At the right endpoint,
 
-**Inputs:** $(0,0),\;(1,0.5),\;(2,0)$, natural endpoint conditions, and query $x_*=0.5$. **Goal:** find both cubic pieces, verify their joins, and estimate the value at the query.
+$$
+S_i''(x_{i+1})
+=
+2c_i+6d_ih_i
+=
+M_{i+1}.
+$$
 
-**Setup:**
+Adjacent segments therefore share the same second derivative at each knot. The tridiagonal system was derived from the matching of the first derivatives, so those are continuous as well.
 
-- $h_0 = x_1 - x_0 = 1,\quad h_1 = x_2 - x_1 = 1$.
-- Natural boundary conditions: $M_0 = 0,\; M_2 = 0$.
+![First and second derivatives of a natural cubic spline](resources/plots/cubic_spline_derivatives.svg)
 
-**Solving for $M_1$:**
+### Worked example
 
-The tridiagonal equation for $i=1$:
+Use
 
 $$
-h_0 M_0 + 2(h_0+h_1)M_1 + h_1 M_2 = 6\left(\frac{y_2-y_1}{h_1} - \frac{y_1-y_0}{h_0}\right)
+(0,0),\qquad(1,0.5),\qquad(2,0).
 $$
 
-$$
-1\cdot 0 + 2(1+1)M_1 + 1\cdot 0 = 6\left(\frac{0-0.5}{1} - \frac{0.5-0}{1}\right) = 6(-0.5 - 0.5) = -6
-$$
+Both intervals have width
 
 $$
-4M_1 = -6 \implies M_1 = -1.5
+h_0=h_1=1.
 $$
 
-**Segment 0** ($[x_0,x_1] = [0,1]$):
+For a natural spline,
 
 $$
-a_0 = y_0 = 0
+M_0=M_2=0.
 $$
 
-$$
-b_0 = \frac{y_1 - y_0}{h_0} - \frac{h_0}{6}(2M_0 + M_1) = \frac{0.5}{1} - \frac{1}{6}(0 + (-1.5)) = 0.5 + 0.25 = 0.75
-$$
+The only interior equation is
 
 $$
-c_0 = \frac{M_0}{2} = 0
+1\cdot M_0
++
+2(1+1)M_1
++
+1\cdot M_2
+=
+6
+\left[
+\frac{0-0.5}{1}
+-
+\frac{0.5-0}{1}
+\right].
 $$
 
-$$
-d_0 = \frac{M_1 - M_0}{6h_0} = \frac{-1.5}{6} = -0.25
-$$
+Therefore,
 
 $$
-S_0(x) = 0.75x - 0.25x^3
+4M_1=-6,
 $$
 
-**Segment 1** ($[x_1,x_2] = [1,2]$):
+so
 
 $$
-a_1 = y_1 = 0.5
+M_1=-1.5.
 $$
 
+For the first interval,
+
 $$
-b_1 = \frac{y_2 - y_1}{h_1} - \frac{h_1}{6}(2M_1 + M_2) = \frac{-0.5}{1} - \frac{1}{6}(2(-1.5)+0) = -0.5 + 0.5 = 0
+a_0=0,
+\qquad
+b_0=0.75,
+\qquad
+c_0=0,
+\qquad
+d_0=-0.25.
 $$
+
+Hence
 
 $$
-c_1 = \frac{M_1}{2} = -0.75
+S_0(x)=0.75x-0.25x^3.
 $$
 
+At $x=0.5$,
+
 $$
-d_1 = \frac{M_2 - M_1}{6h_1} = \frac{1.5}{6} = 0.25
+S_0(0.5)
+=
+0.75(0.5)-0.25(0.5)^3
+=
+0.34375.
 $$
 
+Thus
+
 $$
-S_1(x) = 0.5 - 0.75(x-1)^2 + 0.25(x-1)^3
+\boxed{S(0.5)=0.34375}.
 $$
+
+### Algorithm
+
+For a natural cubic spline:
+
+1. sort the points by increasing $x_i$;
+2. compute interval widths
+   $$
+   h_i=x_{i+1}-x_i;
+   $$
+3. assemble the tridiagonal system for $M_1,\ldots,M_{n-1}$;
+4. solve that system;
+5. set $M_0=M_n=0$;
+6. compute $(a_i,b_i,c_i,d_i)$ for each interval;
+7. for each query, locate its interval and evaluate the corresponding cubic.
+
+The Thomas algorithm solves a nonsingular tridiagonal system in $O(n)$ time and $O(n)$ storage.
 
-**Verification at the knots:**
+### Evaluation cost
 
-| Check | Value |
-|---|---|
-| $S_0(0) = 0$ | $= y_0$ ✓ |
-| $S_0(1) = 0.75 - 0.25 = 0.5$ | $= y_1$ ✓ |
-| $S_1(1) = 0.5$ | $= y_1$ ✓ |
-| $S_1(2) = 0.5 - 0.75 + 0.25 = 0$ | $= y_2$ ✓ |
-| $S_0'(x) = 0.75 - 0.75x^2,\; S_0'(1) = 0$ | First derivative continuous ✓ |
-| $S_1'(x) = -1.5(x-1)+0.75(x-1)^2,\; S_1'(1) = 0$ | ✓ |
-| $S_0''(x) = -1.5x,\; S_0''(1) = -1.5$ | Second derivative continuous ✓ |
-| $S_1''(x) = -1.5+1.5(x-1),\; S_1''(1) = -1.5$ | ✓ |
+After preprocessing, a query requires:
 
-**Evaluating at a query point $x = 0.5$:**
+- interval search: $O(\log n)$ with binary search;
+- polynomial evaluation: constant work.
 
-Since $0.5 \in [0,1]$, we use $S_0$:
+The cubic can be evaluated in nested form:
 
 $$
-S_0(0.5) = 0.75(0.5) - 0.25(0.5)^3 = 0.375 - 0.03125 = 0.34375
+S_i(x)
+=
+a_i+\Delta x
+\left[
+b_i+\Delta x(c_i+\Delta x d_i)
+\right].
 $$
+
+### Boundary conditions matter
+
+Different endpoint conditions produce different interpolants even when all interior data are identical.
+
+Common options include:
+
+- **natural**:
+  $$
+  S''(x_0)=S''(x_n)=0;
+  $$
+- **clamped**: prescribed endpoint slopes;
+- **periodic**: endpoint values and derivatives match periodically;
+- **not-a-knot**: the first two and last two cubic pieces are constrained to behave as if the first and last interior knots were not true breaks.
+
+When comparing with a library, make sure the boundary condition matches. A library default may not be natural.
+
+### Numerical behavior and limitations
 
-### Advantages
+Cubic splines usually avoid the dramatic oscillations of high-degree global polynomials, but they are not automatically shape preserving.
 
-- Splines ensure **smoothness** by producing curves with continuous first and second derivatives, leading to a natural and visually appealing fit.
-- Low-degree pieces often reduce the large oscillations seen with a single high-degree polynomial, although overshoot remains possible.
-- Evaluation uses only one cubic segment after solving for the coefficients. However, changing a data value can change all segments because the coefficient system is globally coupled.
+A cubic spline can:
 
-### Limitations
+- overshoot between monotone data points;
+- become negative between positive samples;
+- change shape globally when a data value changes because the coefficient system is coupled.
 
-- The method involves **complexity**, as it requires setting up and solving a linear system of equations, making it more complicated than simpler interpolation techniques.
-- **Computational cost** is higher than methods like linear interpolation, particularly for large datasets with many control points.
-- **Boundary conditions** must be specified (e.g., natural, clamped) to define the behavior at the endpoints, which can influence the overall fit of the spline.
+If monotonicity is required, use a shape-preserving interpolation method designed for that constraint.
 
-### Boundary and Numerical Checks
+### Reproducing the figures
 
-For the example, $S_0''(0)=0$ and $S_1''(2)=-1.5+1.5=0$, verifying the natural conditions as well as the joins checked above. With only two nodes, there are no interior second derivatives to solve for; the natural spline reduces to the line through the two values.
+Run:
 
-Locate the segment by binary search in $O(\log n)$ work, then evaluate its cubic in constant work using nested multiplication. Queries outside the knot range require an explicit extrapolation policy. Cubic splines do not generally preserve monotonicity or positivity.
+```bash
+python notes/6_regression/resources/plot_cubic_spline_interpolation.py
+```
 
-For an independent numerical comparison, use [SciPy's CubicSpline](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.CubicSpline.html) with `bc_type="natural"`. Its default is `"not-a-knot"`, which defines a different interpolant.
+The script implements the natural spline solve directly with NumPy and generates both SVG figures.

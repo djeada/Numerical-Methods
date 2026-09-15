@@ -1,184 +1,258 @@
-## Linear interpolation
+## Linear Interpolation
 
-Linear interpolation estimates a value between two observations using the straight line joining them. Applied to every interval in an ordered table, it produces a continuous chain of line segments.
+Linear interpolation estimates a value between two known points by assuming the function is a straight line over that interval.
 
-Each query uses only its enclosing pair of nodes. This makes the method simple and local, but curvature within a segment is not represented.
-
-### Inputs and Goal
-
-**Inputs:** at least two finite pairs sorted by $x_i$, with strictly increasing nodes, and a query $x_*$. **Goal:** estimate the response at $x_*$ from its two enclosing nodes. Equal spacing is not required. Reject duplicate nodes before dividing by an interval width.
-
-The formulas below write $x$ for the query and $y$ for the interpolated estimate, not the unknown true value.
-
-### Mathematical Formulation
-
-Given two known data points $(x_i, y_i)$ and $(x_{i+1}, y_{i+1})$, and a target $x$-value with $x_i \leq x \leq x_{i+1}$, the line connecting these points has a slope $\alpha$ given by:
+Given two points
 
 $$
-\alpha = \frac{y_{i+1} - y_i}{x_{i+1} - x_i}.
+(x_0,y_0),\qquad (x_1,y_1),
 $$
 
-To find the interpolated value $y$ at $x$, start from $y_i$ and move along the line for the interval $(x - x_i)$:
+with $x_0\ne x_1$, the interpolated value at a query $x$ is
 
 $$
-y = y_i + \alpha (x - x_i).
+L(x)
+=
+y_0+\frac{x-x_0}{x_1-x_0}(y_1-y_0).
 $$
 
-Substituting $\alpha$:
+A particularly useful form introduces the normalized coordinate
 
 $$
-y = y_i + (x - x_i) \frac{y_{i+1} - y_i}{x_{i+1} - x_i}.
+t=\frac{x-x_0}{x_1-x_0}.
 $$
 
-This formula provides the interpolated $y$-value directly.
-
-### Derivation
-
-![Derivation Illustration](https://user-images.githubusercontent.com/37275728/188960726-ac99ac89-f1b8-4b82-9761-5093cb91d4db.png)
-
-I. **Slope Calculation:**
-
-The slope $\alpha$ of the line passing through $(x_i, y_i)$ and $(x_{i+1}, y_{i+1})$ is:
+Then
 
 $$
-\alpha = \frac{y_{i+1} - y_i}{x_{i+1}-x_i}.
+L(x)=(1-t)y_0+t y_1.
 $$
 
-II. **Linear Equation:**
+When $x$ lies between the endpoints, $0\le t\le1$, so the result is a weighted average of the endpoint values.
 
-A line passing through $(x_i, y_i)$ with slope $\alpha$ is:
+![Geometry of linear interpolation](resources/plots/linear_interpolation_geometry.svg)
 
-$$
-y - y_i = \alpha (x - x_i).
-$$
+### Geometric interpretation
 
-III. **Substitution:**
-
-Replace $\alpha$ with its expression:
+The slope between the two samples is
 
 $$
-y - y_i = \frac{y_{i+1} - y_i}{x_{i+1}-x_i} (x - x_i).
+m=\frac{y_1-y_0}{x_1-x_0}.
 $$
 
-IV. **Final Formula:**
-
-Simplifying:
+The line through $(x_0,y_0)$ is therefore
 
 $$
-y = y_i + \frac{(y_{i+1} - y_i)}{x_{i+1}-x_i} (x - x_i).
+L(x)=y_0+m(x-x_0).
 $$
 
-### Alternative Form
+This formula is exactly the same as the weighted form above.
 
-The interpolation formula can be rewritten as a weighted average of the two $y$-values:
-
-$$
-y = \frac{x_{i+1} - x}{x_{i+1} - x_i} \, y_i + \frac{x - x_i}{x_{i+1} - x_i} \, y_{i+1}.
-$$
-
-The two weights sum to one and are non-negative for $x \in [x_i, x_{i+1}]$, so the result is a **convex combination** of $y_i$ and $y_{i+1}$. At $x = x_i$ the first weight is 1, recovering $y_i$; at $x = x_{i+1}$ the second weight is 1, recovering $y_{i+1}$.
-
-### Error Analysis
-
-If the function $f$ being interpolated has a continuous second derivative on $[x_i, x_{i+1}]$ (i.e. $f \in C^2[x_i, x_{i+1}]$), the interpolation error is bounded by:
+The weights
 
 $$
-|f(x) - y| \leq \frac{1}{8} h^2 \max_{\xi \in [x_i, x_{i+1}]} |f''(\xi)|,
+1-t
+\quad\text{and}\quad
+t
 $$
 
-where $h = x_{i+1} - x_i$ is the interval width. With a common bound on $|f''|$, halving $h$ reduces this upper bound by a factor of four; the actual error need not decrease by exactly that factor.
+sum to one. That has an important consequence: if $x$ is between $x_0$ and $x_1$, then $L(x)$ lies between $y_0$ and $y_1$. A single linear segment cannot overshoot its two endpoint values.
 
-### Algorithm Steps
+### Worked example
 
-I. Check the inputs and identify the interval $[x_i, x_{i+1}]$ containing the target $x$. At a node return its supplied value. Outside $[x_0,x_n]$, report an out-of-range query unless extrapolation has been explicitly chosen.
-
-II. Compute the slope:
+Take
 
 $$
-\frac{y_{i+1} - y_i}{x_{i+1}-x_i}.
+(x_0,y_0)=(1,2),
+\qquad
+(x_1,y_1)=(4,5),
 $$
 
-III. Substitute into the linear interpolation formula:
+and estimate the value at
 
 $$
-y = y_i + \frac{(y_{i+1} - y_i)}{x_{i+1}-x_i} (x - x_i).
+x=2.2.
 $$
 
-The result is the interpolated value $y$ at the desired $x$.
-
-### Example
-
-**Inputs:** $A(-2,0)$ and $B(2,2)$, query $x_*=1$. **Goal:** estimate $y$ at that query. First check $-2\le1\le2$, so these endpoints bracket it.
-
-I. Compute the slope:
+First compute the normalized position:
 
 $$
-\alpha = \frac{2 - 0}{2 - (-2)} = \frac{2}{4} = 0.5.
+t=\frac{2.2-1}{4-1}
+=\frac{1.2}{3}
+=0.4.
 $$
 
-II. Substitute $x=1$:
+Then
 
 $$
-y = 0 + 0.5 (1 - (-2)) = 0.5 \times 3 = 1.5.
+L(2.2)
+=(1-0.4)\cdot2+0.4\cdot5
+=1.2+2
+=3.2.
 $$
 
-The estimate is $y=1.5$. As a separate check, the query is $(1-(-2))/4=3/4$ of the way across the interval, so the weighted average is $(1/4)(0)+(3/4)(2)=1.5$.
-
-**Verification at the endpoints:**
-
-- At $x = -2$: $y = 0 + 0.5(-2 - (-2)) = 0 + 0 = 0$ ✓
-- At $x = 2$: $y = 0 + 0.5(2 - (-2)) = 0.5 \times 4 = 2$ ✓
-
-**Error bound:** If we know only that $|f''(\xi)| \leq M$ for all $\xi \in [-2, 2]$, then $h = 2 - (-2) = 4$ and the maximum interpolation error is:
+So
 
 $$
-|f(x) - y| \leq \frac{1}{8}(4)^2 M = 2M.
+\boxed{L(2.2)=3.2}.
 $$
 
-### Example 2
+The calculation can also be read geometrically: the query is $40\%$ of the way from $x_0$ to $x_1$, so its interpolated value is $40\%$ of the way from $y_0$ to $y_1$.
 
-**Estimating $\sin(\pi/4)$ from two known values of $\sin(x)$.**
+### Piecewise linear interpolation
 
-Known points: $(0,\, 0)$ and $(\pi/2,\, 1)$, since $\sin(0) = 0$ and $\sin(\pi/2) = 1$. Estimate $f(\pi/4) = \sin(\pi/4)$.
-
-I. Compute the slope:
+For many ordered data points
 
 $$
-\alpha = \frac{1 - 0}{\pi/2 - 0} = \frac{2}{\pi} \approx 0.6366.
+x_0<x_1<\cdots<x_n,
 $$
 
-II. Substitute $x = \pi/4$:
+piecewise linear interpolation applies the same two-point formula on each interval.
+
+If
 
 $$
-y = 0 + \frac{2}{\pi}\left(\frac{\pi}{4} - 0\right) = \frac{2}{\pi} \cdot \frac{\pi}{4} = \frac{1}{2} = 0.5.
+x_i\le x\le x_{i+1},
 $$
 
-III. Compare with the exact value:
+then
 
 $$
-\sin\!\left(\frac{\pi}{4}\right) = \frac{\sqrt{2}}{2} \approx 0.7071.
+L_i(x)
+=
+y_i
++
+\frac{x-x_i}{x_{i+1}-x_i}
+(y_{i+1}-y_i).
 $$
 
-The absolute error is $|\sqrt{2}/2-0.5|\approx0.2071$.
+The resulting interpolant is continuous because adjacent segments meet at the shared data points.
 
-IV. Check against the error bound. Here $h = \pi/2$ and $|f''(x)| = |\!-\!\sin(x)| \leq 1$ on $[0, \pi/2]$, so:
+However, its derivative is generally discontinuous. On interval $[x_i,x_{i+1}]$,
 
 $$
-\text{max error} \leq \frac{1}{8}\left(\frac{\pi}{2}\right)^2 \cdot 1 \approx 0.3084.
+L_i'(x)=
+\frac{y_{i+1}-y_i}{x_{i+1}-x_i},
 $$
 
-Indeed $0.2071 < 0.3084$ ✓. This illustrates that for highly curved functions, linear interpolation can have significant error even though the bound is still respected.
+which is constant on that interval. At an interior node, the slope usually jumps from one secant slope to the next.
+
+### Why grid refinement helps
+
+For a smooth function, shorter intervals usually make the straight-line approximation more accurate.
+
+![Piecewise-linear interpolation improves as the grid is refined](resources/plots/linear_interpolation_refinement.svg)
+
+If $f$ is twice continuously differentiable on $[x_i,x_{i+1}]$, the interpolation error satisfies
+
+$$
+f(x)-L_i(x)
+=
+\frac{f''(\xi_x)}{2}
+(x-x_i)(x-x_{i+1})
+$$
+
+for some $\xi_x$ in the interval.
+
+Let
+
+$$
+h_i=x_{i+1}-x_i.
+$$
+
+The product
+
+$$
+|(x-x_i)(x-x_{i+1})|
+$$
+
+is largest at the midpoint and equals $h_i^2/4$ there. Therefore,
+
+$$
+|f(x)-L_i(x)|
+\le
+\frac{h_i^2}{8}
+\max_{\xi\in[x_i,x_{i+1}]}
+|f''(\xi)|.
+$$
+
+This explains the familiar second-order behavior: if the maximum interval width is reduced by roughly a factor of two, the interpolation error for a smooth function often decreases by roughly a factor of four.
+
+### Algorithm
+
+For a single query in sorted data:
+
+1. verify that the query lies in the permitted range;
+2. locate the interval $[x_i,x_{i+1}]$ containing the query;
+3. compute
+   $$
+   t=\frac{x-x_i}{x_{i+1}-x_i};
+   $$
+4. return
+   $$
+   (1-t)y_i+t y_{i+1}.
+   $$
+
+A binary search locates the interval in $O(\log n)$ time. The interpolation itself is constant-time work.
+
+For many sorted queries, a single pass through the nodes and queries can avoid repeating binary searches.
+
+### Numerical details
+
+The formula
+
+$$
+y_i+t(y_{i+1}-y_i)
+$$
+
+is often preferable in code to separately constructing a slope and intercept. It works directly with the local interval and keeps the calculation compact.
+
+Important checks include:
+
+- reject duplicate nodes because $x_{i+1}-x_i=0$ would cause division by zero;
+- decide how to handle a query exactly equal to a node;
+- decide whether to clamp, reject, or extrapolate out-of-range queries;
+- use a data type with sufficient precision for the scale of the coordinates.
+
+When $x_i$ and $x_{i+1}$ are extremely large but very close together relative to machine precision, the difference $x_{i+1}-x_i$ can lose relative accuracy. Rescaling or shifting the coordinate system can help.
+
+### Extrapolation
+
+If $x$ lies outside $[x_i,x_{i+1}]$, the same formula still produces a number, but then either
+
+$$
+t<0
+\qquad\text{or}\qquad
+t>1.
+$$
+
+The weights are no longer both between zero and one, and the result is linear extrapolation rather than interpolation.
+
+Extrapolation can be reasonable over a short distance when a linear trend is justified, but it should not be treated as automatically reliable.
 
 ### Advantages
 
-- The method offers **simplicity**, as the calculation involves straightforward arithmetic, making it easy and quick to apply.
-- **Minimal data requirements** make it practical, needing only two data points to estimate intermediate values.
-- It provides a **local approximation**, working well when the function is nearly linear within the specified interval.
-- When applied piecewise over consecutive intervals, the result is a **continuous interpolant** (a connected chain of line segments).
+Linear interpolation is attractive because it is:
+
+- simple to derive and implement;
+- local;
+- inexpensive;
+- exact at the nodes;
+- free from overshoot inside each interval;
+- easy to update when new nodes are added.
 
 ### Limitations
 
-- The **linear assumption** can lead to poor results if the actual relationship between points is not close to linear.
-- Linear interpolation uses a secant slope from the data, but no supplied derivatives and no within-segment curvature.
-- **Accuracy diminishes** as the interval between points increases or as the function becomes more non-linear, leading to potential errors in approximation.
-- The piecewise-linear interpolant is generally not differentiable at interior knots; a derivative exists there if the adjacent slopes agree.
+Its main limitation is smoothness. The interpolant is only piecewise linear, so corners appear at most interior nodes. If derivatives are important, a cubic spline or another smooth method may be a better choice.
+
+Linear interpolation also ignores curvature inside an interval. A long interval over a highly curved function can produce a noticeable error even though the endpoint values are exact.
+
+### Reproducing the figures
+
+Run:
+
+```bash
+python notes/6_regression/resources/plot_linear_interpolation.py
+```
+
+The script generates both SVG figures used above.
