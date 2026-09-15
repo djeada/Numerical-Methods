@@ -34,8 +34,7 @@ Cubic splines occupy a useful middle ground:
 On interval $[x_i,x_{i+1}]$, write
 
 $$
-S_i(x)
-=
+S_i(x) =
 a_i+b_i(x-x_i)+c_i(x-x_i)^2+d_i(x-x_i)^3.
 $$
 
@@ -110,16 +109,11 @@ $$
 The interior second derivatives satisfy the tridiagonal equations
 
 $$
-h_{i-1}M_{i-1}
-+
-2(h_{i-1}+h_i)M_i
-+
-h_iM_{i+1}
-=
-6
+h_{i-1}M_{i-1} +
+2(h_{i-1}+h_i)M_i +
+h_iM_{i+1} = 6
 \left[
-\frac{y_{i+1}-y_i}{h_i}
--
+\frac{y_{i+1}-y_i}{h_i} -
 \frac{y_i-y_{i-1}}{h_{i-1}}
 \right]
 $$
@@ -141,10 +135,8 @@ a_i=y_i,
 $$
 
 $$
-b_i
-=
-\frac{y_{i+1}-y_i}{h_i}
--
+b_i =
+\frac{y_{i+1}-y_i}{h_i} -
 \frac{h_i}{6}(2M_i+M_{i+1}),
 $$
 
@@ -155,16 +147,14 @@ $$
 and
 
 $$
-d_i
-=
+d_i =
 \frac{M_{i+1}-M_i}{6h_i}.
 $$
 
 Thus
 
 $$
-S_i(x)
-=
+S_i(x) =
 a_i+b_i\Delta x+c_i\Delta x^2+d_i\Delta x^3,
 \qquad
 \Delta x=x-x_i.
@@ -187,10 +177,8 @@ $$
 At the right endpoint,
 
 $$
-S_i''(x_{i+1})
-=
-2c_i+6d_ih_i
-=
+S_i''(x_{i+1}) =
+2c_i+6d_ih_i =
 M_{i+1}.
 $$
 
@@ -221,16 +209,11 @@ $$
 The only interior equation is
 
 $$
-1\cdot M_0
-+
-2(1+1)M_1
-+
-1\cdot M_2
-=
-6
+1\cdot M_0 +
+2(1+1)M_1 +
+1\cdot M_2 = 6
 \left[
-\frac{0-0.5}{1}
--
+\frac{0-0.5}{1} -
 \frac{0.5-0}{1}
 \right].
 $$
@@ -268,10 +251,8 @@ $$
 At $x=0.5$,
 
 $$
-S_0(0.5)
-=
-0.75(0.5)-0.25(0.5)^3
-=
+S_0(0.5) =
+0.75(0.5)-0.25(0.5)^3 =
 0.34375.
 $$
 
@@ -285,16 +266,23 @@ $$
 
 For a natural cubic spline:
 
-1. sort the points by increasing $x_i$;
-2. compute interval widths
-   $$
-   h_i=x_{i+1}-x_i;
-   $$
-3. assemble the tridiagonal system for $M_1,\ldots,M_{n-1}$;
-4. solve that system;
-5. set $M_0=M_n=0$;
-6. compute $(a_i,b_i,c_i,d_i)$ for each interval;
-7. for each query, locate its interval and evaluate the corresponding cubic.
+I. sort the points by increasing $x_i$;
+
+II. compute interval widths
+
+$$
+h_i=x_{i+1}-x_i;
+$$
+
+III. assemble the tridiagonal system for $M_1,\ldots,M_{n-1}$;
+
+IV. solve that system;
+
+V. set $M_0=M_n=0$;
+
+VI. compute $(a_i,b_i,c_i,d_i)$ for each interval;
+
+VII. for each query, locate its interval and evaluate the corresponding cubic.
 
 The Thomas algorithm solves a nonsingular tridiagonal system in $O(n)$ time and $O(n)$ storage.
 
@@ -308,8 +296,7 @@ After preprocessing, a query requires:
 The cubic can be evaluated in nested form:
 
 $$
-S_i(x)
-=
+S_i(x) =
 a_i+\Delta x
 \left[
 b_i+\Delta x(c_i+\Delta x d_i)
@@ -323,9 +310,11 @@ Different endpoint conditions produce different interpolants even when all inter
 Common options include:
 
 - **natural**:
-  $$
-  S''(x_0)=S''(x_n)=0;
-  $$
+
+$$
+S''(x_0)=S''(x_n)=0;
+$$
+
 - **clamped**: prescribed endpoint slopes;
 - **periodic**: endpoint values and derivatives match periodically;
 - **not-a-knot**: the first two and last two cubic pieces are constrained to behave as if the first and last interior knots were not true breaks.
@@ -343,13 +332,3 @@ A cubic spline can:
 - change shape globally when a data value changes because the coefficient system is coupled.
 
 If monotonicity is required, use a shape-preserving interpolation method designed for that constraint.
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/6_regression/resources/plot_cubic_spline_interpolation.py
-```
-
-The script implements the natural spline solve directly with NumPy and generates both SVG figures.
