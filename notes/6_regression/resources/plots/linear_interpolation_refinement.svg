@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+<rect width="100%" height="100%" fill="white"/>
+<text x="400.0" y="28" text-anchor="middle" font-family="sans-serif" font-size="18">Grid refinement reduces linear interpolation error</text>
+<line x1="82.00" y1="54" x2="82.00" y2="382" stroke="#e5e7eb"/>
+<line x1="82" y1="382.00" x2="772" y2="382.00" stroke="#e5e7eb"/>
+<text x="82.00" y="404" text-anchor="middle" font-family="sans-serif" font-size="11">-0.188</text>
+<text x="72" y="386.00" text-anchor="end" font-family="sans-serif" font-size="11">-0.1</text>
+<line x1="254.50" y1="54" x2="254.50" y2="382" stroke="#e5e7eb"/>
+<line x1="82" y1="300.00" x2="772" y2="300.00" stroke="#e5e7eb"/>
+<text x="254.50" y="404" text-anchor="middle" font-family="sans-serif" font-size="11">0.691</text>
+<text x="72" y="304.00" text-anchor="end" font-family="sans-serif" font-size="11">0.2</text>
+<line x1="427.00" y1="54" x2="427.00" y2="382" stroke="#e5e7eb"/>
+<line x1="82" y1="218.00" x2="772" y2="218.00" stroke="#e5e7eb"/>
+<text x="427.00" y="404" text-anchor="middle" font-family="sans-serif" font-size="11">1.57</text>
+<text x="72" y="222.00" text-anchor="end" font-family="sans-serif" font-size="11">0.5</text>
+<line x1="599.50" y1="54" x2="599.50" y2="382" stroke="#e5e7eb"/>
+<line x1="82" y1="136.00" x2="772" y2="136.00" stroke="#e5e7eb"/>
+<text x="599.50" y="404" text-anchor="middle" font-family="sans-serif" font-size="11">2.45</text>
+<text x="72" y="140.00" text-anchor="end" font-family="sans-serif" font-size="11">0.8</text>
+<line x1="772.00" y1="54" x2="772.00" y2="382" stroke="#e5e7eb"/>
+<line x1="82" y1="54.00" x2="772" y2="54.00" stroke="#e5e7eb"/>
+<text x="772.00" y="404" text-anchor="middle" font-family="sans-serif" font-size="11">3.33</text>
+<text x="72" y="58.00" text-anchor="end" font-family="sans-serif" font-size="11">1.1</text>
+<line x1="82" y1="54" x2="82" y2="382" stroke="#111827" stroke-width="1.2"/>
+<line x1="82" y1="382" x2="772" y2="382" stroke="#111827" stroke-width="1.2"/>
+<text x="427.0" y="432" text-anchor="middle" font-family="sans-serif" font-size="13">x</text>
+<text x="20" y="218.0" transform="rotate(-90 20 218.0)" text-anchor="middle" font-family="sans-serif" font-size="13">value</text>
+<polyline points="118.96,354.67 144.74,318.84 170.52,283.63 198.87,246.34 224.65,214.38 250.43,184.85 278.78,155.76 304.56,132.90 332.91,112.19 358.69,97.74 384.47,87.73 412.82,82.04 438.60,81.81 466.95,86.98 492.73,96.54 518.51,110.55 546.86,130.82 572.64,153.31 601.00,182.04 626.77,211.31 652.55,243.05 680.90,280.17 706.68,315.28 735.04,354.67" fill="none" stroke="#2563eb" stroke-width="2.2"/>
+<polyline points="118.96,354.67 144.74,322.32 170.52,289.97 198.87,254.39 224.65,222.04 250.43,189.69 278.78,158.37 304.56,144.97 332.91,130.23 358.69,116.83 384.47,103.44 412.82,88.70 438.60,87.36 466.95,102.10 492.73,115.49 518.51,128.89 546.86,143.63 572.64,157.03 601.00,186.46 626.77,218.80 652.55,251.15 680.90,286.74 706.68,319.08 735.04,354.67" fill="none" stroke="#dc2626" stroke-width="2.2" stroke-dasharray="8 5"/>
+<polyline points="118.96,354.67 144.74,319.65 170.52,284.64 198.87,246.72 224.65,217.04 250.43,187.36 278.78,156.92 304.56,137.09 332.91,115.27 358.69,99.78 384.47,92.82 412.82,85.16 438.60,84.46 466.95,92.12 492.73,99.09 518.51,113.29 546.86,135.11 572.64,154.94 601.00,184.39 626.77,214.07 652.55,243.76 680.90,281.14 706.68,316.15 735.04,354.67" fill="none" stroke="#059669" stroke-width="2.2" stroke-dasharray="10 4 2 4"/>
+<polyline points="118.96,354.67 144.74,318.97 170.52,283.96 198.87,246.51 224.65,214.87 250.43,185.65 278.78,156.27 304.56,133.51 332.91,113.34 358.69,98.62 384.47,88.21 412.82,83.26 438.60,82.91 466.95,87.17 492.73,97.58 518.51,111.65 546.86,131.23 572.64,153.99 601.00,182.88 626.77,211.71 652.55,243.34 680.90,280.53 706.68,315.40 735.04,354.67" fill="none" stroke="#7c3aed" stroke-width="2.2" stroke-dasharray="2 4"/>
+<rect x="554" y="46" width="210" height="106" rx="4" fill="white" fill-opacity=".88" stroke="#d1d5db"/>
+<line x1="562" y1="62" x2="588" y2="62" stroke="#2563eb" stroke-width="2.2"/>
+<text x="596" y="66" font-family="sans-serif" font-size="11">sin(x)</text>
+<line x1="562" y1="86" x2="588" y2="86" stroke="#dc2626" stroke-width="2.2" stroke-dasharray="8 5"/>
+<text x="596" y="90" font-family="sans-serif" font-size="11">4 intervals</text>
+<line x1="562" y1="110" x2="588" y2="110" stroke="#059669" stroke-width="2.2" stroke-dasharray="10 4 2 4"/>
+<text x="596" y="114" font-family="sans-serif" font-size="11">8 intervals</text>
+<line x1="562" y1="134" x2="588" y2="134" stroke="#7c3aed" stroke-width="2.2" stroke-dasharray="2 4"/>
+<text x="596" y="138" font-family="sans-serif" font-size="11">16 intervals</text>
+</svg>
