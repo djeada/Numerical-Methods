@@ -11,26 +11,22 @@ $$
 the residual vector is
 
 $$
-\mathbf r
-=
+\mathbf r =
 \mathbf y-X\boldsymbol{\beta}.
 $$
 
 Ordinary least squares chooses coefficients that minimize
 
 $$
-\mathrm{RSS}(\boldsymbol{\beta})
-=
-\|\mathbf y-X\boldsymbol{\beta}\|_2^2
-=
+\mathrm{RSS}(\boldsymbol{\beta}) =
+\|\mathbf y-X\boldsymbol{\beta}\|_2^2 =
 \sum_{i=1}^{N}r_i^2.
 $$
 
 Equivalently,
 
 $$
-\hat{\boldsymbol{\beta}}
-=
+\hat{\boldsymbol{\beta}} =
 \underset{\boldsymbol{\beta}}{\mathrm{arg\,min}}
 \;
 \mathrm{RSS}(\boldsymbol{\beta}).
@@ -51,8 +47,7 @@ $$
 For measurements $(x_i,y_i)$, the design matrix is
 
 $$
-X
-=
+X =
 \begin{bmatrix}
 1 & x_1\\
 1 & x_2\\
@@ -64,8 +59,7 @@ $$
 the coefficient vector is
 
 $$
-\boldsymbol{\beta}
-=
+\boldsymbol{\beta} =
 \begin{bmatrix}
 \beta_0\\
 \beta_1
@@ -75,8 +69,7 @@ $$
 and the observed values are
 
 $$
-\mathbf y
-=
+\mathbf y =
 \begin{bmatrix}
 y_1\\
 y_2\\
@@ -93,15 +86,11 @@ Expand the objective:
 
 $$
 \begin{aligned}
-\mathrm{RSS}(\boldsymbol{\beta})
-&=
+\mathrm{RSS}(\boldsymbol{\beta}) =
 (\mathbf y-X\boldsymbol{\beta})^\top
-(\mathbf y-X\boldsymbol{\beta})\\
-&=
-\mathbf y^\top\mathbf y
--
-2\boldsymbol{\beta}^\top X^\top\mathbf y
-+
+(\mathbf y-X\boldsymbol{\beta})\\ =
+\mathbf y^\top\mathbf y -
+2\boldsymbol{\beta}^\top X^\top\mathbf y +
 \boldsymbol{\beta}^\top X^\top X\boldsymbol{\beta}.
 \end{aligned}
 $$
@@ -109,8 +98,7 @@ $$
 Differentiate with respect to $\boldsymbol{\beta}$:
 
 $$
-\nabla \mathrm{RSS}
-=
+\nabla \mathrm{RSS} =
 -2X^\top\mathbf y
 +
 2X^\top X\boldsymbol{\beta}.
@@ -125,8 +113,7 @@ $$
 which gives the **normal equations**
 
 $$
-X^\top X\hat{\boldsymbol{\beta}}
-=
+X^\top X\hat{\boldsymbol{\beta}} =
 X^\top\mathbf y.
 $$
 
@@ -137,8 +124,7 @@ If the columns of $X$ are linearly independent, $X^\top X$ is positive definite 
 The fitted vector
 
 $$
-\hat{\mathbf y}
-=
+\hat{\mathbf y} =
 X\hat{\boldsymbol{\beta}}
 $$
 
@@ -148,9 +134,7 @@ The normal equations can be rewritten as
 
 $$
 X^\top
-(\mathbf y-X\hat{\boldsymbol{\beta}})
-=
-0.
+(\mathbf y-X\hat{\boldsymbol{\beta}}) = 0
 $$
 
 Therefore,
@@ -183,8 +167,7 @@ $$
 The design matrix and response vector are
 
 $$
-X
-=
+X =
 \begin{bmatrix}
 1&0\\
 1&1\\
@@ -192,8 +175,7 @@ X
 1&3
 \end{bmatrix},
 \qquad
-\mathbf y
-=
+\mathbf y =
 \begin{bmatrix}
 1\\2\\2\\4
 \end{bmatrix}.
@@ -209,8 +191,7 @@ $$
 \begin{bmatrix}
 \beta_0\\
 \beta_1
-\end{bmatrix}
-=
+\end{bmatrix} =
 \begin{bmatrix}
 9\\18
 \end{bmatrix}.
@@ -271,8 +252,7 @@ can worsen numerical conditioning.
 In the 2-norm,
 
 $$
-\kappa_2(X^\top X)
-=
+\kappa_2(X^\top X) =
 \kappa_2(X)^2
 $$
 
@@ -298,8 +278,7 @@ $$
 where $Q$ has orthonormal columns and $R$ is upper triangular, then
 
 $$
-\|X\boldsymbol{\beta}-\mathbf y\|_2
-=
+\|X\boldsymbol{\beta}-\mathbf y\|_2 =
 \|R\boldsymbol{\beta}-Q^\top\mathbf y\|_2
 $$
 
@@ -308,8 +287,7 @@ up to a residual component orthogonal to the column space.
 The coefficient vector can be obtained by solving
 
 $$
-R\hat{\boldsymbol{\beta}}
-=
+R\hat{\boldsymbol{\beta}} =
 Q^\top\mathbf y.
 $$
 
@@ -330,8 +308,7 @@ makes the numerical rank explicit through the singular values in $\Sigma$.
 A common choice is the minimum-norm least-squares solution computed with the pseudoinverse:
 
 $$
-\hat{\boldsymbol{\beta}}
-=
+\hat{\boldsymbol{\beta}} =
 X^+\mathbf y.
 $$
 
@@ -381,8 +358,7 @@ $$
 The corresponding normal equations are
 
 $$
-X^\top W X\hat{\boldsymbol{\beta}}
-=
+X^\top W X\hat{\boldsymbol{\beta}} =
 X^\top W\mathbf y.
 $$
 
@@ -402,13 +378,3 @@ For an important least-squares model:
 4. examine residuals rather than reporting coefficients alone;
 5. check for outliers and leverage points;
 6. separate numerical fit quality from predictive validity.
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/6_regression/resources/plot_least_squares.py
-```
-
-The script generates the residual and objective-contour figures.
