@@ -1,6 +1,6 @@
 ## Interpolation
 
-Interpolation is the problem of reconstructing an **unknown function** from a *finite* set of **exact** data pairs
+Interpolation constructs a function that matches a finite set of supplied data pairs
 
 $$
 \{(x_i,y_i)\}_{i=0}^{n},\qquad x_0< x_1<\dots <x_n,\qquad y_i=f(x_i).
@@ -16,24 +16,25 @@ $$
 
 Because the nodes $x_i$ are **distinct**, the classical existence-and-uniqueness theorem guarantees that there is a unique algebraic polynomial $P_n$ of degree at most $n$ satisfying the interpolation conditions.
 
-> **Extrapolation** is the computation of $\hat f(x)$ for $x\notin[x_0,x_n]$ and is *not* covered by the uniqueness theorem; error growth can be dramatic.
+> **Extrapolation** evaluates the same uniquely determined polynomial outside $[x_0,x_n]$. Uniqueness still holds, but it does not guarantee accuracy there—or between the nodes. Infinitely many non-polynomial functions can match the same data.
 
 ### Assumptions
 
-* **Exact data** No measurement error: $y_i=f(x_i)$ is taken as ground truth.
+* **Data treated as exact constraints.** Measurements may contain noise; interpolation reproduces it. For fitting a trend in noisy observations, see [regression](regression.md).
 * **Distinct, ordered abscissas** $x_i\neq x_j$ for $i\neq j$ and $x_0<x_1<\dots <x_n$.
 * **Smoothness of the underlying function** Needed only when one wants *error bounds*; e.g. $f\in C^{n+1}[x_0,x_n]$ for polynomial-error formulas.
 
 ### Concepts
 
-| Method                          | Essential idea                                          | Interpolant form                                                                         | Error behavior\*                                                | Typical use-case                       |
-| ------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------- | -------------------------------------- |
-| **Linear**                      | Join successive points by straight segments             | Piecewise degree-1                                                                       | $O(h^2)$                                                        | Fast previews, computer graphics       |
-| **Polynomial**                  | Single poly of degree $n$ through all nodes             | Lagrange, Newton, barycentric, etc.                                                      | $O(h^{n+1})$ but risk of *Runge* oscillations when $n$ is large | Small $n$ on modest intervals          |
-| **Spline**                      | Glue low-degree polynomials with continuity constraints | Piecewise degree-$k$ (usually 3)                                                         | $O(h^{k+1})$ plus good shape control                            | Smooth curves, CAD/CAM, statistics     |
-| **Radial Basis Function (RBF)** | Weighted radial kernels centered at nodes               | $\displaystyle \hat f(x)=\sum_{i=0}^{n} \lambda_i\,\phi\bigl(\lVert x - x_i\rVert\bigr)$ | Spectral for smooth $\phi$                                      | Scattered data, high-dimensional grids |
+| Method | Construction | Conditions and behavior |
+| --- | --- | --- |
+| [Linear](linear_interpolation.md) | Join consecutive nodes with lines | Continuous; slopes may jump. Error on a segment of width $h$ is at most $h^2\max\lvert f''\rvert/8$ for $f\in C^2$. |
+| [Lagrange](lagrange_polynomial_interpolation.md) / [Newton](newton_polynomial.md) | One polynomial of degree at most $n$ | Distinct nodes; use the remainder below. Increasing degree does not guarantee convergence. |
+| [Gauss](gaussian_interpolation.md) | A central ordering of Newton interpolation | Requires equal spacing; the full polynomial is unchanged by ordering. |
+| [Cubic spline](cubic_spline_interpolation.md) | Piecewise cubics with two continuous derivatives | Needs endpoint conditions; can overshoot. Error order depends on smoothness, mesh, and boundary conditions. |
+| [Thin plate spline](thin_plate_spline_interpolation.md) | Affine part plus radial kernels in two dimensions | Distinct, non-collinear locations; a global fit for scattered data. |
 
-Assuming evenly spaced nodes with spacing $h=\max_i (x_{i+1}-x_i)$.
+Choose the method before evaluating the query. Different interpolants can agree at every node and disagree between them. Natural cubic splines, for example, do not automatically achieve a uniform fourth-order error for functions whose endpoint second derivatives are nonzero.
 
 ### Mathematical Formulation
 
@@ -56,7 +57,7 @@ P_n(x)=\sum_{i=0}^{n} y_i\,\ell_i(x),
 \frac{x-x_j}{x_i-x_j}.
 $$
 
-**Error bound** (Peano form): if $f\in C^{n+1}$, then for some $\xi(x)\in[x_0,x_n]$
+**Interpolation remainder** (Lagrange form): if $f\in C^{n+1}$, then for some $\xi(x)\in[x_0,x_n]$
 
 $$
 f(x)-P_n(x)=\frac{f^{(n+1)}(\xi(x))}{(n+1)!}\prod_{i=0}^{n}(x-x_i).
@@ -71,7 +72,7 @@ h_{i-1}M_{i-1}+2(h_{i-1}+h_i)M_i+h_iM_{i+1}=6
 \left(\frac{y_{i+1}-y_i}{h_i}-\frac{y_i-y_{i-1}}{h_{i-1}}\right),
 $$
 
-with $M_0=M_n=0$, where $h_i=x_{i+1}-x_i$.
+for $i=1,\ldots,n-1$, with $M_0=M_n=0$, where $h_i=x_{i+1}-x_i$ and $M_i=S''(x_i)$.
 
 Each piece is then
 
@@ -81,21 +82,21 @@ S_i(x)=\frac{M_i(x_{i+1}-x)^3+M_{i+1}(x-x_i)^3}{6h_i}
 +\left(\frac{y_i}{h_i}-\frac{M_i\,h_i}{6}\right)(x_{i+1}-x).
 $$
 
-### Example
+### Worked Example: Temperature at 10:30
+
+**Inputs:** the time and temperature observations below. **Goal:** estimate the temperature at 10.5 h using a line and a natural cubic spline, then compare the results.
 
 | Time (h) | 9  | 10 | 11 | 12 | 13 | 14 | 15 |
 | -------- | -- | -- | -- | -- | -- | -- | -- |
 | Temp (°C)| 20 | 22 | 26 | 28 | 30 | 31 | 31 |
 
-Estimate $T(10.5)$.
-
 I. **Linear (segment 10 – 11)**
 
 $$
-T(10.5)=22+\frac{26-22}{11-10}(10.5-10)=24\text{ °C}.
+\hat T_{\mathrm{linear}}(10.5)=22+\frac{26-22}{11-10}(10.5-10)=24\text{ °C}.
 $$
 
-> The linear interpolation error is bounded by $\displaystyle\frac{h^2}{8}\max|f''|$. With $h=1$ and a moderate second derivative, this gives an error on the order of tenths of a degree.
+> If the underlying temperature function has $|T''|\le M$ on this interval, the error bound is $M(1\text{ h})^2/8$. The observations alone supply no bound on $M$, so they do not justify a numerical error claim.
 
 II. **Natural cubic spline (all nodes)**
 
@@ -130,7 +131,14 @@ $$
 =\begin{pmatrix}12\\ -12\\ 0\\ -6\\ -6\end{pmatrix}.
 $$
 
-Solving via the Thomas algorithm yields
+For transparency, exploit the unit off-diagonals to eliminate successively. The first four equations give
+
+$$
+M_2=12-4M_1,\quad M_3=15M_1-60,\quad
+M_4=228-56M_1,\quad M_5=209M_1-858.
+$$
+
+The last equation is $M_4+4M_5=-6$. Substitution gives $780M_1-3204=-6$, hence $M_1=3198/780=41/10$. Back-substitution yields
 
 $$
 (M_0,\dots,M_6)=\!\left(0,\;\tfrac{41}{10},\;-\tfrac{22}{5},\;\tfrac{3}{2},\;-\tfrac{8}{5},\;-\tfrac{11}{10},\;0\right)
@@ -150,16 +158,23 @@ $$
 =\frac{(-4.4+4.1)(0.125)}{6}
 +\left(26+\frac{4.4}{6}\right)(0.5)
 +\left(22-\frac{4.1}{6}\right)(0.5)
-\approx 24.02\text{ °C}.
+= -0.00625+13.366666\ldots+10.658333\ldots
+=24.01875\text{ °C}\approx24.02\text{ °C}.
 $$
 
 The spline estimate is very close to the linear result here because the curvature contributions from $M_1$ and $M_2$ nearly cancel at the midpoint of this segment.
 
+### Checks and Interpretation
+
+The computed second derivatives satisfy the system: for example, $4(4.1)-4.4=12$ and $-1.6+4(-1.1)=-6$. Each spline piece reproduces its two endpoint temperatures. These checks verify construction, not the unknown temperature at 10.5 h.
+
+The estimates differ by $0.01875$ °C. Neither is established as more accurate without additional measurements or assumptions.
+
 ### Advantages
 
-* **Locality & smoothness control** (splines, RBFs).
-* **Provable error bounds** under mild differentiability assumptions.
-* **Exactness at data points**—no bias at nodes.
+* Exact agreement with supplied values at the nodes.
+* A choice of continuity and smoothness appropriate to the task.
+* Error bounds when the underlying function satisfies the required derivative bounds.
 
 ### Limitations
 
