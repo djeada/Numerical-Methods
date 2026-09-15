@@ -1,16 +1,14 @@
 ## Thin Plate Spline Interpolation
 
-**Thin Plate Spline (TPS) interpolation** is a non‑parametric, spline‑based technique for fitting a smooth surface through scattered data in two or more spatial dimensions.  In its classical 2‑D form one seeks a function $f\colon\mathbb R^{2}\to\mathbb R$ that passes through specified data points while minimising the *thin‑plate bending energy*—the amount a thin metal sheet would bend if it were pinned at those points.  The construction extends naturally to higher dimensions and higher‑order splines.
+A thin plate spline (TPS) fits a surface through scattered observations in two dimensions. Picture a thin sheet constrained to pass through specified heights: the TPS minimizes its mathematical bending energy while meeting those constraints.
 
-While polynomials or other radial‑basis interpolants can achieve the same pointwise accuracy, TPS is unique in that it yields the *minimum possible bending energy* among *all twice‑differentiable functions matching the data*, so the fitted surface stays as flat (i.e. as smooth) as the constraints allow.  This makes TPS a staple in image warping, geometric modelling, and shape deformation tasks.
+The classical solution has an affine part plus radial kernels centered at the input locations. It is continuously differentiable, but its second derivatives can have logarithmic singularities at those locations. The precise energy formulation below uses square-integrable weak second derivatives, rather than requiring a twice continuously differentiable surface.
 
-### Conceptual Illustration
+### Inputs and Goal
 
-Imagine you have a set of control points $(x_i,y_i,z_i)$ in 3D space, where $(x_i,y_i)$ represent spatial coordinates and $z_i$ is the function value at that location. Thin plate spline interpolation finds a surface $z=f(x,y)$ that exactly passes through all these points. If you imagine the surface as a thin metal sheet pinned at these points, the TPS solution is the shape the sheet would naturally take if it were free to bend but not stretch, minimizing the total bending energy:
+**Inputs:** $N\ge3$ finite triples $(x_i,y_i,z_i)$ and a query $(x_*,y_*)$. The coordinates $(x_i,y_i)$ must be distinct and must not all lie on one line. **Goal:** find the classical two-dimensional TPS interpolant and evaluate its height at the query.
 
-![output](https://github.com/user-attachments/assets/7eac6046-7538-45a2-8ac2-f9893ae7ffb4)
-
-The resulting surface is smooth, continuous in its derivatives, and tends to flatten out smoothly between data points.
+Here $x$ and $y$ are spatial coordinates, while $z$ is the response. Non-collinearity concerns the input locations, not whether the triples lie on a plane. Planar response data are valid and should reproduce an affine function exactly.
 
 ### Mathematical Formulation
 
@@ -23,11 +21,15 @@ that interpolates the given data. Here:
 * The $\alpha_0, \alpha_1, \alpha_2$ terms represent a polynomial of degree 1 (a plane) that gives the global trend.
 * The function $\phi(r)$ is a radial basis function chosen as:
 
-$\phi(r) = r^2 \ln(r)$
+$$
+\phi(r)=\begin{cases}r^2\ln r,&r>0,\\0,&r=0.\end{cases}
+$$
 
-which is the fundamental solution associated with the thin plate spline bending energy in 2D.
+The value at zero is the limit $\lim_{r\to0^+}r^2\ln r=0$; do not evaluate $\ln0$ in code.
 
-* The $w_i$ are the coefficients for the radial basis part.
+Up to a constant absorbed into the weights, this kernel is the fundamental solution of the two-dimensional biharmonic operator.
+
+* The $w_i$ are the coefficients for the radial basis part. They describe the non-affine component.
 
 This $f(x,y)$ must satisfy the interpolation conditions:
 
@@ -37,7 +39,7 @@ Additionally, to ensure a unique solution and remove degeneracies, $f(x,y)$ must
 
 $\sum_{i=1}^N w_i = \sum_{i=1}^N w_i x_i = \sum_{i=1}^N w_i y_i = 0$
 
-This leads to a linear system for the unknown parameters $\alpha_0,\alpha_1,\alpha_2,w_1,\ldots,w_N$
+This leads to a linear system for the unknown parameters $\alpha_0,\alpha_1,\alpha_2,w_1,\ldots,w_N$.
 
 ### Derivation
 
@@ -45,8 +47,11 @@ I. **Energy Minimization**:
 
 Thin plate splines arise from minimizing a bending energy functional:
 
-$J[f] = \int\int \left(\frac{\partial^2 f}{\partial x^2}\right)^2 + 2\left(\frac{\partial^2 f}{\partial x \partial y}\right)^2 + \left(\frac{\partial^2 f}{\partial y^2}\right)^2 \, dx dy,$
-subject to the interpolation constraints $f(x_i,y_i)=z_i$.
+$$
+J[f]=\int_{\mathbb R^2}\left[(f_{xx})^2+2(f_{xy})^2+(f_{yy})^2\right]\,dx\,dy.
+$$
+
+The minimization is subject to the interpolation constraints $f(x_i,y_i)=z_i$.
 
 II. **Variational Problem**:
 
@@ -56,11 +61,13 @@ III. **Linear System**:
 
 Substitute $f(x,y)$ into the interpolation conditions. This produces a system of $N+3$ linear equations (for $w_i, \alpha_0,\alpha_1,\alpha_2$):
 
-$$\begin{bmatrix}
+$$
+\begin{bmatrix}
 K & P \\ P^\top & 0
 \end{bmatrix}
 \begin{bmatrix} w \\ \alpha \end{bmatrix}
-=\begin{bmatrix} z \\ 0 \end{bmatrix}$$
+=\begin{bmatrix} z \\ 0 \end{bmatrix}
+$$
 
 where:
 
@@ -71,60 +78,21 @@ where:
 
 Solving this system yields the TPS coefficients.
 
-### Algorithm (matrix form)
+### Algorithm and Checks
 
-I. **Kernel matrix**
+1. Check finite data, matching lengths, distinct coordinates, and rank three of $P$.
+2. Compute pairwise distances and build $K$, using $\phi(0)=0$ on its diagonal.
+3. Build $P$ and solve the augmented system for $w$ and $\alpha$ without forming an inverse. The system is symmetric but indefinite; an ordinary positive-definite Cholesky solver is not appropriate.
+4. Check both residuals: $Kw+P\alpha-z\approx0$ and $P^\top w\approx0$.
+5. Evaluate the affine part and sum $w_i\phi(r_i)$ at the query.
 
-$$
-K\in\mathbb{R}^{N\times N},
-\qquad
-K_{ij}=\phi\!\bigl(\lVert\mathbf{x}_i-\mathbf{x}_j\rVert_2\bigr).
-$$
-
-II. **Polynomial matrix**
-
-$$
-P=\begin{bmatrix}
-1 & x_1 & y_1\\
-\vdots & \vdots & \vdots\\
-1 & x_N & y_N
-\end{bmatrix}\in\mathbb{R}^{N\times 3}.
-$$
-
-III. **Augmented linear system**
-
-$$
-\underbrace{%
-  \begin{bmatrix}
-    K & P \\ 
-    P^{\mathsf T} & 0_{3\times 3}
-  \end{bmatrix}%
-}_{A\in\mathbb{R}^{(N+3)\times(N+3)}}
-\begin{bmatrix}
-  \mathbf w \\ 
-  \alpha
-\end{bmatrix} =
-\begin{bmatrix}
-  \mathbf z \\ 
-  \mathbf 0
-\end{bmatrix},
-\qquad
-\mathbf z = (z_1, \dots, z_N)^{\mathsf T}
-$$
-
-* Unknowns: $ \mathbf w=(w_1,\dots ,w_N)^{\!\mathsf T}$ and $\alpha=(a_0,a_1,a_2)^{\!\mathsf T}$.
-* $A$ is symmetric and (for distinct points) nonsingular.
-
-IV. **Solve** the linear system once.  Complexity is $O(N^3)$ with dense $K$.
-
-V. **Evaluate** at any $(x,y)$.  Cost per evaluation is $O(N)$.
-
-> **Numerical stability tip**
-> Because $\phi(r)\sim r^2\ln r$ is unbounded at infinity, centre and (optionally) scale the $\mathbf{x}_i$ to unit box if $N$ is large or the domain is wide.
+For distinct, non-collinear locations this system is nonsingular. Dense construction and storage take $O(N^2)$, solving takes $O(N^3)$, and each query takes $O(N)$ once coefficients are available. Centering and using a common coordinate scale can help conditioning. Scaling axes differently changes the distance metric and generally changes the fitted surface.
 
 ### Fully-worked example (four points)
 
-I. Data
+**Goal:** recover the surface and evaluate it at $(0.5,0.5)$.
+
+I. Input data
 
 $$
 \bigl(0,0,0\bigr),
@@ -212,7 +180,9 @@ V. Solution
 
 Solving 
 
-$$A\begin{bmatrix}\mathbf w\\ \alpha\end{bmatrix}=\mathbf b$$
+$$
+A\begin{bmatrix}\mathbf w\\ \alpha\end{bmatrix}=\mathbf b
+$$
 
 gives
 
@@ -241,11 +211,13 @@ $$
 f(x,y)=x+y,
 $$
 
-so the bending-energy minimiser needs **no** non-linear kernel part ($\mathbf w=0$).
+so the bending-energy minimizer needs no nonlinear kernel part ($\mathbf w=0$). Substitution gives $Kw+P\alpha=(0,1,1,2)^\top=z$ and $P^\top w=0$. The plane has zero bending energy and gives $f(0.5,0.5)=0.5+0.5=1$.
 
 ### Example 2: non-planar data
 
-I. Data
+**Goal:** recover the surface and evaluate it at $(0.5,0.5)$.
+
+I. Input data
 
 $$
 \bigl(0,0,1\bigr),
@@ -257,61 +229,11 @@ $$
 
 These four points do **not** lie on a plane: the only candidate is $1 - x - y$, which gives $1-1-1=-1\neq1$ at $(1,1)$.
 
-II. Kernel matrix $K$
+II. Reuse the Geometry
 
-The distance matrix is identical to Example 1:
+The locations are unchanged, so reuse the distance matrix, $K$, $P$, and augmented matrix $A$ from Example 1. Only the right-hand side changes to $(1,0,0,1,0,0,0)^\top$.
 
-$$
-\begin{array}{c|cccc}
- & 1 & 2 & 3 & 4\\\hline
-1 & 0 & 1 & 1 & \sqrt2\\
-2 & 1 & 0 & \sqrt2 & 1\\
-3 & 1 & \sqrt2 & 0 & 1\\
-4 & \sqrt2 & 1 & 1 & 0
-\end{array}
-$$
-
-so $K$ is the same as before:
-
-$$
-K=\begin{bmatrix}
-0 & 0 & 0 & \ln 2\\
-0 & 0 & \ln 2 & 0\\
-0 & \ln 2 & 0 & 0\\
-\ln 2 & 0 & 0 & 0
-\end{bmatrix}
-$$
-
-III. Polynomial matrix $P$
-
-$$
-P=\begin{bmatrix}
-1 & 0 & 0\\
-1 & 1 & 0\\
-1 & 0 & 1\\
-1 & 1 & 1
-\end{bmatrix}
-$$
-
-IV. Augmented system
-
-$$
-A=\begin{bmatrix}
-K & P\\ P^{\!\mathsf T} & 0_{3\times3}
-\end{bmatrix},
-\qquad
-\mathbf b = \begin{bmatrix}
-1 \\ 
-0 \\ 
-0 \\ 
-1 \\ 
-0 \\ 
-0 \\ 
-0
-\end{bmatrix}
-$$
-
-V. Solution
+III. Solve the Constraints and Interpolation Equations
 
 The orthogonality constraint $P^{\!\mathsf T}\mathbf w=\mathbf 0$ gives three equations:
 
@@ -321,7 +243,18 @@ $$
 
 Setting $w_4=w$ we get $w_1=w,\;w_2=-w,\;w_3=-w$.
 
-Substituting into $K\mathbf w+P\alpha=\mathbf z$ and solving yields
+Write $L=\ln2$. The four interpolation equations become
+
+$$
+\begin{aligned}
+Lw+\alpha_0&=1,\\
+-Lw+\alpha_0+\alpha_1&=0,\\
+-Lw+\alpha_0+\alpha_2&=0,\\
+Lw+\alpha_0+\alpha_1+\alpha_2&=1.
+\end{aligned}
+$$
+
+Subtracting the first from the fourth gives $\alpha_1+\alpha_2=0$. The middle equations give $\alpha_1=\alpha_2$, so both slopes vanish. Subtracting the second equation from the first then gives $2Lw=1$, and adding them gives $2\alpha_0=1$. Hence
 
 $$
 w=\frac{1}{2\ln 2}\approx0.7213,
@@ -340,7 +273,7 @@ $$
 
 Interpretation: the polynomial part is the constant $\frac{1}{2}$, and the non-linear kernel is needed to pull the surface up at corners $(0,0)$ and $(1,1)$ and down at $(1,0)$ and $(0,1)$.
 
-VI. Evaluation at $(0.5,\,0.5)$
+IV. Evaluation at $(0.5,\,0.5)$
 
 All four distances are equal:
 
@@ -367,28 +300,18 @@ $$
 
 By symmetry of the data the midpoint value is exactly $\frac{1}{2}$.
 
-### Remarks and extensions
+### Verification and Interpretation
 
-| Topic                     | Notes                                                                                                                                                               |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Singular cases**        | If the data are exactly coplanar *and* you add any numerical noise, $K$ may become rank-deficient.  Add a small diagonal regulariser $\lambda I$ in $K$ if needed.        |
-| **Complexity**            | Solve once in $O(N^3)$; thereafter evaluations are $O(N)$.  For $N\gtrsim2000$ use fast methods (partition of unity, K-D trees, or the O(N) fast-TPS of Beatson & Light). |
-| **Higher dimensions**     | In $d$-D the “thin-plate” energy changes and  $\phi(r)$ becomes $r^2\ln r$ only for $d=2$.  In $d=3$ one has $\phi(r)=r$.                                                 |
-| **Derivative continuity** | The TPS interpolant is $C^1$ and its second derivatives are square-integrable; ideal for smoothly warping images or terrain surfaces.                                     |
-| **Kernel convention**     | Some implementations use $\phi(r)=r^2\ln(r^2)=2r^2\ln r$.  Because the factor of 2 is absorbed by the weights ($w'_i=w_i/2$), the interpolation surface is identical; only the individual weight values change. |
-| **Verification**          | The implementation matches `scipy.interpolate.RBFInterpolator(coords, z, kernel='thin_plate_spline', degree=1)` to machine precision. |
+For the non-planar example, the radial part at the four nodes is $(1/2,-1/2,-1/2,1/2)^\top$. Adding the constant $1/2$ reproduces $(1,0,0,1)^\top$, and the weights satisfy all three side constraints. The midpoint calculation above verifies a new query; an asymmetric query is useful for numerical checks because symmetry alone forces the midpoint value.
 
-### Advantages
+### Smoothing, Geometry, and Limitations
 
-- TPS yields an infinitely differentiable surface, minimizing bending energy, and producing visually pleasing, smooth **interpolants**.
-- The method exactly passes through all given data **points**.
-- TPS works with scattered data without needing a regular **grid**.
-- It generalizes easily to higher dimensions by changing the form of $\phi(r)$, making it **extensible**.
-- TPS is **invariant** under rotations and translations of the data, so the fitted surface does not depend on the choice of coordinate system.
+- **Smoothness:** TPS is generally $C^1$, with square-integrable weak second derivatives; it is smooth away from the centers, but not infinitely differentiable at them.
+- **Singular geometry:** duplicate locations or collinear input coordinates can make the augmented interpolation problem singular. Coplanar response values do not: $K$ depends only on coordinates, not on $z$.
+- **Smoothing:** replacing $K$ by $K+\lambda I$, $\lambda>0$, trades exact interpolation for a smoother fit to noisy responses. It does not repair rank deficiency of $P$; if $P\alpha=0$ for a nonzero $\alpha$, the augmented matrix still has a null vector $(0,\alpha)$.
+- **Global influence:** changing one response generally affects the entire surface. Dense storage and solution cost limit problem size; local approximations can help but change the construction.
+- **Shape:** minimum bending energy does not imply monotonicity, positivity, or reliable predictions outside the observed region.
+- **Coordinates and dimensions:** rotations and translations preserve Euclidean distances. Higher-dimensional polyharmonic splines require dimension- and energy-dependent kernels; the classical two-dimensional bending-energy interpretation here should not be transferred unchanged.
+- **Kernel convention:** using $r^2\ln(r^2)=2r^2\ln r$ halves the weights for exact interpolation while preserving the surface. With smoothing, the regularization parameter must also be scaled to preserve the same fit.
 
-### Limitations
-
-- TPS requires solving a $(N+3) \times (N+3)$ linear system, which can be **expensive** for large $N$.
-- Storing the kernel matrix costs $O(N^2)$ **memory**, which can become prohibitive for very large point sets.
-- The system matrix may become ill-conditioned with many close points, often necessitating regularization like TPS smoothing **splines**.
-- Changing or adding one point affects the entire solution, as TPS is a **global** method, lacking local control like piecewise methods unless combined with domain decomposition techniques.
+For an independent comparison, [SciPy's RBFInterpolator](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RBFInterpolator.html) supports this construction with `kernel="thin_plate_spline"`, `degree=1`, and `smoothing=0`. Supply an $N\times2$ coordinate array and an $N$-element response vector.

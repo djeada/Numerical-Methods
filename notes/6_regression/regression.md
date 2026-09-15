@@ -1,418 +1,254 @@
 ## Regression Analysis
 
-Regression analysis and curve fitting are important tools in statistics, econometrics, engineering, and modern machine-learning pipelines.  At their core they seek a deterministic (or probabilistic) mapping
-$\widehat f: \mathcal X \longrightarrow \mathcal Y$
-that minimizes a suitably chosen loss function with respect to a sample of observations
-$\mathcal D = \{(\mathbf x_1,y_1),\dots,(\mathbf x_N,y_N)\}\subseteq \mathcal X\times\mathcal Y.$
+Regression fits a relationship between inputs and an observed response. The goal is to describe a trend or predict a response at a new input. Observations may contain noise, so a fitted model usually does not pass through every point.
 
-A **regression problem** is typically posed under the additive error model
+For example, given measurements of an input $x$ and a response $y$, we might choose a line $\hat y=\hat\beta_0+\hat\beta_1x$. Choosing the model family, estimating its coefficients, and checking its predictions are separate steps.
 
-$$
-y_i = f_*(\mathbf{x}_i) + \varepsilon_i,
-\qquad
-\mathbb{E}[\varepsilon_i \mid \mathbf{x}_i] = 0,
-\qquad
-\mathrm{Var}(\varepsilon_i) = \sigma^2.
-$$
+### How to Read This Chapter
 
-where $f\_\*$ is an (unknown) deterministic function and $(\varepsilon\_i)$ are random errors.  The analyst’s objective is to construct an estimator $\widehat f$ (or equivalently to estimate a parameter vector $\widehat{\boldsymbol\theta}$ specifying $\widehat f$) such that some notion of risk—mean-squared error, negative log-likelihood, predictive log-loss, etc.—is minimized.
+This directory covers both regression and interpolation. They solve different problems:
 
-| Symbol                                                      | Meaning                                                           |
-| ----------------------------------------------------------- | ----------------------------------------------------------------- |
-| $N$                                                       | sample size (number of observations)                              |
-| $p$                                                       | number of predictors (features)                                   |
-| $\mathbf X \in \mathbb R^{N\times p}$                     | design / model matrix whose $i$-th row is $\mathbf x\_i^\top$ |
-| $\mathbf y = (y\_1,\dots,y\_N)^\top$                      | vector of responses                                               |
-| $\boldsymbol\beta\in\mathbb R^{p}$                        | vector of unknown regression coefficients                         |
-| $\widehat{\boldsymbol\beta}$                              | estimator of $\boldsymbol\beta$                                 |
-| $\mathbf r=\mathbf y-\mathbf X\widehat{\boldsymbol\beta}$ | vector of residuals                                               |
-| $\lVert \cdot \rVert_2$                                   | Euclidean ($\ell_2$) norm                                  |
+| Task | Requirement | Start here |
+| --- | --- | --- |
+| Regression | Minimize a chosen loss over observations | [Least squares](least_squares.md) |
+| Interpolation | Match every supplied value exactly | [Interpolation overview](interpolation.md) |
+| Piecewise interpolation | Join nearby values with lines or smooth cubics | [Linear](linear_interpolation.md), [cubic spline](cubic_spline_interpolation.md) |
+| Global polynomial interpolation | Construct one polynomial through distinct nodes | [Lagrange](lagrange_polynomial_interpolation.md), [Newton](newton_polynomial.md) |
+| Central polynomial interpolation | Use equally spaced nodes in a central ordering | [Gauss formulas](gaussian_interpolation.md) |
+| Scattered surface interpolation | Fit values at locations in two dimensions | [Thin plate spline](thin_plate_spline_interpolation.md) |
 
-### Curve Fitting
+Interpolation can also be applied to noisy measurements, but it reproduces their noise. Exact agreement at the observations does not establish accuracy between them.
 
-Curve fitting emphasizes the geometrical problem of approximating a cloud of points by a parametric curve or surface.  The archetypal formulation is **polynomial least-squares**: given scalar inputs $x\_i\in\mathbb R$, fit an $m$-degree polynomial
+### Inputs, Model, and Objective
 
-$P_m(x)=\sum_{k=0}^{m} a_k x^{k}\quad (\boldsymbol a\in\mathbb R^{m+1})$
+Throughout the regression notes, $N$ is the number of observations and $p$ is the number of fitted coefficients, **including the intercept when present**.
 
-by minimizing the **sum-of-squares loss**
+| Symbol | Meaning |
+| --- | --- |
+| $X\in\mathbb R^{N\times p}$ | Design matrix: one row per observation, one column per coefficient |
+| $y\in\mathbb R^N$ | Observed responses |
+| $\beta\in\mathbb R^p$ | Candidate coefficient vector |
+| $\hat\beta$ | Estimated coefficient vector |
+| $\hat y=X\hat\beta$ | Fitted responses |
+| $r=y-\hat y$ | Residuals: observed minus fitted values |
 
-$$
-S(\mathbf{a})
-= \sum_{i=1}^N \bigl(P_m(x_i) - y_i\bigr)^2.
-$$
+For a line, row $i$ of $X$ is $[1,x_i]$ and $p=2$. The leading one creates the intercept. For a quadratic it is $[1,x_i,x_i^2]$ and $p=3$.
 
-In matrix form let $\mathbf V\in\mathbb R^{N\times(m+1)}$ be the *Vandermonde matrix* with $V\_{ik}=x\_i^{k}$ and $\mathbf a=(a\_0,\dots,a\_m)^\top$.  The normal equations read
-$\mathbf V^{\top}\mathbf V\,\widehat{\mathbf a}=\mathbf V^{\top}\mathbf y.$
-
-Provided $\mathbf V^{\top}\mathbf V$ is nonsingular (which fails if $m \ge N$ or data are collinear), the minimizer is uniquely given by
-$\widehat{\mathbf a}=(\mathbf V^{\top}\mathbf V)^{-1}\mathbf V^{\top}\mathbf y.$
-
-![curve_fitting](https://github.com/djeada/Numerical-Methods/assets/37275728/03a26675-9baa-4557-92fb-2ab86c9d7b7c)
-
-> **Remark (Overfitting and Regularisation).**
-> High-degree polynomials can interpolate noisy data yet extrapolate disastrously. Ridge ($\ell_2$) or Lasso ($\ell_1$) penalties enforce smoothness or sparsity:
+Ordinary least squares (OLS) solves
 
 $$
-S_\lambda(a) = \lVert V\,a - y\rVert_2^2 + \lambda\,\lVert a\rVert_q^q,\quad q\in\{1,2\}
+\hat\beta=\operatorname*{arg\,min}_{\beta}\operatorname{RSS}(\beta),
+\qquad \operatorname{RSS}(\beta)=\sum_{i=1}^N(y_i-(X\beta)_i)^2.
 $$
 
-> Closed-form solutions exist for $q=2$; for $q=1$ one must resort to convex optimisation.
-
-Other classical curve-fitting families include **splines**, **B-splines**, **Bezier curves**, **wavelet bases**, and **kernel smoothers** (e.g. Nadaraya–Watson).  Each trades parametric flexibility against interpretability and computational cost.
-
-### Regression Analysis
-
-In modern statistics, **regression** refers to modeling the conditional mean
+The normal equations are
 
 $$
-\mathbb{E}[\,y\mid x\,] = \mu(x;\,\beta),
+X^\top X\hat\beta=X^\top y.
 $$
 
-where $\mu(\cdot;\beta)$ is a known function (link) indexed by parameters $\beta$. Given i.i.d. samples $(x_i,y_i)$, our goal is to estimate $\beta$.
+If $X$ has full column rank, the coefficients are unique. The expression $(X^\top X)^{-1}X^\top y$ describes this solution algebraically; in numerical code, solve least squares directly with QR or SVD instead of forming an inverse. See the [derivation and solver discussion](least_squares.md).
 
-#### Linear Model
+### Linear in the Coefficients Does Not Mean a Straight Line
 
-If
-
-$$
-\mu(x;\beta) = x^\top \beta,
-$$
-
-the model is **linear** in the parameters. Writing the data matrix $X$ and response vector $y$, the OLS estimator solves
+Polynomial regression of degree $d$ uses
 
 $$
-\hat\beta = \arg\min_{\beta}\,\|\,y - X\beta\|_2^2.
+\hat y=\sum_{j=0}^d\hat\beta_jx^j,
+\qquad X_{i,j+1}=x_i^j,\quad j=0,\ldots,d.
 $$
 
-When $\mathrm{rank}(X)=p$, the closed-form solution is
+It is linear in the unknown coefficients even though it curves as a function of $x$. This matrix has full column rank exactly when there are at least $d+1$ distinct input values. Repeated inputs are allowed in regression; they reduce the number of distinct locations available to identify the polynomial. Collinearity of the plotted responses is not the rank criterion.
+
+By contrast, $\mu(x;V,K)=Vx/(K+x)$ is nonlinear in its unknown parameters. Nonlinear least squares generally needs an iterative solver and an initial estimate; convergence to a global minimum is not guaranteed.
+
+### Worked Example: Fit a Line and Predict a Response
+
+**Inputs:** the five observations below. **Goal:** fit $\hat y=\hat\beta_0+\hat\beta_1x$ by OLS, predict at $x_*=2$, and measure the training fit.
+
+#### Step 1: Organize the Required Sums
+
+| $x_i$ | $y_i$ | $x_i^2$ | $x_iy_i$ |
+| --- | --- | --- | --- |
+| 0.8 | 1.2 | 0.64 | 0.96 |
+| 1.2 | 1.9 | 1.44 | 2.28 |
+| 1.9 | 3.1 | 3.61 | 5.89 |
+| 2.4 | 3.9 | 5.76 | 9.36 |
+| 3.0 | 5.1 | 9.00 | 15.30 |
+| Sum | 15.20 | 20.45 | 33.79 |
+
+Also $N=5$ and $\sum x_i=9.30$. Thus
 
 $$
-\hat\beta = (X^\top X)^{-1}X^\top y.
+X^\top X=\begin{bmatrix}5&9.30\\9.30&20.45\end{bmatrix},
+\qquad X^\top y=\begin{bmatrix}15.20\\33.79\end{bmatrix}.
 $$
 
-**Gauss–Markov Theorem.** If $\mathrm{Cov}(\varepsilon)=\sigma^2I$, then among all linear unbiased estimators $\tilde\beta = Cy$ with $CX=I$, OLS has the smallest variance:
+#### Step 2: Solve the Two Equations
 
 $$
-\mathrm{Var}(\tilde\beta) - \mathrm{Var}(\hat\beta) \succeq 0.
+5\hat\beta_0+9.30\hat\beta_1=15.20,
+\qquad9.30\hat\beta_0+20.45\hat\beta_1=33.79.
 $$
 
-#### Generalized Linear Model (GLM)
-
-For responses in the exponential family (e.g.\ Bernoulli, Poisson), we introduce a **link** $g$ so that
+Multiply the second equation by 5 and subtract 9.30 times the first:
 
 $$
-g\bigl(\mu(x)\bigr) = x^\top \beta.
+(102.25-86.49)\hat\beta_1=168.95-141.36,
+\qquad\hat\beta_1=\frac{27.59}{15.76}\approx1.750635.
 $$
 
-For instance, in logistic regression $g(\mu)=\log\bigl(\mu/(1-\mu)\bigr)$. Parameters are found by maximizing the likelihood
+Back-substitute without rounding the slope:
 
 $$
-\hat\beta = \arg\max_{\beta}\prod_{i=1}^{N} f\bigl(y_i;\,\mu(x_i;\beta)\bigr),
+\hat\beta_0=\frac{15.20-9.30(27.59/15.76)}{5}
+=\frac{-3.407}{15.76}\approx-0.216180.
 $$
 
-using Fisher scoring or Newton methods.
+The fitted line is $\hat y\approx-0.216180+1.750635x$.
 
-#### Nonlinear Least Squares (NLS)
-
-When $\mu(x;\beta)$ is nonlinear in $\beta$ (e.g.\ Michaelis–Menten: $\mu(x;V,K)=Vx/(K+x)$), we minimize
+#### Step 3: Predict at the Requested Input
 
 $$
-S(\beta) = \sum_{i=1}^N \bigl(y_i - \mu(x_i;\beta)\bigr)^2.
+\hat y(2)=\frac{-3.407+27.59(2)}{15.76}
+=\frac{51.773}{15.76}\approx3.285089.
 $$
 
-This loss is generally non-convex; standard solvers include Levenberg–Marquardt or trust-region algorithms.
+This input lies within the observed range $[0.8,3.0]$. Predictions outside that range would be extrapolations.
 
-### Concepts in Regression
+#### Step 4: Check Residuals and Training Fit
 
-| Concept                  | Formal Definition                                                                                                                                        |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Parameter Estimation** | $\displaystyle \hat\theta = \arg\min_{\theta}\,\mathcal L(\theta)$ where $\mathcal L$ is least‐squares or negative log‐likelihood.                       |
-| **Fitted Values**        | $\displaystyle \hat y_i = \mu(\mathbf x_i;\,\hat\theta)$                                                                                                 |
-| **Residuals**            | $\displaystyle r_i = y_i - \hat y_i$                                                                                                                     |
-|                          | $\displaystyle \hat\varepsilon_i = \frac{r_i}{1 - h_{ii}}$, with $h_{ii}$ the $i$th diagonal of the hat matrix.                                          |
-| **Loss / Error**         | $\displaystyle \mathrm{RSS} = \sum_i r_i^2$                                                                                                              |
-|                          | $\displaystyle -\sum_i \bigl[y_i\log\hat y_i + (1-y_i)\log(1-\hat y_i)\bigr]$                                                                            |
-| **Risk**                 | $\displaystyle R(\hat f) = \mathbb{E}\bigl[\mathcal L(\hat f(\mathbf x),y)\bigr]$, empirical risk minimisation replaces $\mathbb{E}$ by the sample mean. |
-| **Goodness-of-Fit**      | $\displaystyle R^2 = 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}},\quad \mathrm{TSS} = \sum_i (y_i - \bar y)^2$                                                 |
-|                          | $\displaystyle \bar R^2 = 1 - (1 - R^2)\,\frac{N-1}{N-p-1}$                                                                                              |
-|                          | $\displaystyle \mathrm{AIC} = 2k - 2\log\hat L$                                                                                                          |
-|                          | $\displaystyle \mathrm{BIC} = k\log N - 2\log\hat L$                                                                                                     |
-| **Inference**            | $\displaystyle z_j = \frac{\hat\beta_j}{\widehat{\mathrm{se}}(\hat\beta_j)} \approx N(0,1)$                                                              |
-|                          | $\displaystyle 2(\ell_1 - \ell_0)\sim \chi^2_{\text{df}}$                                                                                                |
-| **Prediction Interval**  | $\displaystyle \hat y_0 \pm t_{N-p,\,1-\alpha/2}\,\hat\sigma\sqrt{1 + \mathbf x_0^\top (X^\top X)^{-1}\mathbf x_0}$                                      |
+Use the unrounded coefficients for calculation; values below are displayed to six decimals.
 
-### Types of Regression Methods
+| $x_i$ | $y_i$ | $\hat y_i$ | $r_i=y_i-\hat y_i$ |
+| --- | --- | --- | --- |
+| 0.8 | 1.2 | 1.184327 | 0.015673 |
+| 1.2 | 1.9 | 1.884581 | 0.015419 |
+| 1.9 | 3.1 | 3.110025 | -0.010025 |
+| 2.4 | 3.9 | 3.985343 | -0.085343 |
+| 3.0 | 5.1 | 5.035723 | 0.064277 |
 
-1. **Ordinary Least Squares (OLS)**  – Closed-form, BLUE under Gauss–Markov conditions.
-2. **Ridge Regression** – Penalised least-squares with $\lambda|\boldsymbol\beta|\_2^2$; solution $\widehat{\boldsymbol\beta}=(\mathbf X^{\top}\mathbf X+\lambda\mathbf I)^{-1}\mathbf X^{\top}\mathbf y$.
-3. **Lasso & Elastic Net** – $\ell\_1$ and mixed $\ell\_1+\ell\_2$ penalties promoting sparsity; solved by coordinate descent or LARS.
-4. **Generalised Linear Models (GLM)** – Logistic, probit, Poisson; estimated by iteratively re-weighted least squares.
-5. **Non-linear Regression (NLS)** – Use gradient-based optimisers; asymptotic theory requires identifiability and regularity.
-6. **Robust Regression** – M-estimators with Huber or Tukey bisquare $\rho$-functions; minimises $\sum\_{i}\rho(r\_i/\hat\sigma)$.
-7. **Quantile Regression** – Minimises asymmetric absolute loss $\sum\_{i}\rho\_\tau(r\_i)$ with $\rho\_\tau(u)=u(\tau-\mathbb 1\_{u<0})$.
-8. **Bayesian Regression** – Places prior $p(\boldsymbol\beta)$, outputs posterior $p(\boldsymbol\beta\mid\mathbf y)\propto L(\boldsymbol\beta)\,p(\boldsymbol\beta)$; predictive distribution integrates over posterior.
-
-> **Computational Note.**  High-dimensional ($p\gg N$) problems demand numerical linear-algebra tricks: Woodbury identity, iterative conjugate gradient, stochastic gradient descent (SGD), or variance-reduced methods (SVRG, SAGA).
-
-### Worked Examples
-
-#### Example 1 – OLS in Matrix Form
-
-We have $N=5$ observations $\{(x_i,y_i)\}$ and wish to fit
+OLS satisfies $X^\top r=0$: here both $\sum r_i$ and $\sum x_ir_i$ are zero apart from floating-point roundoff. This is a useful independent check on the fitted coefficients.
 
 $$
-y_i = \beta_0 + \beta_1 x_i + \varepsilon_i,\qquad
-\varepsilon_i\sim\text{mean }0.
-$$
-
-We stack the data as
-
-$$
-X = 
-\begin{bmatrix}
-1 & 0.8\\
-1 & 1.2\\
-1 & 1.9\\
-1 & 2.4\\
-1 & 3.0
-\end{bmatrix}, 
-\qquad
-y =
-\begin{bmatrix}
-1.2\\
-1.9\\
-3.1\\
-3.9\\
-5.1
-\end{bmatrix}.
-$$
-
-The OLS estimator is
-
-$$
-\hat\beta
-= (X^\top X)^{-1}\,X^\top y.
-$$
-
-Compute
-
-$$
-X^\top X
-= \begin{bmatrix}
-5   & 9.30\\
-9.30&20.45
-\end{bmatrix},
-\quad
-X^\top y
-= \begin{bmatrix}
-15.20\\
-33.79
-\end{bmatrix}.
-$$
-
-First compute the determinant:
-
-$$
-\det(X^\top X) = 5 \times 20.45 - 9.3^2 = 102.25 - 86.49 = 15.76.
-$$
-
-Then invert:
-
-$$
-(X^\top X)^{-1}
-= \frac{1}{15.76}
-\begin{bmatrix}
-20.45 & -9.30\\
--9.30 & 5
-\end{bmatrix}
-\approx
-\begin{bmatrix}
-1.2976 & -0.5901\\
--0.5901 & 0.3173
-\end{bmatrix}.
-$$
-
-Multiplying out $\hat\beta = (X^\top X)^{-1} X^\top y$ entry-by-entry:
-
-$$
-\hat\beta_0
-= \frac{20.45 \times 15.20 \;-\; 9.30 \times 33.79}{15.76}
-= \frac{310.84 - 314.25}{15.76}
-= \frac{-3.41}{15.76}
-\approx -0.216,
+\operatorname{RSS}=\sum r_i^2\approx0.011998731,
+\qquad\bar y=15.20/5=3.04.
 $$
 
 $$
-\hat\beta_1
-= \frac{-9.30 \times 15.20 \;+\; 5 \times 33.79}{15.76}
-= \frac{-141.36 + 168.95}{15.76}
-= \frac{27.59}{15.76}
-\approx 1.751.
+\begin{aligned}
+\operatorname{TSS}&=\sum(y_i-\bar y)^2\\
+&=(-1.84)^2+(-1.14)^2+(0.06)^2+(0.86)^2+(2.06)^2\\
+&=9.672,\\
+R^2&=1-\frac{0.011998731}{9.672}\approx0.998759.
+\end{aligned}
 $$
 
-Hence
+This is a strong fit to these five observations. It does not by itself measure prediction accuracy on new data.
+
+### Statistical Assumptions and Diagnostics
+
+Computing OLS does not require normally distributed errors. Statistical interpretations require additional assumptions. For a fixed, full-rank design, write
 
 $$
-\hat\beta
-= \begin{pmatrix}\hat\beta_0\\\hat\beta_1\end{pmatrix}
-\approx
-\begin{pmatrix}-0.216\\1.751\end{pmatrix}.
+y=X\beta+\varepsilon,\qquad
+\mathbb E[\varepsilon\mid X]=0,\qquad
+\operatorname{Cov}(\varepsilon\mid X)=\sigma^2I.
 $$
 
-The fitted line is
+Under these assumptions, the Gauss–Markov theorem says OLS has the smallest covariance among estimators that are linear in $y$ and unbiased. It does not say OLS is best among every possible estimator. Heteroscedastic or correlated errors require a suitable covariance estimate or a model for their covariance.
+
+With $p$ counting all coefficients, $N>p$, and $\operatorname{TSS}>0$:
+
+| Quantity | Formula and interpretation |
+| --- | --- |
+| Residual variance estimate | $s^2=\operatorname{RSS}/(N-p)$ |
+| Adjusted $R^2$ | $1-(\operatorname{RSS}/(N-p))/(\operatorname{TSS}/(N-1))$ |
+| Leverage | $h_{ii}$, the diagonal of $H=X(X^\top X)^{-1}X^\top$ |
+| Leave-one-out residual | $r_i/(1-h_{ii})$, when deleting observation $i$ leaves a full-rank design; this is not the ordinary residual |
+
+For independent Gaussian errors with common variance, an exact prediction interval for a new, independent response at design vector $v_*$ is
 
 $$
-\hat y = -0.216 + 1.751\,x.
+\hat y_*\ \pm\ t_{N-p,1-\alpha/2}\,s
+\sqrt{1+v_*^\top(X^\top X)^{-1}v_*}.
 $$
 
-To assess fit, let $\bar y=15.20/5=3.04$ and tabulate the fitted values and residuals:
+Here $v_*=[1,x_*]^\top$ for a line, $\alpha$ is the significance level, and $t_{\nu,q}$ is a Student-$t$ quantile. A confidence interval for the mean response omits the leading 1 under the square root. Under the same Gaussian assumptions, coefficient tests use Student-$t$ with $N-p$ degrees of freedom, not an exact standard normal reference.
 
-| $i$ | $x_i$ | $y_i$ | $\hat y_i$ | $r_i = y_i - \hat y_i$ |
-|-----|--------|--------|-------------|-------------------------|
-| 1   | 0.8    | 1.2    | 1.185       | 0.015                   |
-| 2   | 1.2    | 1.9    | 1.885       | 0.015                   |
-| 3   | 1.9    | 3.1    | 3.111       | −0.011                  |
-| 4   | 2.4    | 3.9    | 3.986       | −0.086                  |
-| 5   | 3.0    | 5.1    | 5.037       | 0.063                   |
+If all responses are equal, TSS is zero and the displayed $R^2$ formula is undefined. For OLS with an intercept, training $R^2$ lies in $[0,1]$; this guarantee does not extend to held-out predictions or models without an intercept.
 
-Then
+### Other Regression Models
 
-$$
-\mathrm{RSS}
-= \sum_i r_i^2
-\approx 0.015^2 + 0.015^2 + 0.011^2 + 0.086^2 + 0.063^2
-\approx 0.012,
-$$
+| Model | What changes |
+| --- | --- |
+| Ridge | Add $\lambda\sum_{j=1}^{p-1}\beta_j^2$ to RSS; this convention leaves the intercept unpenalized |
+| Lasso | Add $\lambda\sum_{j=1}^{p-1}\lvert\beta_j\rvert$; some fitted coefficients can become zero |
+| Elastic net | Combine ridge and lasso penalties |
+| Robust regression | Replace squared loss with a loss less sensitive to large residuals; high-leverage inputs can still be problematic |
+| Quantile regression | Estimate a conditional quantile using asymmetric absolute loss |
+| Generalized linear model | Relate a response mean to $X\beta$ through a link and specify a response distribution |
+| Bayesian regression | Combine a likelihood with a prior to obtain a posterior over model parameters |
 
-$$
-\mathrm{TSS}
-= \sum_i (y_i - \bar y)^2
-= (1.2{-}3.04)^2 + (1.9{-}3.04)^2 + (3.1{-}3.04)^2 + (3.9{-}3.04)^2 + (5.1{-}3.04)^2
-\approx 9.672,
-$$
+Scale predictor columns appropriately before penalizing coefficients, and choose penalty strength using validation. Coefficient shrinkage does not automatically impose a particular curve-smoothness constraint.
 
-$$
-R^2
-= 1 - \frac{\mathrm{RSS}}{\mathrm{TSS}}
-= 1 - \frac{0.012}{9.672}
-\approx 0.999.
-$$
+### Worked Example: One Logistic Regression Update
 
-#### Example 2 – Logistic Regression, MLE Derivatives
+**Inputs:** binary responses $y=(0,0,1)^\top$ at $x=(-1,0,1)$, an intercept, and initial coefficients $\beta^{(0)}=(0,0)^\top$. **Goal:** perform one Newton update of the Bernoulli log-likelihood, then compute the probability at $x=1$.
 
-For binary data $y\_i\in{0,1}$ the log-likelihood is
+Logistic regression models a probability $\pi_i=1/(1+e^{-(X\beta)_i})$. Its logit link is $\log(\pi_i/(1-\pi_i))=(X\beta)_i$.
+
+#### Step 1: Compute Initial Probabilities and Residuals
 
 $$
-\ell(\beta) = \sum_{i=1}^N \bigl[y_i\,x_i^\top \beta - \log\bigl(1 + e^{x_i^\top \beta}\bigr)\bigr].
+X=\begin{bmatrix}1&-1\\1&0\\1&1\end{bmatrix},
+\quad\pi^{(0)}=\begin{bmatrix}1/2\\1/2\\1/2\end{bmatrix},
+\quad y-\pi^{(0)}=\begin{bmatrix}-1/2\\-1/2\\1/2\end{bmatrix}.
 $$
 
-Gradient and Hessian:
+#### Step 2: Compute the Gradient and Curvature
+
+For $\ell(\beta)=\sum_i[y_i(X\beta)_i-\log(1+e^{(X\beta)_i})]$,
 
 $$
-\nabla\ell(\beta) = X^\top (y - \pi), 
-\quad 
-\pi = (1 + e^{-X\beta})^{-1},
+g=X^\top(y-\pi)=\begin{bmatrix}-1/2\\1\end{bmatrix},
+\quad W=\operatorname{diag}(\pi_i(1-\pi_i))=\tfrac14I,
+\quad -\nabla^2\ell=X^\top WX=\begin{bmatrix}3/4&0\\0&1/2\end{bmatrix}.
 $$
 
-$$
-\nabla^2\ell(\beta) = -\,X^\top \mathrm{diag}\bigl(\pi \circ (1 - \pi)\bigr)\,X 
-\preceq0.
-$$
+#### Step 3: Solve for the Update
 
-Newton iteration: $\boldsymbol\beta^{(t+1)}=\boldsymbol\beta^{(t)}-(\nabla^2\ell)^{-1}\nabla\ell$.
-
-**Numerical illustration.** Take $N=3$ observations with one feature (plus intercept):
+Solve $(X^\top WX)\delta=g$:
 
 $$
-X = \begin{bmatrix}1 & -1\\1 & 0\\1 & 1\end{bmatrix},
-\quad
-y = \begin{pmatrix}0\\0\\1\end{pmatrix},
-\quad
-\beta^{(0)} = \begin{pmatrix}0\\0\end{pmatrix}.
+\tfrac34\delta_0=-\tfrac12\implies\delta_0=-\tfrac23,
+\qquad\tfrac12\delta_1=1\implies\delta_1=2.
 $$
 
-At $\beta^{(0)}=(0,0)^\top$ every linear predictor is zero, so $\pi_i=\sigma(0)=0.5$ for all $i$.
-
-Gradient:
+Hence $\beta^{(1)}=\beta^{(0)}+\delta=(-2/3,2)^\top$ and
 
 $$
-\nabla\ell
-= X^\top(y-\pi)
-= \begin{bmatrix}1&1&1\\-1&0&1\end{bmatrix}
-  \begin{pmatrix}-0.5\\-0.5\\0.5\end{pmatrix}
-= \begin{pmatrix}-0.5\\1.0\end{pmatrix}.
+\pi^{(1)}(1)=\frac{1}{1+e^{-(-2/3+2)}}
+=\frac{1}{1+e^{-4/3}}\approx0.791391.
 $$
 
-Weight matrix $W=\operatorname{diag}\bigl(\pi\circ(1-\pi)\bigr)=0.25\,I_3$, so the Hessian is
+**Check and limitation:** the log-likelihood increases from approximately $-2.079442$ to $-0.715508$. This is one iteration, not a converged estimate. These data are completely separable: the threshold $x=1/2$ separates the two classes. Along $\beta=c(-1/2,1)^\top$ as $c\to\infty$, all observed-class probabilities approach 1. Thus the unpenalized likelihood has no finite maximizer. A penalty or prior can produce a finite estimate.
 
-$$
-\nabla^2\ell
-= -X^\top W X
-= -\begin{bmatrix}0.75&0\\0&0.50\end{bmatrix}.
-$$
+### Practical Workflow
 
-Newton update:
+1. State the response, predictors, intended prediction range, and loss.
+2. Build the design matrix and check its rank and scaling.
+3. Fit the model with a suitable numerical solver.
+4. Inspect residuals for curvature, changing spread, dependence, and influential points.
+5. Assess prediction error on held-out data or with cross-validation appropriate to the sampling process.
+6. Report model assumptions and uncertainty alongside predictions. Regression alone does not establish causation.
 
-$$
-\beta^{(1)}
-= \beta^{(0)} - (\nabla^2\ell)^{-1}\nabla\ell
-= \begin{pmatrix}0\\0\end{pmatrix}
-  + \begin{bmatrix}\tfrac{4}{3}&0\\0&2\end{bmatrix}
-    \begin{pmatrix}-0.5\\1.0\end{pmatrix}
-= \begin{pmatrix}-0.667\\2.000\end{pmatrix}.
-$$
+### Reproduce the Calculations
 
-After this single step the model already predicts $P(y{=}1\mid x{=}1)\approx\sigma(-0.667+2.0)=\sigma(1.333)\approx0.79$.
-
-### Applications
-
-* **Finance & Econometrics** – Capital asset pricing (CAPM), term-structure models, volatility forecasting (GARCH regression), default-probability prediction.
-* **Healthcare & Epidemiology** – Survival analysis (Cox proportional hazards), dose-response curves, genome-wide association studies (GWAS) via penalised regression.
-* **Engineering** – System identification, Kalman-filter regressions, fatigue-life modelling.
-* **Marketing & A/B Testing** – Uplift modelling, mixed-effect regressions for hierarchical data.
-* **Machine Learning Pipelines** – Feature engineering baseline, stacking/blending meta-learners, interpretability audits.
-
-### Limitations & Pitfalls
-
-I. **Model Misspecification:**
-
-When $f_*(\mathbf{x})$ lies outside the chosen hypothesis class, estimators remain biased even as $N \to \infty$.
-
-II. **Violation of IID:**
-
-Autocorrelated or clustered errors require GLS or “sandwich” covariance estimators.
-
-III. **Heteroscedasticity:**
-
-If $Var(\varepsilon_i \mid \mathbf{x}_i) = \sigma_i^2$, the usual OLS variance formula is invalid; use White’s (HC) estimators instead.
-
-IV. **Multicollinearity:**
-
-Near–linear dependence among columns of $X$ inflates $Var(\hat\beta_j)$; ridge regression can shrink the condition number.
-
-V. **High Leverage & Outliers:**
-
-Cook’s distance
-
-$$D_i = \frac{r_i^2 \, h_{ii}}{p \, \hat\sigma^2 \, (1 - h_{ii})^2}$$
-
-identifies influential points; strong M–estimators mitigate their effect.
-
-VI. **Overfitting / High Variance:**
-
-Cross-validation, information criteria, or Bayesian model averaging help choose model complexity.
-
-VII. **External Validity:**
-
-Regression learns the conditional mean on $\mathcal{D}$; distribution shifts (covariate shift, concept drift) break prediction accuracy.
-
-VIII. **Causal Inference vs. Prediction:**
-
-Regression coefficients are not causal unless confounding is addressed (e.g.\ via instrumental variables, RCTs, or DAG-based adjustment).
+From the repository root, run `python notes/6_regression/resources/verify_examples.py` with NumPy and SciPy installed. The script checks the worked examples across all nine notes against independent solvers, including spline boundary conditions and Gauss formulas for even and odd node counts.
 
 ### Further Reading
 
-1. Seber, G. A. F., & Lee, A. J. *Linear Regression Analysis*, 2e, Wiley (2003).
-2. Hastie, T., Tibshirani, R., & Friedman, J. *The Elements of Statistical Learning*, 2e, Springer (2009).
-3. McCullagh, P., & Nelder, J. *Generalized Linear Models*, 2e, Chapman & Hall (1989).
-4. Kennedy, P. *A Guide to Econometrics*, 7e, Wiley-Blackwell (2008).
+- Seber and Lee, *Linear Regression Analysis*, 2nd edition, Wiley, 2003.
+- Hastie, Tibshirani, and Friedman, *The Elements of Statistical Learning*, 2nd edition, Springer, 2009.
+- McCullagh and Nelder, *Generalized Linear Models*, 2nd edition, Chapman & Hall, 1989.

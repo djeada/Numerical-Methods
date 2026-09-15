@@ -1,158 +1,112 @@
 ## Least Squares Regression
 
-Least Squares Regression is a fundamental technique in statistical modeling and data analysis used for fitting a model to observed data. The primary goal is to find a set of parameters that minimize the discrepancies (residuals) between the model’s predictions and the actual observed data. The "least squares" criterion is chosen because it leads to convenient mathematical properties and closed-form solutions, particularly for linear models.
+Least squares chooses model coefficients to minimize the sum of squared residuals, where a residual is an observed value minus its fitted value. Unlike interpolation, the fitted model need not pass through every observation.
 
-In its simplest form, least squares regression is applied to **linear regression**, where we assume a linear relationship between a set of input variables (features) $X$ and an output variable $Y$. More generally, it can be extended to polynomial regression and multiple linear regression with multiple input variables. Because of its simplicity, transparency, and relative mathematical convenience, least squares remains one of the most widely used techniques in data analysis.
+This note derives linear least squares, explains how to solve it numerically, and works through a line fit with a prediction and residual checks.
 
-![output(31)](https://github.com/user-attachments/assets/3777f998-f72c-43a1-a8a9-8ecad0e82b1f)
+### Inputs and Goal
 
-### Mathematical Formulation
+**Inputs:** a finite design matrix $X\in\mathbb R^{N\times p}$ and response vector $y\in\mathbb R^N$. Here $N$ counts observations and $p$ counts coefficients, including an intercept if used. **Goal:** find $\hat\beta$ minimizing the residual sum of squares and predict at a new design vector $v_*$.
 
-Given a matrix of features $X \in \mathbb{R}^{m \times n}$ (with $m$ observations and $n$ features), and a vector of target variables $Y \in \mathbb{R}^m$, we seek a coefficient vector $\beta \in \mathbb{R}^n$ that best fits the data in the sense of minimizing the sum of squared residuals. If we include a column of ones in $X$ to represent the intercept term, $\beta$ naturally includes the intercept as well.
+For a line, row $i$ is $[1,x_i]$; for a quadratic it is $[1,x_i,x_i^2]$. The model is linear in its coefficients, even when columns are nonlinear transformations of the original inputs. See the [regression overview](regression.md) for statistical assumptions and model selection.
 
-We model:
+### Derivation of the Normal Equations
 
-$$\hat{Y} = X \beta$$
+Write the residual vector as $r=y-X\beta$. Expanding its squared norm gives
 
-**Objective**: Minimize the Residual Sum of Squares (RSS):
+$$
+\begin{aligned}
+\operatorname{RSS}(\beta)&=(y-X\beta)^\top(y-X\beta)\\
+&=y^\top y-2\beta^\top X^\top y+\beta^\top X^\top X\beta.
+\end{aligned}
+$$
 
-$$RSS(\beta) = \| Y - X\beta \|_2^2 = (Y - X\beta)^\top (Y - X\beta)$$
+Differentiate with respect to the coefficients:
 
-The goal is to find $\beta$ that solves:
+$$
+\nabla\operatorname{RSS}=-2X^\top y+2X^\top X\beta.
+$$
 
-$$\min_\beta \| Y - X\beta \|_2^2$$
+Setting the gradient to zero yields
 
-By setting the gradient of this objective with respect to $\beta$ to zero, we obtain the **Normal Equation**:
+$$
+X^\top X\hat\beta=X^\top y.
+$$
 
-$$X^\top X \beta = X^\top Y$$
+The Hessian is $2X^\top X$. For every vector $v$,
 
-Provided $X^\top X$ is invertible, we have a closed-form solution:
+$$
+v^\top(2X^\top X)v=2\|Xv\|_2^2\ge0.
+$$
 
-$$\beta = (X^\top X)^{-1} X^\top Y$$
+Thus every solution of the normal equations is a global minimum. If $X$ has full column rank, the Hessian is positive definite and the coefficients are unique. Otherwise, different coefficient vectors can have the same fitted vector $X\hat\beta$; an SVD solver can select the minimum-norm solution. Rank deficiency does not mean a least-squares minimizer fails to exist.
 
-This $\beta$ is the least squares estimate of the coefficient vector, ensuring that the fitted line (or hyperplane, in the multi-dimensional case) is the best fit in the least squares sense.
+### Numerical Algorithm
 
-> In this repository's implementation, the input must already be the full **design matrix** $X$ (including any intercept column), and the routine requires $X$ to have full column rank. Rank-deficient or underdetermined systems raise `ValueError` instead of silently returning a minimum-norm pseudo-inverse solution.
+1. Construct $X$ and $y$, including a column of ones if an intercept is intended. Check dimensions, finite values, and scaling.
+2. Solve least squares directly using QR or SVD. With a full-rank reduced QR factorization $X=QR$, solve $R\hat\beta=Q^\top y$ by back-substitution.
+3. Compute $\hat y=X\hat\beta$ and $r=y-\hat y$. Check $X^\top r\approx0$, allowing for floating-point roundoff.
+4. Predict using the same feature construction: $\hat y_*=v_*^\top\hat\beta$.
 
-### Derivation
+The identity $\hat\beta=(X^\top X)^{-1}X^\top y$ is useful for algebra but is not the recommended numerical algorithm. For full-rank $X$, $\kappa_2(X^\top X)=\kappa_2(X)^2$: forming the normal equations worsens conditioning. Applying SVD to the already formed $X^\top X$ does not undo that loss.
 
-I. **Set up the Problem**:
+The repository's educational `least_squares` routine expects the full design matrix, forms the normal equations, and rejects underdetermined or rank-deficient inputs (and zero rows). Those are implementation restrictions, not restrictions on the existence of least-squares solutions. For a direct solver, [NumPy's `lstsq`](https://numpy.org/doc/stable/reference/generated/numpy.linalg.lstsq.html) also reports rank and singular values.
 
-Suppose we have observations $\{ (x_i, y_i) \}_{i=1}^m$, where $x_i \in \mathbb{R}^n$ is a vector of features for the $i$-th observation and $y_i$ is the response. We assume a linear model:
+### Worked Example: Fit, Check, and Predict
 
-$$\hat{y}_i = \sum_{j=1}^n \beta_j x_{ij} = x_i^\top \beta,$$
-or in matrix form:
-
-$$\hat{Y} = X\beta,$$
-where $X$ is the $m \times n$ matrix with rows $x_i^\top$, and $Y \in \mathbb{R}^m$ is the vector of observed responses.
-
-II. **Defining the Error to Minimize**:
-
-We define the residuals as:
-
-$$r = Y - X\beta$$
-
-The objective is to minimize:
-
-$$RSS(\beta) = r^\top r = (Y - X\beta)^\top (Y - X\beta)$$
-
-III. **Finding the Minimum**:
-
-To minimize with respect to $\beta$, take the gradient and set it to zero:
-
-$$\frac{\partial RSS}{\partial \beta} = -2X^\top(Y - X\beta) = 0$$
-
-This implies:
-
-$$X^\top Y - X^\top X \beta = 0 \implies X^\top X \beta = X^\top Y$$
-
-IV. **Solving the Normal Equation**:
-
-If $X^\top X$ is invertible:
-
-$$\beta = (X^\top X)^{-1} X^\top Y$$
-
-This formula provides a closed-form solution for the ordinary least squares estimator $\beta$.
-
-V. **Confirming the Minimum (Second-Derivative Check)**:
-
-The Hessian (second derivative) of $RSS$ with respect to $\beta$ is:
-
-$$\frac{\partial^2 RSS}{\partial \beta^2} = 2X^\top X$$
-
-Since $X^\top X$ is positive semi-definite (and positive definite when $X$ has full column rank), the critical point found in step III is indeed a global minimum.
-
-### Algorithm Steps
-
-I. **Data Preparation**:
-
-- Construct your design matrix $X$ by stacking the observations row-wise.  
-- Each row corresponds to one observation and each column corresponds to one feature.  
-- Often, a column of ones is added to incorporate the intercept term.
-- Construct the response vector $Y$ from the observed target values.
-
-II. **Compute Matrices**:
-
-Compute $X^\top X$ and $X^\top Y$.
-
-III. **Check Full Column Rank**:
-
-- Ensure that $X$ has full column rank so that $X^\top X$ is invertible.
-- In the implementation shipped with this repository, rank-deficient systems are treated as invalid input and raise an exception.
-- If $X^\top X$ is singular in practice, it may be due to multicollinearity. Consider removing or combining features, or switching to a more robust solver such as QR/SVD-based least squares or regularized regression.
-
-IV. **Solve for $\beta$**:
-
-$$\beta = (X^\top X)^{-1} X^\top Y$$
-
-V. **Use the Model for Prediction**:
-
-For a new input $x_{\text{new}}$, predict:
-
-$$\hat{y}_{\text{new}} = x_{\text{new}}^\top \beta$$
-
-### Example
-
-**Given Data Points**: $(x,y)$ = $(1,1), (2,2), (3,2)$.
+**Inputs:** $(x,y)=(1,1),(2,2),(3,2)$ and query $x_*=4$. **Goal:** fit a line with an intercept, calculate its residuals and training $R^2$, and predict the response at the query.
 
 **Step-by-step**:
 
 I. Add an intercept term (column of ones):
 
-$$X = \begin{bmatrix}
+$$
+X = \begin{bmatrix}
 1 & 1 \\
 1 & 2 \\
 1 & 3 \\
 \end{bmatrix}, \quad
-Y=\begin{bmatrix}1 \\ 2 \\ 2\end{bmatrix}$$
+y=\begin{bmatrix}1 \\ 2 \\ 2\end{bmatrix}
+$$
 
-II. Compute $X^\top X$ and $X^\top Y$:
+II. Compute $X^\top X$ and $X^\top y$:
 
-$$X^\top X = \begin{bmatrix} 1+1+1 & 1+2+3 \\ 1+2+3 & 1+4+9 \end{bmatrix} = \begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix}$$
+$$
+X^\top X = \begin{bmatrix} 1+1+1 & 1+2+3 \\ 1+2+3 & 1+4+9 \end{bmatrix} = \begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix}
+$$
 
-$$X^\top Y = \begin{bmatrix} 1 \cdot 1 + 1 \cdot 2 + 1 \cdot 2 \\ 1 \cdot 1 + 2 \cdot 2 + 3 \cdot 2 \end{bmatrix} = \begin{bmatrix} 5 \\ 11 \end{bmatrix}$$
+$$
+X^\top y = \begin{bmatrix} 1 \cdot 1 + 1 \cdot 2 + 1 \cdot 2 \\ 1 \cdot 1 + 2 \cdot 2 + 3 \cdot 2 \end{bmatrix} = \begin{bmatrix} 5 \\ 11 \end{bmatrix}
+$$
 
-III. Invert $X^\top X$:
+III. Solve the two normal equations:
 
-Compute the determinant:
+$$
+3\hat\beta_0+6\hat\beta_1=5,\qquad
+6\hat\beta_0+14\hat\beta_1=11.
+$$
 
-$$\det(X^\top X) = 3 \cdot 14 - 6 \cdot 6 = 42 - 36 = 6$$
+Subtract twice the first equation from the second:
 
-Compute the adjugate (swap diagonal entries and negate off-diagonal entries):
+$$
+(14-12)\hat\beta_1=11-10
+\implies\hat\beta_1=\frac12.
+$$
 
-$$\text{adj}(X^\top X) = \begin{bmatrix} 14 & -6 \\ -6 & 3 \end{bmatrix}$$
+IV. Back-substitute for the intercept:
 
-Apply the inverse formula $A^{-1} = \frac{1}{\det(A)}\text{adj}(A)$:
+$$
+3\hat\beta_0=5-6\left(\frac12\right)=2
+\implies\hat\beta_0=\frac23.
+$$
 
-$$(X^\top X)^{-1} = \frac{1}{6}\begin{bmatrix} 14 & -6 \\ -6 & 3 \end{bmatrix} = \begin{bmatrix} \frac{7}{3} & -1 \\ -1 & \frac{1}{2} \end{bmatrix}$$
-
-IV. Compute $\beta$:
-
-$$\beta = (X^\top X)^{-1}X^\top Y = \frac{1}{6}\begin{bmatrix} 14 & -6 \\ -6 & 3 \end{bmatrix}\begin{bmatrix} 5 \\ 11 \end{bmatrix} = \frac{1}{6}\begin{bmatrix} 70 - 66 \\ -30 + 33 \end{bmatrix} = \frac{1}{6}\begin{bmatrix} 4 \\ 3 \end{bmatrix} = \begin{bmatrix} \frac{2}{3} \\[4pt] \frac{1}{2} \end{bmatrix}$$
+The determinant $3(14)-6^2=6>0$ confirms that this two-variable system has a unique solution.
 
 Thus, the fitted line is:
 
-$$\hat{y} = \frac{2}{3} + \frac{1}{2}\,x$$
+$$
+\hat{y} = \frac{2}{3} + \frac{1}{2}\,x
+$$
 
 V. Verify at data points and compute residuals:
 
@@ -162,29 +116,50 @@ V. Verify at data points and compute residuals:
 | 2 | 2 | $\frac{2}{3} + 1 = \frac{5}{3} \approx 1.667$ | $\phantom{-}\frac{1}{3} \approx 0.333$ |
 | 3 | 2 | $\frac{2}{3} + \frac{3}{2} = \frac{13}{6} \approx 2.167$ | $-\frac{1}{6} \approx -0.167$ |
 
+A separate optimality check uses the unrounded residuals:
+
+$$
+\sum r_i=-\frac16+\frac13-\frac16=0,
+\qquad\sum x_ir_i=-\frac16+\frac23-\frac36=0.
+$$
+
+Thus $X^\top r=0$, as required by the normal equations.
+
 VI. Compute the coefficient of determination ($R^2$):
 
 Mean of observed values:
 
-$$\bar{y} = \frac{1 + 2 + 2}{3} = \frac{5}{3}$$
+$$
+\bar{y} = \frac{1 + 2 + 2}{3} = \frac{5}{3}
+$$
 
 Total Sum of Squares:
 
-$$TSS = \sum_{i=1}^{3}(y_i - \bar{y})^2 = \left(1 - \frac{5}{3}\right)^2 + \left(2 - \frac{5}{3}\right)^2 + \left(2 - \frac{5}{3}\right)^2 = \frac{4}{9} + \frac{1}{9} + \frac{1}{9} = \frac{2}{3}$$
+$$
+TSS = \sum_{i=1}^{3}(y_i - \bar{y})^2 = \left(1 - \frac{5}{3}\right)^2 + \left(2 - \frac{5}{3}\right)^2 + \left(2 - \frac{5}{3}\right)^2 = \frac{4}{9} + \frac{1}{9} + \frac{1}{9} = \frac{2}{3}
+$$
 
 Residual Sum of Squares:
 
-$$RSS = \sum_{i=1}^{3}(y_i - \hat{y}_i)^2 = \left(\frac{1}{6}\right)^2 + \left(\frac{1}{3}\right)^2 + \left(\frac{1}{6}\right)^2 = \frac{1}{36} + \frac{1}{9} + \frac{1}{36} = \frac{1}{6}$$
+$$
+RSS = \sum_{i=1}^{3}(y_i - \hat{y}_i)^2 = \left(\frac{1}{6}\right)^2 + \left(\frac{1}{3}\right)^2 + \left(\frac{1}{6}\right)^2 = \frac{1}{36} + \frac{1}{9} + \frac{1}{36} = \frac{1}{6}
+$$
 
-$$R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{1/6}{2/3} = 1 - \frac{1}{4} = \frac{3}{4} = 0.75$$
+$$
+R^2 = 1 - \frac{RSS}{TSS} = 1 - \frac{1/6}{2/3} = 1 - \frac{1}{4} = \frac{3}{4} = 0.75
+$$
 
-This means 75% of the variance in $Y$ is explained by the linear model.
+The fitted line reduces the training sum of squared errors by 75% relative to predicting the sample mean. This is not an out-of-sample accuracy guarantee.
 
 VII. Prediction for a new input:
 
 For $x_{\text{new}} = 4$:
 
-$$\hat{y} = \frac{2}{3} + \frac{1}{2} \cdot 4 = \frac{2}{3} + 2 = \frac{8}{3} \approx 2.667$$
+$$
+\hat{y} = \frac{2}{3} + \frac{1}{2} \cdot 4 = \frac{2}{3} + 2 = \frac{8}{3} \approx 2.667
+$$
+
+The prediction at $x_*=4$ is an **extrapolation**, because the observed inputs range from 1 to 3. The algebra provides a value, but the data alone do not validate the linear trend beyond that range.
 
 ### Advantages
 
@@ -194,6 +169,6 @@ $$\hat{y} = \frac{2}{3} + \frac{1}{2} \cdot 4 = \frac{2}{3} + 2 = \frac{8}{3} \a
 
 ### Limitations
 
-- **Assumes Linearity**: The method presupposes a linear relationship between features and output.
+- **Model choice**: Linear least squares assumes a model linear in its coefficients. Polynomial and other fixed basis functions are allowed, but an unsuitable basis can miss the underlying pattern.
 - **Sensitive to Outliers**: Squared errors emphasize large errors more heavily, making the model sensitive to outliers.
-- **Invertibility Issues**: If $X^\top X$ is not invertible, the standard formula fails. Issues like multicollinearity require either dropping features, transformations, or using regularized regression variants.
+- **Rank and conditioning**: Dependent columns prevent unique coefficient identification; nearly dependent columns amplify perturbations. Use a direct QR/SVD solver, reconsider features, or introduce justified regularization.
