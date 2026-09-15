@@ -11,8 +11,7 @@ $$
 the Newton polynomial is
 
 $$
-P_n(x)
-=
+P_n(x) =
 a_0
 +a_1(x-x_0)
 +a_2(x-x_0)(x-x_1)
@@ -37,19 +36,16 @@ $$
 First-order divided differences are secant slopes:
 
 $$
-f[x_i,x_{i+1}]
-=
+f[x_i,x_{i+1}] =
 \frac{f[x_{i+1}]-f[x_i]}{x_{i+1}-x_i}.
 $$
 
 Higher-order divided differences are defined recursively:
 
 $$
-f[x_i,\ldots,x_{i+k}]
-=
+f[x_i,\ldots,x_{i+k}] =
 \frac{
-f[x_{i+1},\ldots,x_{i+k}]
--
+f[x_{i+1},\ldots,x_{i+k}] -
 f[x_i,\ldots,x_{i+k-1}]
 }{
 x_{i+k}-x_i
@@ -89,8 +85,7 @@ $$
 The first divided differences are
 
 $$
-f[x_0,x_1]
-=
+f[x_0,x_1] =
 \frac{3-1}{1-0}
 =2,
 $$
@@ -105,18 +100,15 @@ $$
 The second divided difference is
 
 $$
-f[x_0,x_1,x_2]
-=
-\frac{-1-2}{2-0}
-=
+f[x_0,x_1,x_2] =
+\frac{-1-2}{2-0} =
 -\frac{3}{2}.
 $$
 
 Therefore,
 
 $$
-P_2(x)
-=
+P_2(x) =
 1
 +2(x-0)
 -\frac{3}{2}(x-0)(x-1).
@@ -125,8 +117,7 @@ $$
 Expanding gives
 
 $$
-P_2(x)
-=
+P_2(x) =
 -\frac{3}{2}x^2
 +\frac{7}{2}x
 +1,
@@ -145,8 +136,7 @@ $$
 Suppose $P_k(x)$ already interpolates the first $k+1$ nodes. Adding $x_{k+1}$ introduces one new term:
 
 $$
-P_{k+1}(x)
-=
+P_{k+1}(x) =
 P_k(x)
 +
 a_{k+1}
@@ -194,8 +184,7 @@ The Newton form should not be evaluated by separately computing every long produ
 A nested form analogous to Horner's method is
 
 $$
-P_n(x)
-=
+P_n(x) =
 a_0
 +(x-x_0)
 \left[
@@ -234,8 +223,7 @@ Because the underlying polynomial is identical, both forms have the same approxi
 If $f$ has $n+1$ continuous derivatives, then
 
 $$
-f(x)-P_n(x)
-=
+f(x)-P_n(x) =
 \frac{f^{(n+1)}(\xi_x)}{(n+1)!}
 \prod_{i=0}^{n}(x-x_i)
 $$
@@ -277,13 +265,3 @@ For $n+1$ points:
 - adding one new node after existing divided differences are available: $O(n)$ additional work.
 
 This incremental update is one of Newton interpolation's main practical advantages.
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/6_regression/resources/plot_newton_polynomial.py
-```
-
-The script generates the incremental-construction and partial-sum figures.
