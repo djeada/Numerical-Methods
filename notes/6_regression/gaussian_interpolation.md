@@ -11,11 +11,10 @@ $$
 the interpolant has the form
 
 $$
-s(x)
-=
+s(x) =
 \sum_{j=0}^{n}
 \lambda_j
-e^{-\varepsilon^2(x-x_j)^2},
+e^{-\varepsilon^2(x-x_j)^2}
 $$
 
 where the coefficients $\lambda_j$ are chosen so that
@@ -55,8 +54,7 @@ A larger $\varepsilon$ produces a narrower Gaussian. A smaller $\varepsilon$ pro
 Another common parameterization is
 
 $$
-\phi(r)
-=
+\phi(r) =
 e^{-r^2/(2\sigma^2)}.
 $$
 
@@ -81,24 +79,21 @@ gives
 $$
 \sum_{j=0}^{n}
 \lambda_j
-e^{-\varepsilon^2(x_i-x_j)^2}
-=
+e^{-\varepsilon^2(x_i-x_j)^2} =
 y_i.
 $$
 
 Define the matrix
 
 $$
-A_{ij}
-=
+A_{ij} =
 e^{-\varepsilon^2(x_i-x_j)^2}.
 $$
 
 Then the coefficients satisfy
 
 $$
-A\boldsymbol{\lambda}
-=
+A\boldsymbol{\lambda} =
 \mathbf y.
 $$
 
@@ -159,8 +154,7 @@ $$
 Solving
 
 $$
-A\boldsymbol{\lambda}
-=
+A\boldsymbol{\lambda} =
 \begin{bmatrix}
 0\\0.5\\0
 \end{bmatrix}
@@ -183,12 +177,9 @@ $$
 Therefore,
 
 $$
-s(x)
-=
--0.246025e^{-x^2}
-+
-0.681015e^{-(x-1)^2}
--
+s(x) =
+-0.246025e^{-x^2} +
+0.681015e^{-(x-1)^2} -
 0.246025e^{-(x-2)^2}.
 $$
 
@@ -249,8 +240,7 @@ The Gaussian interpolant is infinitely differentiable.
 The first derivative is
 
 $$
-s'(x)
-=
+s'(x) =
 \sum_{j=0}^{n}
 -2\varepsilon^2(x-x_j)
 \lambda_j
@@ -260,13 +250,11 @@ $$
 The second derivative is
 
 $$
-s''(x)
-=
+s''(x) =
 \sum_{j=0}^{n}
 \lambda_j
 \left[
-4\varepsilon^4(x-x_j)^2
--
+4\varepsilon^4(x-x_j)^2 -
 2\varepsilon^2
 \right]
 e^{-\varepsilon^2(x-x_j)^2}.
@@ -276,20 +264,27 @@ No explicit derivative-matching equations are needed because there are no piecew
 
 ### Algorithm
 
-1. validate that all data sites are distinct;
-2. choose $\varepsilon>0$;
-3. construct the dense matrix
-   $$
-   A_{ij}=e^{-\varepsilon^2(x_i-x_j)^2};
-   $$
-4. solve
-   $$
-   A\boldsymbol{\lambda}=\mathbf y;
-   $$
-5. evaluate new queries with
-   $$
-   s(x)=\sum_j \lambda_j e^{-\varepsilon^2(x-x_j)^2}.
-   $$
+I. validate that all data sites are distinct;
+
+II. choose $\varepsilon>0$;
+
+III. construct the dense matrix
+
+$$
+A_{ij}=e^{-\varepsilon^2(x_i-x_j)^2};
+$$
+
+IV. solve
+
+$$
+A\boldsymbol{\lambda}=\mathbf y;
+$$
+
+V. evaluate new queries with
+
+$$
+s(x)=\sum_j \lambda_j e^{-\varepsilon^2(x-x_j)^2}.
+$$
 
 ### Complexity
 
@@ -308,8 +303,7 @@ The system above enforces exact interpolation. If the data are noisy, reproducin
 Regularized RBF fitting modifies the problem, for example by solving a system of the form
 
 $$
-(A+\alpha I)\boldsymbol{\lambda}
-=
+(A+\alpha I)\boldsymbol{\lambda} =
 \mathbf y,
 $$
 
@@ -334,21 +328,10 @@ $$
 Then
 
 $$
-s(\mathbf x)
-=
+s(\mathbf x) =
 \sum_j
 \lambda_j
 e^{-\varepsilon^2\|\mathbf x-\mathbf x_j\|_2^2}.
 $$
 
 This dimension-independent form is one reason RBF interpolation is useful for scattered data.
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/6_regression/resources/plot_gaussian_interpolation.py
-```
-
-The script generates the basis-function and shape-parameter figures.
