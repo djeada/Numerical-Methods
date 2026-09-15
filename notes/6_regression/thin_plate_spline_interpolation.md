@@ -50,8 +50,7 @@ $$
 The interpolant is
 
 $$
-s(\mathbf x)
-=
+s(\mathbf x) =
 a_0+a_1x+a_2y
 +
 \sum_{j=1}^{N}
@@ -61,11 +60,13 @@ $$
 
 There are two parts:
 
-- an affine polynomial
-  $$
-  a_0+a_1x+a_2y;
-  $$
-- a weighted sum of radial basis functions centered at the data sites.
+I. an affine polynomial
+
+$$
+a_0+a_1x+a_2y;
+$$
+
+II. a weighted sum of radial basis functions centered at the data sites.
 
 The radial component supplies flexible curvature, while the affine component is required by the mathematical structure of the TPS kernel.
 
@@ -80,16 +81,14 @@ $$
 Define
 
 $$
-K_{ij}
-=
+K_{ij} =
 \phi(\|\mathbf x_i-\mathbf x_j\|_2).
 $$
 
 Also define
 
 $$
-P
-=
+P =
 \begin{bmatrix}
 1 & x_1 & y_1\\
 1 & x_2 & y_2\\
@@ -108,8 +107,7 @@ P^\top & 0
 \begin{bmatrix}
 \mathbf w\\
 \mathbf a
-\end{bmatrix}
-=
+\end{bmatrix} =
 \begin{bmatrix}
 \mathbf z\\
 0
@@ -176,8 +174,7 @@ The contour plot makes this global coupling easy to see.
 The classical two-dimensional TPS minimizes a bending-energy functional of the form
 
 $$
-J[s]
-=
+J[s] =
 \iint
 \left[
 s_{xx}^2
@@ -216,10 +213,8 @@ $$
 and then
 
 $$
-s(\mathbf x)
-=
-a_0+a_1x+a_2y
-+
+s(\mathbf x) =
+a_0+a_1x+a_2y +
 \sum_{j=1}^{N}w_jr_j^2\log r_j.
 $$
 
@@ -233,21 +228,28 @@ at $r=0$ by the limiting definition.
 
 ### Algorithm
 
-1. collect distinct scattered data sites $(x_i,y_i,z_i)$;
-2. compute every pairwise distance
-   $$
-   r_{ij}
-   =
-   \|\mathbf x_i-\mathbf x_j\|_2;
-   $$
-3. build
-   $$
-   K_{ij}=\phi(r_{ij});
-   $$
-4. build the affine matrix $P$;
-5. assemble the block system;
-6. solve for $\mathbf w$ and $\mathbf a$;
-7. evaluate queries with the radial sum plus affine term.
+I. collect distinct scattered data sites $(x_i,y_i,z_i)$;
+
+II. compute every pairwise distance
+
+$$
+r_{ij}    =
+\|\mathbf x_i-\mathbf x_j\|_2;
+$$
+
+III. build
+
+$$
+K_{ij}=\phi(r_{ij});
+$$
+
+IV. build the affine matrix $P$;
+
+V. assemble the block system;
+
+VI. solve for $\mathbf w$ and $\mathbf a$;
+
+VII. evaluate queries with the radial sum plus affine term.
 
 ### Computational cost
 
@@ -327,13 +329,3 @@ $$
 plus an affine polynomial and side constraints.
 
 TPS interpolation is especially associated with smooth surface deformation and scattered spatial interpolation.
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/6_regression/resources/plot_thin_plate_spline_interpolation.py
-```
-
-The script assembles and solves the TPS block system directly with NumPy, then generates the 3D surface and contour SVG figures.
