@@ -160,8 +160,7 @@ That direct formula is excellent for derivation but is not usually the best way 
 A more efficient and numerically useful representation uses **barycentric weights**
 
 $$
-w_j
-=
+w_j =
 \frac{1}
 {\displaystyle\prod_{\substack{m=0\\m\ne j}}^{n}(x_j-x_m)}.
 $$
