@@ -19,8 +19,7 @@ where each $L_j(x)$ is a **Lagrange basis polynomial**.
 The basis functions are designed so that
 
 $$
-L_j(x_i)
-=
+L_j(x_i) =
 \begin{cases}
 1,& i=j,\\
 0,& i\ne j.
@@ -36,8 +35,7 @@ That property makes the interpolation condition automatic.
 For distinct nodes, define
 
 $$
-L_j(x)
-=
+L_j(x) =
 \prod_{\substack{m=0\\m\ne j}}^{n}
 \frac{x-x_m}{x_j-x_m}.
 $$
@@ -70,10 +68,8 @@ $$
 at a data node $x_i$:
 
 $$
-p_n(x_i)
-=
-\sum_{j=0}^{n}y_jL_j(x_i)
-=
+p_n(x_i) =
+\sum_{j=0}^{n}y_jL_j(x_i) =
 y_i.
 $$
 
@@ -104,28 +100,21 @@ $$
 The basis polynomials are
 
 $$
-L_0(x)
-=
-\frac{(x-1)(x-2)}{(0-1)(0-2)}
-=
+L_0(x) =
+\frac{(x-1)(x-2)}{(0-1)(0-2)} =
 \frac{(x-1)(x-2)}{2},
 $$
 
 $$
-L_1(x)
-=
-\frac{x(x-2)}{(1-0)(1-2)}
-=
+L_1(x) =
+\frac{x(x-2)}{(1-0)(1-2)}=
 -x(x-2),
 $$
 
 and
 
 $$
-L_2(x)
-=
-\frac{x(x-1)}{(2-0)(2-1)}
-=
+L_2(x) = \frac{x(x-1)}{(2-0)(2-1)} =
 \frac{x(x-1)}{2}.
 $$
 
@@ -140,23 +129,13 @@ $$
 After simplification,
 
 $$
-p(x)
-=
--\frac{3}{2}x^2
-+\frac{7}{2}x
-+1.
+p(x) = -\frac{3}{2}x^2 +\frac{7}{2}x +1
 $$
 
 At $x=1.5$,
 
 $$
-p(1.5)
-=
--\frac{3}{2}(1.5)^2
-+\frac{7}{2}(1.5)
-+1
-=
-2.875.
+p(1.5) = -\frac{3}{2}(1.5)^2 +\frac{7}{2}(1.5) +1 = 2.875
 $$
 
 Thus
@@ -191,8 +170,7 @@ $$
 For a query $x$ that is not exactly one of the nodes,
 
 $$
-p_n(x)
-=
+p_n(x) =
 \frac{
 \displaystyle\sum_{j=0}^{n}\frac{w_jy_j}{x-x_j}
 }{
@@ -227,8 +205,7 @@ Lagrange or Newton forms expose the interpolation structure directly and usually
 If the unknown function $f$ has $n+1$ continuous derivatives, then
 
 $$
-f(x)-p_n(x)
-=
+f(x)-p_n(x) =
 \frac{f^{(n+1)}(\xi_x)}{(n+1)!}
 \prod_{i=0}^{n}(x-x_i)
 $$
@@ -271,13 +248,3 @@ Lagrange interpolation is especially useful for:
 - repeated evaluation with precomputed barycentric weights.
 
 If nodes are added one at a time, Newton form is often more convenient because its coefficient table can be extended incrementally.
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/6_regression/resources/plot_lagrange_polynomial_interpolation.py
-```
-
-The script generates the basis-function and weighted-sum SVG figures.
