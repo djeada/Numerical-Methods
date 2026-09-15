@@ -117,8 +117,7 @@ $$
 then
 
 $$
-L_i(x)
-=
+L_i(x) =
 y_i
 +
 \frac{x-x_i}{x_{i+1}-x_i}
