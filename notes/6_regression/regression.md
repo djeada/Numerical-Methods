@@ -19,8 +19,7 @@ The parameters $\boldsymbol{\theta}$ are estimated by minimizing a loss function
 For ordinary least squares,
 
 $$
-\hat{\boldsymbol{\theta}}
-=
+\hat{\boldsymbol{\theta}} =
 \underset{\boldsymbol{\theta}}{\mathrm{arg\,min}}
 \;
 \sum_{i=1}^{N}
@@ -58,8 +57,7 @@ A model is called **linear regression** when it is linear in its unknown coeffic
 For one predictor,
 
 $$
-y
-=
+y =
 \beta_0+\beta_1x+\varepsilon,
 $$
 
@@ -68,8 +66,7 @@ where $\varepsilon$ represents unexplained variation.
 For multiple predictors,
 
 $$
-y
-=
+y =
 \beta_0
 +\beta_1x_1
 +\cdots
@@ -80,8 +77,7 @@ $$
 In matrix form,
 
 $$
-\mathbf y
-=
+\mathbf y =
 X\boldsymbol{\beta}
 +
 \boldsymbol{\varepsilon}.
@@ -90,8 +86,7 @@ $$
 Ordinary least squares estimates $\boldsymbol{\beta}$ by minimizing
 
 $$
-\mathrm{RSS}(\boldsymbol{\beta})
-=
+\mathrm{RSS}(\boldsymbol{\beta}) =
 \|\mathbf y-X\boldsymbol{\beta}\|_2^2.
 $$
 
@@ -102,8 +97,7 @@ See `least_squares.md` for the linear-algebra derivation and numerical solution 
 A polynomial model such as
 
 $$
-y
-=
+y =
 \beta_0
 +\beta_1x
 +\beta_2x^2
@@ -116,8 +110,7 @@ is nonlinear in $x$ but linear in the coefficients $\beta_j$.
 The design matrix is
 
 $$
-X
-=
+X =
 \begin{bmatrix}
 1 & x_1 & x_1^2 & x_1^3\\
 1 & x_2 & x_2^2 & x_2^3\\
@@ -153,16 +146,14 @@ A small average residual is not sufficient. A model can have systematic residual
 The residual sum of squares is
 
 $$
-\mathrm{RSS}
-=
+\mathrm{RSS} =
 \sum_{i=1}^{N}r_i^2.
 $$
 
 Mean squared error is
 
 $$
-\mathrm{MSE}
-=
+\mathrm{MSE} =
 \frac{1}{N}
 \sum_{i=1}^{N}r_i^2.
 $$
@@ -170,16 +161,14 @@ $$
 Root mean squared error is
 
 $$
-\mathrm{RMSE}
-=
+\mathrm{RMSE} =
 \sqrt{\mathrm{MSE}}.
 $$
 
 Mean absolute error is
 
 $$
-\mathrm{MAE}
-=
+\mathrm{MAE} =
 \frac{1}{N}
 \sum_{i=1}^{N}|r_i|.
 $$
@@ -191,10 +180,7 @@ RMSE penalizes large residuals more heavily. MAE is less dominated by isolated l
 For a model with an intercept, a common summary is
 
 $$
-R^2
-=
-1
--
+R^2 = 1 -
 \frac{
 \sum_i(y_i-\hat y_i)^2
 }{
@@ -316,13 +302,3 @@ A model should record the range of data on which it was fit and treat prediction
 8. compare candidate models on held-out performance;
 9. quantify uncertainty where needed;
 10. document assumptions and the valid prediction range.
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/6_regression/resources/plot_regression.py
-```
-
-The script uses a fixed random seed and generates both SVG figures.
