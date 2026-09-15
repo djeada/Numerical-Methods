@@ -1,83 +1,203 @@
 ## Euler's Method
 
-Euler's Method is a numerical technique applied in the realm of initial value problems for ordinary differential equations (ODEs). The simplicity of this method makes it a popular choice in cases where the differential equation lacks a closed-form solution. The method might not always provide the most accurate result, but it offers a good trade-off between simplicity and accuracy.
+Euler's method is the simplest explicit time-stepping method for an initial value problem (IVP). It is useful both as a practical first approximation and as a way to understand how numerical ODE solvers work.
 
-### Mathematical Formulation
+Consider
 
-Consider an initial value problem (IVP) represented as:
+$$
+u'(t)=f(t,u), \qquad u(t_0)=u_0.
+$$
 
-$$u' = f(t, u),$$
-$$u(t_0) = u_0.$$
+The differential equation gives the slope of the solution curve. Euler's method assumes that this slope remains constant over one short step of length $h$.
 
-This IVP can be solved by Euler's method, where the method employs the following approximation:
+![Euler method follows the tangent at the current point](resources/plots/euler_tangent_steps.svg)
 
-$$u_{n+1} = u_n + h*f(t_n, u_n),$$
+### Update Formula
 
-where:
-- $u_{n+1}$ is the approximate value of $u$ at $t = t_n + h$,
-- $u_n$ is the approximate value of $u$ at $t = t_n$,
-- $h$ is the step size,
-- $f(t_n, u_n)$ is the derivative of $u$ at $t = t_n$.
+If $t_n=t_0+nh$ and $u_n$ approximates $u(t_n)$, then
 
-### Derivation
+$$
+u_{n+1}=u_n+h f(t_n,u_n).
+$$
 
-Let's start with the Taylor series:
+This is called **forward Euler** or **explicit Euler** because the new value $u_{n+1}$ is computed directly from known quantities at step $n$.
 
-$$ u(t+h)=u(t)+h u'(t) + O(h^2) $$
+Geometrically:
 
-We may alternatively rewrite the above equation as follows:
+1. evaluate the slope $f(t_n,u_n)$,
+2. follow the tangent line for a horizontal distance $h$,
+3. use the endpoint as the next numerical value.
 
-$$ u(t+h)=u(t)+ h f(u(t),t)+ O(h^2).$$
+### Derivation from Taylor Expansion
 
-Which is roughly equivalent to:
+Expand the exact solution about $t_n$:
 
-$$ u(t+h)=u(t)+ h f(u(t),t)$$
+$$
+u(t_n+h)
+=
+u(t_n)
++h u'(t_n)
++\frac{h^2}{2}u''(\xi_n),
+$$
 
-### Algorithm Steps
+for some $\xi_n\in(t_n,t_n+h)$. Since $u'(t_n)=f(t_n,u(t_n))$,
 
-1. Start with initial conditions $t_0$ and $u_0$.
-2. Calculate $u_{n+1}$ using the formula: $u_{n+1} = u_n + h*f(t_n, u_n)$.
-3. Repeat the above step for a given number of steps or until the final value of $t$ is reached.
+$$
+u(t_n+h)
+=
+u(t_n)
++h f(t_n,u(t_n))
++O(h^2).
+$$
 
-### Example
+Dropping the $O(h^2)$ term gives Euler's update.
 
-$$ u'(t)=u(t),$$
+This immediately explains the method's error:
 
-$$ u(0)=1$$
+- **local truncation error:** $O(h^2)$ per step,
+- **global error:** $O(h)$ over a fixed time interval.
 
-$$u(0.1)=?$$
+So halving the step size should roughly halve the total error once the asymptotic regime is reached.
 
-Let's choose the step value: $h = 0.05$
+![Euler error decreases linearly with step size](resources/plots/euler_error_vs_step.svg)
 
-We start at $t=0$:
+### Worked Example
 
-$$  u(0.05) \approx u(0)+0.05u'(0) $$
+Solve approximately
 
-$$  u(0.05) \approx1+0.05u(0) $$
+$$
+u'=u, \qquad u(0)=1
+$$
 
-$$  u(0.05) \approx1+0.05 \cdot 1 $$
+up to $t=0.1$ using $h=0.05$.
 
-$$  u(0.05) \approx 1.05 $$
+The exact solution is $u(t)=e^t$.
 
-Now that we know $u(0.05)$, we can calculate the second step:
+First step:
 
-$$  u(0.1) \approx u(0.05)+0.05u'(0.05) $$
+$$
+u_1
+=
+u_0+h u_0
+=
+1+0.05(1)
+=
+1.05.
+$$
 
-$$  u(0.1) \approx1.05+0.05u(0.05) $$
+Second step:
 
-$$  u(0.1) \approx1.05+0.05 \cdot 1.05 $$
+$$
+u_2
+=
+u_1+h u_1
+=
+1.05+0.05(1.05)
+=
+1.1025.
+$$
 
-$$  u(0.1) \approx 1.1025 $$
+Thus
 
-### Advantages  
+$$
+u(0.1)\approx 1.1025.
+$$
 
-- Euler's method is **easy** to implement and serves as a foundational technique for introducing numerical solution methods for ODEs.  
-- It can provide **reasonable approximations** for well-behaved functions when the step size is sufficiently small.  
-- The simplicity of the method makes it computationally inexpensive for basic problems and suitable for initial experimentation.  
+The exact value is
 
-### Limitations  
+$$
+e^{0.1}\approx 1.105170.
+$$
 
-- **Accuracy** is limited, as the method can introduce significant errors if the step size is too large or if the function has rapid changes.  
-- The **cumulative error** from each step can grow significantly, making the method unsuitable for long-time integration.  
-- **Stability** is an issue, as Euler's method may fail to converge or produce reliable results for stiff or oscillatory ODEs.  
-- The method lacks the ability to adapt step sizes dynamically, which can lead to inefficiencies or inaccuracies in varying conditions.  
+The error is about $2.67\times 10^{-3}$.
+
+### Algorithm
+
+For a scalar ODE:
+
+```text
+t = t0
+u = u0
+
+while t < tf:
+    u = u + h*f(t, u)
+    t = t + h
+```
+
+For a system
+
+$$
+\mathbf{u}'=\mathbf{f}(t,\mathbf{u}),
+$$
+
+the same formula applies componentwise:
+
+$$
+\mathbf{u}_{n+1}
+=
+\mathbf{u}_n+h\mathbf{f}(t_n,\mathbf{u}_n).
+$$
+
+### Step Size and Stability
+
+Accuracy is not the only reason to choose $h$ carefully. A step can be small enough to look reasonable but still be unstable.
+
+For the test equation
+
+$$
+u'=\lambda u,
+$$
+
+Euler gives
+
+$$
+u_{n+1}=(1+h\lambda)u_n.
+$$
+
+If $\lambda<0$, the exact solution decays. The numerical solution decays only if
+
+$$
+|1+h\lambda|<1.
+$$
+
+For real negative $\lambda$, this requires
+
+$$
+0<h<\frac{2}{|\lambda|}.
+$$
+
+This restriction is severe for **stiff** problems, where some modes decay much faster than others. Explicit Euler may then require extremely small steps even when the solution itself changes slowly.
+
+### When Euler's Method Is Useful
+
+Euler's method is valuable when:
+
+- learning the mechanics of time stepping,
+- obtaining a quick rough approximation,
+- building or debugging a more advanced solver,
+- exploring a model before investing in a higher-order method.
+
+It is usually not the best production method when high accuracy or stiffness matters.
+
+### Advantages
+
+- Very simple to derive and implement.
+- Requires only one evaluation of $f$ per step.
+- Extends directly to systems of ODEs.
+- Makes error, stability, and time-stepping ideas easy to visualize.
+
+### Limitations
+
+- Only first-order accurate globally.
+- Can accumulate substantial error over many steps.
+- Has a small stability region.
+- Performs poorly on stiff problems.
+- A fixed step size can waste work in smooth regions and miss rapid changes elsewhere.
+
+### Reproducing the Figures
+
+Run:
+
+```bash
+python notes/7_ordinary_differential_equations/resources/plot_eulers_method.py
+```

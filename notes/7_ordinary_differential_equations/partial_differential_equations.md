@@ -1,267 +1,362 @@
-## Partial Differential Equations (PDEs)
+## Partial Differential Equations
 
-A **partial differential equation (PDE)** is an equation that involves:
+A **partial differential equation (PDE)** relates an unknown function of several independent variables to its partial derivatives. PDEs describe fields rather than single trajectories: temperature in space and time, pressure in a fluid, displacement in an elastic body, or the amplitude of a wave.
 
-I. Multiple independent variables, typically denoted $x, y, z$ (or $x_1, x_2, \ldots, x_d$ in $d$-dimensional space), and often $t$ if time is also included.
+A general PDE can be written schematically as
 
-II. One (or more) dependent variable(s), which we denote by $u(x_1, x_2, \ldots, x_d)$ or $u(\mathbf{x}, t)$.
+$$
+F\left(
+\mathbf{x},
+t,
+u,
+\nabla u,
+\nabla^2 u,
+\ldots
+\right)=0.
+$$
 
-III. The **partial derivatives** of $u$ with respect to these independent variables.
+Here $\mathbf{x}$ denotes one or more spatial coordinates and $t$ may represent time.
 
-Formally, a PDE can be written as:
+### Why PDEs Differ from ODEs
 
-$$F\bigl( x_1, \ldots, x_d,  u, u_{x_1}, u_{x_2},\ldots, u_{x_1 x_1}, u_{x_1 x_2},\ldots \bigr) = 0$$
+For an ODE, specifying enough initial data often determines a trajectory. A PDE also needs information about the spatial domain and its boundary.
 
-where $u_{x_i}$ denotes the partial derivative of $u$ with respect to $x_i$, and $u_{x_i x_j}$ denotes second partial derivatives, and so on.
+For a domain $\Omega$, typical boundary conditions include:
 
-In ODEs, there is only one independent variable, whereas in PDEs, there are **multiple independent variables**.
+**Dirichlet**
 
-### Understanding Partial Differential Equations
+$$
+u=g
+\qquad
+\text{on } \partial\Omega.
+$$
 
-PDEs capture how a function $u(\mathbf{x}, t)$ varies in multiple directions or with time. They arise in virtually all areas of physics, engineering, finance, and many other fields:
+**Neumann**
 
-• In Physics, continuum mechanics uses stress-strain analysis, electromagnetics employs Maxwell’s equations, fluid dynamics applies the Navier–Stokes equations, and quantum mechanics is based on the Schrödinger equation.  
-• In Engineering, heat transfer is modeled by the heat equation, wave propagation is described using the wave equation, and elasticity alongside structural analysis is approached through mathematical models.  
-• In Economics and Finance, the Black–Scholes equation is used for option pricing while dynamic optimization handles multiple variables to analyze decision-making processes.  
-• In Biology, reaction-diffusion systems are applied to population genetics and pattern formation in developmental biology is explored to understand the emergence of structures.
+$$
+\frac{\partial u}{\partial n}=g
+\qquad
+\text{on } \partial\Omega.
+$$
 
-#### Boundary and Initial Conditions
+**Robin**
 
-To *uniquely* solve a PDE, one typically needs to specify **boundary conditions** (BCs) and/or **initial conditions** (ICs), depending on the PDE’s type and physical context:
+$$
+\alpha u
++
+\beta\frac{\partial u}{\partial n}
+=
+g
+\qquad
+\text{on } \partial\Omega.
+$$
 
-**Boundary conditions**: 
+Time-dependent PDEs also require initial data, such as
 
-I. *Dirichlet BC*: 
+$$
+u(\mathbf{x},0)=u_0(\mathbf{x}).
+$$
 
-This condition requires specifying the value of the function $u$ directly on the boundary; mathematically, it is expressed as  
+### Three Classical Types
 
-$$u\big|_{\partial \Omega} = f$$  
+For a second-order linear PDE in two variables,
 
-where $f$ is a prescribed function on the boundary $\partial \Omega$. This is typically used in scenarios where the state of the system is fixed at the boundary.
+$$
+A u_{xx}+2B u_{xy}+C u_{yy}
++\text{lower-order terms}
+=
+g,
+$$
 
-II. *Neumann BC*: 
+the sign of
 
-This condition involves setting the normal derivative of the function $u$ on the boundary; it is given by  
+$$
+B^2-AC
+$$
 
-$$\frac{\partial u}{\partial n}\bigg|_{\partial \Omega} = g$$  
+provides the classical classification.
 
-where $g$ is a known function defined on $\partial \Omega$ and $\frac{\partial u}{\partial n}$ denotes the derivative in the direction normal to the boundary. This is useful when the flux across the boundary is specified.
+#### Elliptic
 
-III. *Robin (or mixed) BC*: 
+If
 
-This condition combines both the function value and its normal derivative on the boundary, and is formulated as  
+$$
+B^2-AC<0,
+$$
 
-$$\alpha u + \beta \frac{\partial u}{\partial n}\bigg|_{\partial \Omega} = h$$  
+the PDE is elliptic.
 
-where $\alpha$, $\beta$, and $h$ are given functions (or constants) on $\partial \Omega$. This type of condition is applied when both the state of the system and its flux at the boundary are influenced by external factors.
-  
-**Initial conditions**: 
+Prototype:
 
-When time $t$ is involved (often in parabolic or hyperbolic PDEs), one typically specifies the initial state of $u$ (and possibly some derivatives) at $t = t_0$. For instance, for the heat equation:
+$$
+\nabla^2u=0.
+$$
 
-$$u(\mathbf{x}, t_0) = \phi(\mathbf{x}).$$
+Elliptic problems often describe equilibrium states, such as steady temperature or electrostatic potential.
 
-The combination of a PDE with its boundary/initial conditions is referred to as a **boundary value problem (BVP)** or an **initial-boundary value problem (IBVP)** or **initial value problem (IVP)** if the domain is unbounded in space.
+#### Parabolic
 
-### Main Concepts in PDEs
+If
 
-#### Order of a PDE
+$$
+B^2-AC=0,
+$$
 
-As with ODEs, the **order** of a PDE is determined by the highest order partial derivative that appears. For instance:
+the PDE is parabolic.
 
-- A **first-order PDE** involves only first partial derivatives (e.g., $u_x$, $u_t$).
-- A **second-order PDE** can have second partial derivatives like $u_{xx}$, $u_{xy}$, $u_{tt}$, etc.
+Prototype:
 
-#### Linearity vs. Nonlinearity
+$$
+u_t=\alpha u_{xx}.
+$$
 
-A PDE is **linear** if $u$ and its partial derivatives appear only in the first power (i.e., no products of partial derivatives or higher powers/sin/log of $u$) and if each coefficient depends at most on the independent variables (but not on $u$ or its derivatives). 
+This is the heat equation. It smooths spatial variation as time passes.
 
-For a second-order PDE in two variables $(x,t)$, a linear PDE can often be expressed as:
+![Diffusion smooths a localized temperature profile](resources/plots/pde_heat_diffusion.svg)
 
-$$a(x,t)u_{xx} + 2b(x,t)u_{xt} + c(x,t)u_{tt} + d(x,t)u_x + e(x,t)u_t + f(x,t)u = g(x,t)$$
+#### Hyperbolic
 
-- **Homogeneous** if $g(x,t) \equiv 0$.
-- **Nonhomogeneous** if $g(x,t) \neq 0$.
+If
 
-A PDE that is not linear is **nonlinear**. Examples include the Navier–Stokes equations, the nonlinear Schrödinger equation, or the Fisher–KPP equation in biology.
+$$
+B^2-AC>0,
+$$
 
-#### Semilinear, Quasilinear, and Fully Nonlinear
+the PDE is hyperbolic.
 
-When discussing PDEs of order $n$, we often distinguish:
+Prototype:
 
-- **Semilinear**: The highest-order derivatives appear linearly, but lower-order terms may be nonlinear in $u$.  
-- **Quasilinear**: The highest-order derivatives appear linearly in each of them but the coefficients may depend on $u$ and its lower-order derivatives.  
-- **Fully nonlinear**: The PDE cannot be put in a form in which the highest-order partial derivatives appear linearly and separate from one another.
+$$
+u_{tt}=c^2u_{xx}.
+$$
 
-For instance, a **quasilinear** second-order PDE in two variables might look like:
+This is the wave equation. It propagates disturbances at finite speed.
 
-$$a\bigl(x,t,u,u_x,u_t\bigr)u_{xx} + 2b\bigl(x,t,u,u_x,u_t\bigr)u_{xt} + c\bigl(x,t,u,u_x,u_t\bigr)u_{tt} = g\bigl(x,t,u,u_x,u_t\bigr)$$
+![Wave equation transports oscillatory structure rather than simply smoothing it](resources/plots/pde_wave_propagation.svg)
 
-### Classification of Second-Order PDEs
+### The Heat Equation
 
-For a **second-order** PDE in two independent variables $x$ and $t$ (or $x$ and $y$), one often writes it in the form
+Consider a rod $0\le x\le L$:
 
-$$A(x,t)u_{xx} + 2B(x,t)u_{xt} + C(x,t)u_{tt} + \cdots = 0$$
+$$
+u_t=\alpha u_{xx}.
+$$
 
-(Plus lower-order terms omitted for brevity.) The discriminant $\Delta$ is given by:
+A typical initial-boundary value problem is
 
-$$\Delta = B^2 - AC$$
+$$
+u(x,0)=u_0(x),
+$$
 
-**Elliptic** if $\Delta < 0$
+$$
+u(0,t)=u(L,t)=0.
+$$
 
-- Classic example: **Laplace’s equation**, $\nabla^2 u = u_{xx} + u_{yy} = 0$.  
-- Elliptic PDEs often describe *steady-state* phenomena (e.g., electric potential, steady heat distribution).
+The coefficient $\alpha>0$ is the diffusivity.
 
-**Parabolic** if $\Delta = 0$.  
+For the Fourier mode
 
-- Classic example: **Heat (or diffusion) equation**, $u_t = \alpha u_{xx}$.  
-- Parabolic PDEs often describe *time-evolving diffusion-type* phenomena.
+$$
+u_0(x)=\sin\left(\frac{\pi x}{L}\right),
+$$
 
-**Hyperbolic** if $\Delta > 0$.  
+the exact solution is
 
-- Classic example: **Wave equation**, $u_{tt} = c^2u_{xx}$.  
-- Hyperbolic PDEs typically model *wave propagation* or signals at finite speed.
+$$
+u(x,t)
+=
+e^{-\alpha(\pi/L)^2t}
+\sin\left(\frac{\pi x}{L}\right).
+$$
 
-This classification extends to higher dimensions and helps determine the nature of the PDE (well-posedness, appropriate boundary conditions, solution methods, etc.).
+Higher-frequency modes decay faster because their second derivatives are larger. This is the mathematical reason diffusion smooths sharp spatial variation.
 
-### Forms of Common PDEs
+### The Wave Equation
 
-#### Elliptic PDEs
+For a vibrating string,
 
-**Laplace’s Equation**: 
+$$
+u_{tt}=c^2u_{xx},
+$$
 
-$$\nabla^2 u = 0 \quad \Leftrightarrow \quad u_{xx} + u_{yy} = 0  (\text{in 2D}), \quad u_{xx} + u_{yy} + u_{zz} = 0 (\text{in 3D}), \dots$$
+where $c$ is the wave speed.
 
-Describes steady-state temperature distribution, gravitational/electrostatic potential.
+Two initial conditions are required:
 
-**Poisson’s Equation**:
-  
-$$\nabla^2 u = f(\mathbf{x})$
+$$
+u(x,0)=u_0(x),
+$$
 
-A nonhomogeneous extension of Laplace’s equation.
+$$
+u_t(x,0)=v_0(x).
+$$
 
-#### Parabolic PDEs
+With fixed ends,
 
-**Heat (Diffusion) Equation**:
+$$
+u(0,t)=u(L,t)=0.
+$$
 
-$$u_t = \alpha\nabla^2 u \quad \text{(e.g., in 1D: } u_t = \alpha u_{xx}\text{).}$$
+The solution can be decomposed into normal modes. Unlike the heat equation, the ideal wave equation does not damp those modes; energy oscillates between kinetic and potential forms.
 
-Models heat diffusion, particle diffusion in fluids, etc. It evolves in time toward an equilibrium (steady state).
+### Laplace and Poisson Equations
 
-#### Hyperbolic PDEs
+Laplace's equation is
 
-**Wave Equation**:
+$$
+\nabla^2u=0.
+$$
 
-$$u_{tt} = c^2 \nabla^2 u \quad \text{(in 1D: } u_{tt} = c^2u_{xx}\text{).}$$
+Poisson's equation adds a source:
 
-Models vibrations of a string, sound waves, electromagnetic waves in simplified settings.
+$$
+-\nabla^2u=f.
+$$
 
-#### Nonlinear PDEs
+These equations occur in electrostatics, steady heat conduction, gravity, and potential flow.
 
-**Navier–Stokes Equations** for fluid flow:
+For elliptic equations, boundary values influence the solution throughout the domain. There is no preferred time direction because time is absent from the model.
 
-$$\rho \left(\frac{\partial \mathbf{v}}{\partial t} + \mathbf{v}\cdot \nabla \mathbf{v}\right) = -\nabla p + \mu \nabla^2 \mathbf{v} + \mathbf{F}$$
+### First-Order Transport
 
-where $\mathbf{v}$ is velocity field, $p$ is pressure, $\rho$ density, $\mu$ viscosity. Highly nonlinear.
+A simple transport equation is
 
-**Nonlinear Schrödinger Equation**:
+$$
+u_t+c u_x=0.
+$$
 
-$$i\psi_t + \alpha\nabla^2 \psi + \beta|\psi|^2 \psi = 0$$
+Its exact solution is
 
-arises in optics, quantum mechanics for certain approximations.
+$$
+u(x,t)=u_0(x-ct),
+$$
 
-**Reaction-Diffusion Equations**:
+so the initial profile moves with speed $c$ without changing shape.
 
-$$u_t = D\Delta u + R(u)$$
+This equation highlights the importance of numerical conservation and numerical diffusion: a poor discretization may artificially smear or oscillate around a transported profile.
 
-model chemical reactions combined with diffusion. Nonlinear if $R(u)$ is nonlinear.
+### Method of Lines
 
-### Methods of Solving PDEs
+A common way to solve time-dependent PDEs numerically is to discretize space first.
 
-#### Analytical Methods
+For the heat equation, use grid points $x_j=j\Delta x$ and the centered difference
 
-I. **Separation of Variables**:
+$$
+u_{xx}(x_j,t)
+\approx
+\frac{u_{j-1}-2u_j+u_{j+1}}{\Delta x^2}.
+$$
 
-- Assume $u(x,t) = X(x)T(t)$ (or in higher dimensions, products of single-variable functions).  
-- Transform the PDE into ODEs for $X(x)$ and $T(t)$.  
-- Typically used for linear PDEs with nice boundary/initial conditions (heat, wave, Laplace equations).
+Then the PDE becomes a system of ODEs:
 
-II. **Fourier and Laplace Transforms**:
+$$
+\frac{du_j}{dt}
+=
+\alpha
+\frac{u_{j-1}-2u_j+u_{j+1}}{\Delta x^2}.
+$$
 
-- Useful for PDEs on infinite or semi-infinite domains.  
-- Transform w.r.t. space and/or time reduces PDE to ODE or algebraic equation in transform space.
+An ODE solver can then integrate this system in time. This is the **method of lines**.
 
-III. **Method of Characteristics**:
+### Stability of a Simple Heat Solver
 
-- Commonly used for first-order PDEs, such as transport equations, or for certain quasilinear PDEs.  
-- Convert PDE into a set of ODEs describing characteristic curves along which PDE becomes an ODE.
+If forward Euler is used in time together with centered differences in space,
 
-IV. **Green’s Functions**:
+$$
+u_j^{n+1}
+=
+u_j^n
++
+r
+\left(
+u_{j-1}^n
+-2u_j^n
++u_{j+1}^n
+\right),
+$$
 
-- Integral operator method primarily for linear, inhomogeneous PDEs.  
-- Builds solutions from fundamental solutions of simpler PDEs (like the Dirac delta response).
+where
 
-#### Numerical Methods
+$$
+r=\frac{\alpha\Delta t}{\Delta x^2}.
+$$
 
-For more general PDEs—especially nonlinear PDEs or higher-dimensional problems—analytical solutions may be either impossible or extremely difficult to obtain in closed form. In such cases, **numerical approximation** is crucial:
-- **Finite Difference Methods (FDM)**: Approximate derivatives via differences on a grid.
-- **Finite Element Methods (FEM)**: Approximate $u$ by basis functions on a mesh, widely used in engineering (structural analysis, fluid flow, etc.).
-- **Finite Volume Methods (FVM)**: Common in computational fluid dynamics, conserves fluxes across cell boundaries.
-- **Spectral Methods**: Approximate $u$ using trigonometric (Fourier) or polynomial expansions (e.g., Chebyshev polynomials).
+In one spatial dimension, stability requires
 
-#### Existence and Uniqueness Theorems
+$$
+r\le\frac{1}{2}.
+$$
 
-Unlike ODEs, where Picard–Lindelöf gives a neat existence and uniqueness result, PDE theory is much richer and more nuanced. A few highlights:
+This is a typical **CFL-type restriction**: refining the spatial grid may force a much smaller time step.
 
-- **Elliptic PDEs** often rely on tools like the Lax–Milgram theorem (for linear, elliptic PDEs in weak form), Schauder estimates, Sobolev space theory, etc.
-- **Parabolic PDEs**: Existence and uniqueness often shown via semigroup theory (fractional step methods), Galerkin methods, or energy estimates.
-- **Hyperbolic PDEs**: Typically rely on finite speed of propagation arguments, energy estimates, method of characteristics (for first-order or specific second-order problems). Shock formation in nonlinear hyperbolic PDEs complicates uniqueness.
+### Main Numerical Approaches
 
-### Examples of Partial Differential Equations
+#### Finite Differences
 
-I. **Laplace’s Equation** $\nabla^2 u = 0$:
+Replace derivatives with differences on a grid. Finite differences are simple and effective on regular geometries.
 
-- Governs steady heat distribution or electrostatic potential in a region $\Omega\subseteq \mathbb{R}^n$.  
-- Usually accompanied by boundary conditions like $u|_{\partial \Omega} = f(\mathbf{x})$.
+#### Finite Volumes
 
-II. **Heat Equation** $u_t = \alpha u_{xx}$:  
+Integrate conservation laws over small control volumes and update fluxes across their boundaries. This is particularly natural for fluid dynamics and conservation laws.
 
-- Models temperature evolution in a rod.  
-- Often with initial condition $u(x,0) = \phi(x)$ and boundary conditions (Dirichlet or Neumann).
+#### Finite Elements
 
-III. **Wave Equation** $u_{tt} = c^2u_{xx}$:  
+Approximate the solution by basis functions on a mesh and enforce a weak form of the PDE. Finite elements handle irregular geometries and variable material properties well.
 
-- Models vibrations of a string or waves on a membrane (in 2D).  
-- Typically has initial conditions for displacement and velocity, plus boundary conditions if the domain is finite.
+#### Spectral Methods
 
-IV. **Navier–Stokes** for incompressible fluid flow:
+Approximate the solution using global basis functions such as Fourier or Chebyshev modes. For smooth problems, spectral methods can converge extremely rapidly.
 
-$$\begin{cases}
-\frac{\partial \mathbf{v}}{\partial t} + (\mathbf{v}\cdot \nabla)\mathbf{v} 
-= -\frac{1}{\rho}\nabla p + \nu\nabla^2 \mathbf{v} + \mathbf{f}, \\
-\nabla \cdot \mathbf{v} = 0,
-\end{cases}$$
+### Nonlinear PDEs
 
-where $\mathbf{v}$ is velocity, $p$ pressure, $\nu$ kinematic viscosity, $\mathbf{f}$ body forces (like gravity).
+Many important PDEs are nonlinear. Examples include:
 
-V. **Black–Scholes Equation** (Finance)  
+**Burgers' equation**
 
-$$\frac{\partial V}{\partial t} + \tfrac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + rS\frac{\partial V}{\partial S} - rV = 0$$
+$$
+u_t+u u_x=\nu u_{xx}.
+$$
 
-where $V(S,t)$ is the price of an option, $S$ is the underlying asset price, $r$ is risk-free rate, $\sigma$ volatility.
+**Reaction-diffusion**
 
-### Applications of PDEs
+$$
+u_t=D\nabla^2u+R(u).
+$$
 
-- In **physics**, partial differential equations describe phenomena such as material elasticity, electromagnetic fields using Maxwell’s equations, gravitational fields through Einstein's equations, and quantum states via Schrödinger or Dirac equations.  
-- In **engineering**, they are essential for analyzing structures, designing efficient heat exchangers, modeling fluid flows (whether compressible or not), and studying aerodynamic forces.  
-- **Biology** uses these equations to simulate reaction-diffusion systems that explain pattern formation like Turing patterns, predict population genetics trends, and model tumor growth dynamics.  
-- In **finance**, partial differential equations help price derivatives using models like Black–Scholes or Heston and assess risks in financial systems.  
-- For **geosciences**, these equations support geological modeling, simulate the propagation of seismic waves, and guide reservoir simulation for resource management.  
+**Incompressible Navier--Stokes**
 
-### Limitations and Complexities
+$$
+\frac{\partial\mathbf{v}}{\partial t}
++
+(\mathbf{v}\cdot\nabla)\mathbf{v}
+=
+-\frac{1}{\rho}\nabla p
++
+\nu\nabla^2\mathbf{v}
++
+\mathbf{f},
+$$
 
-- **Existence and regularity** of solutions to PDEs can be challenging to prove, particularly for nonlinear equations, requiring tools from advanced functional analysis such as Sobolev spaces and distributions.  
-- **Nonlinear phenomena** like shock waves, turbulence, and pattern formation add complexity to PDE theory, with some aspects remaining unresolved, such as the Navier–Stokes regularity problem in 3D.  
-- **Boundary and initial conditions** must be carefully chosen to align with the PDE classification (elliptic, parabolic, or hyperbolic) to ensure the problem is well-posed and avoids issues like non-unique or highly sensitive solutions. 
-- **Dimensionality** in real-world scenarios often leads to PDEs in 4D or higher (e.g., \(x, y, z, t\)), making accurate solutions computationally intensive due to the curse of dimensionality.  
-- **Parameter sensitivity** in PDEs means that small changes in physical or material parameters can lead to significant shifts in behavior, such as the onset of turbulence in fluid dynamics.
+$$
+\nabla\cdot\mathbf{v}=0.
+$$
+
+Nonlinearity can introduce shocks, bifurcations, turbulence, and pattern formation.
+
+### A Practical PDE Workflow
+
+1. identify the PDE type and physical domain,
+2. state initial and boundary conditions clearly,
+3. choose a spatial discretization suited to the geometry and conservation properties,
+4. choose a stable time integrator if the problem evolves in time,
+5. refine the mesh and time step to check convergence,
+6. monitor conserved or dissipated quantities when the model supplies them,
+7. distinguish numerical artifacts from genuine model behavior.
+
+### Reproducing the Figures
+
+Run:
+
+```bash
+python notes/7_ordinary_differential_equations/resources/plot_partial_differential_equations.py
+```

@@ -1,124 +1,264 @@
-## Runge-Kutta Method
+## Runge--Kutta Methods
 
-The Runge-Kutta method is part of a family of iterative methods, both implicit and explicit, which are frequently employed for the numerical integration of ordinary differential equations (ODEs). This family encompasses widely recognized methods like the Euler Method, Heun's method (a.k.a., the 2nd-order Runge-Kutta), and the 4th-order Runge-Kutta method.
+Runge--Kutta methods advance an ODE solution using several carefully chosen slope evaluations inside each step. They achieve higher-order accuracy without requiring explicit derivatives of $f$ beyond the first derivative already present in the ODE.
 
-### Mathematical Formulation
+Consider
 
-The first-order ODE that is typically used in the Runge-Kutta methods takes the following form:
+$$
+u'(t)=f(t,u),
+\qquad
+u(t_0)=u_0.
+$$
 
-$$ \frac{du}{dt} = f(t, u)$$
+The best-known member of the family is the classical fourth-order Runge--Kutta method, usually called **RK4**.
 
-In this equation, $u$ is the unknown function of time $t$ that we are aiming to solve for, and $f$ is a function of $t$ and $u$.
+### Classical RK4
 
-The general formulation of the 4th order Runge-Kutta method is presented below:
+Given $(t_n,u_n)$ and step size $h$,
 
-$$k_1 = \Delta t \cdot f(t, u)$$
+$$
+k_1=f(t_n,u_n),
+$$
 
-$$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right)$$
+$$
+k_2
+=
+f\left(
+t_n+\frac{h}{2},
+u_n+\frac{h}{2}k_1
+\right),
+$$
 
-$$k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_2}{2}\right)$$
+$$
+k_3
+=
+f\left(
+t_n+\frac{h}{2},
+u_n+\frac{h}{2}k_2
+\right),
+$$
 
-$$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3)$$
+$$
+k_4
+=
+f(t_n+h,u_n+h k_3).
+$$
 
-$$u(t + \Delta t) = u(t) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
+Then
 
-### Derivation of Runge-Kutta Method
+$$
+u_{n+1}
+=
+u_n
++
+\frac{h}{6}
+\left(
+k_1+2k_2+2k_3+k_4
+\right).
+$$
 
-The derivation of the Runge-Kutta methods, especially the 4th order Runge-Kutta method, begins with an initial condition and attempts to estimate the solution value after a small step $\Delta t$. This is achieved by taking weighted averages of increments at the beginning, middle, and end of the interval. The purpose is to imitate a Taylor series expansion, but without the necessity of computing higher derivatives.
+The four stages sample the vector field at the beginning, twice near the middle, and at the end of the step.
 
-Starting with a Taylor series expansion, we get:
+![The four RK4 stages sample slopes within one step](resources/plots/rk4_stages.svg)
 
-$$u(t+\Delta t) = u(t) + \Delta t u'(t) + \frac{\Delta t^2}{2!} u''(t) + \frac{\Delta t^3}{3!} u'''(t) + \frac{\Delta t^4}{4!} u''''(t) + O(\Delta t^5)$$
+### Why RK4 Is Fourth Order
 
-The first derivative $u'(t)$ is already provided by the ODE:
+The exact solution has a Taylor expansion containing derivatives such as $u''$, $u'''$, and $u^{(4)}$. Those derivatives can be expressed using derivatives of $f$, but computing them explicitly is inconvenient.
 
-$$u'(t) = f(t, u)$$
+Runge--Kutta methods instead choose stage locations and weights so that the expansion of the numerical update matches the Taylor expansion through a desired order.
 
-Higher-order derivatives can also be represented in terms of $f(t, u)$ and its derivatives:
+For RK4:
 
-$$u''(t) = \frac{df}{dt} = \frac{\partial f}{\partial t} + \frac{\partial f}{\partial u} \frac{du}{dt} = \frac{\partial f}{\partial t} + \frac{\partial f}{\partial u} f$$
+- local truncation error is $O(h^5)$,
+- global error is $O(h^4)$.
 
-The Runge-Kutta method is designed to mimic the above Taylor series expansion by taking a suitable weighted average of increments at the start, middle, and end of the interval. It avoids explicitly calculating higher derivatives of $f(t, u)$, instead approximating these increments by evaluating $f(t, u)$ at several points within the interval.
+Therefore, halving $h$ reduces the global error by roughly a factor of $16$ in the asymptotic regime.
 
-The 4th order Runge-Kutta method is thus given by:
+![RK4 shows fourth-order convergence on a smooth test problem](resources/plots/rk4_error_vs_step.svg)
 
-$$k_1 = \Delta t \cdot f(t, u)$$
+### Worked Example
 
-$$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right)$$
+For
 
-$$k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_2}{2}\right)$$
+$$
+u'=u,
+\qquad
+u(0)=1,
+$$
 
-$$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3)$$
+with $h=0.1$:
 
-$$u(t + \Delta t) = u(t) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
+$$
+k_1=1,
+$$
 
-In this method, the weights of $k_1, k_2, k_3, k_4$ (1/6, 1/3, 1/3, 1/6) are chosen such that the error term is $O(\Delta t^5)$, indicating that the local truncation error at each step is proportional to the fifth power of the step size, and the global truncation error (after $N$ steps) is proportional to the fourth power of the step size.
+$$
+k_2=1+0.05k_1=1.05,
+$$
 
-### Algorithm Steps
+$$
+k_3=1+0.05k_2=1.0525,
+$$
 
-1. Begin with the initial condition $u(t_0) = u_0$.
-2. For each step, compute $k_1, k_2, k_3, k_4$ as indicated above.
-3. Update $u(t + \Delta t) = u(t) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$.
-4. Repeat steps 2 and 3 until a specified number of iterations is reached or the solution approximation is satisfactory.
+$$
+k_4=1+0.1k_3=1.10525.
+$$
 
-### Example
+Thus
 
-Consider the differential equation
+$$
+u_1
+=
+1+
+\frac{0.1}{6}
+\left(
+1+2(1.05)+2(1.0525)+1.10525
+\right),
+$$
 
-$$ u'(t)=u(t),$$
+which gives
 
-with the initial condition $u(0)=1$. We want to estimate the value of $u$ at $t = 0.1$ using the Runge-Kutta method with a step size of $\Delta t = 0.05$.
+$$
+u_1\approx1.105170833.
+$$
 
-1. We start at $t=0$ with $u(0) = 1$.
+The exact solution is
 
-First, we calculate the four increments:
+$$
+e^{0.1}\approx1.105170186.
+$$
 
-$$k_1 = \Delta t \cdot f(t, u) = 0.05 \cdot 1 = 0.05$$
+The error after a single step is already below $10^{-6}$.
 
-$$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right) = 0.05 \cdot (1 + 0.05/2) = 0.05125$$
+### Butcher Tableau
 
-$$k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_2}{2}\right) = 0.05 \cdot (1 + 0.05125/2) = 0.0515625$$
+A Runge--Kutta method can be summarized by a **Butcher tableau**. For RK4:
 
-$$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3) = 0.05 \cdot (1 + 0.0515625) = 0.052578125$$
+$$
+\begin{array}{c|cccc}
+0 \\
+\frac12 & \frac12 \\
+\frac12 & 0 & \frac12 \\
+1 & 0 & 0 & 1 \\
+\hline
+& \frac16 & \frac13 & \frac13 & \frac16
+\end{array}
+$$
 
-Then, we calculate the next value of $u$:
+The entries specify:
 
-$$u(0.05) = u(0) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
+- where each stage is evaluated,
+- how previous stages construct the stage state,
+- how the final stages are combined.
 
-$$u(0.05) = 1 + \frac{1}{6}(0.05 + 2 \cdot 0.05125 + 2 \cdot 0.0515625 + 0.052578125)$$
+### General Explicit Runge--Kutta Form
 
-$$u(0.05) = 1.05104166667$$
+For an $s$-stage explicit method,
 
-2. Now that we have $u(0.05)$, we move on to $t = 0.1$.
+$$
+k_i
+=
+f\left(
+t_n+c_i h,
+u_n+h\sum_{j=1}^{i-1}a_{ij}k_j
+\right),
+$$
 
-Similarly, we first calculate the four increments:
+and
 
-$$k_1 = \Delta t \cdot f(t, u) = 0.05 \cdot 1.05104166667 = 0.0525520833335$$
+$$
+u_{n+1}
+=
+u_n+h\sum_{i=1}^{s}b_i k_i.
+$$
 
-$$k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_1}{2}\right) = 0.05 \cdot (1.05104166667 + 0.0525520833335/2) = 0.0531899049680$$
+Different choices of the coefficients produce different methods and orders.
 
-$$k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, u + \frac{k_2}{2}\right) = 0.05 \cdot (1.05104166667 + 0.0531899049680/2) = 0.0533905595735$$
+### Adaptive Runge--Kutta Methods
 
-$$k_4 = \Delta t \cdot f(t + \Delta t, u + k_3) = 0.05 \cdot (1.05104166667 + 0.0533905595735) = 0.0552220602058$$
+Fixed-step RK4 is simple, but modern solvers often use **embedded pairs**, such as RK45.
 
-Then, we calculate the next value of $u$:
+An embedded pair computes two approximations of different orders using mostly the same stage evaluations. Their difference estimates the local error.
 
-$$u(0.1) = u(0.05) + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)$$
+A controller then changes $h$:
 
-$$u(0.1) = 1.05104166667 + \frac{1}{6}(0.0525520833335 + 2 \cdot 0.0531899049680 + 2 \cdot 0.0533905595735 + 0.0552220602058)$$
+- decrease $h$ when estimated error is too large,
+- increase $h$ when the solution is smooth.
 
-$$u(0.1) = 1.10517087727$$
+This can reduce work dramatically when a problem alternates between easy and difficult regions.
 
-### Advantages  
+### Stability
 
-- Runge-Kutta methods, particularly the 4th order, strike a **balance** between computational efficiency and solution accuracy, making them widely used in practice.  
-- They avoid the need to compute **higher derivatives** of $f(t, u)$, which can be complex or impractical in certain problems, unlike Taylor series methods.  
-- The methods are versatile and can handle a wide range of **initial value problems**, making them applicable in diverse fields such as physics, engineering, and biology.  
-- **Intermediate steps** within the Runge-Kutta framework improve stability and accuracy compared to simpler methods like Euler’s method.  
+For
 
-### Limitations  
+$$
+u'=\lambda u,
+$$
 
-- Runge-Kutta methods may be inefficient or fail entirely for **stiff differential equations**, which often require specialized implicit methods.  
-- The **error accumulation** over multiple steps limits their suitability for long-time integration or problems demanding extremely high precision.  
-- They involve multiple evaluations of $f(t, u)$ at each step, which can make them computationally expensive for complex systems or multidimensional problems.  
-- For highly **oscillatory systems**, the choice of step size becomes critical, and incorrect step sizes may lead to instability or inaccuracies.  
+RK4 has stability polynomial
+
+$$
+R(z)
+=
+1+z+\frac{z^2}{2}
++\frac{z^3}{6}
++\frac{z^4}{24},
+\qquad
+z=h\lambda.
+$$
+
+The method is stable where
+
+$$
+|R(z)|\le1.
+$$
+
+RK4 has a useful explicit stability region but is not A-stable. Strongly stiff systems may still demand impractically small steps.
+
+### RK4 Versus Euler and Heun
+
+| Method | Evaluations of $f$ per step | Global order |
+|---|---:|---:|
+| Euler | 1 | 1 |
+| Heun | 2 | 2 |
+| RK4 | 4 | 4 |
+
+Higher order does not automatically mean lower total cost. The best method depends on:
+
+- desired accuracy,
+- cost of evaluating $f$,
+- smoothness,
+- stiffness,
+- whether adaptive time stepping is available.
+
+### Systems of ODEs
+
+RK4 applies directly to
+
+$$
+\mathbf{u}'=\mathbf{f}(t,\mathbf{u}).
+$$
+
+Each $k_i$ becomes a vector. This makes RK methods convenient for mechanics, circuits, chemical kinetics, population models, and other coupled systems.
+
+### Advantages
+
+- High accuracy for smooth non-stiff IVPs.
+- No need to compute higher derivatives.
+- Straightforward extension to systems.
+- Well understood and easy to verify on benchmark problems.
+
+### Limitations
+
+- Four function evaluations per RK4 step.
+- Fixed-step RK4 has no built-in error estimator.
+- Explicit Runge--Kutta methods can be inefficient on stiff equations.
+- Very long integrations may require methods that better preserve invariants or geometric structure.
+
+### Reproducing the Figures
+
+Run:
+
+```bash
+python notes/7_ordinary_differential_equations/resources/plot_runge_kutta.py
+```
