@@ -1,89 +1,234 @@
 ## Heun's Method
 
-Heun's method is an improved version of Euler's method that enhances accuracy by using an average of the slope at the beginning and the predicted slope at the end of the interval.
+Heun's method improves Euler's method by using information from both ends of each step. It is a second-order explicit Runge--Kutta method and is also known as the **explicit trapezoidal method** or **improved Euler method**.
 
-### Mathematical Formulation
+For the IVP
 
-Assuming a first order differential equation:
+$$
+u'(t)=f(t,u), \qquad u(t_0)=u_0,
+$$
 
-$$ \frac{du}{dt} = f(t, u), $$
+Euler uses only the slope at the beginning of a step. Heun first predicts the endpoint, evaluates the slope there, and then advances using the average of the two slopes.
 
-given $u(t_0) = u_0$ and a step size $h$, Heun's method predicts the solution at time $(t_0 + h)$ as follows:
+![Heun predictor-corrector geometry](resources/plots/heun_predictor_corrector.svg)
 
-1. **Euler's step (predictor step)**: Predict the value at $t = t_0 + h$ using Euler's method:
+### Predictor-Corrector Form
 
-$$ \tilde{u}_{n+1} = u_n + h f(t_n, u_n), $$
+Given $(t_n,u_n)$ and step size $h$:
 
-2. **Heun's step (corrector step)**: Correct this prediction by taking an average of the slopes at the beginning and end of the interval:
+**Predictor**
 
-$$ u_{n+1} = u_n + \frac{h}{2} [f(t_n, u_n) + f(t_{n} + h, \tilde{u}_{n+1})]. $$
+$$
+\widetilde{u}_{n+1}
+=
+u_n+h f(t_n,u_n).
+$$
 
-This process is repeated for each point in the desired interval.
+**Corrector**
 
-### Derivation
+$$
+u_{n+1}
+=
+u_n+\frac{h}{2}
+\left[
+f(t_n,u_n)
++
+f(t_n+h,\widetilde{u}_{n+1})
+\right].
+$$
 
-The second-order Taylor series expansion around $t$ is given by:
+The predictor is an Euler step. The corrector replaces Euler's single slope by the average of the start and predicted-end slopes.
 
-$$ u(t + h) = u(t) + h u'(t) + \frac{1}{2}(h)^2 u''(t) + O(h^3), $$
+### Why the Average Helps
 
-where we approximate $u''(t)$ by the first difference of $u'(t)$:
+The exact solution satisfies
 
-$$ u''(t) \approx \frac{u'(t+h) - u'(t)}{h} = \frac{f(t + h, u(t + h)) - f(t, u(t))}{h}. $$
+$$
+u(t_{n+1})-u(t_n)
+=
+\int_{t_n}^{t_{n+1}} f(t,u(t))\,dt.
+$$
 
-Substituting this approximation into the Taylor series, we get:
+If this integral is approximated by the trapezoidal rule,
 
-$$ u(t + h) = u(t) + h u'(t) + \frac{1}{2}(h)^2 \frac{f(t + h, u(t + h)) - f(t, u(t))}{h} + O(h^3), $$
+$$
+u(t_{n+1})
+\approx
+u(t_n)
++
+\frac{h}{2}
+\left[
+f(t_n,u(t_n))
++
+f(t_{n+1},u(t_{n+1}))
+\right].
+$$
 
-and approximating $u(t + h)$ by removing the higher order term yields Heun's method:
+The unknown endpoint $u(t_{n+1})$ would make this implicit. Heun avoids that by replacing it with the Euler prediction $\widetilde{u}_{n+1}$.
 
-$$ u(t + h) \approx u(t) + \frac{h}{2} [f(t, u(t)) + f(t + h, \tilde{u}_{n+1})]. $$
+The result has:
 
-### Algorithm Steps
+- **local truncation error:** $O(h^3)$,
+- **global error:** $O(h^2)$.
 
-1. Begin with initial conditions $u_0$ and $t_0$.
-2. Compute $\tilde{u}_{n+1}$ using the predictor step.
-3. Calculate $u_{n+1}$ using the corrector step.
-4. Repeat steps 2-3 for all points in the desired interval.
+Halving $h$ therefore reduces the global error by roughly a factor of four.
 
-### Example
+![Heun converges faster than Euler as the step is refined](resources/plots/heun_error_vs_step.svg)
 
-Consider the differential equation
+### Worked Example
 
-$$ u'(t) = u(t), $$
+Use
 
-with the initial condition $u(0) = 1$. We want to estimate the value of $u$ at $t = 0.1$ using Heun's method with a step size of $h = 0.05$.
+$$
+u'=u, \qquad u(0)=1,
+$$
 
-1. We start at $t = 0$ with $u(0) = 1$.
+with $h=0.05$.
 
-First, we calculate the Euler's step (predictor):
+For the first step:
 
-$$ \tilde{u} = u(0) + h \cdot f(t, u(0)) = 1 + 0.05 \cdot 1 = 1.05. $$
+$$
+k_1=f(0,1)=1,
+$$
 
-Then, we correct this estimation:
+$$
+\widetilde{u}_1
+=
+1+0.05(1)
+=
+1.05,
+$$
 
-$$ u(0.05) \approx u(0) + \frac{h}{2} [f(t, u(0)) + f(t + h, \tilde{u}_{n+1})] = 1 + \frac{0.05}{2} [1 + 1.05] = 1.05125. $$
+$$
+k_2
+=
+f(0.05,1.05)
+=
+1.05.
+$$
 
-2. Now, we have $u(0.05)$, we move on to $t = 0.1$.
+Then
 
-Similarly, we calculate the Euler's step:
+$$
+u_1
+=
+1+\frac{0.05}{2}(1+1.05)
+=
+1.05125.
+$$
 
-$$ \tilde{u} = u(0.05) + h \cdot f(t, u(0.05)) = 1.05125 + 0.05 \cdot 1.05125 = 1.1025625. $$
+For the second step:
 
-Then, we correct this estimation:
+$$
+\widetilde{u}_2
+=
+1.05125+0.05(1.05125)
+=
+1.1038125,
+$$
 
-$$ u(0.1) \approx u(0.05) + \frac{h}{2} [f(t, u(0.05)) + f(t + h, \tilde{u}_{n+1})] = 1.05125 + \frac{0.05}{2} [1.05125 + 1.1025625] = 1.105158203125. $$
+and therefore
 
-So, the approximate solution to $u(0.1)$ with Heun's method is $1.105158203125$.
+$$
+u_2
+=
+1.05125
++
+\frac{0.05}{2}
+(1.05125+1.1038125)
+=
+1.1051265625.
+$$
 
-### Advantages  
+The exact value is $e^{0.1}\approx1.105170186$, so Heun is much closer than Euler with the same step size.
 
-- Heun's method is **simple** to implement and easy to understand, making it accessible for introductory numerical analysis.  
-- It often provides a more **accurate approximation** than Euler's method by incorporating a correction step based on the trapezoidal rule.  
-- The method offers a good balance between **computational simplicity** and improved accuracy for many non-stiff problems.  
+### Runge--Kutta Interpretation
 
-### Limitations  
+Heun can be written as
 
-- While more accurate than Euler’s method, Heun's method can still introduce **significant errors** when using large step sizes or dealing with highly nonlinear functions.  
-- Like other explicit methods, it is not well-suited for **stiff systems**, where implicit methods are typically more effective.  
-- The need to evaluate $f(t, u)$ at multiple points in each step increases the **computational effort** compared to simpler methods like Euler’s.  
-- The accuracy of Heun’s method is still limited for **complex dynamics**, requiring smaller step sizes to achieve desired precision, which may increase computational cost.  
+$$
+k_1=f(t_n,u_n),
+$$
+
+$$
+k_2=f(t_n+h,u_n+h k_1),
+$$
+
+$$
+u_{n+1}
+=
+u_n+\frac{h}{2}(k_1+k_2).
+$$
+
+This is a two-stage explicit Runge--Kutta method. It uses two evaluations of $f$ per step instead of one.
+
+### Algorithm
+
+```text
+t = t0
+u = u0
+
+while t < tf:
+    k1 = f(t, u)
+    predictor = u + h*k1
+    k2 = f(t + h, predictor)
+
+    u = u + h*(k1 + k2)/2
+    t = t + h
+```
+
+### Accuracy Versus Cost
+
+Compared with Euler:
+
+| Method | Function evaluations per step | Global order |
+|---|---:|---:|
+| Euler | 1 | 1 |
+| Heun | 2 | 2 |
+
+A Heun step costs about twice as much if evaluating $f$ dominates the work, but its error decreases much faster under step refinement.
+
+### Stability
+
+Applied to
+
+$$
+u'=\lambda u,
+$$
+
+Heun produces the amplification factor
+
+$$
+R(z)=1+z+\frac{z^2}{2},
+\qquad z=h\lambda.
+$$
+
+The method is stable for values of $z$ satisfying
+
+$$
+|R(z)|\le 1.
+$$
+
+Its stability region is larger than Euler's in some directions, but Heun is still explicit and is not a good default for strongly stiff systems.
+
+### Advantages
+
+- Second-order accuracy with a simple formula.
+- Easy to understand as a predictor-corrector method.
+- More accurate than Euler for a similar conceptual complexity.
+- Useful as a building block for more general Runge--Kutta schemes.
+
+### Limitations
+
+- Requires two evaluations of $f$ per step.
+- Still uses an explicit stability region.
+- Fixed-step implementations do not automatically adapt to difficult portions of a trajectory.
+- Stiff systems generally require implicit methods.
+
+### Reproducing the Figures
+
+Run:
+
+```bash
+python notes/7_ordinary_differential_equations/resources/plot_heuns_method.py
+```

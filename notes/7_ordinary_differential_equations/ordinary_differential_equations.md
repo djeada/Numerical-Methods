@@ -1,259 +1,331 @@
-## Ordinary Differential Equations (ODEs)
+## Ordinary Differential Equations
 
-An **ordinary differential equation (ODE)** is an equation that involves:
+An **ordinary differential equation (ODE)** relates an unknown function of one independent variable to one or more of its derivatives. ODEs are the natural language of dynamical systems: they describe how a state changes when its instantaneous rate of change is known.
 
-I. One independent variable, often denoted by $t$ (in many applications, $t$ represents time).
+A general $n$th-order ODE can be written as
 
-II. One dependent variable (or unknown function), which we may denote by $y(t)$.
+$$
+F\left(
+t,
+y,
+y',
+\ldots,
+y^{(n)}
+\right)=0.
+$$
 
-III. The derivatives of the dependent variable with respect to the independent variable.
+The word *ordinary* means that derivatives are taken with respect to a single independent variable. If several independent variables appear, the corresponding equation is a partial differential equation.
 
-Formally, an ODE can be written as
+### From a Model to a Trajectory
 
-$$F\bigl(t, y(t), y'(t), y''(t), \dots, y^{(n)}(t)\bigr) = 0$$
+A common first-order form is
 
-where $y^{(n)}(t)$ denotes the $n$-th derivative of $y$ with respect to $t$. The integer $n$ is called the **order** of the ODE.
+$$
+y'(t)=f(t,y(t)),
+\qquad
+y(t_0)=y_0.
+$$
 
-The term *ordinary* differentiates it from a **partial differential equation (PDE)**, in which derivatives with respect to multiple independent variables can appear.
+At every point $(t,y)$, the function $f$ specifies the slope of a possible solution curve. The initial condition chooses one trajectory from that slope field.
 
-### Classification and Terminology
+Autonomous problems have the form
 
-- **Order**: The order of an ODE is the order of the highest derivative appearing in the equation.
-- **Degree**: The degree of an ODE is the exponent of the highest-order derivative after the equation has been simplified and cleared of any fractional or irrational expressions in the derivatives.
-- **Linearity vs. Nonlinearity**: 
+$$
+y'=f(y),
+$$
 
-A (single) ODE is **linear** if it can be expressed in the form
+so the direction of motion depends only on the current state.
 
-$$a_n(t)y^{(n)}(t) + a_{n-1}(t)y^{(n-1)}(t) + \cdots + a_1(t)y'(t) + a_0(t)y(t) = g(t)$$
+![Phase-line behavior of a logistic ODE](resources/plots/ode_phase_line.svg)
 
-where $a_0(t), \dots, a_n(t)$ and $g(t)$ are functions of $t$ only (i.e., do not depend on $y$ or its derivatives). If any product of the dependent variable and/or its derivatives or any power other than $1$ of $y$ or its derivatives appears, then the ODE is **nonlinear**.
+For example, the logistic equation
 
-- **Homogeneous vs. Nonhomogeneous** (Inhomogeneous) for Linear ODEs: A linear ODE is called **homogeneous** if $g(t) \equiv 0$. Otherwise, it is **nonhomogeneous** or **inhomogeneous** if $g(t) \neq 0$.
-- **Autonomous vs. Nonautonomous**: An **autonomous** ODE is one in which the independent variable $t$ does not appear explicitly in the function $F$. For instance, $y' = f(y)$ is autonomous. A **nonautonomous** ODE explicitly depends on $t$, for example $y' = f(t, y)$.
+$$
+y'=r y\left(1-\frac{y}{K}\right)
+$$
 
-### Understanding Differential Equations
+has equilibria at $y=0$ and $y=K$. When $0<y<K$, the derivative is positive; when $y>K$, it is negative. This qualitative information already reveals the long-term behavior without solving the equation explicitly.
 
-Differential equations capture the relationship between a function (representing a quantity of interest) and its rates of change. These arise naturally in numerous domains:
+### Initial Value Problems and Boundary Value Problems
 
-- In **physics**, Newton’s laws of motion lead to second-order ODEs in time describing the positions of objects.
-- In **biology**, population growth can often be modeled by first-order ODEs.
-- In **engineering**, circuits and systems obey Kirchhoff’s laws or mass-spring-damper systems described by second-order ODEs.
-- In **economics**, growth models and dynamic systems can be formulated as ODEs.
+An **initial value problem (IVP)** specifies all required conditions at one point. For a second-order ODE,
 
-#### Initial Conditions and Boundary Conditions
+$$
+y''=g(t,y,y'),
+$$
 
-To find a unique solution, one often needs:
+a typical IVP is
 
-- **Initial conditions**, e.g., for a first-order ODE $y'(t) = f(t,y)$, one typically specifies $y(t_0) = y_0$.
-- For higher-order ODEs, more initial values (or boundary values) are required. For example, a second-order ODE might need $y(t_0) = y_0$ and $y'(t_0) = v_0$.
+$$
+y(t_0)=y_0,
+\qquad
+y'(t_0)=v_0.
+$$
 
-The combination of a differential equation and enough conditions to fix a unique solution is called an **initial value problem (IVP)** or **boundary value problem (BVP)**, depending on whether the conditions are specified at a single point (IVP) or at different points (BVP).
+A **boundary value problem (BVP)** specifies conditions at different locations, for example
 
-#### Existence and Uniqueness of Solutions
+$$
+y''+y=0,
+\qquad
+y(0)=0,
+\qquad
+y(1)=1.
+$$
 
-A crucial theoretical aspect of ODEs is ensuring whether a solution to a given IVP exists and whether it is unique. One fundamental result for first-order ODEs is the **Picard–Lindelöf theorem (also known as the Existence and Uniqueness Theorem)**, which states that if:
+IVPs are naturally advanced forward or backward in the independent variable. BVPs usually require different numerical ideas such as shooting or finite differences.
 
-I. $f(t,y)$ is continuous in a region around $(t_0, y_0)$,
-
-II. $f$ satisfies a Lipschitz condition in $y$ (i.e., there exists a constant $L$ such that
-
-$$\bigl| f(t, y_1) - f(t, y_2) \bigr| \le L \bigl| y_1 - y_2 \bigr|$$
-
-for all $y_1, y_2$ in that region), then there exists a time interval $(t_0 - \delta, t_0 + \delta)$ on which there is a unique solution $y(t)$ satisfying $y(t_0) = y_0$.
-
-### Main Concepts in Ordinary Differential Equations
-
-We revisit the key concepts with further mathematical detail:
+### Classification
 
 #### Order
 
-If an ODE contains derivatives up to the $n$-th derivative, it is called an **$n$-th order** ODE. For example:
+The order is the highest derivative present.
 
-- $\frac{dy}{dt} = f(t, y)$ is a first-order ODE.
-- $\frac{d^2y}{dt^2} + a(t)\frac{dy}{dt} + b(t)y = 0$ is a second-order ODE.
+- $y'=f(t,y)$ is first order.
+- $y''+3y'+2y=0$ is second order.
+- $y^{(4)}+y=0$ is fourth order.
 
-#### Degree
+#### Linear and Nonlinear ODEs
 
-The **degree** is determined by writing the ODE in polynomial form in its highest-order derivative. For example, the ODE
+A linear $n$th-order ODE has the form
 
-$$\left(y''\right)^2 + \left(y'\right)^3 + y = 0$$
-is **not** in polynomial form due to the squared second derivative and cubed first derivative. However, if we could (somehow) algebraically solve for the highest-order derivative and rewrite it linearly or as a polynomial expression without fractional exponents, then the exponent of that highest-order derivative would tell us the degree. Many ODEs (especially linear ones) are understood in simpler terms: the degree is typically $1$ for linear ODEs.
+$$
+a_n(t)y^{(n)}
++\cdots+
+a_1(t)y'
++a_0(t)y
+=
+g(t).
+$$
 
-#### Linearity
+The unknown function and its derivatives appear only linearly.
 
-A **linear** ODE of order $n$ has the form
+Examples:
 
-$$a_n(t)y^{(n)} + a_{n-1}(t)y^{(n-1)} + \cdots + a_1(t)y' + a_0(t)y = g(t),$$
+$$
+y'+2y=\sin t
+$$
 
-where each $a_k(t)$ (for $k = 0,1,\dots,n$) and $g(t)$ depend only on $t$. No products like $(y')^2$ or $yy''$ occur, nor do terms such as $\sin(y)$. If such terms do occur, the ODE is **nonlinear**.
+is linear, while
 
-#### Homogeneity
+$$
+y'=y^2-t
+$$
 
-- A linear ODE is **homogeneous** if $g(t) = 0$. The homogeneous form is
+and
 
-  $$a_n(t)y^{(n)} + a_{n-1}(t)y^{(n-1)} + \cdots + a_1(t)y' + a_0(t)y = 0.$$
-- It is **nonhomogeneous (or inhomogeneous)** if $g(t) \neq 0$.
+$$
+y''+\sin y=0
+$$
 
-#### Autonomous ODEs
+are nonlinear.
 
-- An **autonomous** ODE does not explicitly depend on $t$. Formally, it takes a form such as $y' = f(y)$.
-- The solutions and their qualitative behavior can often be studied using **phase-line analysis** (for first-order autonomous ODEs) or **phase-plane analysis** (for second-order systems), etc.
+#### Homogeneous and Nonhomogeneous Linear Equations
 
-### Mathematical Forms of Ordinary Differential Equations
+A linear equation is homogeneous when $g(t)=0$. Otherwise it is nonhomogeneous.
 
-Below are some standard forms that frequently appear.
+### Converting Higher-Order Equations to First-Order Systems
 
-#### General First-Order ODE
+Numerical solvers are usually written for first-order systems. Any higher-order ODE can be rewritten in that form.
 
-$$\frac{dy}{dt} = f\bigl(t, y(t)\bigr), \quad y(t_0) = y_0$$
+For
 
-- **Goal**: Find a function $y(t)$ that satisfies the differential equation for $t$ in some interval containing $t_0$ and also satisfies the initial condition $y(t_0) = y_0$.
+$$
+y''+c y'+k y=0,
+$$
 
-#### First-Order Linear ODE
+define
 
-$$\frac{dy}{dt} + p(t)y = g(t).$$
+$$
+u_1=y,
+\qquad
+u_2=y'.
+$$
 
-This is a subset of the above form but is special because its solution technique is well-known. A classic approach is the **Integrating Factor** method:
+Then
 
-I. Multiply both sides by the integrating factor
+$$
+u_1'=u_2,
+$$
 
-$$\mu(t) = e^{\int p(t)dt}.$$
+$$
+u_2'=-k u_1-c u_2.
+$$
 
-II. Rewrite the left-hand side as the derivative of $\mu(t)y(t)$.
+So the second-order scalar problem becomes
 
-III. Integrate both sides w.r.t. $t$ to solve for $y(t)$.
+$$
+\mathbf{u}'=\mathbf{f}(t,\mathbf{u}).
+$$
 
-#### Second-Order Linear ODE
+The same conversion works for arbitrary order.
 
-$$\frac{d^2y}{dt^2} + a(t)\frac{dy}{dt} + b(t)y = g(t)$$
+### Existence and Uniqueness
 
-- **Homogeneous** if $g(t) = 0$.
-- **Nonhomogeneous** if $g(t) \neq 0$.
+For
 
-#### Constant-Coefficient Case
+$$
+y'=f(t,y),
+\qquad
+y(t_0)=y_0,
+$$
 
-When $a$ and $b$ are constants, the ODE
+a standard local result is the Picard--Lindelof theorem. Roughly, if:
 
-$$y'' + ay' + by = g(t)$$
+- $f$ is continuous near $(t_0,y_0)$, and
+- $f$ is Lipschitz continuous in $y$,
 
-can be solved using:
+then the IVP has a unique local solution.
 
-I. **Characteristic equation** for the associated homogeneous part:
+A Lipschitz condition in $y$ means there is a constant $L$ such that
 
-$$r^2 + ar + b = 0$$
+$$
+|f(t,y_1)-f(t,y_2)|
+\le
+L|y_1-y_2|.
+$$
 
-II. The solution of the homogeneous ODE depends on the discriminant $\Delta = a^2 - 4b$:
+This condition prevents nearby solution curves from splitting unpredictably.
 
-- If $\Delta > 0$, two distinct real roots $r_1$ and $r_2$. 
-- If $\Delta = 0$, a repeated real root $r$.
-- If $\Delta < 0$, two complex conjugate roots $\alpha \pm i\beta$.
+### Analytical Versus Numerical Solutions
 
-III. A **particular solution** $y_p(t)$ must be found (e.g., via the method of undetermined coefficients or variation of parameters) for the nonhomogeneous case.
+Some ODEs have closed-form solutions. Many important nonlinear systems do not.
 
-IV. The **general solution** is $y(t) = y_h(t) + y_p(t)$.
+For example,
 
-#### Autonomous ODE
+$$
+y'=ay
+$$
 
-$$\frac{dy}{dt} = f\bigl(y(t)\bigr).$$
+has the exact solution
 
-Analyzing equilibrium (steady-state) solutions where $f(y)=0$ is a powerful tool for studying the long-term behavior (qualitative analysis).
+$$
+y(t)=y_0e^{a(t-t_0)}.
+$$
 
-### Solutions of Ordinary Differential Equations
+But once $f$ becomes nonlinear, coupled, discontinuous, or expensive, numerical integration is often the practical route.
 
-#### General Remarks
+Common explicit methods include:
 
-A **solution** to an ODE on an interval $I$ is a function $y(t)$ that:
+- Euler's method,
+- Heun's method,
+- Runge--Kutta methods.
 
-I. Is differentiable up to the required order on $I$.
+Their accuracy can differ dramatically at the same step size.
 
-II. Substitutes into the ODE to satisfy it identically for all $t \in I$.
+![Accuracy comparison for several time-stepping methods](resources/plots/ode_method_accuracy.svg)
 
-#### General vs. Particular Solutions
+### Local and Global Error
 
-- A **general solution** often contains constants (like $C_1, C_2, \ldots$) that can be set by initial or boundary conditions.
-- A **particular solution** is a single, specific solution that satisfies both the ODE and a given set of boundary/initial conditions.
+A one-step method advances by
 
-### Classic Examples
+$$
+u_{n+1}=\Phi_h(t_n,u_n).
+$$
 
-I. **First-Order Linear with Constant Coefficient**  
+Two distinct errors are useful:
 
-$$\frac{dy}{dt} = ay \quad \longrightarrow \quad \frac{dy}{y} = adt$$
+- **local truncation error:** the error produced in one step when starting from the exact solution,
+- **global error:** the accumulated difference after many steps.
 
-Integrating both sides:
+A method of global order $p$ typically satisfies
 
-$$\ln|y| = at + C \quad \longrightarrow \quad y(t) = C_1 e^{a t}$$
+$$
+\max_n |u(t_n)-u_n|
+=
+O(h^p)
+$$
 
-If $y(t_0) = y_0$, then $C_1 = y_0 e^{-a t_0}$.
+on a fixed interval as $h\to0$.
 
-II. **Second-Order Homogeneous with Constant Coefficients**  
+Euler has order $1$, Heun order $2$, and classical RK4 order $4$.
 
-$$y'' + ay' + by = 0.$$
-The characteristic equation is $r^2 + ar + b = 0$. Let $\Delta = a^2 - 4b$. 
-- If $\Delta > 0$ with roots $r_1, r_2$, the general solution is
+### Stability and Stiffness
 
- $$y(t) = C_1 e^{r_1 t} + C_2 e^{r_2 t}.$$
-- If $\Delta = 0$ with repeated root $r$, the general solution is
+Accuracy alone does not guarantee a good numerical solution.
 
- $$y(t) = \bigl(C_1 + C_2t\bigr) e^{r t}.$$
-- If $\Delta < 0$ with complex roots $\alpha \pm i\beta$, the general solution is
+For the test equation
 
- $$y(t) = e^{\alpha t}\bigl(C_1 \cos(\beta t) + C_2 \sin(\beta t)\bigr).$$
+$$
+y'=\lambda y,
+$$
 
-III. **Second-Order Nonhomogeneous with Constant Coefficients**  
+a numerical method produces
 
-$$y'' + ay' + by = g(t).$$
+$$
+y_{n+1}=R(h\lambda)y_n,
+$$
 
-One finds the **general solution** as
+where $R$ is the method's stability function. Stability requires the numerical amplification to behave consistently with the exact solution.
 
-$$y(t) = y_h(t) + y_p(t),$$
-where $y_h(t)$ is the general solution of the homogeneous equation, and $y_p(t)$ is any particular solution of the original nonhomogeneous equation.
+A problem is called **stiff** when rapidly decaying modes force explicit methods to use very small steps for stability even though the physically interesting solution evolves on a much slower time scale.
 
-### Examples of Ordinary Differential Equations
+In stiff regimes, implicit methods such as backward Euler, BDF schemes, or implicit Runge--Kutta methods are usually preferred.
 
-I. **Newton’s Second Law of Motion**  
+### Adaptive Step Sizes
 
-Often written as $F = ma$. Since $a = \frac{d^2 x}{dt^2}$,
+Modern ODE solvers rarely use a single fixed $h$ everywhere. Instead they estimate local error and adapt the step size:
 
-$$m\frac{d^2x}{dt^2} = F(x, t).$$
+- reduce $h$ when the solution changes rapidly,
+- increase $h$ when the solution is smooth.
 
-This is a **second-order** ODE. If $F$ depends only on $x$ and $t$ (and possibly $v = x'$), it may be nonlinear or linear (if $F$ is linear in $x$, $x'$, etc.).
+Embedded Runge--Kutta pairs, such as RK45, obtain two approximations of different orders from related stage evaluations and use their difference as an error estimate.
 
-II. **Population Dynamics**  
+### Important Model Examples
 
-The logistic model:
+#### Exponential Growth and Decay
 
-$$\frac{dP}{dt} = rP \left(1 - \frac{P}{K}\right),$$
-is a **first-order** **nonlinear** **autonomous** ODE describing population growth with a carrying capacity $K$.
+$$
+y'=ay.
+$$
 
-III. **RC Circuit (First-Order Linear ODE)**  
+The sign of $a$ determines growth or decay.
 
-Consider a resistor $R$ in series with a capacitor $C$. The voltage $V_C(t)$ across the capacitor satisfies:
+#### Logistic Growth
 
-$$C\frac{dV_C}{dt} + \frac{V_C(t)}{R} = \frac{V_{\text{in}}(t)}{R}.$$
+$$
+P'=rP\left(1-\frac{P}{K}\right).
+$$
 
-Rearranged:
+The parameter $K$ is the carrying capacity.
 
-$$\frac{dV_C}{dt} + \frac{1}{RC}V_C(t) = \frac{V_{\text{in}}(t)}{RC}.$$
+#### Harmonic Oscillator
 
-This is a first-order linear ODE.
+$$
+x''+\omega^2x=0.
+$$
 
-### Applications
+As a first-order system:
 
-ODEs are ubiquitous in mathematical modeling across disciplines:
+$$
+x'=v,
+\qquad
+v'=-\omega^2x.
+$$
 
-- **Quantum mechanics** uses the Schrödinger equation, which can reduce to ordinary differential equations in specific cases.  
-- The motion of particles and rigid bodies is described by Newton's laws or through **Lagrangian/Hamiltonian formulations**, involving ordinary differential equations.  
-- **System dynamics** and control theory rely on transfer functions and state-space models based on ordinary differential equations.  
-- Electrical circuits, such as **RLC circuits** and operational amplifiers, are modeled using ordinary differential equations to describe voltage and current over time.  
-- The spread of infectious diseases is modeled with the **SIR framework**, a system of ordinary differential equations for population groups.  
-- **Biochemical reactions** are often described by the Michaelis–Menten equations, which are ordinary differential equations for reaction rates.  
-- **Macroeconomic systems** use dynamical models to study growth and other phenomena through ordinary differential equations.  
-- **Option pricing** models, while typically based on partial differential equations, can simplify to ordinary differential equations under certain assumptions.  
-- **Chemical kinetics** describes reaction rates using ordinary differential equations for product formation.  
+#### Damped Oscillator
 
-### Limitations and Complexities
+$$
+x''+2\zeta\omega x'+\omega^2x=0.
+$$
 
-- **Analytical solutions** often do not exist for many ordinary differential equations, especially nonlinear ones, requiring the use of numerical methods like Euler’s method and Runge–Kutta methods.  
-- **High-order and nonlinear ODEs** become increasingly complex to solve, leading to reliance on qualitative methods such as stability analysis and phase-plane diagrams instead of closed-form solutions.  
-- **Simplifying assumptions** underpin many ODE models, such as linearization or ignoring certain effects, but these assumptions can limit the solution's applicability when they do not hold.  
-- **Parameter sensitivity** in real-world models means small changes in parameters can result in drastically different outcomes, as seen in chaotic systems.  
+The damping ratio $\zeta$ controls whether the motion is underdamped, critically damped, or overdamped.
+
+### A Practical Workflow
+
+When solving an ODE numerically:
+
+1. identify whether the problem is an IVP or BVP,
+2. rewrite higher-order equations as a first-order system,
+3. inspect scales, smoothness, and possible stiffness,
+4. choose a suitable method and tolerance,
+5. verify convergence by tightening the step or tolerance,
+6. compare against invariants, known limits, or exact solutions when available,
+7. interpret the numerical result in the context of the model.
+
+### Reproducing the Figures
+
+Run:
+
+```bash
+python notes/7_ordinary_differential_equations/resources/plot_ordinary_differential_equations.py
+```
