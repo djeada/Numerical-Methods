@@ -1,9 +1,15 @@
 """Generate the Gaussian RBF figures used by gaussian_interpolation.md."""
 from pathlib import Path
+import sys
 
 import numpy as np
 
 from svg_plot_utils import PALETTE, line_chart
+
+# Share the implementation with the runnable RBF example and its tests.
+MODULE_ROOT = Path(__file__).resolve().parents[3] / "src" / "6_regression" / "gaussian_interpolation"
+sys.path.insert(0, str(MODULE_ROOT))
+from implementation.gaussian_rbf import GaussianRBFInterpolator
 
 OUT = Path(__file__).with_name("plots")
 
@@ -36,10 +42,10 @@ def main():
 
     series = []
     for epsilon in [.5, 1., 2.]:
+        interpolator = GaussianRBFInterpolator(centers, values, epsilon)
         matrix = gaussian_basis(centers, centers, epsilon)
-        weights = np.linalg.solve(matrix, values)
         series.append({
-            "x": x, "y": gaussian_basis(x, centers, epsilon) @ weights,
+            "x": x, "y": interpolator(x),
             "label": f"epsilon={epsilon:g}, cond={np.linalg.cond(matrix):.1e}",
         })
     line_chart(
