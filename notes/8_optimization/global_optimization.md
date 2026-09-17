@@ -94,11 +94,3 @@ This separates broad exploration from precise local convergence.
 ### Reproducibility
 
 Stochastic optimization should expose and record random seeds. Report the number of function evaluations, not only iterations, because different algorithms can perform very different amounts of work per iteration.
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/8_optimization/resources/plot_global_optimization.py
-```
