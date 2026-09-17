@@ -230,11 +230,3 @@ Picard iteration may fail or become inconvenient when:
 - the ODE is stiff or highly nonlinear.
 
 A local convergence theorem does not imply that one Picard iteration run converges uniformly over an arbitrarily long interval.
-
-### Reproducing the Figures
-
-Run:
-
-```bash
-python notes/7_ordinary_differential_equations/resources/plot_picards_method.py
-```
