@@ -85,11 +85,3 @@ A full Newton step can be excellent near a solution and disastrous far away. Lin
 - Strict Wolfe checks can increase gradient evaluations.
 
 The BFGS implementation in this repository uses a compact backtracking loop that tests sufficient decrease and a Wolfe-style curvature condition.
-
-### Reproducing the figure
-
-Run:
-
-```bash
-python notes/8_optimization/resources/plot_line_search.py
-```
