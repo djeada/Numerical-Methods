@@ -113,11 +113,3 @@ larger than at the other feasible vertices.
 ### Numerical notes
 
 Degeneracy can produce zero-length pivots and cycling. Real solvers use anti-cycling rules, presolve, scaling, sparse linear algebra, and often dual-simplex or interior-point variants.
-
-### Reproducing the figure
-
-Run:
-
-```bash
-python notes/8_optimization/resources/plot_linear_programming.py
-```
