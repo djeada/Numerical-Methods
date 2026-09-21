@@ -10,7 +10,7 @@ $$
 
 Euler uses only the slope at the beginning of a step. Heun first predicts the endpoint, evaluates the slope there, and then advances using the average of the two slopes.
 
-![Heun predictor-corrector geometry](resources/plots/heun_predictor_corrector.svg)
+![Heun predictor-corrector geometry](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/heun_predictor_corrector.svg)
 
 ### Predictor-Corrector Form
 
@@ -73,7 +73,7 @@ The result has:
 
 Halving $h$ therefore reduces the global error by roughly a factor of four.
 
-![Heun converges faster than Euler as the step is refined](resources/plots/heun_error_vs_step.svg)
+![Heun converges faster than Euler as the step is refined](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/heun_error_vs_step.svg)
 
 ### Worked Example
 
@@ -224,11 +224,3 @@ Its stability region is larger than Euler's in some directions, but Heun is stil
 - Still uses an explicit stability region.
 - Fixed-step implementations do not automatically adapt to difficult portions of a trajectory.
 - Stiff systems generally require implicit methods.
-
-### Reproducing the Figures
-
-Run:
-
-```bash
-python notes/7_ordinary_differential_equations/resources/plot_heuns_method.py
-```

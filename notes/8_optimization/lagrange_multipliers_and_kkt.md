@@ -22,7 +22,7 @@ $$
 \nabla f(x^*)+\nu\nabla h(x^*)=0.
 $$
 
-![Tangency of an objective contour and an equality constraint](resources/plots/lagrange_tangency.svg)
+![Tangency of an objective contour and an equality constraint](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/lagrange_tangency.svg)
 
 The Lagrangian is
 
@@ -114,11 +114,3 @@ h(x)
 $$
 
 for equality-constrained problems. The repository implementation applies a Newton-like step to such a residual using a simple Hessian approximation.
-
-### Reproducing the figure
-
-Run:
-
-```bash
-python notes/8_optimization/resources/plot_lagrange_kkt.py
-```

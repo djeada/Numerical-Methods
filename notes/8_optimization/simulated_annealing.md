@@ -31,7 +31,7 @@ $$
 
 The choice of $T_0$, $\alpha$, proposal scale, and iteration budget all matter.
 
-![Temperature, objective, and accepted uphill moves](resources/plots/simulated_annealing_trace.svg)
+![Temperature, objective, and accepted uphill moves](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/simulated_annealing_trace.svg)
 
 ### Proposal distribution
 
@@ -57,11 +57,3 @@ Classical convergence proofs require cooling schedules much slower than those us
 ### Reproducibility
 
 Because the path is random, report the seed and preferably repeat the run over multiple seeds. For comparisons, summarize distributions of final objective values rather than showing only the best lucky run.
-
-### Reproducing the figure
-
-Run:
-
-```bash
-python notes/8_optimization/resources/plot_simulated_annealing.py
-```

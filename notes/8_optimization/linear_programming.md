@@ -19,7 +19,7 @@ The feasible region is a polyhedron.
 
 If a linear program has a finite optimum, at least one optimum occurs at an extreme point of the feasible polyhedron. In two dimensions these are polygon vertices.
 
-![Linear-programming geometry and an optimal vertex](resources/plots/linear_programming_geometry.svg)
+![Linear-programming geometry and an optimal vertex](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/linear_programming_geometry.svg)
 
 The objective contours
 

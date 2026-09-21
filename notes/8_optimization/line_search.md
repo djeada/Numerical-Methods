@@ -32,7 +32,7 @@ $$
 
 with a small constant such as $c_1=10^{-4}$.
 
-![Armijo sufficient decrease along a search direction](resources/plots/line_search_armijo.svg)
+![Armijo sufficient decrease along a search direction](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/line_search_armijo.svg)
 
 For a descent direction, the right-hand side lies below $f(x_k)$ for $\alpha>0$.
 

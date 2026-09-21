@@ -34,7 +34,7 @@ $$
 
 Unlike interpolation, least squares does not generally require the fitted model to pass through every data point.
 
-![Least-squares line and its residuals](resources/plots/least_squares_residuals.svg)
+![Least-squares line and its residuals](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/least_squares_residuals.svg)
 
 ### Design matrix formulation
 
@@ -235,7 +235,7 @@ $$
 
 is a quadratic function of the coefficients.
 
-![Contours of the least-squares objective](resources/plots/least_squares_objective_contours.svg)
+![Contours of the least-squares objective](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/least_squares_objective_contours.svg)
 
 When $X$ has full column rank, the quadratic bowl has one unique minimum. If the columns of $X$ are linearly dependent, there are multiple coefficient vectors that produce the same fitted values unless an additional criterion is imposed.
 

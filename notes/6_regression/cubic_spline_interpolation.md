@@ -16,7 +16,7 @@ $$
 
 The pieces are joined so that the function, first derivative, and second derivative are continuous at every interior knot. The result is a smooth curve with local low-degree behavior.
 
-![Natural cubic spline through irregularly spaced knots](resources/plots/cubic_spline_piecewise_curve.svg)
+![Natural cubic spline through irregularly spaced knots](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/cubic_spline_piecewise_curve.svg)
 
 ### Why use piecewise cubics?
 
@@ -184,7 +184,7 @@ $$
 
 Adjacent segments therefore share the same second derivative at each knot. The tridiagonal system was derived from the matching of the first derivatives, so those are continuous as well.
 
-![First and second derivatives of a natural cubic spline](resources/plots/cubic_spline_derivatives.svg)
+![First and second derivatives of a natural cubic spline](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/cubic_spline_derivatives.svg)
 
 ### Worked example
 

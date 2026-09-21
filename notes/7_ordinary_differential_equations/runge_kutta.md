@@ -59,7 +59,7 @@ $$
 
 The four stages sample the vector field at the beginning, twice near the middle, and at the end of the step.
 
-![The four RK4 stages sample slopes within one step](resources/plots/rk4_stages.svg)
+![The four RK4 stages sample slopes within one step](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/rk4_stages.svg)
 
 ### Why RK4 Is Fourth Order
 
@@ -74,7 +74,7 @@ For RK4:
 
 Therefore, halving $h$ reduces the global error by roughly a factor of $16$ in the asymptotic regime.
 
-![RK4 shows fourth-order convergence on a smooth test problem](resources/plots/rk4_error_vs_step.svg)
+![RK4 shows fourth-order convergence on a smooth test problem](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/rk4_error_vs_step.svg)
 
 ### Worked Example
 
@@ -254,11 +254,3 @@ Each $k_i$ becomes a vector. This makes RK methods convenient for mechanics, cir
 - Fixed-step RK4 has no built-in error estimator.
 - Explicit Runge--Kutta methods can be inefficient on stiff equations.
 - Very long integrations may require methods that better preserve invariants or geometric structure.
-
-### Reproducing the Figures
-
-Run:
-
-```bash
-python notes/7_ordinary_differential_equations/resources/plot_runge_kutta.py
-```

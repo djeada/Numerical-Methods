@@ -112,7 +112,7 @@ $$
 
 This is the heat equation. It smooths spatial variation as time passes.
 
-![Diffusion smooths a localized temperature profile](resources/plots/pde_heat_diffusion.svg)
+![Diffusion smooths a localized temperature profile](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/pde_heat_diffusion.svg)
 
 #### Hyperbolic
 
@@ -132,7 +132,7 @@ $$
 
 This is the wave equation. It propagates disturbances at finite speed.
 
-![Wave equation transports oscillatory structure rather than simply smoothing it](resources/plots/pde_wave_propagation.svg)
+![Wave equation transports oscillatory structure rather than simply smoothing it](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/pde_wave_propagation.svg)
 
 ### The Heat Equation
 
@@ -352,11 +352,3 @@ Nonlinearity can introduce shocks, bifurcations, turbulence, and pattern formati
 5. refine the mesh and time step to check convergence,
 6. monitor conserved or dissipated quantities when the model supplies them,
 7. distinguish numerical artifacts from genuine model behavior.
-
-### Reproducing the Figures
-
-Run:
-
-```bash
-python notes/7_ordinary_differential_equations/resources/plot_partial_differential_equations.py
-```

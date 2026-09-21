@@ -67,7 +67,7 @@ $$
 
 It is the multidimensional analogue of replacing a derivative by a finite secant slope.
 
-![Newton curvature versus a BFGS approximation](resources/plots/newton_quasi_newton.svg)
+![Newton curvature versus a BFGS approximation](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/newton_quasi_newton.svg)
 
 ### BFGS
 
@@ -99,11 +99,3 @@ For a dense problem with $n$ variables:
 ### When to prefer each method
 
 Use Newton when accurate Hessians are affordable and the problem is not too large. Use BFGS when gradients are available but Hessians are inconvenient. For very large problems, prefer sparse Newton-Krylov or limited-memory variants.
-
-### Reproducing the figure
-
-Run:
-
-```bash
-python notes/8_optimization/resources/plot_newton_and_quasi_newton.py
-```
