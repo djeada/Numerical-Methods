@@ -54,7 +54,7 @@ $$
 
 where $\Pi_C$ denotes Euclidean projection.
 
-![Gradient step followed by projection to a feasible set](resources/plots/quadratic_programming_projection.svg)
+![Gradient step followed by projection to a feasible set](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/quadratic_programming_projection.svg)
 
 The repository implementation uses this idea in a simplified form: it takes a gradient step, projects violated half-space inequalities one at a time, and then corrects affine equality residuals.
 
@@ -119,11 +119,3 @@ This linear-algebra viewpoint is central to active-set and interior-point method
 ### Numerical caveats
 
 Sequentially projecting violated inequalities is easy to understand but is not the same as computing the exact Euclidean projection onto a general polyhedron. For difficult constraint geometries, a dedicated QP solver is preferable.
-
-### Reproducing the figure
-
-Run:
-
-```bash
-python notes/8_optimization/resources/plot_quadratic_programming.py
-```

@@ -36,7 +36,7 @@ $$
 
 so the direction of motion depends only on the current state.
 
-![Phase-line behavior of a logistic ODE](resources/plots/ode_phase_line.svg)
+![Phase-line behavior of a logistic ODE](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/ode_phase_line.svg)
 
 For example, the logistic equation
 
@@ -212,7 +212,7 @@ Common explicit methods include:
 
 Their accuracy can differ dramatically at the same step size.
 
-![Accuracy comparison for several time-stepping methods](resources/plots/ode_method_accuracy.svg)
+![Accuracy comparison for several time-stepping methods](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/ode_method_accuracy.svg)
 
 ### Local and Global Error
 
@@ -321,11 +321,3 @@ When solving an ODE numerically:
 5. verify convergence by tightening the step or tolerance,
 6. compare against invariants, known limits, or exact solutions when available,
 7. interpret the numerical result in the context of the model.
-
-### Reproducing the Figures
-
-Run:
-
-```bash
-python notes/7_ordinary_differential_equations/resources/plot_ordinary_differential_equations.py
-```

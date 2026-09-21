@@ -23,7 +23,7 @@ The coefficients $a_k$ are **divided differences**.
 
 The key advantage is structural: when a new point is added, the previously computed terms do not need to be changed. One new coefficient and one new product term are appended.
 
-![Incremental construction of a Newton interpolant](resources/plots/newton_incremental_construction.svg)
+![Incremental construction of a Newton interpolant](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/newton_incremental_construction.svg)
 
 ### Divided differences
 
@@ -150,7 +150,7 @@ $$
 
 Therefore the new term vanishes at every old node. The correction can enforce the new data point without disturbing the interpolation conditions that were already satisfied.
 
-![Partial sums of the Newton polynomial](resources/plots/newton_partial_sums.svg)
+![Partial sums of the Newton polynomial](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/newton_partial_sums.svg)
 
 ### Divided-difference table
 

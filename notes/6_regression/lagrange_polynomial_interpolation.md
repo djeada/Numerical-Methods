@@ -28,7 +28,7 @@ $$
 
 That property makes the interpolation condition automatic.
 
-![Lagrange basis polynomials](resources/plots/lagrange_basis_functions.svg)
+![Lagrange basis polynomials](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/lagrange_basis_functions.svg)
 
 ### Constructing the basis
 
@@ -85,7 +85,7 @@ $$
 
 contributes a polynomial that has the correct value $y_j$ at one node and vanishes at all the others. Adding the terms combines those local interpolation constraints into one global polynomial.
 
-![Weighted Lagrange terms and their sum](resources/plots/lagrange_weighted_sum.svg)
+![Weighted Lagrange terms and their sum](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/lagrange_weighted_sum.svg)
 
 Although the basis functions are tied to individual nodes, the final polynomial is global. Changing one node or data value generally changes the polynomial everywhere.
 

@@ -27,7 +27,7 @@ for every data point.
 
 Unlike piecewise splines, the representation is global: every basis function can contribute to every query.
 
-![Gaussian radial basis functions centered at the data sites](resources/plots/gaussian_rbf_basis_functions.svg)
+![Gaussian radial basis functions centered at the data sites](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/gaussian_rbf_basis_functions.svg)
 
 The figure shows the **unweighted basis functions**, with centers $x_j=0,1,2,3$ and a shared shape parameter $\varepsilon=1.2$. Each curve reaches exactly $1$ at its own center, is symmetric about that center, and tends to zero away from it. The dots at height $1$ mark the peaks; the dots at height $0$ mark the data sites, not the observed values $y_j$.
 
@@ -204,7 +204,7 @@ The interpolant still passes through all three supplied data values exactly in e
 
 The shape parameter affects both the visual shape of the interpolant and the conditioning of the linear system.
 
-![Effect of the Gaussian shape parameter](resources/plots/gaussian_rbf_shape_parameter.svg)
+![Effect of the Gaussian shape parameter](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/gaussian_rbf_shape_parameter.svg)
 
 When $\varepsilon$ is large, each basis function is narrow. The interpolation matrix becomes closer to the identity if the sites are well separated.
 

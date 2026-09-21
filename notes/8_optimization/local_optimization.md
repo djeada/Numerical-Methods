@@ -48,7 +48,7 @@ $$
 
 has a unique global minimum at $(1,1)$, but its narrow curved valley makes it difficult for methods that do not account for curvature.
 
-![Representative local-optimization paths on the Rosenbrock function](resources/plots/local_rosenbrock_paths.svg)
+![Representative local-optimization paths on the Rosenbrock function](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/local_rosenbrock_paths.svg)
 
 Gradient descent makes inexpensive iterations but often zig-zags. Newton and quasi-Newton methods spend more work per iteration to learn the valley geometry.
 
@@ -78,7 +78,7 @@ $$
 
 respectively.
 
-![Idealized local convergence rates](resources/plots/local_convergence_rates.svg)
+![Idealized local convergence rates](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/local_convergence_rates.svg)
 
 ### Why plain Newton can fail
 
@@ -163,11 +163,3 @@ For a local solver, report more than the final point. Useful diagnostics include
 - number of function and gradient evaluations;
 - Hessian eigenvalues or quasi-Newton curvature tests;
 - sensitivity to the starting point.
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/8_optimization/resources/plot_local_optimization.py
-```

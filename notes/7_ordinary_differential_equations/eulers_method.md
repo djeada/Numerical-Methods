@@ -10,7 +10,7 @@ $$
 
 The differential equation gives the slope of the solution curve. Euler's method assumes that this slope remains constant over one short step of length $h$.
 
-![Euler method follows the tangent at the current point](resources/plots/euler_tangent_steps.svg)
+![Euler method follows the tangent at the current point](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/euler_tangent_steps.svg)
 
 ### Update Formula
 
@@ -59,7 +59,7 @@ This immediately explains the method's error:
 
 So halving the step size should roughly halve the total error once the asymptotic regime is reached.
 
-![Euler error decreases linearly with step size](resources/plots/euler_error_vs_step.svg)
+![Euler error decreases linearly with step size](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/euler_error_vs_step.svg)
 
 ### Worked Example
 
@@ -193,11 +193,3 @@ It is usually not the best production method when high accuracy or stiffness mat
 - Has a small stability region.
 - Performs poorly on stiff problems.
 - A fixed step size can waste work in smooth regions and miss rapid changes elsewhere.
-
-### Reproducing the Figures
-
-Run:
-
-```bash
-python notes/7_ordinary_differential_equations/resources/plot_eulers_method.py
-```

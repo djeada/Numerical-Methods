@@ -32,7 +32,7 @@ with componentwise random $\alpha\in[0,1]^n$.
 
 Mutation adds random perturbations to selected genes. It maintains diversity and creates information not already present in the selected parents.
 
-![Population evolution toward a low-objective basin](resources/plots/genetic_algorithm_population.svg)
+![Population evolution toward a low-objective basin](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/genetic_algorithm_population.svg)
 
 ### Exploration versus selection pressure
 
@@ -67,11 +67,3 @@ GAs are most attractive when:
 - parallel hardware is available.
 
 For smooth convex problems, they are usually far less efficient than deterministic local methods.
-
-### Reproducing the figure
-
-Run:
-
-```bash
-python notes/8_optimization/resources/plot_genetic_algorithms.py
-```

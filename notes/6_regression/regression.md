@@ -30,7 +30,7 @@ $$
 
 The central question is not just “How closely can the model fit these data?” but “How well does the fitted relationship describe or predict new data?”
 
-![Regression models with different complexity](resources/plots/regression_model_complexity.svg)
+![Regression models with different complexity](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/regression_model_complexity.svg)
 
 ### Regression versus interpolation
 
@@ -200,7 +200,7 @@ A model that is too flexible can adapt to random noise in the training data. Thi
 
 The training error usually decreases as model flexibility increases. Predictive error on unseen data often follows a different pattern: it decreases at first, then can increase once the model starts fitting noise.
 
-![Training and held-out error as polynomial degree increases](resources/plots/regression_train_validation_error.svg)
+![Training and held-out error as polynomial degree increases](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/regression_train_validation_error.svg)
 
 This is why model selection should use held-out data, cross-validation, or another out-of-sample assessment rather than training error alone.
 

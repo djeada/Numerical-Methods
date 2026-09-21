@@ -30,7 +30,7 @@ $$
 
 Geometrically, the chord between two points on the graph lies above the graph.
 
-![Jensen inequality for a convex function](resources/plots/convex_jensen.svg)
+![Jensen inequality for a convex function](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/convex_jensen.svg)
 
 For differentiable $f$, convexity is equivalent to the global first-order lower bound
 
@@ -89,7 +89,7 @@ $$
 
 where $f$ and every $g_i$ are convex and the equality constraints are affine.
 
-![Convex level sets and a convex feasible region](resources/plots/convex_feasible_levels.svg)
+![Convex level sets and a convex feasible region](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/convex_feasible_levels.svg)
 
 Under a suitable constraint qualification such as Slater's condition, the KKT conditions are necessary and sufficient for optimality.
 
@@ -157,11 +157,3 @@ Because the objective is convex, this stationary point is automatically the uniq
 ### Modeling lessons
 
 Before choosing a generic nonlinear solver, ask whether the problem can be expressed as a convex one. A correct convex formulation can transform an apparently difficult search problem into one with global guarantees and reliable numerical methods.
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/8_optimization/resources/plot_convex_optimization.py
-```

@@ -14,7 +14,7 @@ $$
 
 This is different from regression or approximation. A regression model is usually allowed to miss individual observations in order to capture an overall trend; an interpolant treats the supplied values as exact constraints.
 
-![Interpolation compared with a least-squares trend](resources/plots/interpolation_exact_vs_regression.svg)
+![Interpolation compared with a least-squares trend](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/interpolation_exact_vs_regression.svg)
 
 The distinction matters. If the measurements are noisy, exact interpolation may reproduce noise that should have been smoothed away. If the values come from a trusted table, simulation, or expensive deterministic function, exact interpolation can be exactly what is needed.
 
@@ -46,7 +46,7 @@ A **local** method uses only nearby points. Piecewise linear interpolation, for 
 
 A **global** method uses all data points in one formula. Lagrange interpolation, Newton interpolation, and Gaussian radial basis function interpolation are examples.
 
-![Local piecewise interpolation and a global polynomial interpolant](resources/plots/interpolation_local_vs_global.svg)
+![Local piecewise interpolation and a global polynomial interpolant](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/interpolation_local_vs_global.svg)
 
 This local-versus-global distinction affects cost, smoothness, sensitivity, and how much the interpolant changes when one observation is modified.
 
@@ -199,4 +199,3 @@ A robust interpolation workflow is:
 6. inspect behavior between the nodes;
 7. define an explicit policy for out-of-range queries;
 8. compare against a trusted library implementation for important applications.
-

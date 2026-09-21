@@ -29,7 +29,7 @@ $$
 
 When $x$ lies between the endpoints, $0\le t\le1$, so the result is a weighted average of the endpoint values.
 
-![Geometry of linear interpolation](resources/plots/linear_interpolation_geometry.svg)
+![Geometry of linear interpolation](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/linear_interpolation_geometry.svg)
 
 ### Geometric interpretation
 
@@ -139,7 +139,7 @@ which is constant on that interval. At an interior node, the slope usually jumps
 
 For a smooth function, shorter intervals usually make the straight-line approximation more accurate.
 
-![Piecewise-linear interpolation improves as the grid is refined](resources/plots/linear_interpolation_refinement.svg)
+![Piecewise-linear interpolation improves as the grid is refined](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/linear_interpolation_refinement.svg)
 
 If $f$ is twice continuously differentiable on $[x_i,x_{i+1}]$, the interpolation error satisfies
 

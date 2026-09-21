@@ -44,7 +44,7 @@ $$
 
 Each iteration produces a new function, not merely a single number.
 
-![Successive Picard iterates approaching the exact solution](resources/plots/picard_iterates.svg)
+![Successive Picard iterates approaching the exact solution](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/picard_iterates.svg)
 
 ### Fixed-Point Interpretation
 
@@ -183,7 +183,7 @@ $$
 
 The iterates approach this solution on intervals where the contraction argument applies.
 
-![Picard iteration error decreases with iteration count](resources/plots/picard_convergence.svg)
+![Picard iteration error decreases with iteration count](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/picard_convergence.svg)
 
 ### An Important Distinction
 

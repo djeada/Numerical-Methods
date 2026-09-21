@@ -32,7 +32,7 @@ $$
 f(0)=0.
 $$
 
-![Rastrigin landscape with local and global minima](resources/plots/global_rastrigin.svg)
+![Rastrigin landscape with local and global minima](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/global_rastrigin.svg)
 
 A local descent method started near $x=3$ can settle in a nearby basin instead of finding the origin.
 
@@ -44,7 +44,7 @@ The implementation includes:
 - **simulated annealing**: a stochastic trajectory that can accept uphill moves;
 - **genetic algorithm**: a population-based evolutionary search.
 
-![Representative global-search behavior](resources/plots/global_search_comparison.svg)
+![Representative global-search behavior](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/global_search_comparison.svg)
 
 Detailed notes:
 

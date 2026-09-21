@@ -16,7 +16,7 @@ $$
 
 The constraints define the feasible set. A constrained optimum can lie on its boundary even when the objective gradient is nonzero.
 
-![Contours of an objective over a feasible region](resources/plots/constrained_feasible_region.svg)
+![Contours of an objective over a feasible region](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/constrained_feasible_region.svg)
 
 ### Equality constraints and tangency
 
@@ -80,7 +80,7 @@ $$
 \lambda_i^*g_i(x^*)=0.
 $$
 
-![KKT geometry at an active boundary](resources/plots/constrained_kkt_geometry.svg)
+![KKT geometry at an active boundary](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/constrained_kkt_geometry.svg)
 
 For a convex problem satisfying a standard qualification, these conditions are also sufficient for global optimality.
 
@@ -175,11 +175,3 @@ and the stationarity residual
 $$
 r_{\text{stat}}=\|\nabla_x\mathcal{L}\|.
 $$
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/8_optimization/resources/plot_constrained_optimization.py
-```

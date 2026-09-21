@@ -14,7 +14,7 @@ where $x\in\mathbb{R}^n$ is the decision vector, $f$ is the objective, and $\Ome
 
 The difficulty of an optimization problem depends less on its dimension alone than on its **geometry**: convexity, smoothness, conditioning, constraints, and the number of local minima all determine which algorithms are appropriate.
 
-![Local and global minima on a non-convex landscape](resources/plots/optimization_landscape.svg)
+![Local and global minima on a non-convex landscape](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/optimization_landscape.svg)
 
 ### A useful classification
 
@@ -81,7 +81,7 @@ measures their elongation.
 
 When $\kappa_2(A)$ is large, steepest descent tends to zig-zag across a narrow valley instead of moving directly toward the minimum.
 
-![Conditioning changes the path of gradient descent](resources/plots/optimization_conditioning.svg)
+![Conditioning changes the path of gradient descent](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/optimization_conditioning.svg)
 
 For a quadratic, fixed-step gradient descent
 
@@ -155,11 +155,3 @@ $$
 $$
 
 No single criterion is reliable in every problem. Small steps can occur because of a bad step size, and a small objective change can occur on a flat plateau even when the gradient is not small.
-
-### Reproducing the figures
-
-Run:
-
-```bash
-python notes/8_optimization/resources/plot_optimization.py
-```

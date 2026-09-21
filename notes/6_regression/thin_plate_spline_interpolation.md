@@ -25,7 +25,7 @@ that passes through every data value while minimizing a measure of bending.
 
 The name comes from the physical analogy of a thin elastic plate that is forced through fixed points and settles into the least-bending shape compatible with those constraints.
 
-![Thin-plate spline surface through scattered data](resources/plots/thin_plate_spline_surface.svg)
+![Thin-plate spline surface through scattered data](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/thin_plate_spline_surface.svg)
 
 ### Radial basis form
 
@@ -167,7 +167,7 @@ Changing one observed value can therefore alter many or all coefficients and cha
 
 The contour plot makes this global coupling easy to see.
 
-![Contours of a thin-plate spline interpolant](resources/plots/thin_plate_spline_contours.svg)
+![Contours of a thin-plate spline interpolant](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/thin_plate_spline_contours.svg)
 
 ### Bending-energy interpretation
 
