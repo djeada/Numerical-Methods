@@ -145,7 +145,7 @@ $$
 The minimizer solves $H x=b$:
 
 $$
-(x^*,y^*) = (0.5,1).
+(x^{\ast}, y^{\ast}) = (0.5, 1).
 $$
 
 Newton reaches it in one exact step from any starting point because the quadratic model is the function itself. Gradient descent generally needs multiple steps and its rate is controlled by the eigenvalue ratio $8/2=4$.
