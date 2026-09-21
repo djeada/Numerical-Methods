@@ -105,8 +105,7 @@ A&0
 \begin{bmatrix}
 x\\
 \nu
-\end{bmatrix}
-=
+\end{bmatrix} =
 \begin{bmatrix}
 -c\\
 b
