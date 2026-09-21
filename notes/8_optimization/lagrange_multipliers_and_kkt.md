@@ -19,7 +19,7 @@ $$
 At a regular constrained optimum, the objective gradient is normal to the feasible tangent space, so
 
 $$
-\nabla f(x^*) + \nu\nabla h(x^*) = 0.
+\nabla f(x^{\ast}) + \nu\nabla h(x^*) = 0.
 $$
 
 ![Tangency of an objective contour and an equality constraint](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/lagrange_tangency.svg)
