@@ -30,7 +30,7 @@ The implementation should solve this linear system; it should not explicitly for
 Near a nondegenerate minimizer, the Hessian changes smoothly and the quadratic model becomes highly accurate. Under standard assumptions,
 
 $$
-\| x_{k+1} - x^*\| \le C\| x_k - x^*\|^2.
+|x_{k+1} - x^{\ast}| \le C |x_k - x^{\ast}|^2
 $$
 
 This rapid local convergence is the main attraction of Newton's method.
