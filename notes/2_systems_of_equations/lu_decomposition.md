@@ -8,13 +8,15 @@ LU Decomposition (or LU Factorization) is a powerful and widely used technique i
 
 Consider a square $n \times n$ matrix $A$:
 
-$$A = \begin{bmatrix}
+$$
+A = \begin{bmatrix}
 a_{11} & a_{12} & a_{13} & \cdots & a_{1n} \\
 a_{21} & a_{22} & a_{23} & \cdots & a_{2n} \\
 a_{31} & a_{32} & a_{33} & \cdots & a_{3n} \\
 \vdots & \vdots & \vdots & \ddots & \vdots \\
 a_{n1} & a_{n2} & a_{n3} & \cdots & a_{nn}
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 The LU decomposition expresses $A$ as:
 
@@ -22,13 +24,15 @@ $$A = LU$$
 
 where
 
-$$L = \begin{bmatrix}
+$$
+L = \begin{bmatrix}
 1 & 0 & 0 & \cdots & 0 \\
 l_{21} & 1 & 0 & \cdots & 0 \\
 l_{31} & l_{32} & 1 & \cdots & 0 \\
 \vdots & \vdots & \vdots & \ddots & \vdots \\
 l_{n1} & l_{n2} & l_{n3} & \cdots & 1
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 $$
 U = \begin{bmatrix}
@@ -37,7 +41,8 @@ u_{11} & u_{12} & u_{13} & \cdots & u_{1n} \\
 0 & 0 & u_{33} & \cdots & u_{3n} \\
 \vdots & \vdots & \vdots & \ddots & \vdots \\
 0 & 0 & 0 & \cdots & u_{nn}
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 Here, $L$ is lower-triangular with ones on the diagonal, and $U$ is upper-triangular. The factorization is not always guaranteed to exist unless certain conditions are met (e.g., no zero pivots without partial pivoting, or $A$ being nonsingular and well-conditioned).
 
@@ -73,19 +78,19 @@ IV. This process continues recursively until $A$ is fully decomposed into $L$ an
 
 Given an $n \times n$ matrix $A$, the LU decomposition algorithm without pivoting can be described as follows:
 
-I. **Initialization**:  
+I. **Initialization**:
 
 Set $L = I$ (the $n \times n$ identity matrix) and $U = 0$ (the $n \times n$ zero matrix).
 
 II. **Main Loop** (for $i = 1$ to $n$):
 
-Compute the diagonal and upper elements of $U$:  
+Compute the diagonal and upper elements of $U$:
 
 For $j = i$ to $n$:
 
 $$u_{ij} = a_{ij} - \sum_{k=1}^{i-1} l_{ik} u_{kj}.$$
 
-Compute the lower elements of $L$:  
+Compute the lower elements of $L$:
 
 For $j = i+1$ to $n$:
 
@@ -111,41 +116,49 @@ $$x_i = \frac{c_i - \sum_{k=i+1}^{n} u_{ik}x_{k}}{u_{ii}}.$$
 
 Consider the system of equations:
 
-$$\begin{aligned}
-2x + 3y - 4z &= 1, \\
-3x - 3y + 2z &= -2, \\
--2x + 6y - z &= 3.
-\end{aligned}$$
+$$
+\begin{aligned}
+  2x + 3y - 4z &= 1, \\
+  3x - 3y + 2z &= -2, \\
+  -2x + 6y - z &= 3.
+\end{aligned}
+$$
 
 In matrix form:
 
-$$A = \begin{bmatrix}
+$$
+A = \begin{bmatrix}
 2 & 3 & -4 \\
 3 & -3 & 2 \\
 -2 & 6 & -1
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 $$
-\mathbf{b} = \begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}$$
+\mathbf{b} = \begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}
+$$
 
 **Step-by-Step LU Decomposition**
 
-**Step 1: Initialize**  
+**Step 1: Initialize**
 
 Set:
 
-$$L = \begin{bmatrix} 
+$$
+L = \begin{bmatrix}
 1 & 0 & 0 \\
 0 & 1 & 0 \\
 0 & 0 & 1
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 $$
 U = \begin{bmatrix}
 0 & 0 & 0 \\
 0 & 0 & 0 \\
 0 & 0 & 0
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 **Compute First Row of $U$**:
 
@@ -153,25 +166,32 @@ $$u_{11} = a_{11} = 2, \quad u_{12} = a_{12} = 3, \quad u_{13} = a_{13} = -4.$$
 
 Thus:
 
-$$U = \begin{bmatrix}
+$$
+U = \begin{bmatrix}
 2 & 3 & -4 \\
 0 & 0 & 0 \\
 0 & 0 & 0
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 **Compute First Column of $L$ (below diagonal)**:
 
 For $i = 2$ to 3:
 
-$$l_{21} = \frac{a_{21}}{u_{11}} = \frac{3}{2} = 1.5, \quad l_{31} = \frac{a_{31}}{u_{11}} = \frac{-2}{2} = -1.$$
+$$
+l_{21} = \frac{a_{21}}{u_{11}} = \frac{3}{2} = 1.5, \quad
+l_{31} = \frac{a_{31}}{u_{11}} = \frac{-2}{2} = -1.
+$$
 
 Now:
 
-$$L = \begin{bmatrix}
+$$
+L = \begin{bmatrix}
 1 & 0 & 0 \\
 1.5 & 1 & 0 \\
 -1 & 0 & 1
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 **Second Pivot (i=2)**:
 
@@ -185,11 +205,13 @@ $$u_{23} = a_{23} - l_{21}u_{13} = 2 - (1.5)(-4) = 2 + 6 = 8.$$
 
 Thus:
 
-$$U = \begin{bmatrix}
+$$
+U = \begin{bmatrix}
 2 & 3 & -4 \\
 0 & -7.5 & 8 \\
 0 & 0 & 0
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 For $l_{32}$:
 
@@ -197,11 +219,13 @@ $$l_{32} = \frac{a_{32} - l_{31}u_{12}}{u_{22}} = \frac{6 - (-1)(3)}{-7.5} = \fr
 
 Update $L$:
 
-$$L = \begin{bmatrix}
+$$
+L = \begin{bmatrix}
 1 & 0 & 0 \\
 1.5 & 1 & 0 \\
 -1 & -1.2 & 1
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 **Third Pivot (i=3)**:
 
@@ -211,30 +235,35 @@ $$u_{33} = a_{33} - l_{31}u_{13} - l_{32}u_{23} = (-1) - (-1)(-4) - (-1.2)(8).$$
 
 Carefully evaluate:
 
-$$(-1) - ( -1 \times -4) - (-1.2 \times 8) = (-1) - (4) - (-9.6) = -5 + 9.6 = 4.6.$$
+$$(-1) - (-1 \times - 4) - (-1.2 \times 8) = (-1) - (4) - (-9.6) = -5 + 9.6 = 4.6.$$
 
 Thus:
-
-$$U = \begin{bmatrix}
-2 & 3 & -4 \\
-0 & -7.5 & 8 \\
-0 & 0 & 4.6
-\end{bmatrix}$$
-
-So finally, we have:
-
-$$L = \begin{bmatrix}
-1 & 0 & 0 \\
-1.5 & 1 & 0 \\
--1 & -1.2 & 1
-\end{bmatrix}$$
 
 $$
 U = \begin{bmatrix}
 2 & 3 & -4 \\
 0 & -7.5 & 8 \\
 0 & 0 & 4.6
-\end{bmatrix}$$
+\end{bmatrix}
+$$
+
+So finally, we have:
+
+$$
+L = \begin{bmatrix}
+1 & 0 & 0 \\
+1.5 & 1 & 0 \\
+-1 & -1.2 & 1
+\end{bmatrix}
+$$
+
+$$
+U = \begin{bmatrix}
+2 & 3 & -4 \\
+0 & -7.5 & 8 \\
+0 & 0 & 4.6
+\end{bmatrix}
+$$
 
 **Forward Substitution ($L\mathbf{c} = \mathbf{b}$)**:
 
@@ -246,7 +275,7 @@ $$c_3 = b_3 - l_{31}c_1 - l_{32}c_2 = 3 - (-1)(1) - (-1.2)(-3.5) = 3 + 1 - 4.2 =
 
 **Backward Substitution ($U\mathbf{x} = \mathbf{c}$)**:
 
-$$x_3 = \frac{c_3}{u_{33}} = \frac{-0.2}{4.6} \approx -0.0434783$$
+$$x_3 = \frac{c_3}{u_{33}} = \frac{-0.2}{4.6} \approx - 0.0434783$$
 
 $$x_2 = \frac{c_2 - u_{23}x_3}{u_{22}} = \frac{-3.5 - (8)(-0.0434783)}{-7.5} = \frac{-3.5 + 0.3478264}{-7.5} = \frac{-3.1521736}{-7.5} \approx 0.42029$$
 

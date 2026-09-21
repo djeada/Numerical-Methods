@@ -13,13 +13,13 @@ $$
 subject to
 
 $$
-h(x)=0.
+h(x) = 0.
 $$
 
 At a regular constrained optimum, the objective gradient is normal to the feasible tangent space, so
 
 $$
-\nabla f(x^*)+\nu\nabla h(x^*)=0.
+\nabla f(x^*) + \nu\nabla h(x^*) = 0.
 $$
 
 ![Tangency of an objective contour and an equality constraint](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/lagrange_tangency.svg)
@@ -27,15 +27,14 @@ $$
 The Lagrangian is
 
 $$
-\mathcal{L}(x,\nu)=f(x)+\nu h(x).
+\mathcal{L}(x,\nu) = f(x) + \nu h(x).
 $$
 
 The first-order equations are
 
 $$
-\nabla_x\mathcal{L}=0,
-\qquad
-h(x)=0.
+\nabla_x\mathcal{L} = 0,
+\qquad h(x) = 0.
 $$
 
 ### Multiple constraints
@@ -43,8 +42,7 @@ $$
 With equality constraints $h_j(x)=0$ and inequalities $g_i(x)\le0$,
 
 $$
-\mathcal{L}(x,\lambda,\nu)
-=f(x)+\sum_i\lambda_i g_i(x)+\sum_j\nu_j h_j(x).
+\mathcal{L}(x,\lambda,\nu) = f(x) + \sum_i\lambda_i g_i(x) + \sum_j\nu_j h_j(x).
 $$
 
 The Karush-Kuhn-Tucker conditions are:
@@ -52,15 +50,14 @@ The Karush-Kuhn-Tucker conditions are:
 **Stationarity**
 
 $$
-\nabla_x\mathcal{L}=0.
+\nabla_x\mathcal{L} = 0.
 $$
 
 **Primal feasibility**
 
 $$
 g_i(x)\le0,
-\qquad
-h_j(x)=0.
+\qquad h_j(x) = 0.
 $$
 
 **Dual feasibility**
@@ -72,7 +69,7 @@ $$
 **Complementary slackness**
 
 $$
-\lambda_i g_i(x)=0.
+\lambda_i g_i(x) = 0.
 $$
 
 ### Active constraints
@@ -80,13 +77,13 @@ $$
 Complementary slackness says that either
 
 $$
-g_i(x^*)<0\quad\Rightarrow\quad\lambda_i=0,
+g_i(x^*)<0\quad\Rightarrow\quad\lambda_i = 0,
 $$
 
 or the constraint is active:
 
 $$
-g_i(x^*)=0.
+g_i(x^*) = 0.
 $$
 
 Only active inequality constraints can exert a first-order force on the optimum.

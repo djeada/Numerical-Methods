@@ -5,20 +5,14 @@ Picard iteration turns an initial value problem into a sequence of integral appr
 Consider
 
 $$
-y'(t)=f(t,y(t)),
-\qquad
-y(t_0)=y_0.
+y'(t) = f(t,y(t)),
+\qquad y(t_0) = y_0.
 $$
 
 Integrating from $t_0$ to $t$ gives the equivalent integral equation
 
 $$
-y(t)
-=
-y_0
-+
-\int_{t_0}^{t}
-f(s,y(s))\,ds.
+y(t) = y_0 + \int_{t_0}^{t} f(s,y(s))\, ds.
 $$
 
 Picard's method replaces the unknown function inside the integral with the previous approximation.
@@ -28,18 +22,13 @@ Picard's method replaces the unknown function inside the integral with the previ
 Choose an initial function, often
 
 $$
-y_0(t)=y_0.
+y_0(t) = y_0.
 $$
 
 Then define
 
 $$
-y_{n+1}(t)
-=
-y_0
-+
-\int_{t_0}^{t}
-f(s,y_n(s))\,ds.
+y_{n+1}(t) = y_0 + \int_{t_0}^{t} f(s,y_n(s))\, ds.
 $$
 
 Each iteration produces a new function, not merely a single number.
@@ -51,24 +40,19 @@ Each iteration produces a new function, not merely a single number.
 Define an operator
 
 $$
-(Ty)(t)
-=
-y_0
-+
-\int_{t_0}^{t}
-f(s,y(s))\,ds.
+(Ty)(t) = y_0 + \int_{t_0}^{t} f(s,y(s))\, ds.
 $$
 
 A solution of the IVP is exactly a fixed point:
 
 $$
-Ty=y.
+Ty = y.
 $$
 
 Picard iteration is therefore the fixed-point iteration
 
 $$
-y_{n+1}=Ty_n.
+y_{n+1} = Ty_n.
 $$
 
 If $T$ is a contraction on a suitable function space, the contraction mapping theorem guarantees convergence to a unique fixed point.
@@ -78,26 +62,19 @@ If $T$ is a contraction on a suitable function space, the contraction mapping th
 Suppose
 
 $$
-|f(t,y)-f(t,z)|
-\le
-L|y-z|.
+|f(t,y) - f(t,z)| \le L|y - z|.
 $$
 
 Then on a short interval $|t-t_0|\le a$,
 
 $$
-|(Ty)(t)-(Tz)(t)|
-\le
-\int_{t_0}^{t}
-L|y(s)-z(s)|\,ds.
+|(Ty)(t) - (Tz)(t)| \le \int_{t_0}^{t} L|y(s) - z(s)|\, ds.
 $$
 
 Using the supremum norm,
 
 $$
-\|Ty-Tz\|_\infty
-\le
-La\|y-z\|_\infty.
+\| Ty - Tz\|_\infty \le La\| y - z\|_\infty.
 $$
 
 If
@@ -113,72 +90,56 @@ then $T$ is a contraction. This is the core idea behind the local Picard--Lindel
 Consider
 
 $$
-y'=x+y,
-\qquad
-y(0)=1.
+y' = x + y,
+\qquad y(0) = 1.
 $$
 
 The integral form is
 
 $$
-y(x)
-=
-1+\int_0^x(t+y(t))\,dt.
+y(x) = 1 + \int_0^x(t + y(t))\, dt.
 $$
 
 Start with
 
 $$
-y_0(x)=1.
+y_0(x) = 1.
 $$
 
 The first iterate is
 
 $$
-y_1(x)
-=
-1+\int_0^x(t+1)\,dt
-=
-1+x+\frac{x^2}{2}.
+y_1(x) = 1 + \int_0^x(t + 1)\, dt = 1 + x + \frac{x^2}{2}.
 $$
 
 The second iterate is
 
 $$
-y_2(x)
-=
-1+\int_0^x
-\left(
-t+1+t+\frac{t^2}{2}
-\right)dt,
+y_2(x) = 1 + \int_0^x \left(t + 1 + t + \frac{t^2}{2} \right)dt,
 $$
 
 so
 
 $$
-y_2(x)
-=
-1+x+x^2+\frac{x^3}{6}.
+y_2(x) = 1 + x + x^2 + \frac{x^3}{6}.
 $$
 
 The third iterate is
 
 $$
-y_3(x)
-=
-1+x+x^2+\frac{x^3}{3}+\frac{x^4}{24}.
+y_3(x) = 1 + x + x^2 + \frac{x^3}{3} + \frac{x^4}{24}.
 $$
 
 The exact solution of
 
 $$
-y'-y=x
+y' - y = x
 $$
 
 is
 
 $$
-y(x)=2e^x-x-1.
+y(x) = 2e^x - x - 1.
 $$
 
 The iterates approach this solution on intervals where the contraction argument applies.
@@ -207,7 +168,7 @@ $$
 and approximate
 
 $$
-\int_{t_0}^{t_j}f(s,y_n(s))\,ds
+\int_{t_0}^{t_j}f(s,y_n(s))\, ds
 $$
 
 with a quadrature rule.

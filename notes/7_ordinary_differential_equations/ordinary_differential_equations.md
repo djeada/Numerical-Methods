@@ -5,13 +5,7 @@ An **ordinary differential equation (ODE)** relates an unknown function of one i
 A general $n$th-order ODE can be written as
 
 $$
-F\left(
-t,
-y,
-y',
-\ldots,
-y^{(n)}
-\right)=0.
+F\left(t, y, y', \ldots, y^{(n)} \right) = 0.
 $$
 
 The word *ordinary* means that derivatives are taken with respect to a single independent variable. If several independent variables appear, the corresponding equation is a partial differential equation.
@@ -21,9 +15,8 @@ The word *ordinary* means that derivatives are taken with respect to a single in
 A common first-order form is
 
 $$
-y'(t)=f(t,y(t)),
-\qquad
-y(t_0)=y_0.
+y'(t) = f(t,y(t)),
+\qquad y(t_0) = y_0.
 $$
 
 At every point $(t,y)$, the function $f$ specifies the slope of a possible solution curve. The initial condition chooses one trajectory from that slope field.
@@ -31,7 +24,7 @@ At every point $(t,y)$, the function $f$ specifies the slope of a possible solut
 Autonomous problems have the form
 
 $$
-y'=f(y),
+y' = f(y),
 $$
 
 so the direction of motion depends only on the current state.
@@ -41,7 +34,7 @@ so the direction of motion depends only on the current state.
 For example, the logistic equation
 
 $$
-y'=r y\left(1-\frac{y}{K}\right)
+y' = r y\left(1 - \frac{y}{K}\right)
 $$
 
 has equilibria at $y=0$ and $y=K$. When $0<y<K$, the derivative is positive; when $y>K$, it is negative. This qualitative information already reveals the long-term behavior without solving the equation explicitly.
@@ -51,25 +44,22 @@ has equilibria at $y=0$ and $y=K$. When $0<y<K$, the derivative is positive; whe
 An **initial value problem (IVP)** specifies all required conditions at one point. For a second-order ODE,
 
 $$
-y''=g(t,y,y'),
+y'' = g(t,y,y'),
 $$
 
 a typical IVP is
 
 $$
-y(t_0)=y_0,
-\qquad
-y'(t_0)=v_0.
+y(t_0) = y_0,
+\qquad y'(t_0) = v_0.
 $$
 
 A **boundary value problem (BVP)** specifies conditions at different locations, for example
 
 $$
-y''+y=0,
-\qquad
-y(0)=0,
-\qquad
-y(1)=1.
+y'' + y = 0,
+\qquad y(0) = 0,
+\qquad y(1) = 1.
 $$
 
 IVPs are naturally advanced forward or backward in the independent variable. BVPs usually require different numerical ideas such as shooting or finite differences.
@@ -89,12 +79,7 @@ The order is the highest derivative present.
 A linear $n$th-order ODE has the form
 
 $$
-a_n(t)y^{(n)}
-+\cdots+
-a_1(t)y'
-+a_0(t)y
-=
-g(t).
+a_n(t)y^{(n)} + \cdots + a_1(t)y' + a_0(t)y = g(t).
 $$
 
 The unknown function and its derivatives appear only linearly.
@@ -102,19 +87,19 @@ The unknown function and its derivatives appear only linearly.
 Examples:
 
 $$
-y'+2y=\sin t
+y' + 2y = \sin t
 $$
 
 is linear, while
 
 $$
-y'=y^2-t
+y' = y^2 - t
 $$
 
 and
 
 $$
-y''+\sin y=0
+y'' + \sin y = 0
 $$
 
 are nonlinear.
@@ -130,31 +115,30 @@ Numerical solvers are usually written for first-order systems. Any higher-order 
 For
 
 $$
-y''+c y'+k y=0,
+y'' + c y' + k y = 0,
 $$
 
 define
 
 $$
-u_1=y,
-\qquad
-u_2=y'.
+u_1 = y,
+\qquad u_2 = y'.
 $$
 
 Then
 
 $$
-u_1'=u_2,
+u_1' = u_2,
 $$
 
 $$
-u_2'=-k u_1-c u_2.
+u_2' = -k u_1 - c u_2.
 $$
 
 So the second-order scalar problem becomes
 
 $$
-\mathbf{u}'=\mathbf{f}(t,\mathbf{u}).
+\mathbf{u}' = \mathbf{f}(t,\mathbf{u}).
 $$
 
 The same conversion works for arbitrary order.
@@ -164,9 +148,8 @@ The same conversion works for arbitrary order.
 For
 
 $$
-y'=f(t,y),
-\qquad
-y(t_0)=y_0,
+y' = f(t,y),
+\qquad y(t_0) = y_0,
 $$
 
 a standard local result is the Picard--Lindelof theorem. Roughly, if:
@@ -179,9 +162,7 @@ then the IVP has a unique local solution.
 A Lipschitz condition in $y$ means there is a constant $L$ such that
 
 $$
-|f(t,y_1)-f(t,y_2)|
-\le
-L|y_1-y_2|.
+|f(t,y_1) - f(t,y_2)| \le L|y_1 - y_2|.
 $$
 
 This condition prevents nearby solution curves from splitting unpredictably.
@@ -193,13 +174,13 @@ Some ODEs have closed-form solutions. Many important nonlinear systems do not.
 For example,
 
 $$
-y'=ay
+y' = ay
 $$
 
 has the exact solution
 
 $$
-y(t)=y_0e^{a(t-t_0)}.
+y(t) = y_0e^{a(t-t_0)}.
 $$
 
 But once $f$ becomes nonlinear, coupled, discontinuous, or expensive, numerical integration is often the practical route.
@@ -219,7 +200,7 @@ Their accuracy can differ dramatically at the same step size.
 A one-step method advances by
 
 $$
-u_{n+1}=\Phi_h(t_n,u_n).
+u_{n+1} = \Phi_h(t_n,u_n).
 $$
 
 Two distinct errors are useful:
@@ -230,9 +211,7 @@ Two distinct errors are useful:
 A method of global order $p$ typically satisfies
 
 $$
-\max_n |u(t_n)-u_n|
-=
-O(h^p)
+\max_n |u(t_n) - u_n| = O(h^p)
 $$
 
 on a fixed interval as $h\to0$.
@@ -246,13 +225,13 @@ Accuracy alone does not guarantee a good numerical solution.
 For the test equation
 
 $$
-y'=\lambda y,
+y' = \lambda y,
 $$
 
 a numerical method produces
 
 $$
-y_{n+1}=R(h\lambda)y_n,
+y_{n+1} = R(h\lambda)y_n,
 $$
 
 where $R$ is the method's stability function. Stability requires the numerical amplification to behave consistently with the exact solution.
@@ -275,7 +254,7 @@ Embedded Runge--Kutta pairs, such as RK45, obtain two approximations of differen
 #### Exponential Growth and Decay
 
 $$
-y'=ay.
+y' = ay.
 $$
 
 The sign of $a$ determines growth or decay.
@@ -283,7 +262,7 @@ The sign of $a$ determines growth or decay.
 #### Logistic Growth
 
 $$
-P'=rP\left(1-\frac{P}{K}\right).
+P' = rP\left(1 - \frac{P}{K}\right).
 $$
 
 The parameter $K$ is the carrying capacity.
@@ -291,21 +270,20 @@ The parameter $K$ is the carrying capacity.
 #### Harmonic Oscillator
 
 $$
-x''+\omega^2x=0.
+x'' + \omega^2x = 0.
 $$
 
 As a first-order system:
 
 $$
-x'=v,
-\qquad
-v'=-\omega^2x.
+x' = v,
+\qquad v' = -\omega^2x.
 $$
 
 #### Damped Oscillator
 
 $$
-x''+2\zeta\omega x'+\omega^2x=0.
+x'' + 2\zeta\omega x' + \omega^2x = 0.
 $$
 
 The damping ratio $\zeta$ controls whether the motion is underdamped, critically damped, or overdamped.

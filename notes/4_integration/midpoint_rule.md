@@ -20,10 +20,10 @@ $$
 
 Within each subinterval, defined by $x_{i}$ and $x_{i+1}$, the function $f(x)$ is evaluated at the midpoint $\frac{x_{i} + x_{i+1}}{2}$. This gives rise to the coordinates of the rectangle:
 
-- ** $\left(x_{i}, f\left(\frac{x_{i} + x_{i+1}}{2}\right)\right)$
-- ** $\left(x_{i+1}, f\left(\frac{x_{i} + x_{i+1}}{2}\right)\right)$
-- ** $\left(x_{i+1}, 0\right)$
-- ** $\left(x_{i}, 0\right)$
+- \*\* $\left(x_{i}, f\left(\frac{x_{i} + x_{i+1}}{2}\right)\right)$
+- \*\* $\left(x_{i+1}, f\left(\frac{x_{i} + x_{i+1}}{2}\right)\right)$
+- \*\* $\left(x_{i+1}, 0\right)$
+- \*\* $\left(x_{i}, 0\right)$
 
 The area of each rectangle is then computed by multiplying the height $f\left(\frac{x_{i} + x_{i+1}}{2}\right)$ by the width $h$. The integral approximation is obtained by summing these areas across all subintervals:
 
@@ -46,11 +46,11 @@ This summation provides an estimate of the total area under the curve $f(x)$ ove
 
 Consider the function $f(x) = x^2$.
 
-I. **Choose Interval and Subdivisions:** 
+I. **Choose Interval and Subdivisions:**
 
 Let $a = 0$ and $b = 2$, and partition this interval into $n = 2$ equal subintervals. This results in subintervals $[0, 1]$ and $[1, 2]$, each with a width $h = 1$.
 
-II. **Evaluate at Midpoints:** 
+II. **Evaluate at Midpoints:**
 
 - For the first subinterval $[0, 1]$, the midpoint is $x = 0.5$. Evaluating the function gives $f(0.5) = (0.5)^2 = 0.25$.
 - For the second subinterval $[1, 2]$, the midpoint is $x = 1.5$. Evaluating the function gives $f(1.5) = (1.5)^2 = 2.25$.
@@ -60,7 +60,7 @@ III. **Apply the Midpoint Rule Formula:**
 - $(1 - 0) \times f(0.5) = 1 \times 0.25 = 0.25$.
 - $(2 - 1) \times f(1.5) = 1 \times 2.25 = 2.25$.
 
-IV. **Sum the Areas:** 
+IV. **Sum the Areas:**
 
 The total integral approximation is $0.25 + 2.25 = 2.5$.
 
@@ -77,4 +77,3 @@ The exact value of the integral $\int_{0}^{2} x^2 \, dx = \frac{8}{3} \approx 2.
 - The Midpoint Rule can introduce **errors** when dealing with functions that exhibit high curvature or rapid changes within subintervals, as a single midpoint evaluation may not capture the function's behavior adequately.
 - Achieving high accuracy with the Midpoint Rule often requires a large number of **subintervals**, increasing computational effort due to the necessity of more function evaluations and calculations.
 - The Midpoint Rule is less effective for **discontinuous** functions, as the method assumes continuity over the interval of integration and may fail to provide meaningful approximations for functions with discontinuities or sharp corners.
-

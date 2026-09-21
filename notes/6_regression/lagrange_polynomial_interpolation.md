@@ -11,7 +11,7 @@ $$
 the interpolating polynomial is written as
 
 $$
-p_n(x)=\sum_{j=0}^{n}y_jL_j(x),
+p_n(x) = \sum_{j=0}^{n}y_jL_j(x),
 $$
 
 where each $L_j(x)$ is a **Lagrange basis polynomial**.
@@ -43,34 +43,32 @@ $$
 At $x=x_j$, every factor equals one, so
 
 $$
-L_j(x_j)=1.
+L_j(x_j) = 1.
 $$
 
 At any other node $x_i$, one numerator factor becomes
 
 $$
-x_i-x_i=0,
+x_i - x_i = 0,
 $$
 
 so
 
 $$
-L_j(x_i)=0
-\qquad\text{for }i\ne j.
+L_j(x_i) = 0
+\qquad \text{for }i\ne j.
 $$
 
 Now evaluate
 
 $$
-p_n(x)=\sum_{j=0}^{n}y_jL_j(x)
+p_n(x) = \sum_{j=0}^{n}y_jL_j(x)
 $$
 
 at a data node $x_i$:
 
 $$
-p_n(x_i) =
-\sum_{j=0}^{n}y_jL_j(x_i) =
-y_i.
+p_n(x_i) = \sum_{j=0}^{n}y_jL_j(x_i) = y_i.
 $$
 
 This proves that the polynomial interpolates every supplied value.
@@ -94,47 +92,43 @@ Although the basis functions are tied to individual nodes, the final polynomial 
 Interpolate the three points
 
 $$
-(0,1),\qquad(1,3),\qquad(2,2).
+(0,1),
+\qquad(1,3),
+\qquad(2,2).
 $$
 
 The basis polynomials are
 
 $$
-L_0(x) =
-\frac{(x-1)(x-2)}{(0-1)(0-2)} =
-\frac{(x-1)(x-2)}{2},
+L_0(x) = \frac{(x-1)(x-2)}{(0-1)(0-2)} = \frac{(x-1)(x-2)}{2},
 $$
 
 $$
-L_1(x) =
-\frac{x(x-2)}{(1-0)(1-2)}=
--x(x-2),
+L_1(x) = \frac{x(x-2)}{(1-0)(1-2)} = -x(x - 2),
 $$
 
 and
 
 $$
-L_2(x) = \frac{x(x-1)}{(2-0)(2-1)} =
-\frac{x(x-1)}{2}.
+L_2(x) = \frac{x(x-1)}{(2-0)(2-1)} = \frac{x(x-1)}{2}.
 $$
 
 Therefore,
 
 $$
-p(x) =
-1L_0(x)+3L_1(x)+2L_2(x).
+p(x) = 1L_0(x) + 3L_1(x) + 2L_2(x).
 $$
 
 After simplification,
 
 $$
-p(x) = -\frac{3}{2}x^2 +\frac{7}{2}x +1
+p(x) = -\frac{3}{2}x^2 + \frac{7}{2}x + 1
 $$
 
 At $x=1.5$,
 
 $$
-p(1.5) = -\frac{3}{2}(1.5)^2 +\frac{7}{2}(1.5) +1 = 2.875
+p(1.5) = -\frac{3}{2}(1.5)^2 + \frac{7}{2}(1.5) + 1 = 2.875
 $$
 
 Thus
@@ -146,7 +140,9 @@ $$
 The polynomial also satisfies
 
 $$
-p(0)=1,\qquad p(1)=3,\qquad p(2)=2.
+p(0) = 1,
+\qquad p(1) = 3,
+\qquad p(2) = 2.
 $$
 
 ### Direct evaluation cost
@@ -168,12 +164,7 @@ $$
 For a query $x$ that is not exactly one of the nodes,
 
 $$
-p_n(x) =
-\frac{
-\displaystyle\sum_{j=0}^{n}\frac{w_jy_j}{x-x_j}
-}{
-\displaystyle\sum_{j=0}^{n}\frac{w_j}{x-x_j}
-}.
+p_n(x) = \frac{ \displaystyle\sum_{j=0}^{n}\frac{w_jy_j}{x-x_j} }{ \displaystyle\sum_{j=0}^{n}\frac{w_j}{x-x_j} }.
 $$
 
 The weights depend only on the node locations, so they can be precomputed once. After that, one scalar query costs $O(n)$.
@@ -181,7 +172,7 @@ The weights depend only on the node locations, so they can be precomputed once. 
 If $x=x_k$ exactly, the correct value is simply
 
 $$
-p_n(x_k)=y_k.
+p_n(x_k) = y_k.
 $$
 
 An implementation should detect this case rather than evaluate a formula containing division by zero.
@@ -191,7 +182,7 @@ An implementation should detect this case rather than evaluate a formula contain
 The same polynomial can be written in monomial form:
 
 $$
-p_n(x)=a_0+a_1x+\cdots+a_nx^n.
+p_n(x) = a_0 + a_1x + \cdots + a_nx^n.
 $$
 
 Matching the data gives a Vandermonde system. In exact arithmetic this is valid, but a monomial Vandermonde matrix can be badly conditioned, especially for high degrees or poorly scaled nodes.
@@ -203,9 +194,7 @@ Lagrange or Newton forms expose the interpolation structure directly and usually
 If the unknown function $f$ has $n+1$ continuous derivatives, then
 
 $$
-f(x)-p_n(x) =
-\frac{f^{(n+1)}(\xi_x)}{(n+1)!}
-\prod_{i=0}^{n}(x-x_i)
+f(x) - p_n(x) = \frac{f^{(n+1)}(\xi_x)}{(n+1)!} \prod_{i=0}^{n}(x - x_i)
 $$
 
 for some $\xi_x$ in the relevant interval.

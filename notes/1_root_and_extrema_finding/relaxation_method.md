@@ -135,25 +135,30 @@ $$x_1 = g(x_0) = g(0) = \frac{0^2 + 2}{3} = \frac{2}{3}\approx0.6667$$
 
 **Iteration 2:**
 
-$$x_2 = g(x_1) = g(0.6667) = \frac{(0.6667)^2 + 2}{3} = \frac{0.4444 + 2}{3}\approx\frac{2.4444}{3}=0.8148$$
+$$
+x_2 = g(x_1) = g(0.6667) = \frac{(0.6667)^2 + 2}{3} = \frac{0.4444 + 2}{3}\approx
+\frac{2.4444}{3} = 0.8148
+$$
 
 **Iteration 3:**
 
-$$x_3 = g(x_2) = g(0.8148)=\frac{(0.8148)^2 +2}{3}=\frac{0.6639+2}{3}\approx\frac{2.6639}{3}=0.8880$$
+$$
+x_3 = g(x_2) = g(0.8148) = \frac{(0.8148)^2 +2}{3} = \frac{0.6639+2}{3}\approx
+\frac{2.6639}{3} = 0.8880
+$$
 
 Repeating this process, we observe $x_n$ approaching one of the roots (in this case, it will move closer to $x=1$, depending on the behavior of $g(x)$ near that root).
 
-### Advantages  
+### Advantages
 
-1. **Flexible formulation** allows the relaxation method to work by simply rewriting the equation in fixed-point form $x = g(x)$ and iterating, making it conceptually straightforward.  
-2. **Potentially faster than bisection**, the method can converge more quickly when $g(x)$ is well-chosen, particularly if $|g'(x)| < 1$ near the root.  
-3. **Broad applicability** makes the method suitable for nonlinear equations that do not require derivatives, although convergence often depends on the properties of $g(x)$.  
-4. **Straightforward implementation** is achieved by directly iterating $x_{n+1} = g(x_n)$, provided an appropriate $g(x)$ is identified.  
+1. **Flexible formulation** allows the relaxation method to work by simply rewriting the equation in fixed-point form $x = g(x)$ and iterating, making it conceptually straightforward.
+2. **Potentially faster than bisection**, the method can converge more quickly when $g(x)$ is well-chosen, particularly if $|g'(x)| < 1$ near the root.
+3. **Broad applicability** makes the method suitable for nonlinear equations that do not require derivatives, although convergence often depends on the properties of $g(x)$.
+4. **Straightforward implementation** is achieved by directly iterating $x_{n+1} = g(x_n)$, provided an appropriate $g(x)$ is identified.
 
-### Limitations  
+### Limitations
 
-1. **No guaranteed convergence** means the method may fail if $|g'(x)| \geq 1$ in the vicinity of the root, unlike bracketing methods that ensure convergence under certain conditions.  
-2. **Sensitive to the choice of $g(x)$**, as some transformations of $f(x) = 0$ into $x = g(x)$ promote convergence while others lead to divergence.  
-3. **Initial guess importance** highlights that a poor starting point can result in divergence or very slow convergence, making the method less robust in such cases.  
-4. **Dependent on continuity and differentiability**, with standard convergence theory requiring $g(x)$ to be continuous and differentiable, limiting its applicability for problems that do not meet these conditions.  
-
+1. **No guaranteed convergence** means the method may fail if $|g'(x)| \geq 1$ in the vicinity of the root, unlike bracketing methods that ensure convergence under certain conditions.
+2. **Sensitive to the choice of $g(x)$**, as some transformations of $f(x) = 0$ into $x = g(x)$ promote convergence while others lead to divergence.
+3. **Initial guess importance** highlights that a poor starting point can result in divergence or very slow convergence, making the method less robust in such cases.
+4. **Dependent on continuity and differentiability**, with standard convergence theory requiring $g(x)$ to be continuous and differentiable, limiting its applicability for problems that do not meet these conditions.

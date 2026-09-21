@@ -7,13 +7,13 @@ Simulated annealing is a stochastic global-search method that occasionally accep
 Suppose the current point is $x$ and a candidate $y$ has objective difference
 
 $$
-\Delta f=f(y)-f(x).
+\Delta f = f(y) - f(x).
 $$
 
 If $\Delta f\le0$, accept the candidate. If $\Delta f>0$, accept with probability
 
 $$
-P=\exp\left(-\frac{\Delta f}{T}\right),
+P = \exp\left(-\frac{\Delta f}{T}\right),
 $$
 
 where $T>0$ is the temperature.
@@ -25,7 +25,7 @@ At high temperature, uphill moves are common. At low temperature, the method bec
 The repository uses geometric cooling:
 
 $$
-T_{k+1}=\alpha T_k,
+T_{k+1} = \alpha T_k,
 \qquad 0<\alpha<1.
 $$
 
@@ -38,7 +38,7 @@ The choice of $T_0$, $\alpha$, proposal scale, and iteration budget all matter.
 For continuous variables, a simple proposal is
 
 $$
-y=x+\sigma z,
+y = x + \sigma z,
 \qquad z\sim\mathcal N(0,I).
 $$
 

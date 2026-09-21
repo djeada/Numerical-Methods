@@ -21,11 +21,11 @@ Assume $f$ is three times differentiable on $[x-h,,x+h]$. By Taylor’s theorem,
 > For a quick refresher on this notation, see [Taylor Series](taylor_series.md).
 
 $$
-f(x+h) = f(x) + hf'(x) + \frac{h^2}{2}f''(x) + \frac{h^3}{6}f^{(3)}(\xi_1)
+f(x + h) = f(x) + hf'(x) + \frac{h^2}{2}f''(x) + \frac{h^3}{6}f^{(3)}(\xi_1)
 $$
 
 $$
-f(x-h) = f(x) - hf'(x) + \frac{h^2}{2}f''(x) - \frac{h^3}{6}f^{(3)}(\xi_2)
+f(x - h) = f(x) - hf'(x) + \frac{h^2}{2}f''(x) - \frac{h^3}{6}f^{(3)}(\xi_2)
 $$
 
 #### Forward and Backward Differences
@@ -33,8 +33,7 @@ $$
 The forward difference approximation is:
 
 $$
-\frac{f(x+h)-f(x)}{h}
-= f'(x) + \frac{h}{2}f''(x) + \frac{h^2}{6}f^{(3)}(\xi_1)
+\frac{f(x+h)-f(x)}{h} = f'(x) + \frac{h}{2}f''(x) + \frac{h^2}{6}f^{(3)}(\xi_1)
 $$
 
 Thus
@@ -46,8 +45,7 @@ $$
 Similarly, the backward difference approximation is:
 
 $$
-\frac{f(x)-f(x-h)}{h}
-= f'(x) - \frac{h}{2}f''(x) + \frac{h^2}{6}f^{(3)}(\xi_2)
+\frac{f(x)-f(x-h)}{h} = f'(x) - \frac{h}{2}f''(x) + \frac{h^2}{6}f^{(3)}(\xi_2)
 $$
 
 Thus
@@ -65,13 +63,13 @@ $$
 $$
 
 $$
-= \frac12\Bigl[\bigl(f'(x) + \tfrac{h}{2}f''(x) + \tfrac{h^2}{6}f^{(3)}(\xi_1)\bigr)
+\= \\frac12\\Bigl\[\\bigl(f'(x) + \\tfrac{h}{2}f''(x) + \\tfrac{h^2}{6}f^{(3)}(\\xi\_1)\\bigr)
 
-* \bigl(f'(x) - \tfrac{h}{2}f''(x) + \tfrac{h^2}{6}f^{(3)}(\xi_2)\bigr)\Bigr]
+- \\bigl(f'(x) - \\tfrac{h}{2}f''(x) + \\tfrac{h^2}{6}f^{(3)}(\\xi\_2)\\bigr)\\Bigr\]
   $$
 
 $$
-= f'(x) + \frac{h^2}{12}\bigl(f^{(3)}(\xi_1)+f^{(3)}(\xi_2)\bigr)
+= f'(x) + \frac{h^2}{12}\bigl(f^{(3)}(\xi_1) + f^{(3)}(\xi_2)\bigr)
 $$
 
 The $\pm\tfrac{h}{2}f''(x)$ terms cancel exactly, leaving only an $\mathcal{O}(h^2)$ remainder.
@@ -79,15 +77,15 @@ The $\pm\tfrac{h}{2}f''(x)$ terms cancel exactly, leaving only an $\mathcal{O}(h
 Rewriting the left-hand side:
 
 $$
-\frac{1}{2}\Bigl(\tfrac{f(x+h)-f(x)}{h} + \tfrac{f(x)-f(x-h)}{h}\Bigr)
-= \frac{f(x+h)-f(x-h)}{2h}
+\frac{1}{2}\Bigl(\tfrac{f(x+h)-f(x)}{h} +
+\tfrac{f(x)-f(x-h)}{h}\Bigr) = \frac{f(x+h)-f(x-h)}{2h}
 $$
 
 Hence
 
 $$
-\frac{f(x+h)-f(x-h)}{2h}
-= f'(x) + \underbrace{\frac{h^2}{12}\bigl(f^{(3)}(\xi_1)+f^{(3)}(\xi_2)\bigr)}_{\displaystyle \mathcal{O}(h^2)}
+\frac{f(x+h)-f(x-h)}{2h} = f'(x) +
+\underbrace{\frac{h^2}{12}\bigl(f^{(3)}(\xi_1)+f^{(3)}(\xi_2)\bigr)}_{\displaystyle \mathcal{O}(h^2)}
 $$
 
 If $f^{(3)}$ is continuous, then there exists some $\xi\in(x-h,x+h)$ such that
@@ -99,23 +97,19 @@ $$
 and therefore
 
 $$
-\frac{f(x+h)-f(x-h)}{2h}
-= f'(x) + \frac{h^2}{6}f^{(3)}(\xi)
-= f'(x) + \mathcal{O}(h^2)
+\frac{f(x+h)-f(x-h)}{2h} = f'(x) + \frac{h^2}{6}f^{(3)}(\xi) = f'(x) + \mathcal{O}(h^2)
 $$
 
 Equivalently,
 
 $$
-f'(x)=\frac{f(x+h)-f(x-h)}{2h}+\mathcal{O}(h^2)
+f'(x) = \frac{f(x+h)-f(x-h)}{2h} + \mathcal{O}(h^2)
 $$
 
 Dropping the explicit remainder term gives the familiar approximation:
 
 $$
-\boxed{
-f'(x)\approx \frac{f(x+h)-f(x-h)}{2h}
-}
+\boxed{ f'(x)\approx \frac{f(x+h)-f(x-h)}{2h} }
 $$
 
 which is **second‐order accurate** (error $\propto h^2$) because the leading $h^1$ terms have cancelled.
@@ -131,18 +125,19 @@ However, while reducing $h$ improves truncation error, it must be balanced again
 Suppose we have a function $f(x) = x^2$, and we want to approximate the derivative at the point $x = 2$ with a step size $h = 0.01$. Using the central difference method, we get:
 
 $$
-f'(2) \approx \frac{f(2 + 0.01) - f(2 - 0.01)}{2 \times 0.01} = \frac{4.0401 - 3.9601}{0.02} = 4.00
+f'(2) \approx
+\frac{f(2 + 0.01) - f(2 - 0.01)}{2 \times 0.01} = \frac{4.0401 - 3.9601}{0.02} = 4.00
 $$
 
 The exact derivative of $f(x) = x^2$ at the point $x = 2$ is $f'(2) = 2 \times 2 = 4$, so the approximation is accurate. This example demonstrates how the central difference method can effectively approximate derivatives with high precision for smooth functions, while also highlighting the importance of an appropriate step size $h$.
 
 ### Advantages
 
-* The method offers **higher accuracy** compared to forward or backward difference methods by using function values on both sides of the point, reducing the leading error term in derivative approximations.
-* **Simplicity in implementation** makes it easy to apply, with straightforward formulas that are accessible for numerical analysis and computational tasks.
-* The central difference method is **applicable to discrete data**, allowing for its use when analytical derivatives are difficult or impossible, such as in data fitting, signal processing, and numerical simulations.
+- The method offers **higher accuracy** compared to forward or backward difference methods by using function values on both sides of the point, reducing the leading error term in derivative approximations.
+- **Simplicity in implementation** makes it easy to apply, with straightforward formulas that are accessible for numerical analysis and computational tasks.
+- The central difference method is **applicable to discrete data**, allowing for its use when analytical derivatives are difficult or impossible, such as in data fitting, signal processing, and numerical simulations.
 
 ### Limitations
 
-* There is always an **approximation error**. Decreasing the step size $h$ reduces truncation error, but excessively small $h$ can cause numerical issues due to floating-point round-off.
-* The method requires **function values on both sides** of the point, so it cannot be applied directly at domain boundaries unless the function is defined beyond those boundaries (or one uses one-sided/ghost-point techniques).
+- There is always an **approximation error**. Decreasing the step size $h$ reduces truncation error, but excessively small $h$ can cause numerical issues due to floating-point round-off.
+- The method requires **function values on both sides** of the point, so it cannot be applied directly at domain boundaries unless the function is defined beyond those boundaries (or one uses one-sided/ghost-point techniques).

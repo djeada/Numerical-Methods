@@ -3,7 +3,7 @@
 A line search chooses the step length $\alpha_k$ after a search direction $p_k$ has been selected:
 
 $$
-x_{k+1}=x_k+\alpha_k p_k.
+x_{k+1} = x_k + \alpha_k p_k.
 $$
 
 The direction determines **where** to move; the line search determines **how far**.
@@ -13,7 +13,7 @@ The direction determines **where** to move; the line search determines **how far
 Define
 
 $$
-\phi(\alpha)=f(x_k+\alpha p_k).
+\phi(\alpha) = f(x_k + \alpha p_k).
 $$
 
 A line search approximately minimizes $\phi(\alpha)$ for $\alpha>0$ or finds a step that satisfies sufficient-decrease conditions.
@@ -25,9 +25,7 @@ Exact minimization is usually unnecessary and can cost more than it saves.
 The Armijo condition requires
 
 $$
-f(x_k+\alpha p_k)
-\le
-f(x_k)+c_1\alpha\nabla f(x_k)^\top p_k,
+f(x_k + \alpha p_k) \le f(x_k) + c_1\alpha\nabla f(x_k)^\top p_k,
 $$
 
 with a small constant such as $c_1=10^{-4}$.
@@ -52,17 +50,13 @@ This is inexpensive and robust for steepest descent and damped Newton methods.
 Quasi-Newton methods benefit from an additional curvature condition. The weak Wolfe conditions are
 
 $$
-f(x_k+\alpha p_k)
-\le
-f(x_k)+c_1\alpha g_k^\top p_k,
+f(x_k + \alpha p_k) \le f(x_k) + c_1\alpha g_k^\top p_k,
 $$
 
 and
 
 $$
-\nabla f(x_k+\alpha p_k)^\top p_k
-\ge
-c_2 g_k^\top p_k,
+\nabla f(x_k + \alpha p_k)^\top p_k \ge c_2 g_k^\top p_k,
 $$
 
 where

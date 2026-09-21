@@ -23,13 +23,13 @@ The challenge is that a non-convex objective can contain many local minima, flat
 The one-dimensional Rastrigin function
 
 $$
-f(x)=10+x^2-10\cos(2\pi x)
+f(x) = 10 + x^2 - 10\cos(2\pi x)
 $$
 
 contains many local minima but has the global minimum
 
 $$
-f(0)=0.
+f(0) = 0.
 $$
 
 ![Rastrigin landscape with local and global minima](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/global_rastrigin.svg)

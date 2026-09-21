@@ -20,14 +20,16 @@ III. **$V$** is an $n \times n$ orthogonal matrix (i.e., $V^{T}V = I$). Its colu
 
 Putting it together:
 
-$$A = U \begin{bmatrix}
+$$
+A = U \begin{bmatrix}
 \sigma_1 & 0 & \cdots & 0 \\
 0 & \sigma_2 & \cdots & 0 \\
 \vdots & \vdots & \ddots & \vdots \\
 0 & 0 & \cdots & \sigma_p \\
 \vdots & \vdots & & \vdots \\
 0 & 0 & \cdots & 0
-\end{bmatrix} V^{T}$$
+\end{bmatrix} V^{T}
+$$
 
 Here, $\Sigma$ is "diagonal" in the sense that all non-zero elements are on the main diagonal. The rank of $A$ is equal to the number of non-zero singular values.
 
@@ -45,27 +47,27 @@ Since every real matrix $A$ gives rise to a non-negative, symmetric matrix $A^{T
 
 ### Algorithm Steps
 
-I. **Form $A^{T}A$**:  
+I. **Form $A^{T}A$**:
 
 Compute the $n \times n$ matrix $A^{T}A$.
 
-II. **Compute Eigenvalues and Eigenvectors of $A^{T}A$**:  
+II. **Compute Eigenvalues and Eigenvectors of $A^{T}A$**:
 
 Solve $(A^{T}A) v = \lambda v$ to find all eigenvalues $\lambda_i \ge 0$ and corresponding eigenvectors $v_i$.
 
-III. **Obtain Singular Values**:  
+III. **Obtain Singular Values**:
 
 Sort the eigenvalues in decreasing order and take $\sigma_i = \sqrt{\lambda_i}$. These form the diagonal entries of $\Sigma$.
 
-IV. **Form $V$**:  
+IV. **Form $V$**:
 
 The eigenvectors $v_i$ of $A^{T}A$ are arranged as columns to form the matrix $V$.
 
-V. **Form $U$**:  
+V. **Form $U$**:
 
 Similarly, find the eigenvectors of $AA^{T}$ or directly use the relation $U = A V \Sigma^{-1}$ (for non-zero singular values) to obtain $U$.
 
-VI. **Assemble the SVD**:  
+VI. **Assemble the SVD**:
 
 With $U, \Sigma, V$ computed, $A = U \Sigma V^{T}$.
 
@@ -83,7 +85,7 @@ II. Find the eigenvalues of $A^{T}A$:
 
 Solve $\det(A^{T}A - \lambda I) = 0$:
 
-$$(13-\lambda)(17-\lambda) - 14^2 = 0.$$
+$$(13 - \lambda)(17 - \lambda) - 14^2 = 0.$$
 
 Solving yields $\lambda_1 = 30$ and $\lambda_2 = 0$.
 
@@ -121,28 +123,28 @@ $$A = U \Sigma V^{T}.$$
 
 ### Advantages
 
-I. **Universality**:  
+I. **Universality**:
 
 SVD exists for any $m \times n$ matrix $A$, regardless of its rank, making it more broadly applicable than EVD.
 
-II. **Noise Reduction and Compression**:  
+II. **Noise Reduction and Compression**:
 
 By truncating small singular values, one can achieve low-rank approximations of $A$ that are close to the original but simpler, useful in data compression and de-noising.
 
-III. **Numerical Stability**:  
+III. **Numerical Stability**:
 
 SVD is numerically stable and widely used in robust numerical methods, e.g., pseudo-inverse computations and solving least-squares problems.
 
 ### Limitations
 
-I. **Computational Complexity**:  
+I. **Computational Complexity**:
 
 Computing an SVD is often more computationally expensive than eigenvalue decomposition for large square matrices. Efficient algorithms exist, but the cost can still be significant for very large datasets.
 
-II. **Interpretation of Factors**:  
+II. **Interpretation of Factors**:
 
 While the decomposition yields orthogonal factors and non-negative singular values, interpreting the physical or application-specific meaning of these components may require additional insight.
 
-III. **No Direct Eigenvalue Information of Original A**:  
+III. **No Direct Eigenvalue Information of Original A**:
 
 The singular values are related to the eigenvalues of $A^{T}A$ (or $AA^{T}$), not directly to the eigenvalues of $A$ itself. Thus, SVD does not directly provide the eigenvalues of $A$ unless $A$ is also diagonalizable in the usual sense.

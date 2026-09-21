@@ -18,21 +18,21 @@ $$
 
 where det(A) is the determinant of A and adj(A) is the adjugate of A.
 
-The adjugate of A is the transpose of the cofactor matrix C of A. Each element c_ij of C is calculated as (-1)^(i+j) det(M_ij), where M_ij is the (i, j)th minor of A.
+The adjugate of A is the transpose of the cofactor matrix C of A. Each element c\_ij of C is calculated as (-1)^(i+j) det(M\_ij), where M\_ij is the (i, j)th minor of A.
 
 ### Using inverse matrix to solve matrix equations
 
 We can solve a following matrix equation, using a matrix invers:
 
-$$ A\boldsymbol{x}=\boldsymbol{b} $$
+$$A\boldsymbol{x} = \boldsymbol{b}$$
 
 Let's mutiply both sides by the inverse of the matrix $A$:
 
-$$ \implies A^{-1}A\boldsymbol{x} = A^{-1}\boldsymbol{b} $$
+$$\implies A^{-1}A\boldsymbol{x} = A^{-1}\boldsymbol{b}$$
 
-$$ \implies I\boldsymbol{x} = A^{-1}\boldsymbol{b} $$
+$$\implies I\boldsymbol{x} = A^{-1}\boldsymbol{b}$$
 
-$$ \implies \boldsymbol{x} = A^{-1}\boldsymbol{b} $$
+$$\implies \boldsymbol{x} = A^{-1}\boldsymbol{b}$$
 
 ### Algorithm Steps
 
@@ -49,7 +49,7 @@ Finding the inverse of a matrix is a multi-step process:
 Let's take a 2x2 matrix A as an example:
 
 $$
-A = \begin{bmatrix} 4 & 7 \\ 
+A = \begin{bmatrix} 4 & 7 \\
 2 & 6\\ \end{bmatrix}
 $$
 
@@ -60,8 +60,8 @@ $$
 5. The inverse of A is the adjugate divided by the determinant, resulting in:
 
 $$
-A^{-1} = \frac{1}{10} \begin{bmatrix} 6 & -7 \\ 
--2 & 4\\ \end{bmatrix} = \begin{bmatrix} 0.6 & -0.7 \\ 
+A^{-1} = \frac{1}{10} \begin{bmatrix} 6 & -7 \\
+-2 & 4\\ \end{bmatrix} = \begin{bmatrix} 0.6 & -0.7 \\
 -0.2 & 0.4\\ \end{bmatrix}
 $$
 

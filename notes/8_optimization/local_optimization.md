@@ -15,7 +15,7 @@ $$
 An update has the generic form
 
 $$
-x_{k+1}=x_k+\alpha_k p_k,
+x_{k+1} = x_k + \alpha_k p_k,
 $$
 
 where $\alpha_k>0$ is the step length.
@@ -23,19 +23,19 @@ where $\alpha_k>0$ is the step length.
 Steepest descent chooses
 
 $$
-p_k=-\nabla f(x_k).
+p_k = -\nabla f(x_k).
 $$
 
 Newton's method solves
 
 $$
-\nabla^2 f(x_k)p_k=-\nabla f(x_k),
+\nabla^2 f(x_k)p_k = -\nabla f(x_k),
 $$
 
 and BFGS uses an approximate inverse Hessian $H_k$:
 
 $$
-p_k=-H_k\nabla f(x_k).
+p_k = -H_k\nabla f(x_k).
 $$
 
 ### The Rosenbrock valley
@@ -43,7 +43,7 @@ $$
 The Rosenbrock function
 
 $$
-f(x,y)=(1-x)^2+100(y-x^2)^2
+f(x,y) = (1 - x)^2 + 100(y - x^2)^2
 $$
 
 has a unique global minimum at $(1,1)$, but its narrow curved valley makes it difficult for methods that do not account for curvature.
@@ -98,23 +98,20 @@ The repository implementation intentionally keeps the algorithms compact: fixed-
 Define
 
 $$
-s_k=x_{k+1}-x_k,
-\qquad
-y_k=\nabla f(x_{k+1})-\nabla f(x_k),
+s_k = x_{k+1} - x_k,
+\qquad y_k = \nabla f(x_{k+1}) - \nabla f(x_k),
 $$
 
 and
 
 $$
-\rho_k=\frac{1}{y_k^\top s_k}.
+\rho_k = \frac{1}{y_k^\top s_k}.
 $$
 
 The inverse-Hessian BFGS update is
 
 $$
-H_{k+1}
-=(I-\rho_k s_k y_k^\top)H_k(I-\rho_k y_k s_k^\top)
-+\rho_k s_k s_k^\top.
+H_{k+1} = (I - \rho_k s_k y_k^\top)H_k(I - \rho_k y_k s_k^\top) + \rho_k s_k s_k^\top.
 $$
 
 If $H_k$ is positive definite and $y_k^\top s_k>0$, the update preserves positive definiteness.
@@ -126,7 +123,7 @@ See [Newton and quasi-Newton methods](newton_and_quasi_newton.md) for the deriva
 For
 
 $$
-f(x,y)=\frac12(8x^2+2y^2)-4x-2y,
+f(x,y) = \frac12(8x^2 + 2y^2) - 4x - 2y,
 $$
 
 we have
@@ -148,7 +145,7 @@ $$
 The minimizer solves $H x=b$:
 
 $$
-(x^*,y^*)=(0.5,1).
+(x^*,y^*) = (0.5,1).
 $$
 
 Newton reaches it in one exact step from any starting point because the quadratic model is the function itself. Gradient descent generally needs multiple steps and its rate is controlled by the eigenvalue ratio $8/2=4$.

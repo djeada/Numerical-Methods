@@ -8,12 +8,14 @@ When working with linear systems, representing the equations in *matrix form* pr
 
 A general linear system with $n$ variables $x_1, x_2, \ldots, x_n$ can be expressed as:
 
-$$\begin{cases}
-A_{11}x_1 + A_{12}x_2 + \cdots + A_{1n}x_n = b_1, \\
-A_{21}x_1 + A_{22}x_2 + \cdots + A_{2n}x_n = b_2, \\
-\quad\vdots \\
-A_{n1}x_1 + A_{n2}x_2 + \cdots + A_{nn}x_n = b_n.
-\end{cases}$$
+$$
+\begin{cases}
+  A_{11}x_1 + A_{12}x_2 + \cdots + A_{1n}x_n = b_1, \\
+  A_{21}x_1 + A_{22}x_2 + \cdots + A_{2n}x_n = b_2, \\
+  \quad\vdots \\
+  A_{n1}x_1 + A_{n2}x_2 + \cdots + A_{nn}x_n = b_n.
+\end{cases}
+$$
 
 We can rewrite this collection of equations succinctly as:
 
@@ -58,25 +60,25 @@ Expressing the system in matrix form allows us to apply well-studied algebraic p
 
 A system $\mathbf{A}\mathbf{x} = \mathbf{b}$ of $n$ linear equations in $n$ unknowns has a *unique* solution if and only if any one (and thus all) of the following equivalent conditions holds:
 
-I. **Non-zero determinant**: 
+I. **Non-zero determinant**:
 
 $$\det(\mathbf{A}) \neq 0$$  
 
 A non-zero determinant indicates that the matrix $\mathbf{A}$ is *invertible*.
 
-II. **Invertibility of $\mathbf{A}$**: 
+II. **Invertibility of $\mathbf{A}$**:
 
-There exists an inverse matrix $\mathbf{A}^{-1}$ such that  
+There exists an inverse matrix $\mathbf{A}^{-1}$ such that
 
 $$
 \mathbf{x} = \mathbf{A}^{-1}\mathbf{b}.
 $$
 
-III. **Linear independence of columns**: 
+III. **Linear independence of columns**:
 
 The columns of $\mathbf{A}$ are linearly independent vectors in $\mathbb{R}^n$. In practical terms, no column can be written as a linear combination of the other columns.
 
-IV. **Linear independence of rows**: 
+IV. **Linear independence of rows**:
 
 Similarly, the rows of $\mathbf{A}$ are also linearly independent. No row can be expressed as a linear combination of the other rows.
 
@@ -88,9 +90,9 @@ Consider the following system of three linear equations in three unknowns $x, y,
 
 $$
 \begin{cases}
-3x + 2y - z = 1, \\
-2x - 2y + 4z = -2, \\
--x + 0.5y - z = 0.
+  3x + 2y - z = 1, \\
+  2x - 2y + 4z = -2, \\
+  -x + 0.5y - z = 0.
 \end{cases}
 $$
 
@@ -123,6 +125,7 @@ To solve this system, one may use:
 - Compute $\mathbf{A}^{-1}$ and multiply both sides of $\mathbf{A}\mathbf{x} = \mathbf{b}$ by $\mathbf{A}^{-1}$.
 
 Each approach exploits the structure of linear systems to systematically isolate the solution for $\mathbf{x}$.
+
 ### Advantages
 
 - Matrix methods, such as Gaussian elimination, provide a *systematic framework* for solving linear systems, making both theoretical understanding and practical implementation more straightforward.

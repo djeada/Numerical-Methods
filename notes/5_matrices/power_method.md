@@ -2,7 +2,7 @@
 
 The power method is a fundamental iterative algorithm for estimating the eigenvalue of largest magnitude and its associated eigenvector for a given matrix. This technique is particularly appealing when dealing with large and sparse matrices, where direct eigenvalue computations (e.g., via the characteristic polynomial) are computationally expensive or numerically unstable. The power method capitalizes on the property that repeated multiplication by a matrix $A$ will cause any initial vector to align with the direction of the eigenvector associated with the dominant eigenvalue, assuming this eigenvalue is well-separated from the others in magnitude.
 
-![power_method](https://github.com/user-attachments/assets/e48ec2b5-fd18-4886-a4b9-497c73aae0de)
+![power\_method](https://github.com/user-attachments/assets/e48ec2b5-fd18-4886-a4b9-497c73aae0de)
 
 - The power method **iteratively** refines a vector to approximate the eigenvector associated with the dominant eigenvalue.
 - It is particularly **efficient** for large and sparse matrices since it only requires matrix-vector multiplications.
@@ -53,7 +53,7 @@ As $k \to \infty$, because $|\lambda_1| > |\lambda_j|$ for $j > 1$, the terms in
 
 $$\frac{A^k x^{(0)}}{\|A^k x^{(0)}\|} \to v_1$$
 
-and the Rayleigh quotient $\frac{x^{(k)T} A x^{(k)}}{x^{(k)T} x^{(k)}}$ tends to $\lambda_1$. 
+and the Rayleigh quotient $\frac{x^{(k)T} A x^{(k)}}{x^{(k)T} x^{(k)}}$ tends to $\lambda_1$.
 
 Thus, the power method converges to the dominant eigenvector $v_1$ and eigenvalue $\lambda_1$.
 

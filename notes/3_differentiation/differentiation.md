@@ -28,7 +28,7 @@ While the classical definition provides a rigorous mathematical foundation for d
 
 Numerical differentiation encompasses various methods designed to approximate the derivatives of functions using finite differences. These methods are essential tools in numerical analysis, enabling the estimation of derivatives when analytical approaches are impractical. The primary numerical differentiation methods include the Forward Difference Method, Backward Difference Method, and Central Difference Method. Each method employs different strategies to utilize available data points for derivative approximation, balancing simplicity, accuracy, and computational efficiency.
 
-#### 1. Forward Difference Method
+#### 1\. Forward Difference Method
 
 The Forward Difference Method is a straightforward approach to approximating the derivative of a function. It estimates the derivative at a point by considering the difference between the function's value at that point and its value at a subsequent point. Mathematically, it is expressed as:
 
@@ -38,7 +38,7 @@ $$
 
 This method relies on information from the current point and the next point in the sequence, making it suitable for applications where future data points are accessible or when data is processed in a forward sequence.
 
-#### 2. Backward Difference Method
+#### 2\. Backward Difference Method
 
 In contrast to the Forward Difference Method, the Backward Difference Method approximates the derivative by considering the difference between the function's value at a point and its value at a preceding point. The mathematical representation of this method is:
 
@@ -48,7 +48,7 @@ $$
 
 This approach is particularly useful in scenarios where only past data points are available or when working with data that naturally flows in a backward direction.
 
-#### 3. Central Difference Method
+#### 3\. Central Difference Method
 
 The Central Difference Method offers a more accurate approximation by averaging the forward and backward differences. This method takes into account information from both sides of the target point, enhancing the precision of the derivative estimate. It is mathematically represented as:
 
