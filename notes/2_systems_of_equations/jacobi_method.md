@@ -11,9 +11,10 @@ One of the key characteristics of the Jacobi method is that each component of th
 Consider the linear system:
 
 $$A\mathbf{x} = \mathbf{b},$$
-where 
+where
 
-$$A = \begin{bmatrix}
+$$
+A = \begin{bmatrix}
 a_{11} & a_{12} & \cdots & a_{1n}\\
 a_{21} & a_{22} & \cdots & a_{2n}\\
 \vdots & \vdots & \ddots & \vdots\\
@@ -26,7 +27,8 @@ $$
 $$
 
 $$
-\mathbf{b} = \begin{bmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{bmatrix}$$
+\mathbf{b} = \begin{bmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{bmatrix}
+$$
 
 If we split $A$ into its diagonal and off-diagonal parts, we have:
 
@@ -40,15 +42,15 @@ where:
 
 The system $A\mathbf{x} = \mathbf{b}$ can then be written as:
 
-$$D\mathbf{x} = \mathbf{b} - (L+U)\mathbf{x}.$$
+$$D\mathbf{x} = \mathbf{b} - (L + U)\mathbf{x}.$$
 
 Solving for $\mathbf{x}$:
 
-$$\mathbf{x} = D^{-1}(\mathbf{b} - (L+U)\mathbf{x}).$$
+$$\mathbf{x} = D^{-1}(\mathbf{b} - (L + U)\mathbf{x}).$$
 
 The Jacobi iteration proceeds by using the values of $\mathbf{x}$ from the previous iteration on the right-hand side. Let $\mathbf{x}^{(k)}$ denote the approximation of the solution after $k$ iterations. Then the iteration rule is:
 
-$$\mathbf{x}^{(k+1)} = D^{-1}\bigl(\mathbf{b} - (L+U)\mathbf{x}^{(k)}\bigr).$$
+$$\mathbf{x}^{(k+1)} = D^{-1}\bigl(\mathbf{b} - (L + U)\mathbf{x}^{(k)}\bigr).$$
 
 This can be written component-wise as:
 
@@ -72,17 +74,20 @@ This process defines the Jacobi iteration. The method converges if the spectral 
 
 ### Algorithm Steps
 
-I. **Initialization**:  
+I. **Initialization**:
 
 Choose an initial guess $\mathbf{x}^{(0)} = (x_1^{(0)}, x_2^{(0)}, \ldots, x_n^{(0)})^\top$. A common choice is the zero vector or a small random vector.
 
-II. **Iterative Update**:  
+II. **Iterative Update**:
 
 For $k = 0,1,2,\ldots$ (until convergence):
 
-$$x_i^{(k+1)} = \frac{b_i - \sum_{j=1, j \ne i}^{n} a_{ij} x_j^{(k)}}{a_{ii}}, \quad i = 1, 2, \ldots, n.$$
+$$
+x_i^{(k+1)} = \frac{b_i - \sum_{j=1, j \ne i}^{n} a_{ij} x_j^{(k)}}{a_{ii}}, \quad
+i = 1, 2, \ldots, n.
+$$
 
-III. **Convergence Check**:  
+III. **Convergence Check**:
 
 After computing $\mathbf{x}^{(k+1)}$, check if $\|\mathbf{x}^{(k+1)} - \mathbf{x}^{(k)}\|$ (or $\|A\mathbf{x}^{(k+1)}-\mathbf{b}\|$) is less than a given tolerance $\varepsilon$. If yes, stop; otherwise, continue iterating.
 
@@ -90,10 +95,12 @@ After computing $\mathbf{x}^{(k+1)}$, check if $\|\mathbf{x}^{(k+1)} - \mathbf{x
 
 **Given System**:
 
-$$\begin{aligned}
-2x - y &= 5, \\
-x + 3y &= 7.
-\end{aligned}$$
+$$
+\begin{aligned}
+  2x - y &= 5, \\
+  x + 3y &= 7.
+\end{aligned}
+$$
 
 In matrix form:
 
@@ -119,15 +126,19 @@ $$x^{(1)} = \frac{5 + 0}{2} = 2.5, \quad y^{(1)} = \frac{7 - 0}{3} \approx 2.333
 
 Using $x^{(1)} = 2.5$ and $y^{(1)} = 2.3333$:
 
-$$x^{(2)} = \frac{5 + (2.3333)}{2} = \frac{7.3333}{2} = 3.66665, \quad
-y^{(2)} = \frac{7 - 2.5}{3} = \frac{4.5}{3} = 1.5.$$
+$$
+x^{(2)} = \frac{5 + (2.3333)}{2} = \frac{7.3333}{2} = 3.66665, \quad
+y^{(2)} = \frac{7 - 2.5}{3} = \frac{4.5}{3} = 1.5.
+$$
 
 **Iteration 3**:
 
 Now $x^{(2)} = 3.66665$, $y^{(2)} = 1.5$:
 
-$$x^{(3)} = \frac{5 + 1.5}{2} = \frac{6.5}{2} = 3.25, \quad
-y^{(3)} = \frac{7 - 3.66665}{3} = \frac{3.33335}{3} = 1.1111167.$$
+$$
+x^{(3)} = \frac{5 + 1.5}{2} = \frac{6.5}{2} = 3.25, \quad
+y^{(3)} = \frac{7 - 3.66665}{3} = \frac{3.33335}{3} = 1.1111167.
+$$
 
 Continue iterating until $|x^{(k+1)} - x^{(k)}|$ and $|y^{(k+1)} - y^{(k)}|$ are below a desired tolerance (e.g., $10^{-4}$). Over many iterations, the values will approach the true solution (which, by direct solving, is $x=3, y= \frac{4}{3} \approx 1.3333$). The Jacobi iterations gradually "home in" on this solution.
 

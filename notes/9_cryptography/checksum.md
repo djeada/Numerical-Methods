@@ -26,7 +26,7 @@ where $S$ is the Luhn sum of the payload digits.
 Validate the number 79927398713:
 
 | Position (from right) | Digit | Action | Result |
-|----------------------|-------|--------|--------|
+| --- | --- | --- | --- |
 | 1 | 3 | Keep | 3 |
 | 2 | 1 | Double: $1 \times 2 = 2$ | 2 |
 | 3 | 7 | Keep | 7 |
@@ -55,7 +55,10 @@ $$\text{CRC} = M(x) \cdot x^{32} \mod G(x)$$
 
 where $G(x)$ is the generator polynomial. The standard CRC-32 generator is:
 
-$$G(x) = x^{32} + x^{26} + x^{23} + x^{22} + x^{16} + x^{12} + x^{11} + x^{10} + x^8 + x^7 + x^5 + x^4 + x^2 + x + 1$$
+$$
+G(x) = x^{32} + x^{26} + x^{23} + x^{22} + x^{16} + x^{12} + x^{11} + x^{10} + x^8 +
+x^7 + x^5 + x^4 + x^2 + x + 1
+$$
 
 In the reflected (LSB-first) implementation, the polynomial constant is $\texttt{0xEDB88320}$.
 
@@ -107,7 +110,7 @@ Compute Adler-32 for the ASCII string "Wikipedia":
 Starting with $A = 1$, $B = 0$:
 
 | Character | ASCII | A (mod 65521) | B (mod 65521) |
-|-----------|-------|---------------|---------------|
+| --- | --- | --- | --- |
 | W | 87 | 88 | 88 |
 | i | 105 | 193 | 281 |
 | k | 107 | 300 | 581 |

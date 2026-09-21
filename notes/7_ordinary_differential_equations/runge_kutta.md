@@ -5,9 +5,8 @@ Runge--Kutta methods advance an ODE solution using several carefully chosen slop
 Consider
 
 $$
-u'(t)=f(t,u),
-\qquad
-u(t_0)=u_0.
+u'(t) = f(t,u),
+\qquad u(t_0) = u_0.
 $$
 
 The best-known member of the family is the classical fourth-order Runge--Kutta method, usually called **RK4**.
@@ -17,44 +16,25 @@ The best-known member of the family is the classical fourth-order Runge--Kutta m
 Given $(t_n,u_n)$ and step size $h$,
 
 $$
-k_1=f(t_n,u_n),
+k_1 = f(t_n,u_n),
 $$
 
 $$
-k_2
-=
-f\left(
-t_n+\frac{h}{2},
-u_n+\frac{h}{2}k_1
-\right),
+k_2 = f\left(t_n + \frac{h}{2}, u_n + \frac{h}{2}k_1 \right),
 $$
 
 $$
-k_3
-=
-f\left(
-t_n+\frac{h}{2},
-u_n+\frac{h}{2}k_2
-\right),
+k_3 = f\left(t_n + \frac{h}{2}, u_n + \frac{h}{2}k_2 \right),
 $$
 
 $$
-k_4
-=
-f(t_n+h,u_n+h k_3).
+k_4 = f(t_n + h,u_n + h k_3).
 $$
 
 Then
 
 $$
-u_{n+1}
-=
-u_n
-+
-\frac{h}{6}
-\left(
-k_1+2k_2+2k_3+k_4
-\right).
+u_{n+1} = u_n + \frac{h}{6} \left(k_1 + 2k_2 + 2k_3 + k_4 \right).
 $$
 
 The four stages sample the vector field at the beginning, twice near the middle, and at the end of the step.
@@ -81,39 +61,32 @@ Therefore, halving $h$ reduces the global error by roughly a factor of $16$ in t
 For
 
 $$
-u'=u,
-\qquad
-u(0)=1,
+u' = u,
+\qquad u(0) = 1,
 $$
 
 with $h=0.1$:
 
 $$
-k_1=1,
+k_1 = 1,
 $$
 
 $$
-k_2=1+0.05k_1=1.05,
+k_2 = 1 + 0.05k_1 = 1.05,
 $$
 
 $$
-k_3=1+0.05k_2=1.0525,
+k_3 = 1 + 0.05k_2 = 1.0525,
 $$
 
 $$
-k_4=1+0.1k_3=1.10525.
+k_4 = 1 + 0.1k_3 = 1.10525.
 $$
 
 Thus
 
 $$
-u_1
-=
-1+
-\frac{0.1}{6}
-\left(
-1+2(1.05)+2(1.0525)+1.10525
-\right),
+u_1 = 1 + \frac{0.1}{6} \left(1 + 2(1.05) + 2(1.0525) + 1.10525 \right),
 $$
 
 which gives
@@ -156,20 +129,13 @@ The entries specify:
 For an $s$-stage explicit method,
 
 $$
-k_i
-=
-f\left(
-t_n+c_i h,
-u_n+h\sum_{j=1}^{i-1}a_{ij}k_j
-\right),
+k_i = f\left(t_n + c_i h, u_n + h\sum_{j=1}^{i-1}a_{ij}k_j \right),
 $$
 
 and
 
 $$
-u_{n+1}
-=
-u_n+h\sum_{i=1}^{s}b_i k_i.
+u_{n+1} = u_n + h\sum_{i=1}^{s}b_i k_i.
 $$
 
 Different choices of the coefficients produce different methods and orders.
@@ -192,19 +158,14 @@ This can reduce work dramatically when a problem alternates between easy and dif
 For
 
 $$
-u'=\lambda u,
+u' = \lambda u,
 $$
 
 RK4 has stability polynomial
 
 $$
-R(z)
-=
-1+z+\frac{z^2}{2}
-+\frac{z^3}{6}
-+\frac{z^4}{24},
-\qquad
-z=h\lambda.
+R(z) = 1 + z + \frac{z^2}{2} + \frac{z^3}{6} + \frac{z^4}{24},
+\qquad z = h\lambda.
 $$
 
 The method is stable where
@@ -218,7 +179,7 @@ RK4 has a useful explicit stability region but is not A-stable. Strongly stiff s
 ### RK4 Versus Euler and Heun
 
 | Method | Evaluations of $f$ per step | Global order |
-|---|---:|---:|
+| --- | --: | --: |
 | Euler | 1 | 1 |
 | Heun | 2 | 2 |
 | RK4 | 4 | 4 |
@@ -236,7 +197,7 @@ Higher order does not automatically mean lower total cost. The best method depen
 RK4 applies directly to
 
 $$
-\mathbf{u}'=\mathbf{f}(t,\mathbf{u}).
+\mathbf{u}' = \mathbf{f}(t,\mathbf{u}).
 $$
 
 Each $k_i$ becomes a vector. This makes RK methods convenient for mechanics, circuits, chemical kinetics, population models, and other coupled systems.

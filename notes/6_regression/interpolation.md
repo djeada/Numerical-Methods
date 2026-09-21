@@ -9,7 +9,8 @@ $$
 an interpolant $p(x)$ satisfies
 
 $$
-p(x_i)=y_i,\qquad i=0,1,\ldots,n.
+p(x_i) = y_i,
+\qquad i = 0,1,\ldots,n.
 $$
 
 This is different from regression or approximation. A regression model is usually allowed to miss individual observations in order to capture an overall trend; an interpolant treats the supplied values as exact constraints.
@@ -55,19 +56,21 @@ This local-versus-global distinction affects cost, smoothness, sensitivity, and 
 Consider
 
 $$
-(0,1),\qquad (1,2),\qquad (2,0).
+(0,1),
+\qquad (1,2),
+\qquad (2,0).
 $$
 
 To estimate the value at $x_*=1.5$, piecewise linear interpolation uses only the interval $[1,2]$:
 
 $$
-t=\frac{1.5-1}{2-1}=0.5.
+t = \frac{1.5-1}{2-1} = 0.5.
 $$
 
 The interpolated value is
 
 $$
-p(1.5)=(1-t)\cdot 2+t\cdot 0=1.
+p(1.5) = (1 - t)\cdot 2 + t\cdot 0 = 1.
 $$
 
 A quadratic polynomial through all three points gives a different curve between the nodes even though it reproduces the same three data values exactly. Both are valid interpolants; they encode different assumptions about the shape between observations.
@@ -83,7 +86,7 @@ It can be represented in several mathematically equivalent forms:
 - **monomial form**, such as
 
 $$
-p(x)=a_0+a_1x+\cdots+a_nx^n,
+p(x) = a_0 + a_1x + \cdots + a_nx^n,
 $$
 
 which is conceptually simple but often a poor numerical representation for solving the interpolation problem directly.
@@ -106,14 +109,13 @@ Piecewise methods are often preferable when the dataset has many nodes.
 Interpolation can also be built from distance-based basis functions. In one dimension, Gaussian radial basis function interpolation has the form
 
 $$
-s(x)=\sum_{j=0}^{n}\lambda_j
-e^{-\varepsilon^2(x-x_j)^2}.
+s(x) = \sum_{j=0}^{n}\lambda_j e^{-\varepsilon^2(x-x_j)^2}.
 $$
 
 In two dimensions, thin-plate splines use a radial kernel such as
 
 $$
-\phi(r)=r^2\log r,
+\phi(r) = r^2\log r,
 $$
 
 with the value at $r=0$ defined by continuity as $0$.
@@ -127,9 +129,7 @@ An interpolant reproduces the data exactly, but that does **not** imply that it 
 For polynomial interpolation through $n+1$ nodes, if the underlying function $f$ is sufficiently smooth, the error can be written as
 
 $$
-f(x)-p_n(x) =
-\frac{f^{(n+1)}(\xi_x)}{(n+1)!}
-\prod_{i=0}^{n}(x-x_i)
+f(x) - p_n(x) = \frac{f^{(n+1)}(\xi_x)}{(n+1)!} \prod_{i=0}^{n}(x - x_i)
 $$
 
 for some point $\xi_x$ in the interval containing the nodes and the query.
@@ -145,19 +145,19 @@ Adding more equally spaced nodes does not automatically improve a global polynom
 
 Before choosing an interpolation method, ask:
 
-**Are the observations effectively exact?**  
+**Are the observations effectively exact?**\
 If the values contain substantial measurement noise, regression or smoothing may be more appropriate.
 
-**How smooth should the result be?**  
+**How smooth should the result be?**\
 Piecewise linear interpolation is continuous but not differentiable at the knots. Cubic splines are smoother. Gaussian RBF interpolants are infinitely differentiable.
 
-**Is the data one-dimensional or scattered in several dimensions?**  
+**Is the data one-dimensional or scattered in several dimensions?**\
 Polynomial and spline methods are especially natural in one dimension. RBF methods are often convenient for scattered multidimensional data.
 
-**Will points be added frequently?**  
+**Will points be added frequently?**\
 Newton interpolation has an incremental form. A global solve may be less convenient if the dataset changes often.
 
-**How many queries will be evaluated?**  
+**How many queries will be evaluated?**\
 Some methods have a relatively expensive setup followed by cheap evaluations. For repeated queries, that setup can be worthwhile.
 
 ### Complexity overview
@@ -165,7 +165,7 @@ Some methods have a relatively expensive setup followed by cheap evaluations. Fo
 For $n+1$ nodes:
 
 | Method | Setup | Cost per scalar query | Typical property |
-|---|---:|---:|---|
+| --- | --: | --: | --- |
 | Piecewise linear | $O(n)$ preprocessing or none | $O(\log n)$ interval search | local, continuous |
 | Newton polynomial | $O(n^2)$ divided differences | $O(n)$ | global polynomial |
 | Lagrange polynomial | $O(n^2)$ naive setup, $O(n)$ barycentric setup | $O(n)$ | global polynomial |

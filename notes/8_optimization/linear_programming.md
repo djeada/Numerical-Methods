@@ -24,7 +24,7 @@ If a linear program has a finite optimum, at least one optimum occurs at an extr
 The objective contours
 
 $$
-c^\top x=\gamma
+c^\top x = \gamma
 $$
 
 are parallel hyperplanes. Moving them in the improving direction until they last touch the feasible region reveals the optimum geometrically.
@@ -40,7 +40,7 @@ $$
 can be rewritten as
 
 $$
-a_i^\top x+s_i=b_i,
+a_i^\top x + s_i = b_i,
 \qquad s_i\ge0.
 $$
 
@@ -69,17 +69,17 @@ The educational simplex implementation in this repository assumes a simple initi
 Maximize
 
 $$
-5x_1+4x_2
+5x_1 + 4x_2
 $$
 
 subject to
 
 $$
-2x_1+x_2\le8,
+2x_1 + x_2\le8,
 $$
 
 $$
-x_1+2x_2\le7,
+x_1 + 2x_2\le7,
 $$
 
 $$
@@ -89,23 +89,23 @@ $$
 The boundary intersection solves
 
 $$
-2x_1+x_2=8,
+2x_1 + x_2 = 8,
 $$
 
 $$
-x_1+2x_2=7,
+x_1 + 2x_2 = 7,
 $$
 
 which gives
 
 $$
-(x_1,x_2)=(3,2).
+(x_1,x_2) = (3,2).
 $$
 
 The objective value is
 
 $$
-5(3)+4(2)=23,
+5(3) + 4(2) = 23,
 $$
 
 larger than at the other feasible vertices.

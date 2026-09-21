@@ -19,11 +19,11 @@ Tournament selection avoids needing a special transformation from objective valu
 For two real-valued parents $x^{(1)}$ and $x^{(2)}$, blend crossover can use
 
 $$
-y^{(1)}=\alpha\odot x^{(1)}+(1-\alpha)\odot x^{(2)},
+y^{(1)} = \alpha\odot x^{(1)} + (1 - \alpha)\odot x^{(2)},
 $$
 
 $$
-y^{(2)}=(1-\alpha)\odot x^{(1)}+\alpha\odot x^{(2)},
+y^{(2)} = (1 - \alpha)\odot x^{(1)} + \alpha\odot x^{(2)},
 $$
 
 with componentwise random $\alpha\in[0,1]^n$.
@@ -49,7 +49,7 @@ Many practical GAs explicitly copy one or more best individuals into the next ge
 If the population size is $P$ and the algorithm runs for $G$ generations, it performs roughly
 
 $$
-P(G+1)
+P(G + 1)
 $$
 
 objective evaluations, aside from any reuse or parallelization.

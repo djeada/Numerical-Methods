@@ -11,7 +11,7 @@ The foundation of Simpson's Rule is based on estimating the integral of a functi
 The basic formula to approximate the integral of $f(x)$ from $a$ to $b$ using Simpson's Rule is given by:
 
 $$
-\frac{b - a}{6} \left[ f(a) + 4f\left(\frac{a+b}{2}\right) + f(b) \right]
+\frac{b - a}{6} \left[f(a) + 4f\left(\frac{a+b}{2}\right) + f(b) \right]
 $$
 
 This formula calculates the weighted average of the function values at the endpoints and the midpoint, with the midpoint value being given four times the weight of the endpoints. The factor $\frac{b - a}{6}$ scales the sum appropriately based on the width of the interval.
@@ -19,7 +19,8 @@ This formula calculates the weighted average of the function values at the endpo
 To extend Simpson's Rule to multiple subintervals, let $h$ represent half the width of each subinterval, defined as $h = \frac{b - a}{2}$. When the interval $[a, b]$ is divided into an even number of subintervals $N$, the approximation of the integral becomes:
 
 $$
-\int_a^b f(x)  dx \approx \frac{h}{3} \sum_{k=1}^{N/2} \left[ f(x_{2k-2}) + 4f(x_{2k-1}) + f(x_{2k}) \right]
+\int_a^b f(x) dx \approx \frac{h}{3} \sum_{k=1}^{N/2}
+\left[f(x_{2k-2}) + 4f(x_{2k-1}) + f(x_{2k}) \right]
 $$
 
 In this summation, each pair of subintervals is treated together, ensuring that the number of intervals remains even. The function values are weighted accordingly, with the midpoints receiving a higher weight to account for the curvature captured by the quadratic approximation.
@@ -47,7 +48,9 @@ II. **Evaluate Function at Required Points:**
 III. **Apply Simpson's Rule Formula:**
 
 $$
-\int_a^b f(x)  dx \approx \frac{h}{3} \left[ f(x_0) + 4 \sum_{k=1}^{N/2} f(x_{2k-1}) + 2 \sum_{k=1}^{N/2 - 1} f(x_{2k}) + f(x_N) \right]
+\int_a^b f(x) dx \approx \frac{h}{3}
+\left[f(x_0) + 4 \sum_{k=1}^{N/2} f(x_{2k-1}) + 2 \sum_{k=1}^{N/2 - 1} f(x_{2k}) +
+f(x_N) \right]
 $$
 
 This formula accounts for the alternating weights of 4 and 2 applied to the function values at odd and even indices, respectively, ensuring that each pair of subintervals is accurately modeled by a parabola.
@@ -79,7 +82,10 @@ These evaluations provide the necessary data points for applying Simpson's Rule.
 III. **Apply Simpson's Rule Formula:**
 
 $$
-\frac{b - a}{6} \left[ f(a) + 4f\left(\frac{a+b}{2}\right) + f(b) \right] = \frac{2 - 0}{6} \left[ f(0) + 4f(1) + f(2) \right] = \frac{2}{6} \left[ 0 + 4(1) + 4 \right] = \frac{2}{6} \times 8 = \frac{16}{6} = \frac{8}{3}
+\frac{b - a}{6}
+\left[f(a) + 4f\left(\frac{a+b}{2}\right) + f(b) \right] = \frac{2 - 0}{6}
+\left[f(0) + 4f(1) + f(2) \right] = \frac{2}{6} \left[0 + 4(1) + 4 \right] = \frac{2}{6}
+\times 8 = \frac{16}{6} = \frac{8}{3}
 $$
 
 This calculation yields an approximate value of $\frac{8}{3}$ for the integral.
@@ -87,21 +93,21 @@ This calculation yields an approximate value of $\frac{8}{3}$ for the integral.
 IV. **Compare with Exact Integral:**
 
 $$
-\int_{0}^{2} x^2  dx = \left[ \frac{x^3}{3} \right]_0^2 = \frac{8}{3} - 0 = \frac{8}{3}
+\int_{0}^{2} x^2 dx = \left[\frac{x^3}{3} \right]_0^2 = \frac{8}{3} - 0 = \frac{8}{3}
 $$
 
 In this case, Simpson's Rule provides an exact approximation, demonstrating its effectiveness for polynomial functions of degree two or lower.
 
 ### Advantages
 
-* When compared to the Rectangle (Midpoint) Rule and the Trapezoidal Rule, the method often yields a more *accurate approximation* of definite integrals. This increased accuracy comes from using quadratic polynomials to model the function’s behavior, allowing it to capture curvature and more complex features. For smooth functions that can be closely approximated by parabolas over each pair of subintervals, the method can achieve exact results with *fewer subintervals* than other approaches. This efficiency is especially useful in computational applications where reducing the number of function evaluations saves significant processing time.
-* The method is straightforward to understand and implement, making it accessible to students. It requires only *basic arithmetic operations* and function evaluations at specific points, without the need for complex algorithms or iterative procedures. Its simplicity allows for quick coding and seamless integration into larger numerical computation frameworks, facilitating its use across a wide range of scientific and engineering problems.
-* It is particularly effective for functions that are well-approximated by *parabolas* over small intervals. This makes the method ideal for integrating *polynomial functions of degree two or lower*, as well as other smooth functions where a quadratic approximation is sufficiently accurate. By capturing the essential curvature of such functions, it minimizes the error associated with linear approximations, yielding more reliable results.
+- When compared to the Rectangle (Midpoint) Rule and the Trapezoidal Rule, the method often yields a more *accurate approximation* of definite integrals. This increased accuracy comes from using quadratic polynomials to model the function’s behavior, allowing it to capture curvature and more complex features. For smooth functions that can be closely approximated by parabolas over each pair of subintervals, the method can achieve exact results with *fewer subintervals* than other approaches. This efficiency is especially useful in computational applications where reducing the number of function evaluations saves significant processing time.
+- The method is straightforward to understand and implement, making it accessible to students. It requires only *basic arithmetic operations* and function evaluations at specific points, without the need for complex algorithms or iterative procedures. Its simplicity allows for quick coding and seamless integration into larger numerical computation frameworks, facilitating its use across a wide range of scientific and engineering problems.
+- It is particularly effective for functions that are well-approximated by *parabolas* over small intervals. This makes the method ideal for integrating *polynomial functions of degree two or lower*, as well as other smooth functions where a quadratic approximation is sufficiently accurate. By capturing the essential curvature of such functions, it minimizes the error associated with linear approximations, yielding more reliable results.
 
 ### Limitations
 
-* The method requires that the interval $a, b$ be divided into an *even number of subintervals*. This can be inconvenient when the available data points do not naturally align with an even partitioning. If an odd number of subintervals is initially chosen, users must adjust by either adding an extra subinterval or applying a different technique for the final piece, which complicates the implementation.
-* Its reliance on *quadratic polynomials* means it performs best for functions that closely resemble parabolas within each pair of subintervals. For functions with significant higher-order curvature or behaviors not well captured by parabolic fits, it may produce large errors. In such cases, the approximation can be misleading unless the suitability of the method is carefully assessed relative to the function’s characteristics.
-* Functions exhibiting rapid changes, oscillations, or *discontinuities* within the integration interval pose challenges. A single quadratic fit over each pair of subintervals may not capture sudden variations or sharp transitions, leading to substantial errors. For piecewise-defined functions, those with vertical asymptotes, or abrupt slope changes, the method can require an impractically large number of subintervals to reach acceptable accuracy, negating its computational advantages.
-* Like all numerical methods, it is subject to *numerical stability* issues and round-off errors—particularly when working with very large or very small intervals or limited numerical precision. Error accumulation can compromise the approximation’s integrity, sometimes necessitating higher-precision arithmetic to mitigate these effects.
-* The method is designed for definite integrals over *finite intervals* and is not inherently suited to improper integrals—those with infinite integration limits or integrand singularities. Applying it to such problems demands additional techniques or adaptations, which can complicate the process and diminish its overall effectiveness.
+- The method requires that the interval $a, b$ be divided into an *even number of subintervals*. This can be inconvenient when the available data points do not naturally align with an even partitioning. If an odd number of subintervals is initially chosen, users must adjust by either adding an extra subinterval or applying a different technique for the final piece, which complicates the implementation.
+- Its reliance on *quadratic polynomials* means it performs best for functions that closely resemble parabolas within each pair of subintervals. For functions with significant higher-order curvature or behaviors not well captured by parabolic fits, it may produce large errors. In such cases, the approximation can be misleading unless the suitability of the method is carefully assessed relative to the function’s characteristics.
+- Functions exhibiting rapid changes, oscillations, or *discontinuities* within the integration interval pose challenges. A single quadratic fit over each pair of subintervals may not capture sudden variations or sharp transitions, leading to substantial errors. For piecewise-defined functions, those with vertical asymptotes, or abrupt slope changes, the method can require an impractically large number of subintervals to reach acceptable accuracy, negating its computational advantages.
+- Like all numerical methods, it is subject to *numerical stability* issues and round-off errors—particularly when working with very large or very small intervals or limited numerical precision. Error accumulation can compromise the approximation’s integrity, sometimes necessitating higher-precision arithmetic to mitigate these effects.
+- The method is designed for definite integrals over *finite intervals* and is not inherently suited to improper integrals—those with infinite integration limits or integrand singularities. Applying it to such problems demands additional techniques or adaptations, which can complicate the process and diminish its overall effectiveness.

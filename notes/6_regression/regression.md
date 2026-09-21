@@ -11,7 +11,7 @@ $$
 a regression model predicts
 
 $$
-\hat y_i=f(\mathbf x_i;\boldsymbol{\theta}).
+\hat y_i = f(\mathbf x_i;\boldsymbol{\theta}).
 $$
 
 The parameters $\boldsymbol{\theta}$ are estimated by minimizing a loss function or maximizing a likelihood.
@@ -19,13 +19,8 @@ The parameters $\boldsymbol{\theta}$ are estimated by minimizing a loss function
 For ordinary least squares,
 
 $$
-\hat{\boldsymbol{\theta}} =
-\underset{\boldsymbol{\theta}}{\mathrm{arg\,min}}
-\;
-\sum_{i=1}^{N}
-\left[
-y_i-f(\mathbf x_i;\boldsymbol{\theta})
-\right]^2.
+\hat{\boldsymbol{\theta}} = \underset{\boldsymbol{\theta}}{\mathrm{arg\,min}} \;
+\sum_{i=1}^{N} \left[y_i - f(\mathbf x_i;\boldsymbol{\theta}) \right]^2.
 $$
 
 The central question is not just “How closely can the model fit these data?” but “How well does the fitted relationship describe or predict new data?”
@@ -37,13 +32,13 @@ The central question is not just “How closely can the model fit these data?”
 Interpolation imposes exact constraints:
 
 $$
-p(x_i)=y_i.
+p(x_i) = y_i.
 $$
 
 Regression allows residuals:
 
 $$
-r_i=y_i-\hat y_i.
+r_i = y_i - \hat y_i.
 $$
 
 This difference reflects different assumptions.
@@ -57,8 +52,7 @@ A model is called **linear regression** when it is linear in its unknown coeffic
 For one predictor,
 
 $$
-y =
-\beta_0+\beta_1x+\varepsilon,
+y = \beta_0 + \beta_1x + \varepsilon,
 $$
 
 where $\varepsilon$ represents unexplained variation.
@@ -66,28 +60,19 @@ where $\varepsilon$ represents unexplained variation.
 For multiple predictors,
 
 $$
-y =
-\beta_0
-+\beta_1x_1
-+\cdots
-+\beta_px_p
-+\varepsilon.
+y = \beta_0 + \beta_1x_1 + \cdots + \beta_px_p + \varepsilon.
 $$
 
 In matrix form,
 
 $$
-\mathbf y =
-X\boldsymbol{\beta}
-+
-\boldsymbol{\varepsilon}.
+\mathbf y = X\boldsymbol{\beta} + \boldsymbol{\varepsilon}.
 $$
 
 Ordinary least squares estimates $\boldsymbol{\beta}$ by minimizing
 
 $$
-\mathrm{RSS}(\boldsymbol{\beta}) =
-\|\mathbf y-X\boldsymbol{\beta}\|_2^2.
+\mathrm{RSS}(\boldsymbol{\beta}) = \|\mathbf y - X\boldsymbol{\beta}\|_2^2.
 $$
 
 See `least_squares.md` for the linear-algebra derivation and numerical solution methods.
@@ -97,12 +82,7 @@ See `least_squares.md` for the linear-algebra derivation and numerical solution 
 A polynomial model such as
 
 $$
-y =
-\beta_0
-+\beta_1x
-+\beta_2x^2
-+\beta_3x^3
-+\varepsilon
+y = \beta_0 + \beta_1x + \beta_2x^2 + \beta_3x^3 + \varepsilon
 $$
 
 is nonlinear in $x$ but linear in the coefficients $\beta_j$.
@@ -126,7 +106,7 @@ It can therefore be fit with the same least-squares machinery as a straight line
 For each observation,
 
 $$
-r_i=y_i-\hat y_i.
+r_i = y_i - \hat y_i.
 $$
 
 Residuals are not just leftover errors; they are diagnostic information.
@@ -146,31 +126,25 @@ A small average residual is not sufficient. A model can have systematic residual
 The residual sum of squares is
 
 $$
-\mathrm{RSS} =
-\sum_{i=1}^{N}r_i^2.
+\mathrm{RSS} = \sum_{i=1}^{N}r_i^2.
 $$
 
 Mean squared error is
 
 $$
-\mathrm{MSE} =
-\frac{1}{N}
-\sum_{i=1}^{N}r_i^2.
+\mathrm{MSE} = \frac{1}{N} \sum_{i=1}^{N}r_i^2.
 $$
 
 Root mean squared error is
 
 $$
-\mathrm{RMSE} =
-\sqrt{\mathrm{MSE}}.
+\mathrm{RMSE} = \sqrt{\mathrm{MSE}}.
 $$
 
 Mean absolute error is
 
 $$
-\mathrm{MAE} =
-\frac{1}{N}
-\sum_{i=1}^{N}|r_i|.
+\mathrm{MAE} = \frac{1}{N} \sum_{i=1}^{N}|r_i|.
 $$
 
 RMSE penalizes large residuals more heavily. MAE is less dominated by isolated large errors.
@@ -180,12 +154,7 @@ RMSE penalizes large residuals more heavily. MAE is less dominated by isolated l
 For a model with an intercept, a common summary is
 
 $$
-R^2 = 1 -
-\frac{
-\sum_i(y_i-\hat y_i)^2
-}{
-\sum_i(y_i-\bar y)^2
-}.
+R^2 = 1 - \frac{ \sum_i(y_i-\hat y_i)^2 }{ \sum_i(y_i-\bar y)^2 }.
 $$
 
 An $R^2$ near one indicates that the fitted model explains a large fraction of the variation around the sample mean.
@@ -241,11 +210,8 @@ $$
 to the objective:
 
 $$
-\underset{\boldsymbol{\beta}}{\mathrm{minimize}}
-\quad
-\|\mathbf y-X\boldsymbol{\beta}\|_2^2
-+
-\lambda\|\boldsymbol{\beta}\|_2^2.
+\underset{\boldsymbol{\beta}}{\mathrm{minimize}} \quad \|\mathbf y -
+X\boldsymbol{\beta}\|_2^2 + \lambda\|\boldsymbol{\beta}\|_2^2.
 $$
 
 With an unpenalized intercept handled separately, the penalty discourages very large coefficients and can stabilize correlated or high-dimensional predictors.

@@ -5,7 +5,8 @@ Euler's method is the simplest explicit time-stepping method for an initial valu
 Consider
 
 $$
-u'(t)=f(t,u), \qquad u(t_0)=u_0.
+u'(t) = f(t,u),
+\qquad u(t_0) = u_0.
 $$
 
 The differential equation gives the slope of the solution curve. Euler's method assumes that this slope remains constant over one short step of length $h$.
@@ -17,7 +18,7 @@ The differential equation gives the slope of the solution curve. Euler's method 
 If $t_n=t_0+nh$ and $u_n$ approximates $u(t_n)$, then
 
 $$
-u_{n+1}=u_n+h f(t_n,u_n).
+u_{n+1} = u_n + h f(t_n,u_n).
 $$
 
 This is called **forward Euler** or **explicit Euler** because the new value $u_{n+1}$ is computed directly from known quantities at step $n$.
@@ -33,21 +34,13 @@ Geometrically:
 Expand the exact solution about $t_n$:
 
 $$
-u(t_n+h)
-=
-u(t_n)
-+h u'(t_n)
-+\frac{h^2}{2}u''(\xi_n),
+u(t_n + h) = u(t_n) + h u'(t_n) + \frac{h^2}{2}u''(\xi_n),
 $$
 
 for some $\xi_n\in(t_n,t_n+h)$. Since $u'(t_n)=f(t_n,u(t_n))$,
 
 $$
-u(t_n+h)
-=
-u(t_n)
-+h f(t_n,u(t_n))
-+O(h^2).
+u(t_n + h) = u(t_n) + h f(t_n,u(t_n)) + O(h^2).
 $$
 
 Dropping the $O(h^2)$ term gives Euler's update.
@@ -66,7 +59,8 @@ So halving the step size should roughly halve the total error once the asymptoti
 Solve approximately
 
 $$
-u'=u, \qquad u(0)=1
+u' = u,
+\qquad u(0) = 1
 $$
 
 up to $t=0.1$ using $h=0.05$.
@@ -76,25 +70,13 @@ The exact solution is $u(t)=e^t$.
 First step:
 
 $$
-u_1
-=
-u_0+h u_0
-=
-1+0.05(1)
-=
-1.05.
+u_1 = u_0 + h u_0 = 1 + 0.05(1) = 1.05.
 $$
 
 Second step:
 
 $$
-u_2
-=
-u_1+h u_1
-=
-1.05+0.05(1.05)
-=
-1.1025.
+u_2 = u_1 + h u_1 = 1.05 + 0.05(1.05) = 1.1025.
 $$
 
 Thus
@@ -127,15 +109,13 @@ while t < tf:
 For a system
 
 $$
-\mathbf{u}'=\mathbf{f}(t,\mathbf{u}),
+\mathbf{u}' = \mathbf{f}(t,\mathbf{u}),
 $$
 
 the same formula applies componentwise:
 
 $$
-\mathbf{u}_{n+1}
-=
-\mathbf{u}_n+h\mathbf{f}(t_n,\mathbf{u}_n).
+\mathbf{u}_{n+1} = \mathbf{u}_n + h\mathbf{f}(t_n,\mathbf{u}_n).
 $$
 
 ### Step Size and Stability
@@ -145,25 +125,25 @@ Accuracy is not the only reason to choose $h$ carefully. A step can be small eno
 For the test equation
 
 $$
-u'=\lambda u,
+u' = \lambda u,
 $$
 
 Euler gives
 
 $$
-u_{n+1}=(1+h\lambda)u_n.
+u_{n+1} = (1 + h\lambda)u_n.
 $$
 
 If $\lambda<0$, the exact solution decays. The numerical solution decays only if
 
 $$
-|1+h\lambda|<1.
+|1 + h\lambda|<1.
 $$
 
 For real negative $\lambda$, this requires
 
 $$
-0<h<\frac{2}{|\lambda|}.
+0<h< \frac{2}{|\lambda|}.
 $$
 
 This restriction is severe for **stiff** problems, where some modes decay much faster than others. Explicit Euler may then require extremely small steps even when the solution itself changes slowly.

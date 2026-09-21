@@ -37,15 +37,15 @@ As $k$ increases, under certain conditions (e.g., a well-chosen shift strategy),
 
 The idea behind the QR method arises from the following observations:
 
-I. **Similarity and Eigenvalues**:  
+I. **Similarity and Eigenvalues**:
 
 Two matrices $A$ and $B$ are similar if there exists an invertible matrix $C$ such that $A = C^{-1} B C$. Similar matrices share the same eigenvalues.
 
-II. **QR Decomposition**:  
+II. **QR Decomposition**:
 
 Every invertible (or at least full rank) matrix $A$ can be decomposed into an orthogonal matrix $Q$ and an upper-triangular matrix $R$.
 
-III. **Iterative Process**:  
+III. **Iterative Process**:
 
 By repeatedly factoring $A_{k-1}$ into $Q_k R_k$ and then forming $A_k = R_k Q_k$, we create a sequence of similar matrices $A_0, A_1, A_2, \ldots$. If $A_k$ converges to an upper-triangular matrix, the eigenvalues are the diagonal elements of that limit.
 
@@ -85,7 +85,7 @@ The diagonal elements of the nearly upper-triangular matrix $A_k$ at convergence
 
 ### Example
 
-**Given System**:  
+**Given System**:
 
 $$A = \begin{bmatrix}4 & 1 \\ 2 & 3\end{bmatrix}.$$
 

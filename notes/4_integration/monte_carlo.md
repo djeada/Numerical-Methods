@@ -66,7 +66,7 @@ I. **Identify the Domain and Volume**:
 II. **Generate Random Points**:
 
 - Generate $N$ random points $x_i$ uniformly distributed in $D$.
-- In one dimension, sample $x_i \in [a,b]$ uniformly.  
+- In one dimension, sample $x_i \in [a,b]$ uniformly.
 - In multiple dimensions, sample each coordinate from the appropriate range to cover the entire domain $D$.
 
 III. **Evaluate the Function**:
@@ -85,7 +85,7 @@ $$I \approx V \overline{f}.$$
 
 VI. **Assess Accuracy**:
 
-- If necessary, increase $N$ and repeat to improve accuracy.  
+- If necessary, increase $N$ and repeat to improve accuracy.
 - The standard deviation of the estimator decreases as $1/\sqrt{N}$.
 
 ### Example
@@ -98,7 +98,7 @@ Exact answer: $\int_0^1 x^2 dx = \frac{1}{3} \approx 0.3333.$
 
 I. Domain $D=[0,1]$, volume $V=1$.
 
-II. Let $N=1000$. Generate 1000 random points $x_i$ in [0,1].
+II. Let $N=1000$. Generate 1000 random points $x_i$ in \[0,1\].
 
 III. Compute $f(x_i)= (x_i)^2$ for each $i$.
 
@@ -110,29 +110,29 @@ VI. With more points (e.g., $N=10^5$), we would expect the estimate to get close
 
 ### Advantages
 
-I. **Dimensional Independence**:  
+I. **Dimensional Independence**:
 
 Monte Carlo methods handle high-dimensional integrals more easily than deterministic methods, whose complexity often grows exponentially with dimension.
 
-II. **Simplicity**:  
+II. **Simplicity**:
 
 Easy to implement, no complex quadrature rules needed. Just random sampling and arithmetic.
 
-III. **Versatility**:  
+III. **Versatility**:
 
 Works with any integrable function and domain, including complex shapes, as long as uniform sampling is possible.
 
 ### Limitations
 
-I. **Convergence Rate**:  
+I. **Convergence Rate**:
 
 Monte Carlo integration converges as $1/\sqrt{N}$, which can be slower than some deterministic methods in low dimensions.
 
-II. **Variance and Accuracy**:  
+II. **Variance and Accuracy**:
 
 To achieve high accuracy, a large $N$ may be required, increasing computational cost.
 
-III. **Randomness**:  
+III. **Randomness**:
 
 The result is a random variable. Each run may give slightly different answers unless a fixed random seed is used. Confidence intervals and variance reduction techniques (e.g., importance sampling, stratified sampling) are often employed.
 
@@ -141,4 +141,3 @@ The result is a random variable. Each run may give slightly different answers un
 - **Importance Sampling**: Improves convergence by sampling more frequently in regions where the function contributes more to the integral.
 - **Stratified, Latin Hypercube, and Quasi-Monte Carlo Sampling**: Reduce variance by more clever sampling strategies.
 - **Adaptive Methods**: Adjust the sampling distribution on the fly to improve efficiency.
-

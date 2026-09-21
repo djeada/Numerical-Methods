@@ -104,7 +104,7 @@ V. Increment $n = n+1$ and repeat from step I.
 
 **Function:**
 
-$$f(x) = x^2 -4.$$
+$$f(x) = x^2 - 4.$$
 
 **Known Root:**
 
@@ -131,7 +131,7 @@ $$x_1 = x_0 - \frac{f(x_0)}{f'(x_0)} = 3 - \frac{5}{6} = 3 - 0.8333 = 2.1667$$
 - Evaluate $f'(2.1667)=2\cdot 2.1667=4.3333$
 - Update:
 
-$$x_2 = 2.1667 - \frac{0.6945}{4.3333} \approx 2.1667 - 0.1602= 2.0065$$
+$$x_2 = 2.1667 - \frac{0.6945}{4.3333} \approx 2.1667 - 0.1602 = 2.0065$$
 
 **Iteration 3:**
 
@@ -139,20 +139,19 @@ $$x_2 = 2.1667 - \frac{0.6945}{4.3333} \approx 2.1667 - 0.1602= 2.0065$$
 - $f'(2.0065)=2\cdot2.0065=4.013.$
 - Update:
 
-$$x_3 = 2.0065 - \frac{0.0260}{4.013}\approx 2.0065 -0.00648= 2.0000$$
+$$x_3 = 2.0065 - \frac{0.0260}{4.013}\approx 2.0065 - 0.00648 = 2.0000$$
 
 After a few iterations, we have $x_3 \approx 2.0000$, which is very close to the actual root $x=2$.
 
-### Advantages  
+### Advantages
 
-1. **Fast convergence** makes Newton's method highly efficient when the initial guess is close to the actual root and $f'(x) \neq 0$, as it exhibits quadratic convergence.  
-2. **Simplicity** in implementation requires only evaluations of the function and its derivative at each step, making the method conceptually straightforward.  
-3. **Fewer iterations** are typically needed to achieve a desired accuracy compared to bracketing methods like the bisection method, assuming the method converges.  
+1. **Fast convergence** makes Newton's method highly efficient when the initial guess is close to the actual root and $f'(x) \neq 0$, as it exhibits quadratic convergence.
+2. **Simplicity** in implementation requires only evaluations of the function and its derivative at each step, making the method conceptually straightforward.
+3. **Fewer iterations** are typically needed to achieve a desired accuracy compared to bracketing methods like the bisection method, assuming the method converges.
 
-### Limitations  
+### Limitations
 
-1. **Requirement of the derivative** means that $f'(x)$ must either be computable or approximated, which can be challenging or computationally expensive for certain functions.  
-2. **No guaranteed convergence** occurs if the initial guess is far from the root, or if $f'(x)$ is small or zero near the approximation, potentially leading to divergence.  
-3. **Wrong root or complex behavior** may arise in cases where the function has multiple roots or inflection points, causing convergence to an unintended root or erratic behavior.  
-4. **Division by zero** is a critical issue if $f'(x_n) = 0$ at any iteration, requiring safeguards or modifications to the standard algorithm to handle such cases.  
-
+1. **Requirement of the derivative** means that $f'(x)$ must either be computable or approximated, which can be challenging or computationally expensive for certain functions.
+2. **No guaranteed convergence** occurs if the initial guess is far from the root, or if $f'(x)$ is small or zero near the approximation, potentially leading to divergence.
+3. **Wrong root or complex behavior** may arise in cases where the function has multiple roots or inflection points, causing convergence to an unintended root or erratic behavior.
+4. **Division by zero** is a critical issue if $f'(x_n) = 0$ at any iteration, requiring safeguards or modifications to the standard algorithm to handle such cases.

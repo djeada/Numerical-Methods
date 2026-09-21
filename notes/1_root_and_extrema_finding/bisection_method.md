@@ -127,7 +127,7 @@ so there is at least one root in $[0,5]$.
 
 **Iteration 1**:
 
-Compute midpoint: 
+Compute midpoint:
 
 $$c_1 = \frac{0+5}{2} = 2.5.$$
 
@@ -185,15 +185,15 @@ $$a_3 = 1.875, \quad b_3 = 2.5.$$
 
 Continuing this process, as we further narrow down the interval, we find that the root approaches $x=2$. Indeed, $f(2)=0$ exactly, so the root is $x=2$.
 
-### Advantages  
+### Advantages
 
-1. **Guaranteed convergence** is ensured if $f$ is continuous and the interval $[a, b]$ satisfies $f(a)f(b) < 0$, making the method reliable for root-finding.  
-2. The **robustness and simplicity** of the method come from its reliance only on function evaluations, requiring no derivatives or complex operations, making it easy to use across various problems.  
-3. The method’s **stable and predictable behavior** allows for precise estimation of the number of iterations required to achieve a desired accuracy since the interval halves with each iteration.  
+1. **Guaranteed convergence** is ensured if $f$ is continuous and the interval $[a, b]$ satisfies $f(a)f(b) < 0$, making the method reliable for root-finding.
+2. The **robustness and simplicity** of the method come from its reliance only on function evaluations, requiring no derivatives or complex operations, making it easy to use across various problems.
+3. The method’s **stable and predictable behavior** allows for precise estimation of the number of iterations required to achieve a desired accuracy since the interval halves with each iteration.
 
-### Limitations  
+### Limitations
 
-1. **Slow convergence** is a drawback, as the method converges linearly, making it inefficient compared to faster methods like Newton-Raphson or Secant methods for well-behaved functions.  
-2. The requirement for an **initial bracketing of the root** means that you must first identify two points $[a, b]$ where $f(a)f(b) < 0$, which can be challenging if the function’s behavior is not well-known.  
-3. The method is limited to **finding a single root** within a given interval, necessitating separate bracketing for each root in cases where multiple roots exist.  
-4. **Inapplicability to complex or multiple root situations** arises because the method does not use additional information like derivatives or higher-order approximations, making it less suitable for complicated problems.  
+1. **Slow convergence** is a drawback, as the method converges linearly, making it inefficient compared to faster methods like Newton-Raphson or Secant methods for well-behaved functions.
+2. The requirement for an **initial bracketing of the root** means that you must first identify two points $[a, b]$ where $f(a)f(b) < 0$, which can be challenging if the function’s behavior is not well-known.
+3. The method is limited to **finding a single root** within a given interval, necessitating separate bracketing for each root in cases where multiple roots exist.
+4. **Inapplicability to complex or multiple root situations** arises because the method does not use additional information like derivatives or higher-order approximations, making it less suitable for complicated problems.

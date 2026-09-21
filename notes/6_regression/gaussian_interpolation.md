@@ -11,16 +11,13 @@ $$
 the interpolant has the form
 
 $$
-s(x) =
-\sum_{j=0}^{n}
-\lambda_j
-e^{-\varepsilon^2(x-x_j)^2}
+s(x) = \sum_{j=0}^{n} \lambda_j e^{-\varepsilon^2(x-x_j)^2}
 $$
 
 where the coefficients $\lambda_j$ are chosen so that
 
 $$
-s(x_i)=y_i
+s(x_i) = y_i
 $$
 
 for every data point.
@@ -38,7 +35,7 @@ The individual basis functions do not interpolate the observations. The interpol
 The Gaussian radial basis function is
 
 $$
-\phi(r)=e^{-(\varepsilon r)^2},
+\phi(r) = e^{-(\varepsilon r)^2},
 $$
 
 with shape parameter
@@ -50,7 +47,7 @@ $$
 The distance is
 
 $$
-r=|x-x_j|.
+r = |x - x_j|.
 $$
 
 A larger $\varepsilon$ produces a narrower Gaussian. A smaller $\varepsilon$ produces a broader, flatter Gaussian.
@@ -58,14 +55,13 @@ A larger $\varepsilon$ produces a narrower Gaussian. A smaller $\varepsilon$ pro
 Another common parameterization is
 
 $$
-\phi(r) =
-e^{-r^2/(2\sigma^2)}.
+\phi(r) = e^{-r^2/(2\sigma^2)}.
 $$
 
 The two forms are equivalent when
 
 $$
-\varepsilon=\frac{1}{\sqrt{2}\sigma}.
+\varepsilon = \frac{1}{\sqrt{2}\sigma}.
 $$
 
 When reading code or papers, always check which convention is being used.
@@ -75,30 +71,25 @@ When reading code or papers, always check which convention is being used.
 Applying the condition
 
 $$
-s(x_i)=y_i
+s(x_i) = y_i
 $$
 
 gives
 
 $$
-\sum_{j=0}^{n}
-\lambda_j
-e^{-\varepsilon^2(x_i-x_j)^2} =
-y_i.
+\sum_{j=0}^{n} \lambda_j e^{-\varepsilon^2(x_i-x_j)^2} = y_i.
 $$
 
 Define the matrix
 
 $$
-A_{ij} =
-e^{-\varepsilon^2(x_i-x_j)^2}.
+A_{ij} = e^{-\varepsilon^2(x_i-x_j)^2}.
 $$
 
 Then the coefficients satisfy
 
 $$
-A\boldsymbol{\lambda} =
-\mathbf y.
+A\boldsymbol{\lambda} = \mathbf y.
 $$
 
 For distinct data sites and $\varepsilon>0$, the Gaussian kernel is strictly positive definite. In exact arithmetic, the matrix is therefore symmetric positive definite and the interpolation problem has a unique solution.
@@ -108,7 +99,7 @@ For distinct data sites and $\varepsilon>0$, the Gaussian kernel is strictly pos
 The mathematical identity
 
 $$
-\boldsymbol{\lambda}=A^{-1}\mathbf y
+\boldsymbol{\lambda} = A^{-1}\mathbf y
 $$
 
 is useful symbolically, but numerical code should solve the linear system directly.
@@ -122,13 +113,15 @@ Explicitly computing $A^{-1}$ usually costs more, stores more information than n
 Use
 
 $$
-(0,0),\qquad(1,0.5),\qquad(2,0)
+(0,0),
+\qquad(1,0.5),
+\qquad(2,0)
 $$
 
 with
 
 $$
-\varepsilon=1.
+\varepsilon = 1.
 $$
 
 Then
@@ -166,30 +159,27 @@ $$
 gives approximately
 
 $$
-\lambda_0=-0.246025,
+\lambda_0 = -0.246025,
 $$
 
 $$
-\lambda_1=0.681015,
+\lambda_1 = 0.681015,
 $$
 
 $$
-\lambda_2=-0.246025.
+\lambda_2 = -0.246025.
 $$
 
 Therefore,
 
 $$
-s(x) =
--0.246025e^{-x^2} +
-0.681015e^{-(x-1)^2} -
-0.246025e^{-(x-2)^2}.
+s(x) = -0.246025e^{-x^2} + 0.681015e^{-(x-1)^2} - 0.246025e^{-(x-2)^2}.
 $$
 
 At
 
 $$
-x=0.5,
+x = 0.5,
 $$
 
 the result is approximately
@@ -243,24 +233,14 @@ The Gaussian interpolant is infinitely differentiable.
 The first derivative is
 
 $$
-s'(x) =
-\sum_{j=0}^{n}
--2\varepsilon^2(x-x_j)
-\lambda_j
-e^{-\varepsilon^2(x-x_j)^2}.
+s'(x) = \sum_{j=0}^{n} - 2\varepsilon^2(x - x_j) \lambda_j e^{-\varepsilon^2(x-x_j)^2}.
 $$
 
 The second derivative is
 
 $$
-s''(x) =
-\sum_{j=0}^{n}
-\lambda_j
-\left[
-4\varepsilon^4(x-x_j)^2 -
-2\varepsilon^2
-\right]
-e^{-\varepsilon^2(x-x_j)^2}.
+s''(x) = \sum_{j=0}^{n} \lambda_j
+\left[4\varepsilon^4(x - x_j)^2 - 2\varepsilon^2 \right] e^{-\varepsilon^2(x-x_j)^2}.
 $$
 
 No explicit derivative-matching equations are needed because there are no piecewise joins.
@@ -274,19 +254,19 @@ II. choose $\varepsilon>0$;
 III. construct the dense matrix
 
 $$
-A_{ij}=e^{-\varepsilon^2(x_i-x_j)^2};
+A_{ij} = e^{-\varepsilon^2(x_i-x_j)^2};
 $$
 
 IV. solve
 
 $$
-A\boldsymbol{\lambda}=\mathbf y;
+A\boldsymbol{\lambda} = \mathbf y;
 $$
 
 V. evaluate new queries with
 
 $$
-s(x)=\sum_j \lambda_j e^{-\varepsilon^2(x-x_j)^2}.
+s(x) = \sum_j \lambda_j e^{-\varepsilon^2(x-x_j)^2}.
 $$
 
 ### Complexity
@@ -306,8 +286,7 @@ The system above enforces exact interpolation. If the data are noisy, reproducin
 Regularized RBF fitting modifies the problem, for example by solving a system of the form
 
 $$
-(A+\alpha I)\boldsymbol{\lambda} =
-\mathbf y,
+(A + \alpha I)\boldsymbol{\lambda} = \mathbf y,
 $$
 
 with $\alpha>0$.
@@ -325,16 +304,13 @@ $$
 Replace the one-dimensional distance by the Euclidean norm:
 
 $$
-r=\|\mathbf x-\mathbf x_j\|_2.
+r = \|\mathbf x - \mathbf x_j\|_2.
 $$
 
 Then
 
 $$
-s(\mathbf x) =
-\sum_j
-\lambda_j
-e^{-\varepsilon^2\|\mathbf x-\mathbf x_j\|_2^2}.
+s(\mathbf x) = \sum_j \lambda_j e^{-\varepsilon^2\|\mathbf x-\mathbf x_j\|_2^2}.
 $$
 
 This dimension-independent form is one reason RBF interpolation is useful for scattered data.

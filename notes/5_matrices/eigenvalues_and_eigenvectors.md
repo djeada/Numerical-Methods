@@ -20,20 +20,23 @@ where:
 
 1. **Eigenvalues**: Eigenvalues are calculated by solving the characteristic equation, formulated as $det(A - \lambda I) = 0$. Here, $I$ is the identity matrix of the same dimension as $A$, and $det(\cdot)$ denotes the determinant. The roots of this equation yield the eigenvalues.
 
-2. **Eigenvectors**: Upon finding each eigenvalue, its corresponding eigenvectors are obtained by substituting the eigenvalue into the equation $(A - \lambda I)v = 0$, followed by computing the null space. 
+2. **Eigenvectors**: Upon finding each eigenvalue, its corresponding eigenvectors are obtained by substituting the eigenvalue into the equation $(A - \lambda I)v = 0$, followed by computing the null space.
 
 ### Example
 
 Consider a 2x2 matrix:
 
-$$A = \begin{bmatrix} 4 & 1 \\ 
-2 & 3 \\ \end{bmatrix}$$
+$$
+A = \begin{bmatrix} 4 & 1 \\
+2 & 3 \\ \end{bmatrix}
+$$
 
 1. Solve the characteristic equation $det(A - \lambda I) = 0$, which gives $\lambda^2 - 7\lambda + 10 = 0$. The roots of this equation are $\lambda_1 = 2$ and $\lambda_2 = 5$, representing the eigenvalues.
 
 2. To find the corresponding eigenvectors:
-    - For $\lambda_1 = 2$, solve the equation $(A - 2I)v = 0$, which yields the eigenvector $v_1 = [1, -2]$.
-    - For $\lambda_2 = 5$, solve the equation $(A - 5I)v = 0$, which yields the eigenvector $v_2 = [1, 1]$.
+
+   - For $\lambda_1 = 2$, solve the equation $(A - 2I)v = 0$, which yields the eigenvector $v_1 = [1, -2]$.
+   - For $\lambda_2 = 5$, solve the equation $(A - 5I)v = 0$, which yields the eigenvector $v_2 = [1, 1]$.
 
 ### Applications
 

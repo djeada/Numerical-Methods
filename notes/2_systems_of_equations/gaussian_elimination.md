@@ -4,7 +4,7 @@ Gaussian elimination is a fundamental algorithmic procedure in linear algebra us
 
 From a conceptual viewpoint, Gaussian elimination provides a structured approach to eliminating unknowns step-by-step. Geometrically, each linear equation represents a hyperplane in $n$-dimensional space, and the solution of the system corresponds to the intersection point(s) of these hyperplanes. Gaussian elimination successively "clears out" the variables, enabling a direct path to the solution (or revealing inconsistencies or infinite solution sets if they exist).
 
-![gaussian_elimination](https://github.com/user-attachments/assets/54011276-5a17-4666-8fbf-91d92ee9c30e)
+![gaussian\_elimination](https://github.com/user-attachments/assets/54011276-5a17-4666-8fbf-91d92ee9c30e)
 
 ### Mathematical Formulation
 
@@ -13,7 +13,8 @@ Consider a system of $n$ linear equations with $n$ unknowns:
 $$A\mathbf{x} = \mathbf{b},$$
 where
 
-$$A = \begin{bmatrix}
+$$
+A = \begin{bmatrix}
 a_{11} & a_{12} & \cdots & a_{1n}\\
 a_{21} & a_{22} & \cdots & a_{2n}\\
 \vdots & \vdots & \ddots & \vdots\\
@@ -42,12 +43,14 @@ $$
 
 The goal of Gaussian elimination is to perform a series of row operations to transform $[A|\mathbf{b}]$ into an upper-triangular form:
 
-$$[U|\mathbf{c}] = \begin{bmatrix}
+$$
+[U|\mathbf{c}] = \begin{bmatrix}
 u_{11} & u_{12} & \cdots & u_{1n} & c_1 \\
 0 & u_{22} & \cdots & u_{2n} & c_2 \\
 \vdots & \vdots & \ddots & \vdots & \vdots \\
 0 & 0 & \cdots & u_{nn} & c_n
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 where $U$ is an upper-triangular matrix. Once in this form, the solution $\mathbf{x}$ can be found by back substitution.
 
@@ -55,11 +58,11 @@ where $U$ is an upper-triangular matrix. Once in this form, the solution $\mathb
 
 The derivation of Gaussian elimination closely mirrors the logic of systematic elimination of variables from a set of equations:
 
-I. **Elimination of $x_1$ from equations 2 through $n$**:  
+I. **Elimination of $x_1$ from equations 2 through $n$**:
 
 Suppose the first pivot (the leading element in the first row) is $a_{11}$. By using row operations, we can eliminate the $x_1$-term from all equations below the first. This is achieved by subtracting suitable multiples of the first row from subsequent rows.
 
-II. **Elimination of $x_2$ from equations 3 through $n$**:  
+II. **Elimination of $x_2$ from equations 3 through $n$**:
 
 After the first step, the second row now has a leading coefficient (pivot) in the second column. Using this pivot, we eliminate the $x_2$-term from all equations below the second.
 
@@ -77,12 +80,14 @@ The end result is an upper-triangular system that can be solved starting from th
 
 I. **Form the augmented matrix**:
 
-$$[A|\mathbf{b}] = \begin{bmatrix}
+$$
+[A|\mathbf{b}] = \begin{bmatrix}
 a_{11} & a_{12} & \cdots & a_{1n} & b_1 \\
 a_{21} & a_{22} & \cdots & a_{2n} & b_2 \\
 \vdots & \vdots & \ddots & \vdots & \vdots \\
 a_{n1} & a_{n2} & \cdots & a_{nn} & b_n
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 II. **Forward Elimination** (to reach upper-triangular form):
 
@@ -96,12 +101,14 @@ III.III. **Elimination**: For each row $j > i$, subtract $a_{ji}$ times the $i$-
 
 After these steps, the matrix is in row echelon form:
 
-$$[U|\mathbf{c}] = \begin{bmatrix}
+$$
+[U|\mathbf{c}] = \begin{bmatrix}
 1 & * & \cdots & * & * \\
 0 & 1 & \cdots & * & * \\
 \vdots & \vdots & \ddots & \vdots & \vdots \\
 0 & 0 & \cdots & 1 & *
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 where $*$ represents arbitrary numbers obtained during the process.
 
@@ -121,41 +128,50 @@ This process yields the solution vector $\mathbf{x}$.
 
 **Given System**:
 
-$$\begin{aligned}
-2x + y - z &= 8, \\
--3x - y + 2z &= -11, \\
--2x + y + 2z &= -3.
-\end{aligned}$$
+$$
+\begin{aligned}
+  2x + y - z &= 8, \\
+  -3x - y + 2z &= -11, \\
+  -2x + y + 2z &= -3.
+\end{aligned}
+$$
 
 I. **Augmented Matrix**:
 
-$$[A|\mathbf{b}] = \begin{bmatrix}
+$$
+[A|\mathbf{b}] = \begin{bmatrix}
 2 & 1 & -1 & 8 \\
 -3 & -1 & 2 & -11 \\
 -2 & 1 & 2 & -3
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 II. **Forward Elimination**:
 
 Pivot in first row is $a_{11} = 2$. Normalize the first row by dividing by 2:
 
-$$\begin{bmatrix}
+$$
+\begin{bmatrix}
 1 & 0.5 & -0.5 & 4 \\
 -3 & -1 & 2 & -11 \\
 -2 & 1 & 2 & -3
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 Eliminate $x$-terms in row 2 and row 3 using row 1:
 For row 2: Add 3 times row 1:
 
-$$(-3)R_1 + R_2 \to R_2 \implies
+$$
+(-3)R_1 + R_2 \to R_2 \implies
 R_2 = \begin{bmatrix}
 0 & 0.5 & 0.5 & 1
-\end{bmatrix}$$
-  
+\end{bmatrix}
+$$
+
 For row 3: Add 2 times row 1:
 
-$$(2)R_1 + R_3 \to R_3 \implies
+$$
+(2)R_1 + R_3 \to R_3 \implies
 R_3 = \begin{bmatrix}
 0 & 2 & 1 & 5
 \end{bmatrix}
@@ -163,7 +179,8 @@ $$
 
 Now the matrix is:
 
-$$\begin{bmatrix}
+$$
+\begin{bmatrix}
 1 & 0.5 & -0.5 & 4 \\
 0 & 0.5 & 0.5 & 1 \\
 0 & 2 & 1 & 5
@@ -172,7 +189,8 @@ $$
 
 Next pivot is $a_{22} = 0.5$. Normalize the second row by dividing by 0.5:
 
-$$\begin{bmatrix}
+$$
+\begin{bmatrix}
 1 & 0.5 & -0.5 & 4 \\
 0 & 1 & 1 & 2 \\
 0 & 2 & 1 & 5
@@ -183,14 +201,16 @@ Eliminate below the second pivot:
 
 For row 3: subtract 2 times row 2 from row 3:
 
-$$R_3 - 2R_2 \implies R_3 = \begin{bmatrix}
+$$
+R_3 - 2R_2 \implies R_3 = \begin{bmatrix}
 0 & 0 & -1 & 1
 \end{bmatrix}
 $$
 
 Now the matrix is in upper-triangular form:
 
-$$[U|\mathbf{c}] = \begin{bmatrix}
+$$
+[U|\mathbf{c}] = \begin{bmatrix}
 1 & 0.5 & -0.5 & 4 \\
 0 & 1 & 1 & 2 \\
 0 & 0 & -1 & 1
@@ -204,7 +224,7 @@ Substitute $z = -1$ into second equation:
 
 $y + 1(-1) = 2 \implies y = 3$.
 
-Substitute $y = 3, z = -1$ into first equation:  
+Substitute $y = 3, z = -1$ into first equation:
 
 $x + 0.5(3) -0.5(-1) = 4 \implies x + 1.5 + 0.5 = 4 \implies x = 2$.
 
@@ -221,4 +241,3 @@ The solution is $\mathbf{x} = (2, 3, -1)^\top$.
 - **Numerical instability** is a concern due to round-off errors, particularly without pivoting. Partial or full pivoting mitigates this issue but may require additional computational steps.
 - The method’s **computational cost**, proportional to $O(n^3)$ operations, can become prohibitive for large-scale systems, making it less efficient than iterative methods for such cases.
 - A **zero pivot element** halts the process unless row interchanges are performed. Pivoting is necessary to avoid division by zero and to maintain algorithmic stability.
-

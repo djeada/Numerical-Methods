@@ -13,7 +13,7 @@ Consider an $n \times n$ matrix $A$. The Eigenvalue Decomposition of $A$ is give
 $$A = P D P^{-1},$$
 where:
 
-I. **Eigenvalues ($\lambda_i$)**:  
+I. **Eigenvalues ($\lambda_i$)**:
 
 The eigenvalues of $A$ are the roots of the characteristic polynomial:
 
@@ -21,7 +21,7 @@ $$\det(A - \lambda I) = 0.$$
 
 If we solve this polynomial equation and find $n$ eigenvalues (not necessarily distinct), we denote them as $\lambda_1, \lambda_2, \ldots, \lambda_n$.
 
-II. **Eigenvectors ($v_i$)**:  
+II. **Eigenvectors ($v_i$)**:
 
 For each eigenvalue $\lambda_i$, we find the corresponding eigenvector $v_i$ by solving:
 
@@ -35,20 +35,24 @@ Once we have the set of eigenvalues and eigenvectors:
 
 Construct $D$ as a diagonal matrix whose diagonal entries are the eigenvalues:
 
-$$D = \begin{bmatrix}
+$$
+D = \begin{bmatrix}
 \lambda_1 & 0 & \cdots & 0 \\
 0 & \lambda_2 & \cdots & 0 \\
 \vdots & \vdots & \ddots & \vdots \\
 0 & 0 & \cdots & \lambda_n
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 Construct $P$ such that its columns are the eigenvectors $v_1, v_2, \ldots, v_n$:
 
-$$P = \begin{bmatrix}
+$$
+P = \begin{bmatrix}
 | & | &  & | \\
 v_1 & v_2 & \cdots & v_n \\
 | & | &  & |
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 If $A$ is diagonalizable, and if the $v_i$ are chosen to be linearly independent, then $P$ is invertible and $A = P D P^{-1}$.
 
@@ -60,7 +64,11 @@ $$A v_i = \lambda_i v_i.$$
 
 If we gather all eigenvectors into the matrix $P$ and consider how $A$ acts on the columns of $P$:
 
-$$A [v_1 \, v_2 \, \cdots \, v_n] = [A v_1 \, A v_2 \, \cdots \, A v_n] = [\lambda_1 v_1 \, \lambda_2 v_2 \, \cdots \, \lambda_n v_n] = P D.$$
+$$
+A
+[v_1 \, v_2 \, \cdots \, v_n] = [A v_1 \, A v_2 \, \cdots \, A v_n] = [\lambda_1 v_1 \,
+\lambda_2 v_2 \, \cdots \, \lambda_n v_n] = P D.
+$$
 
 If $P$ is invertible, we can write:
 
@@ -93,12 +101,14 @@ IV. **Verify Invertibility of $P$**:
 
 Let:
 
-$$A = \begin{bmatrix}
+$$
+A = \begin{bmatrix}
 4 & 1 \\
 2 & 3
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
-I. **Find Eigenvalues**:  
+I. **Find Eigenvalues**:
 
 The characteristic polynomial:
 
@@ -106,7 +116,10 @@ $$\det(A - \lambda I) = \det\begin{bmatrix}4 - \lambda & 1 \\ 2 & 3 - \lambda\en
 
 Expanding:
 
-$$(4-\lambda)(3-\lambda) - 2 = (12 -7\lambda + \lambda^2) - 2 = \lambda^2 -7\lambda +10=0.$$
+$$
+(4 - \lambda)(3 - \lambda) - 2 = (12 - 7\lambda + \lambda^2) - 2 = \lambda^2 -
+7\lambda + 10 = 0.
+$$
 
 Solve $\lambda^2 -7\lambda +10=0$:
 
@@ -136,28 +149,28 @@ $$A = P D P^{-1}.$$
 
 ### Advantages
 
-I. **Simplification of Computations**:  
+I. **Simplification of Computations**:
 
 Once in the form $A = P D P^{-1}$, computing powers of $A$ or applying certain transformations becomes much simpler. For example, $A^k = P D^k P^{-1}$, and since $D$ is diagonal, raising it to a power is straightforward.
 
-II. **Insights into Matrix Structure**:  
+II. **Insights into Matrix Structure**:
 
 The eigendecomposition reveals the intrinsic "modes" of the linear transformation represented by $A$. Eigenvalues show how the transformation scales each eigen-direction, and eigenvectors show the directions of these fundamental modes.
 
-III. **Numerical Stability in Some Computations**:  
+III. **Numerical Stability in Some Computations**:
 
 Working with $D$ instead of $A$ can improve numerical stability and make some algorithms more efficient, particularly in areas like principal component analysis, spectral clustering, and other advanced data analysis tasks.
 
 ### Limitations
 
-I. **Not All Matrices Are Diagonalizable**:  
+I. **Not All Matrices Are Diagonalizable**:
 
 Some matrices cannot be broken down into a pure eigen decomposition if they do not have enough linearly independent eigenvectors. For such matrices, more generalized decompositions like the Jordan normal form are required.
 
-II. **Computational Cost for Large Matrices**:  
+II. **Computational Cost for Large Matrices**:
 
 Finding eigenvalues and eigenvectors for large matrices can be computationally expensive. Efficient numerical algorithms and approximations exist, but they may still be costly for very large systems.
 
-III. **Complex Eigenvalues**:  
+III. **Complex Eigenvalues**:
 
 For real matrices, eigenvalues can be complex. While this is not a fundamental limitation, it means we must consider complex arithmetic when performing the decomposition, which may not be desired in some real-world applications.

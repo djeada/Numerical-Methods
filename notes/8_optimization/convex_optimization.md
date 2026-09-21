@@ -11,7 +11,7 @@ That fact turns first-order or KKT conditions into global certificates of optima
 A set $C\subseteq\mathbb{R}^n$ is convex if
 
 $$
-\theta x+(1-\theta)y\in C
+\theta x + (1 - \theta)y\in C
 $$
 
 for every $x,y\in C$ and every $\theta\in[0,1]$.
@@ -23,9 +23,7 @@ Examples include affine subspaces, half-spaces, Euclidean balls, boxes, and poly
 A function $f$ is convex when
 
 $$
-f(\theta x+(1-\theta)y)
-\le
-\theta f(x)+(1-\theta)f(y).
+f(\theta x + (1 - \theta)y) \le \theta f(x) + (1 - \theta)f(y).
 $$
 
 Geometrically, the chord between two points on the graph lies above the graph.
@@ -35,7 +33,7 @@ Geometrically, the chord between two points on the graph lies above the graph.
 For differentiable $f$, convexity is equivalent to the global first-order lower bound
 
 $$
-f(y)\ge f(x)+\nabla f(x)^\top(y-x).
+f(y)\ge f(x) + \nabla f(x)^\top(y - x).
 $$
 
 For twice-differentiable $f$ on a convex domain, a sufficient and necessary condition is
@@ -51,7 +49,7 @@ for every $x$ in the domain.
 A differentiable function is $\mu$-strongly convex if
 
 $$
-f(y)\ge f(x)+\nabla f(x)^\top(y-x)+\frac{\mu}{2}\|y-x\|_2^2.
+f(y)\ge f(x) + \nabla f(x)^\top(y - x) + \frac{\mu}{2}\| y - x\|_2^2.
 $$
 
 Strong convexity implies a unique minimizer and enables explicit convergence-rate bounds for first-order methods.
@@ -61,13 +59,13 @@ Strong convexity implies a unique minimizer and enables explicit convergence-rat
 If the gradient is $L$-Lipschitz,
 
 $$
-\|\nabla f(x)-\nabla f(y)\|_2\le L\|x-y\|_2,
+\|\nabla f(x) - \nabla f(y)\|_2\le L\| x - y\|_2,
 $$
 
 then gradient descent with step $1/L$ satisfies standard convergence guarantees. When $f$ is both $\mu$-strongly convex and $L$-smooth, the ratio
 
 $$
-\kappa=\frac{L}{\mu}
+\kappa = \frac{L}{\mu}
 $$
 
 plays the role of a condition number.
@@ -84,7 +82,7 @@ subject to
 
 $$
 g_i(x)\le0,
-\qquad Ax=b,
+\qquad Ax = b,
 $$
 
 where $f$ and every $g_i$ are convex and the equality constraints are affine.
@@ -98,7 +96,7 @@ Under a suitable constraint qualification such as Slater's condition, the KKT co
 A convex quadratic program has objective
 
 $$
-q(x)=\frac12 x^\top Qx+c^\top x
+q(x) = \frac12 x^\top Qx + c^\top x
 $$
 
 with
@@ -125,7 +123,7 @@ The repository's `is_convex_function` helper should therefore be read as a numer
 Consider
 
 $$
-f(x,y)=x^2+4y^2+2x-8y.
+f(x,y) = x^2 + 4y^2 + 2x - 8y.
 $$
 
 Its Hessian is
@@ -141,15 +139,14 @@ $$
 so the function is strongly convex. Setting the gradient to zero gives
 
 $$
-2x+2=0,
-\qquad
-8y-8=0,
+2x + 2 = 0,
+\qquad 8y - 8 = 0,
 $$
 
 hence
 
 $$
-(x^*,y^*)=(-1,1).
+(x^*,y^*) = (-1,1).
 $$
 
 Because the objective is convex, this stationary point is automatically the unique global minimum.

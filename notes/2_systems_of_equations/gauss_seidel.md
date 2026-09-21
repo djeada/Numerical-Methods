@@ -13,12 +13,14 @@ Consider a system of $n$ linear equations with $n$ unknowns:
 $$A\mathbf{x} = \mathbf{b},$$
 where
 
-$$A = \begin{bmatrix}
+$$
+A = \begin{bmatrix}
 A_{11} & A_{12} & \cdots & A_{1n} \\
 A_{21} & A_{22} & \cdots & A_{2n} \\
 \vdots & \vdots & \ddots & \vdots \\
 A_{n1} & A_{n2} & \cdots & A_{nn}
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 $$
 \mathbf{x} = \begin{bmatrix}
@@ -29,7 +31,8 @@ $$
 $$
 \mathbf{b} = \begin{bmatrix}
 b_1 \\ b_2 \\ \cdots \\ b_n
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 If $A$ is nonsingular (invertible), there exists a unique solution $\mathbf{x}^*$ such that $A\mathbf{x}^* = \mathbf{b}$.
 
@@ -88,17 +91,21 @@ IV. **Output**: Once the loop terminates, $\mathbf{x}^{(k+1)}$ is considered the
 
 **Given System:**
 
-$$\begin{aligned}
-5x - y &= 6, \\
-7x + 8y &= 20.
-\end{aligned}$$
+$$
+\begin{aligned}
+  5x - y &= 6, \\
+  7x + 8y &= 20.
+\end{aligned}
+$$
 
 This can be expressed in matrix form as:
 
-$$A = \begin{bmatrix} 5 & -1 \\ 
+$$
+A = \begin{bmatrix} 5 & -1 \\
 7 & 8 \end{bmatrix}, \quad
 \mathbf{x} = \begin{bmatrix} x \\ y \end{bmatrix}, \quad
-\mathbf{b} = \begin{bmatrix} 6 \\ 20 \end{bmatrix}$$
+\mathbf{b} = \begin{bmatrix} 6 \\ 20 \end{bmatrix}
+$$
 
 We have two equations:
 
@@ -108,7 +115,7 @@ II. $7x + 8y = 20$
 
 **Step-by-Step Iteration:**
 
-**Initialization**: 
+**Initialization**:
 
 $$x^{(0)} = 0, y^{(0)} = 0$$
 

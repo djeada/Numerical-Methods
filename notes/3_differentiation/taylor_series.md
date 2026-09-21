@@ -1,14 +1,17 @@
-## Taylor Series 
+## Taylor Series
 
 The Taylor series is a fundamental tool in calculus and mathematical analysis, offering a powerful way to represent and approximate functions. By expanding a function around a specific point, known as the "center" or "point of expansion," we can express it as an infinite sum of polynomial terms derived from the function’s derivatives. This concept is especially useful for approximating functions that are difficult or impossible to compute directly, as well as for understanding the local behavior of functions.
 
-![taylor_series](https://github.com/user-attachments/assets/cba25294-b445-42c2-9a3e-15dfc80813cf)
+![taylor\_series](https://github.com/user-attachments/assets/cba25294-b445-42c2-9a3e-15dfc80813cf)
 
 ### Mathematical Formulation
 
 Consider a function $f(x)$ that is infinitely differentiable at a point $a$. The Taylor series of $f(x)$ about the point $a$ is given by:
 
-$$f(x) = f(a) + f'(a)(x - a) + \frac{f''(a)}{2!}(x - a)^2 + \frac{f'''(a)}{3!}(x - a)^3 + \cdots$$
+$$
+f(x) = f(a) + f'(a)(x - a) + \frac{f''(a)}{2!}(x - a)^2 + \frac{f'''(a)}{3!}(x - a)^3 +
+\cdots
+$$
 
 More compactly, we write:
 
@@ -24,7 +27,8 @@ If the series converges to $f(x)$ for all $x$ in some interval around $a$, then 
 For numerical methods, we often use a **finite-order Taylor expansion with remainder**:
 
 $$
-f(x)=\sum_{k=0}^{n}\frac{f^{(k)}(a)}{k!}(x-a)^k + \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-a)^{n+1},
+f(x) = \sum_{k=0}^{n} \frac{f^{(k)}(a)}{k!}(x - a)^k +
+\frac{f^{(n+1)}(\xi)}{(n+1)!}(x - a)^{n+1},
 \qquad \xi\in(a,x)
 $$
 
@@ -34,19 +38,19 @@ Here, derivatives in the polynomial part are evaluated at $a$, while the remaind
 
 The Taylor series is not only a theoretical construct. It has numerous practical applications:
 
-I. **Approximation**:  
+I. **Approximation**:
 
 Near the point $x = a$, the partial sums of the Taylor series (called Taylor polynomials) provide increasingly accurate approximations to $f(x)$. This is often used in numerical methods to approximate complicated functions with simpler polynomial expressions.
 
-II. **Analysis of Behavior**:  
+II. **Analysis of Behavior**:
 
 By examining the derivatives at a single point, one can gain insights into the function's local behavior, such as growth rates, curvature, and pattern of change.
 
-III. **Computational Efficiency**:  
+III. **Computational Efficiency**:
 
 In contexts like numerical analysis, physics, and engineering, it may be easier or more efficient to use a truncated Taylor series for computations instead of evaluating a complex function directly.
 
-IV. **Series Solutions to Differential Equations**:  
+IV. **Series Solutions to Differential Equations**:
 
 Many differential equations can be solved (or approximated) by expressing their solutions as Taylor series expansions.
 

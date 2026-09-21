@@ -88,13 +88,13 @@ II. Evaluate $f(x_1)$ and $f(x_2)$.
 
 III. If $f(x_1) > f(x_2)$:
 
-Set $a = x_1$.  
+Set $a = x_1$.
 
 (The minimum is in the interval $\[x_1,b\]$)
 
 Else:
 
-Set $b = x_2$.  
+Set $b = x_2$.
 
 (The minimum is in the interval $\[a,x_2\]$)
 
@@ -125,9 +125,12 @@ $$a = -2, \quad b = 2, \quad \phi = \frac{1+\sqrt{5}}{2} \approx 1.618.$$
 
 Compute:
 
-$$x_1 = b - \frac{b-a}{\phi} = 2 - \frac{2 - (-2)}{1.618} = 2 - \frac{4}{1.618} \approx 2 - 2.472 \approx -0.472.$$
+$$
+x_1 = b - \frac{b-a}{\phi} = 2 - \frac{2 - (-2)}{1.618} = 2 - \frac{4}{1.618} \approx
+2 - 2.472 \approx - 0.472.
+$$
 
-$$x_2 = a + \frac{b-a}{\phi} = -2 + \frac{4}{1.618} \approx -2 + 2.472 = 0.472.$$
+$$x_2 = a + \frac{b-a}{\phi} = -2 + \frac{4}{1.618} \approx - 2 + 2.472 = 0.472.$$
 
 Evaluate:
 
@@ -143,9 +146,12 @@ New interval: $[a,b] = [-2,0.472]$
 
 Compute new points:
 
-$$x_1 = b - \frac{b-a}{\phi} = 0.472 - \frac{0.472 - (-2)}{1.618} = 0.472 - \frac{2.472}{1.618} \approx 0.472 - 1.526 \approx -1.054.$$
+$$
+x_1 = b - \frac{b-a}{\phi} = 0.472 - \frac{0.472 - (-2)}{1.618} = 0.472 -
+\frac{2.472}{1.618} \approx 0.472 - 1.526 \approx - 1.054.
+$$
 
-$$x_2 = a + \frac{b-a}{\phi} = -2 + \frac{2.472}{1.618} \approx -2 + 1.526 = -0.474.$$
+$$x_2 = a + \frac{b-a}{\phi} = -2 + \frac{2.472}{1.618} \approx - 2 + 1.526 = -0.474.$$
 
 Evaluate:
 
@@ -169,16 +175,16 @@ maintaining $[a,b] = [-1.054, 0.472]$.
 
 At each iteration, you would similarly compute new $x_1, x_2$, evaluate $f(x_1)$ and $f(x_2)$, and narrow down the interval. Ultimately, as you continue, the interval will shrink around $x=0$, since $f(x) = x^2$ achieves its minimum at $x=0$.
 
-### Advantages  
+### Advantages
 
-1. **No derivatives required** makes the Golden Ratio Search ideal for problems where derivative information is unavailable or too expensive to compute.  
-2. **Guaranteed reduction** of the search interval by approximately $\frac{1}{\phi}$ (the Golden Ratio) in each iteration ensures steady progress toward locating the minimum.  
-3. The method's **robustness** guarantees convergence to a minimum within the provided interval, assuming the function is unimodal.  
-4. **Simplicity of implementation** makes the algorithm accessible, as it involves straightforward iterative calculations without the need for complex procedures.  
+1. **No derivatives required** makes the Golden Ratio Search ideal for problems where derivative information is unavailable or too expensive to compute.
+2. **Guaranteed reduction** of the search interval by approximately $\frac{1}{\phi}$ (the Golden Ratio) in each iteration ensures steady progress toward locating the minimum.
+3. The method's **robustness** guarantees convergence to a minimum within the provided interval, assuming the function is unimodal.
+4. **Simplicity of implementation** makes the algorithm accessible, as it involves straightforward iterative calculations without the need for complex procedures.
 
-### Limitations  
+### Limitations
 
-1. **Unimodality required** means the method assumes the function has only one minimum in the interval; multiple minima can lead to convergence to a local minimum or failure to isolate a solution.  
-2. **Initial bracketing** of the interval $[a, b]$ containing the minimum is essential, and determining this interval can be challenging if the function's behavior is poorly understood.  
-3. The method is **not the fastest** for all problems, particularly when gradient-based methods like Newton’s method or quasi-Newton methods can be used effectively.  
-4. **Slow convergence** can occur in flat regions around the minimum, where reductions per iteration provide limited new information for further narrowing the interval.  
+1. **Unimodality required** means the method assumes the function has only one minimum in the interval; multiple minima can lead to convergence to a local minimum or failure to isolate a solution.
+2. **Initial bracketing** of the interval $[a, b]$ containing the minimum is essential, and determining this interval can be challenging if the function's behavior is poorly understood.
+3. The method is **not the fastest** for all problems, particularly when gradient-based methods like Newton’s method or quasi-Newton methods can be used effectively.
+4. **Slow convergence** can occur in flat regions around the minimum, where reductions per iteration provide limited new information for further narrowing the interval.

@@ -147,7 +147,7 @@ V. **Compare with Exact Integral:**
 For validation, compute the exact value of the integral analytically:
 
 $$
-\int_{0}^{2} x^2 \, dx = \left[ \frac{x^3}{3} \right]_0^2 = \frac{8}{3} \approx 2.6667
+\int_{0}^{2} x^2 \, dx = \left[\frac{x^3}{3} \right]_0^2 = \frac{8}{3} \approx 2.6667
 $$
 
 The Trapezoidal Rule approximation of 3 is reasonably close to the exact value of approximately 2.6667, demonstrating the method's effectiveness even with a small number of subintervals.

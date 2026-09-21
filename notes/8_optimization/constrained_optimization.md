@@ -10,8 +10,7 @@ subject to
 
 $$
 g_i(x)\le0,
-\qquad
-h_j(x)=0.
+\qquad h_j(x) = 0.
 $$
 
 The constraints define the feasible set. A constrained optimum can lie on its boundary even when the objective gradient is nonzero.
@@ -23,19 +22,19 @@ The constraints define the feasible set. A constrained optimum can lie on its bo
 For a single equality constraint
 
 $$
-h(x)=0,
+h(x) = 0,
 $$
 
 feasible first-order motions $d$ satisfy
 
 $$
-\nabla h(x)^\top d=0.
+\nabla h(x)^\top d = 0.
 $$
 
 At a regular constrained optimum, no feasible tangent direction can decrease the objective. Therefore the objective gradient must lie in the span of the constraint gradient:
 
 $$
-\nabla f(x^*)+\lambda\nabla h(x^*)=0.
+\nabla f(x^*) + \lambda\nabla h(x^*) = 0.
 $$
 
 This is the Lagrange-multiplier condition.
@@ -47,7 +46,7 @@ For an inequality $g_i(x)\le0$, the constraint is **active** at $x^*$ when $g_i(
 This distinction is captured by complementary slackness:
 
 $$
-\lambda_i g_i(x^*)=0.
+\lambda_i g_i(x^*) = 0.
 $$
 
 ### KKT conditions
@@ -55,19 +54,18 @@ $$
 Define the Lagrangian
 
 $$
-\mathcal{L}(x,\lambda,\nu)
-=f(x)+\sum_i\lambda_i g_i(x)+\sum_j\nu_j h_j(x).
+\mathcal{L}(x,\lambda,\nu) = f(x) + \sum_i\lambda_i g_i(x) + \sum_j\nu_j h_j(x).
 $$
 
 Under a suitable constraint qualification, a local optimum must satisfy
 
 $$
-\nabla_x\mathcal{L}(x^*,\lambda^*,\nu^*)=0,
+\nabla_x\mathcal{L}(x^*,\lambda^*,\nu^*) = 0,
 $$
 
 $$
 g_i(x^*)\le0,
-\qquad h_j(x^*)=0,
+\qquad h_j(x^*) = 0,
 $$
 
 $$
@@ -77,7 +75,7 @@ $$
 and
 
 $$
-\lambda_i^*g_i(x^*)=0.
+\lambda_i^*g_i(x^*) = 0.
 $$
 
 ![KKT geometry at an active boundary](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/constrained_kkt_geometry.svg)
@@ -121,39 +119,38 @@ The repository's equality-constrained routine uses the identity matrix as a simp
 Minimize
 
 $$
-f(x,y)=x^2+y^2
+f(x,y) = x^2 + y^2
 $$
 
 subject to
 
 $$
-x+y=4.
+x + y = 4.
 $$
 
 The Lagrangian is
 
 $$
-\mathcal{L}=x^2+y^2+\nu(x+y-4).
+\mathcal{L} = x^2 + y^2 + \nu(x + y - 4).
 $$
 
 Stationarity gives
 
 $$
-2x+\nu=0,
-\qquad
-2y+\nu=0,
+2x + \nu = 0,
+\qquad 2y + \nu = 0,
 $$
 
 so $x=y$. The constraint then gives
 
 $$
-x=y=2.
+x = y = 2.
 $$
 
 The constrained minimum is therefore
 
 $$
-f(2,2)=8.
+f(2,2) = 8.
 $$
 
 ### Feasibility and scaling
@@ -163,15 +160,15 @@ In practice, monitor both optimality and feasibility. A point with a tiny gradie
 Useful residuals include
 
 $$
-r_{\text{eq}}=\|h(x)\|,
+r_{\text{eq}} = \| h(x)\|,
 $$
 
 $$
-r_{\text{ineq}}=\|\max(g(x),0)\|,
+r_{\text{ineq}} = \|\max(g(x),0)\|,
 $$
 
 and the stationarity residual
 
 $$
-r_{\text{stat}}=\|\nabla_x\mathcal{L}\|.
+r_{\text{stat}} = \|\nabla_x\mathcal{L}\|.
 $$

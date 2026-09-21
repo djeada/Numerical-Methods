@@ -3,15 +3,14 @@
 A quadratic program (QP) has a quadratic objective and linear constraints:
 
 $$
-\min_x \frac12x^\top Qx+c^\top x
+\min_x \frac12x^\top Qx + c^\top x
 $$
 
 subject to
 
 $$
 A_{\text{ub}}x\le b_{\text{ub}},
-\qquad
-A_{\text{eq}}x=b_{\text{eq}}.
+\qquad A_{\text{eq}}x = b_{\text{eq}}.
 $$
 
 When
@@ -27,13 +26,13 @@ the problem is convex.
 If $Q$ is positive definite and there are no constraints, stationarity gives
 
 $$
-Qx^*+c=0,
+Qx^* + c = 0,
 $$
 
 so
 
 $$
-Qx^*=-c.
+Qx^* = -c.
 $$
 
 Again, solve this system directly rather than forming $Q^{-1}$.
@@ -43,13 +42,13 @@ Again, solve this system directly rather than forming $Q^{-1}$.
 For a convex feasible set $C$, projected gradient descent uses
 
 $$
-y_k=x_k-\alpha\nabla f(x_k),
+y_k = x_k - \alpha\nabla f(x_k),
 $$
 
 then
 
 $$
-x_{k+1}=\Pi_C(y_k),
+x_{k+1} = \Pi_C(y_k),
 $$
 
 where $\Pi_C$ denotes Euclidean projection.
@@ -63,19 +62,19 @@ The repository implementation uses this idea in a simplified form: it takes a gr
 For
 
 $$
-f(x)=\frac12x^\top Qx+c^\top x,
+f(x) = \frac12x^\top Qx + c^\top x,
 $$
 
 the gradient is
 
 $$
-\nabla f(x)=Qx+c.
+\nabla f(x) = Qx + c.
 $$
 
 If $Q\succeq0$, the largest eigenvalue is a Lipschitz constant for the gradient. A common conservative fixed step is therefore approximately
 
 $$
-\alpha=\frac{1}{\lambda_{\max}(Q)}.
+\alpha = \frac{1}{\lambda_{\max}(Q)}.
 $$
 
 ### KKT system for equality-constrained QP
@@ -83,17 +82,17 @@ $$
 For
 
 $$
-Ax=b,
+Ax = b,
 $$
 
 the optimality equations are
 
 $$
-Qx+c+A^\top\nu=0,
+Qx + c + A^\top\nu = 0,
 $$
 
 $$
-Ax=b.
+Ax = b.
 $$
 
 Together they form

@@ -11,8 +11,8 @@ $$
 at locations
 
 $$
-\mathbf x_i=(x_i,y_i),
-\qquad i=1,\ldots,N.
+\mathbf x_i = (x_i,y_i),
+\qquad i = 1,\ldots,N.
 $$
 
 A thin-plate spline constructs a surface
@@ -32,30 +32,26 @@ The name comes from the physical analogy of a thin elastic plate that is forced 
 In two dimensions, the classical thin-plate spline kernel is
 
 $$
-\phi(r)=r^2\log r.
+\phi(r) = r^2\log r.
 $$
 
 At
 
 $$
-r=0,
+r = 0,
 $$
 
 the limiting value is defined as
 
 $$
-\phi(0)=0.
+\phi(0) = 0.
 $$
 
 The interpolant is
 
 $$
-s(\mathbf x) =
-a_0+a_1x+a_2y
-+
-\sum_{j=1}^{N}
-w_j
-\phi(\|\mathbf x-\mathbf x_j\|_2).
+s(\mathbf x) = a_0 + a_1x + a_2y + \sum_{j=1}^{N} w_j
+\phi(\|\mathbf x - \mathbf x_j\|_2).
 $$
 
 There are two parts:
@@ -63,7 +59,7 @@ There are two parts:
 I. an affine polynomial
 
 $$
-a_0+a_1x+a_2y;
+a_0 + a_1x + a_2y;
 $$
 
 II. a weighted sum of radial basis functions centered at the data sites.
@@ -75,14 +71,13 @@ The radial component supplies flexible curvature, while the affine component is 
 At every data site,
 
 $$
-s(\mathbf x_i)=z_i.
+s(\mathbf x_i) = z_i.
 $$
 
 Define
 
 $$
-K_{ij} =
-\phi(\|\mathbf x_i-\mathbf x_j\|_2).
+K_{ij} = \phi(\|\mathbf x_i - \mathbf x_j\|_2).
 $$
 
 Also define
@@ -126,23 +121,23 @@ $$
 The lower block gives the side constraints
 
 $$
-P^\top\mathbf w=0.
+P^\top\mathbf w = 0.
 $$
 
 Written componentwise,
 
 $$
-\sum_{j=1}^{N}w_j=0,
+\sum_{j=1}^{N}w_j = 0,
 $$
 
 $$
-\sum_{j=1}^{N}w_jx_j=0,
+\sum_{j=1}^{N}w_jx_j = 0,
 $$
 
 and
 
 $$
-\sum_{j=1}^{N}w_jy_j=0.
+\sum_{j=1}^{N}w_jy_j = 0.
 $$
 
 These constraints make the decomposition between the radial and affine parts unique under the usual geometric conditions.
@@ -158,7 +153,7 @@ Duplicate data locations are also problematic for exact interpolation unless the
 Every kernel term
 
 $$
-\phi(\|\mathbf x-\mathbf x_j\|_2)
+\phi(\|\mathbf x - \mathbf x_j\|_2)
 $$
 
 depends on the distance from the query to one data site, but the coefficient vector is obtained from one global linear system.
@@ -174,22 +169,13 @@ The contour plot makes this global coupling easy to see.
 The classical two-dimensional TPS minimizes a bending-energy functional of the form
 
 $$
-J[s] =
-\iint
-\left[
-s_{xx}^2
-+
-2s_{xy}^2
-+
-s_{yy}^2
-\right]
-\,dx\,dy
+J[s] = \iint \left[s_{xx}^2 + 2s_{xy}^2 + s_{yy}^2 \right] \, dx\, dy
 $$
 
 subject to the interpolation constraints
 
 $$
-s(x_i,y_i)=z_i.
+s(x_i,y_i) = z_i.
 $$
 
 The second derivatives measure curvature. Minimizing their squared magnitude favors a surface that bends as little as possible while still passing through the required points.
@@ -201,27 +187,25 @@ This variational interpretation explains why thin-plate splines tend to look smo
 After solving for $\mathbf w$ and $\mathbf a$, evaluate a new point
 
 $$
-\mathbf x=(x,y)
+\mathbf x = (x,y)
 $$
 
 by computing all distances
 
 $$
-r_j=\|\mathbf x-\mathbf x_j\|_2
+r_j = \|\mathbf x - \mathbf x_j\|_2
 $$
 
 and then
 
 $$
-s(\mathbf x) =
-a_0+a_1x+a_2y +
-\sum_{j=1}^{N}w_jr_j^2\log r_j.
+s(\mathbf x) = a_0 + a_1x + a_2y + \sum_{j=1}^{N}w_jr_j^2\log r_j.
 $$
 
 For a query that exactly coincides with a data site, use
 
 $$
-r^2\log r=0
+r^2\log r = 0
 $$
 
 at $r=0$ by the limiting definition.
@@ -233,14 +217,13 @@ I. collect distinct scattered data sites $(x_i,y_i,z_i)$;
 II. compute every pairwise distance
 
 $$
-r_{ij}    =
-\|\mathbf x_i-\mathbf x_j\|_2;
+r_{ij} = \|\mathbf x_i - \mathbf x_j\|_2;
 $$
 
 III. build
 
 $$
-K_{ij}=\phi(r_{ij});
+K_{ij} = \phi(r_{ij});
 $$
 
 IV. build the affine matrix $P$;
@@ -270,12 +253,8 @@ Exact TPS interpolation treats every observed value as a hard constraint. That c
 A smoothing thin-plate spline introduces a tradeoff between data fit and bending energy. Conceptually, it solves a problem like
 
 $$
-\underset{s}{\mathrm{minimize}}
-\quad
-\sum_{i=1}^{N}
-[z_i-s(x_i,y_i)]^2
-+
-\lambda J[s],
+\underset{s}{\mathrm{minimize}} \quad \sum_{i=1}^{N} [z_i - s(x_i,y_i)]^2 + \lambda
+J[s],
 $$
 
 where

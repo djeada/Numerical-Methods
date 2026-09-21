@@ -8,7 +8,7 @@ Conceptually, the Secant Method constructs a secant line between two points $(x_
 
 Imagine plotting the function $f(x)$:
 
-![secant_method](https://github.com/user-attachments/assets/5e904eb0-1c4f-499a-9937-39fcdb210fde)
+![secant\_method](https://github.com/user-attachments/assets/5e904eb0-1c4f-499a-9937-39fcdb210fde)
 
 The intersection of the secant line with the x-axis gives the next approximation $x_{n+1}$. Repeating this procedure leads to progressively better approximations of the root, assuming the method converges.
 
@@ -16,7 +16,7 @@ The intersection of the secant line with the x-axis gives the next approximation
 
 Consider a continuous function $f(x)$ for which we want to solve $f(x)=0$. The Secant Method starts with two initial approximations $x_0$ and $x_1$, and then generates a sequence $\{x_n\}$ according to:
 
-$$x_{n+1} = x_n - f(x_n)\frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}$$
+$$x_{n+1} = x_n - f(x_n) \frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}$$
 
 This formula approximates the derivative $f'(x_n)$ by the finite difference:
 
@@ -26,13 +26,13 @@ By replacing $f'(x_n)$ with the above approximation in the Newton's method formu
 
 ### Derivation
 
-I. **Starting from Newton’s Method**:  
+I. **Starting from Newton’s Method**:
 
 Newton’s method update rule is:
 
 $$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}.$$
 
-II. **Approximating the Derivative**:  
+II. **Approximating the Derivative**:
 
 If the derivative $f'(x_n)$ is difficult to compute or unknown, we can use a finite difference approximation based on the two most recent points:
 
@@ -88,11 +88,11 @@ IV. Update indices: $n = n+1$ and repeat step I.
 
 **Given Function:**
 
-$$f(x)=x^2 -4.$$
+$$f(x) = x^2 - 4.$$
 
 We know the roots are $x=\pm 2$. Suppose we do not know the roots in advance and start with:
 
-$$x_0=0, \quad x_1=1$$
+$$x_0 = 0, \quad x_1 = 1$$
 
 **Iteration 1:**
 
@@ -101,13 +101,19 @@ $$x_0=0, \quad x_1=1$$
 
 Update:
 
-$$x_2 = x_1 - f(x_1)\frac{x_1 - x_0}{f(x_1)-f(x_0)} = 1 -(-3)\frac{1-0}{(-3)-(-4)} = 1 -(-3)\frac{1}{-3+4} = 1-( -3 \times 1 ) = 1 +3 =4.$$
+$$
+x_2 = x_1 - f(x_1) \frac{x_1 - x_0}{f(x_1)-f(x_0)} = 1 - (-3)
+\frac{1-0}{(-3)-(-4)} = 1 - (-3) \frac{1}{-3+4} = 1 - (-3 \times 1) = 1 + 3 = 4.
+$$
 
-Check carefully:  
+Check carefully:
 
 Actually, let's compute step-by-step to avoid confusion:
 
-$$x_2 = 1 - (-3)\frac{1-0}{-3-(-4)} = 1 - (-3)\frac{1}{-3+4} = 1 - (-3)\frac{1}{1} = 1+3 =4.$$
+$$
+x_2 = 1 - (-3) \frac{1-0}{-3-(-4)} = 1 - (-3) \frac{1}{-3+4} = 1 - (-3)
+\frac{1}{1} = 1 + 3 = 4.
+$$
 
 **Iteration 2:**
 
@@ -118,7 +124,10 @@ Now:
 
 Update:
 
-$$x_3 = x_2 - f(x_2)\frac{x_2 - x_1}{f(x_2)-f(x_1)} = 4 - 12\frac{4-1}{12-(-3)} = 4 - 12\frac{3}{15}=4 -12 \times 0.2 =4 -2.4=1.6.$$
+$$
+x_3 = x_2 - f(x_2) \frac{x_2 - x_1}{f(x_2)-f(x_1)} = 4 - 12 \frac{4-1}{12-(-3)} = 4 - 12
+\frac{3}{15} = 4 - 12 \times 0.2 = 4 - 2.4 = 1.6.
+$$
 
 **Iteration 3:**
 
@@ -129,19 +138,22 @@ Now:
 
 Update:
 
-$$x_4 = x_3 - f(x_3)\frac{x_3 - x_2}{f(x_3)-f(x_2)} = 1.6 - (-1.44)\frac{1.6-4}{-1.44-12} $$
+$$
+x_4 = x_3 - f(x_3) \frac{x_3 - x_2}{f(x_3)-f(x_2)} = 1.6 - (-1.44)
+\frac{1.6-4}{-1.44-12}
+$$
 
-$$= 1.6 -(-1.44)\frac{-2.4}{-13.44} $$
+$$= 1.6 - (-1.44) \frac{-2.4}{-13.44}$$
 
-$$= 1.6 -(-1.44)\frac{-2.4}{-13.44}$$
+$$= 1.6 - (-1.44) \frac{-2.4}{-13.44}$$
 
 Compute inside:
 
-$$\frac{-2.4}{-13.44}=0.1786\text{(approx)}, \quad (-1.44)\times0.1786=-0.2572$$
+$$\frac{-2.4}{-13.44} = 0.1786 \text{(approx)}, \quad (-1.44)\times0.1786 = -0.2572$$
 
 So:
 
-$$x_4 = 1.6 - (-0.2572)=1.6+0.2572=1.8572$$
+$$x_4 = 1.6 - (-0.2572) = 1.6 + 0.2572 = 1.8572$$
 
 Repeating further will bring the sequence closer to $x=2$.
 

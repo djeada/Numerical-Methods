@@ -19,7 +19,7 @@ The difficulty of an optimization problem depends less on its dimension alone th
 ### A useful classification
 
 | Property | Typical consequence | Common methods |
-|---|---|---|
+| --- | --- | --- |
 | smooth, unconstrained, convex | every local minimum is global | gradient, Newton, BFGS |
 | smooth, unconstrained, non-convex | stationary points may be minima, maxima, or saddles | local methods with safeguards, multi-start |
 | constrained | iterates must respect or penalize feasibility | projected methods, active-set, KKT, SQP |
@@ -50,7 +50,7 @@ For basic steepest descent, see the earlier [gradient descent note](../1_root_an
 For an unconstrained differentiable objective, a local minimizer $x^*$ in the interior must satisfy
 
 $$
-\nabla f(x^*)=0.
+\nabla f(x^*) = 0.
 $$
 
 This condition is necessary, not sufficient. A stationary point can also be a maximum or saddle point.
@@ -58,7 +58,7 @@ This condition is necessary, not sufficient. A stationary point can also be a ma
 For a twice-differentiable function, the Hessian
 
 $$
-H(x)=\nabla^2 f(x)
+H(x) = \nabla^2 f(x)
 $$
 
 helps classify a stationary point. If $H(x^*)$ is positive definite, $x^*$ is a strict local minimum. If it is negative definite, $x^*$ is a strict local maximum. An indefinite Hessian indicates a saddle.
@@ -68,13 +68,13 @@ helps classify a stationary point. If $H(x^*)$ is positive definite, $x^*$ is a 
 Consider the quadratic
 
 $$
-f(x)=\frac12 x^\top A x-b^\top x,
+f(x) = \frac12 x^\top A x - b^\top x,
 $$
 
 with $A$ symmetric positive definite. Its contours are ellipses, and the condition number
 
 $$
-\kappa_2(A)=\frac{\lambda_{\max}(A)}{\lambda_{\min}(A)}
+\kappa_2(A) = \frac{\lambda_{\max}(A)}{\lambda_{\min}(A)}
 $$
 
 measures their elongation.
@@ -86,13 +86,13 @@ When $\kappa_2(A)$ is large, steepest descent tends to zig-zag across a narrow v
 For a quadratic, fixed-step gradient descent
 
 $$
-x_{k+1}=x_k-\alpha(Ax_k-b)
+x_{k+1} = x_k - \alpha(Ax_k - b)
 $$
 
 converges when
 
 $$
-0<\alpha<\frac{2}{\lambda_{\max}(A)}.
+0<\alpha< \frac{2}{\lambda_{\max}(A)}.
 $$
 
 With the best fixed step for the spectrum, the contraction factor depends on $\kappa$; poor conditioning directly slows convergence.
@@ -120,7 +120,8 @@ $$
 subject to
 
 $$
-g_i(x)\le0,\qquad h_j(x)=0,
+g_i(x)\le0,
+\qquad h_j(x) = 0,
 $$
 
 we cannot generally set $\nabla f=0$. The gradient may point outside the feasible region. Instead, active constraint gradients enter through the Lagrangian and KKT conditions.
@@ -145,13 +146,13 @@ $$
 $$
 
 $$
-\|x_{k+1}-x_k\|\le\varepsilon_x(1+\|x_k\|),
+\| x_{k+1} - x_k\|\le\varepsilon_x(1 + \| x_k\|),
 $$
 
 and
 
 $$
-|f(x_{k+1})-f(x_k)|\le\varepsilon_f(1+|f(x_k)|).
+|f(x_{k+1}) - f(x_k)|\le\varepsilon_f(1 + |f(x_k)|).
 $$
 
 No single criterion is reliable in every problem. Small steps can occur because of a bad step size, and a small objective change can occur on a flat plateau even when the gradient is not small.
