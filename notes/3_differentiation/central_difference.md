@@ -59,17 +59,14 @@ $$
 Average the two approximations:
 
 $$
-\frac12\biggl[\frac{f(x+h)-f(x)}{h} + \frac{f(x)-f(x-h)}{h}\biggr]
-$$
-
-$$
-\= \\frac12\\Bigl\[\\bigl(f'(x) + \\tfrac{h}{2}f''(x) + \\tfrac{h^2}{6}f^{(3)}(\\xi\_1)\\bigr)
-
-- \\bigl(f'(x) - \\tfrac{h}{2}f''(x) + \\tfrac{h^2}{6}f^{(3)}(\\xi\_2)\\bigr)\\Bigr\]
-  $$
-
-$$
-= f'(x) + \frac{h^2}{12}\bigl(f^{(3)}(\xi_1) + f^{(3)}(\xi_2)\bigr)
+\begin{aligned}
+\frac12\left[\frac{f(x+h)-f(x)}{h} + \frac{f(x)-f(x-h)}{h}\right]
+&= \frac12\left[
+\left(f'(x) + \frac{h}{2}f''(x) + \frac{h^2}{6}f^{(3)}(\xi_1)\right)
++ \left(f'(x) - \frac{h}{2}f''(x) + \frac{h^2}{6}f^{(3)}(\xi_2)\right)
+\right] \\
+&= f'(x) + \frac{h^2}{12}\left(f^{(3)}(\xi_1) + f^{(3)}(\xi_2)\right)
+\end{aligned}
 $$
 
 The $\pm\tfrac{h}{2}f''(x)$ terms cancel exactly, leaving only an $\mathcal{O}(h^2)$ remainder.

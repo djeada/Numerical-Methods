@@ -98,7 +98,7 @@ Exact answer: $\int_0^1 x^2 dx = \frac{1}{3} \approx 0.3333.$
 
 I. Domain $D=[0,1]$, volume $V=1$.
 
-II. Let $N=1000$. Generate 1000 random points $x_i$ in \[0,1\].
+II. Let $N=1000$. Generate 1000 random points $x_i$ in $[0,1]$.
 
 III. Compute $f(x_i)= (x_i)^2$ for each $i$.
 

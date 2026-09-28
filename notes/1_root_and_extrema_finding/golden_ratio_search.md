@@ -90,13 +90,13 @@ III. If $f(x_1) > f(x_2)$:
 
 Set $a = x_1$.
 
-(The minimum is in the interval $\[x_1,b\]$)
+(The minimum is in the interval $[x_1,b]$)
 
 Else:
 
 Set $b = x_2$.
 
-(The minimum is in the interval $\[a,x_2\]$)
+(The minimum is in the interval $[a,x_2]$)
 
 IV. If $|b-a| < \epsilon$ or $k \geq n_{\max}$:
 
