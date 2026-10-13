@@ -16,7 +16,7 @@ $$
 
 This formula calculates the weighted average of the function values at the endpoints and the midpoint, with the midpoint value being given four times the weight of the endpoints. The factor $\frac{b - a}{6}$ scales the sum appropriately based on the width of the interval.
 
-To extend Simpson's Rule to multiple subintervals, let $h$ represent half the width of each subinterval, defined as $h = \frac{b - a}{2}$. When the interval $[a, b]$ is divided into an even number of subintervals $N$, the approximation of the integral becomes:
+To extend Simpson's Rule to multiple subintervals, let $h$ represent the width of each subinterval. When the interval $[a, b]$ is divided into an even number of subintervals $N$, so that $h = \frac{b - a}{N}$ and $x_i = a + ih$, the approximation of the integral becomes:
 
 $$
 \int_a^b f(x) dx \approx \frac{h}{3} \sum_{k=1}^{N/2}
@@ -30,6 +30,22 @@ The diagram below visualizes the concept of Simpson's Rule, illustrating how par
 ![Simpson's Rule Visualization](https://user-images.githubusercontent.com/37275728/188944644-e3f47dbf-ba97-472f-8891-7e12906566d3.png)
 
 This visual representation helps in understanding how the quadratic polynomials approximate the area under the curve, providing a more accurate estimation compared to linear approximations used in other numerical integration methods.
+
+### Error Term
+
+For a single application over $[a, b]$ (with $h = \frac{b-a}{2}$), the error is
+
+$$
+\int_a^b f(x)\,dx - \frac{b-a}{6}\left[f(a) + 4f\left(\frac{a+b}{2}\right) + f(b)\right] = -\frac{h^5}{90} f^{(4)}(\xi) = -\frac{(b-a)^5}{2880} f^{(4)}(\xi)
+$$
+
+for some $\xi \in (a, b)$. For the composite rule with $N$ subintervals of width $h = \frac{b-a}{N}$:
+
+$$
+E = -\frac{b-a}{180} h^4 f^{(4)}(\xi), \qquad |E| \le \frac{(b-a)\,h^4}{180} \max_{[a,b]} |f^{(4)}|.
+$$
+
+Although the rule is built from a quadratic (degree-2) interpolant, the error depends on the fourth derivative, not the third. By symmetry the cubic term of the integrand integrates to the same value as its parabolic fit, so the rule is exact for all polynomials of degree three or lower and fails first for $x^4$. The composite rule is therefore fourth-order accurate: halving $h$ reduces the error by about a factor of 16.
 
 ### Algorithm Steps
 
@@ -96,17 +112,17 @@ $$
 \int_{0}^{2} x^2 dx = \left[\frac{x^3}{3} \right]_0^2 = \frac{8}{3} - 0 = \frac{8}{3}
 $$
 
-In this case, Simpson's Rule provides an exact approximation, demonstrating its effectiveness for polynomial functions of degree two or lower.
+In this case, Simpson's Rule provides an exact result. This is expected for any quadratic, and in fact the rule is exact for every polynomial of degree three or lower (see the error term below).
 
 ### Advantages
 
 - When compared to the Rectangle (Midpoint) Rule and the Trapezoidal Rule, the method often yields a more *accurate approximation* of definite integrals. This increased accuracy comes from using quadratic polynomials to model the function’s behavior, allowing it to capture curvature and more complex features. For smooth functions that can be closely approximated by parabolas over each pair of subintervals, the method can achieve exact results with *fewer subintervals* than other approaches. This efficiency is especially useful in computational applications where reducing the number of function evaluations saves significant processing time.
 - The method is straightforward to understand and implement, making it accessible to students. It requires only *basic arithmetic operations* and function evaluations at specific points, without the need for complex algorithms or iterative procedures. Its simplicity allows for quick coding and seamless integration into larger numerical computation frameworks, facilitating its use across a wide range of scientific and engineering problems.
-- It is particularly effective for functions that are well-approximated by *parabolas* over small intervals. This makes the method ideal for integrating *polynomial functions of degree two or lower*, as well as other smooth functions where a quadratic approximation is sufficiently accurate. By capturing the essential curvature of such functions, it minimizes the error associated with linear approximations, yielding more reliable results.
+- It is particularly effective for functions that are well-approximated by *parabolas* over small intervals. This makes the method ideal for integrating *polynomials of degree three or lower* (integrated exactly), as well as other smooth functions where a quadratic approximation is sufficiently accurate. By capturing the essential curvature of such functions, it minimizes the error associated with linear approximations, yielding more reliable results.
 
 ### Limitations
 
-- The method requires that the interval $a, b$ be divided into an *even number of subintervals*. This can be inconvenient when the available data points do not naturally align with an even partitioning. If an odd number of subintervals is initially chosen, users must adjust by either adding an extra subinterval or applying a different technique for the final piece, which complicates the implementation.
+- The method requires that the interval $[a, b]$ be divided into an *even number of subintervals*. This can be inconvenient when the available data points do not naturally align with an even partitioning. If an odd number of subintervals is initially chosen, users must adjust by either adding an extra subinterval or applying a different technique for the final piece, which complicates the implementation.
 - Its reliance on *quadratic polynomials* means it performs best for functions that closely resemble parabolas within each pair of subintervals. For functions with significant higher-order curvature or behaviors not well captured by parabolic fits, it may produce large errors. In such cases, the approximation can be misleading unless the suitability of the method is carefully assessed relative to the function’s characteristics.
 - Functions exhibiting rapid changes, oscillations, or *discontinuities* within the integration interval pose challenges. A single quadratic fit over each pair of subintervals may not capture sudden variations or sharp transitions, leading to substantial errors. For piecewise-defined functions, those with vertical asymptotes, or abrupt slope changes, the method can require an impractically large number of subintervals to reach acceptable accuracy, negating its computational advantages.
 - Like all numerical methods, it is subject to *numerical stability* issues and round-off errors—particularly when working with very large or very small intervals or limited numerical precision. Error accumulation can compromise the approximation’s integrity, sometimes necessitating higher-precision arithmetic to mitigate these effects.

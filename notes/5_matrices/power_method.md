@@ -29,7 +29,17 @@ These steps are repeated until convergence. Convergence occurs when the vector $
 
 ### Inverse Power Method for the Smallest Eigenvalue
 
-If we are interested in finding the smallest eigenvalue of $A$, we can use the inverse power method. The eigenvalues of $A^{-1}$ are the reciprocals of the eigenvalues of $A$. Thus, applying the power method to $A^{-1}$ instead of $A$ will yield the eigenvector associated with the smallest eigenvalue of $A$, and the inverse of the dominant eigenvalue of $A^{-1}$ will give us the smallest eigenvalue of $A$.
+If we are interested in the eigenvalue of $A$ with the smallest magnitude, we can use the inverse power method. For invertible $A$, the eigenvalues of $A^{-1}$ are the reciprocals of the eigenvalues of $A$ (with the same eigenvectors). Thus, applying the power method to $A^{-1}$ instead of $A$ yields the eigenvector of the eigenvalue of $A$ with the smallest magnitude, and the reciprocal of the dominant eigenvalue of $A^{-1}$ gives that eigenvalue. In practice $A^{-1}$ is never formed; each step solves $A y^{(k)} = x^{(k)}$.
+
+With a **shift** $\sigma$, the same idea applied to $(A - \sigma I)^{-1}$, whose eigenvalues are $1/(\lambda_i - \sigma)$, finds the eigenvalue of $A$ closest to $\sigma$. Each step solves
+
+$$(A - \sigma I)\, y^{(k)} = x^{(k)}, \qquad x^{(k+1)} = \frac{y^{(k)}}{\|y^{(k)}\|},$$
+
+and the eigenvalue is estimated by the Rayleigh quotient $x^{(k+1)T} A\, x^{(k+1)}$ (or $\sigma + 1/\mu$, where $\mu$ is the dominant eigenvalue estimate of $(A - \sigma I)^{-1}$). The error shrinks by a factor of about
+
+$$\frac{|\lambda_{\text{closest}} - \sigma|}{|\lambda_{\text{next}} - \sigma|}$$
+
+per iteration, where $\lambda_{\text{next}}$ is the second-closest eigenvalue to $\sigma$. Choosing $\sigma$ close to the target eigenvalue therefore gives very fast convergence, while a shift that is equally far from two eigenvalues gives no convergence. The shift must not equal an eigenvalue exactly, since $A - \sigma I$ would then be singular.
 
 ### Derivation
 
@@ -94,9 +104,9 @@ Normalize:
 
 $$x^{(2)} = \frac{1}{\sqrt{2^2 + 3^2}}\begin{bmatrix}2 \\ 3\end{bmatrix} = \begin{bmatrix}0.5547 \\ 0.8321\end{bmatrix}.$$
 
-Repeating these steps, $x^{(k)}$ converges to the eigenvector associated with the largest eigenvalue, which in this case is approximately 3.5616. The corresponding eigenvector stabilizes around:
+Repeating these steps, $x^{(k)}$ converges to the eigenvector associated with the largest eigenvalue, which in this case is $\frac{5 + \sqrt{5}}{2} \approx 3.6180$. The corresponding eigenvector stabilizes around:
 
-$$\begin{bmatrix}0.55 \\ 0.83\end{bmatrix}$$
+$$\begin{bmatrix}0.5257 \\ 0.8507\end{bmatrix}$$
 
 ### Advantages
 
@@ -106,6 +116,7 @@ $$\begin{bmatrix}0.55 \\ 0.83\end{bmatrix}$$
 
 ### Limitations
 
-- The power method can find only the **largest** eigenvalue in magnitude, not all eigenvalues.
+- The power method can find only the **largest** eigenvalue in magnitude (the eigenvalue of smallest magnitude, or the one closest to a shift, requires the inverse power method), not all eigenvalues.
 - Convergence may be **slow** if the magnitudes of the first and second eigenvalues are close.
-- The method **requires** a unique largest eigenvalue to ensure convergence to a single eigenvector.
+- The method **requires** a unique largest eigenvalue to ensure convergence to a single eigenvector; if the dominant eigenvalues form a complex conjugate pair (or $\lambda_1 = -\lambda_2$), the iteration does not converge.
+- The starting vector must have a non-zero component along the dominant eigenvector ($c_1 \neq 0$); in floating point, rounding errors usually restore such a component anyway.

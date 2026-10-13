@@ -28,7 +28,7 @@ $$x_1 = b - \frac{b-a}{\phi}, \quad x_2 = a + \frac{b-a}{\phi}.$$
 
 It follows from this construction that:
 
-$$\frac{x_2 - a}{b - x_1} = \phi.$$
+$$\frac{b - a}{x_2 - a} = \phi.$$
 
 Because of how $\phi$ partitions the interval, the ratio of the smaller subinterval to the larger subinterval is equal to $1/\phi$, ensuring a consistent and balanced reduction.
 
@@ -80,29 +80,33 @@ Once this length is less than a prescribed tolerance $\epsilon$, we accept that 
 
 **Iteration:**
 
-I. Compute:
+I. Compute (only before the first iteration; later iterations reuse a point, see step III):
 
-$$x_1 = b - \frac{b-a}{\phi}, \quad x_2 = a + \frac{b-a}{\phi}.$$
+$$x_1 = b - \frac{b-a}{\phi}, \quad x_2 = a + \frac{b-a}{\phi},$$
 
-II. Evaluate $f(x_1)$ and $f(x_2)$.
+and evaluate $f(x_1)$ and $f(x_2)$.
+
+II. If $f(x_1) = f(x_2)$, the comparison gives no information about which side to discard. Stop and return $\frac{a+b}{2}$ (this is what the implementation does).
 
 III. If $f(x_1) > f(x_2)$:
 
-Set $a = x_1$.
+Set $a = x_1$, $x_1 = x_2$, $f(x_1) = f(x_2)$, and compute a new $x_2 = a + \frac{b-a}{\phi}$.
 
 (The minimum is in the interval $[x_1,b]$)
 
-Else:
+Else ($f(x_1) < f(x_2)$):
 
-Set $b = x_2$.
+Set $b = x_2$, $x_2 = x_1$, $f(x_2) = f(x_1)$, and compute a new $x_1 = b - \frac{b-a}{\phi}$.
 
 (The minimum is in the interval $[a,x_2]$)
 
-IV. If $|b-a| < \epsilon$ or $k \geq n_{\max}$:
+Because of the golden ratio, the surviving interior point is exactly one of the two interior points of the smaller interval, so only **one new function evaluation** is needed per iteration.
 
-Stop and approximate the minimum as $\frac{a+b}{2}$.
+IV. If $|b-a| < \epsilon$:
 
-V. Increment iteration counter $k = k+1$ and go back to step I.
+Stop and approximate the minimum as $\frac{a+b}{2}$. If $k \geq n_{\max}$ without reaching this, the implementation raises an error.
+
+V. Otherwise evaluate $f$ at the new interior point, increment $k = k+1$ and go back to step II.
 
 **Output:**
 
@@ -134,9 +138,9 @@ $$x_2 = a + \frac{b-a}{\phi} = -2 + \frac{4}{1.618} \approx - 2 + 2.472 = 0.472.
 
 Evaluate:
 
-$$f(x_1) = (-0.472)^2 \approx 0.2225, \quad f(x_2) = (0.472)^2 \approx 0.2225.$$
+$$f(x_1) = (-0.472)^2 \approx 0.2228, \quad f(x_2) = (0.472)^2 \approx 0.2228.$$
 
-Since $f(x_1) = f(x_2)$, we can choose either subinterval. Let’s choose $[a,b] = [-2, x_2] = [-2, 0.472]$ for simplicity. So:
+Since $f(x_1) = f(x_2)$, the comparison cannot rule out either side (the implementation would stop here and return the midpoint $0$, which happens to be exact for this symmetric case). To illustrate the iteration, let’s instead choose $[a,b] = [-2, x_2] = [-2, 0.472]$. So:
 
 $$b = 0.472.$$
 
@@ -148,28 +152,24 @@ Compute new points:
 
 $$
 x_1 = b - \frac{b-a}{\phi} = 0.472 - \frac{0.472 - (-2)}{1.618} = 0.472 -
-\frac{2.472}{1.618} \approx 0.472 - 1.526 \approx - 1.054.
+\frac{2.472}{1.618} \approx 0.472 - 1.528 \approx - 1.056.
 $$
 
-$$x_2 = a + \frac{b-a}{\phi} = -2 + \frac{2.472}{1.618} \approx - 2 + 1.526 = -0.474.$$
+$$x_2 = a + \frac{b-a}{\phi} = -2 + \frac{2.472}{1.618} \approx - 2 + 1.528 = -0.472.$$
 
 Evaluate:
 
-$$f(x_1) = (-1.054)^2 \approx 1.110, \quad f(x_2) = (-0.474)^2 \approx 0.224.$$
+$$f(x_1) = (-1.056)^2 \approx 1.115, \quad f(x_2) = (-0.472)^2 \approx 0.223.$$
 
 Compare:
 
-$$f(x_1) = 1.110, \quad f(x_2) = 0.224.$$
+$$f(x_1) = 1.115, \quad f(x_2) = 0.223.$$
 
-Since $f(x_1) > f(x_2)$, the minimum lies in $[x_1,b] = [-1.054,0.472]$? Actually, check logic:
+Since $f(x_1) > f(x_2)$, the minimum lies in $[x_1,b]$, so we set:
 
-We found $f(x_1) > f(x_2)$, which means the smaller value is at $x_2$. Thus, we keep the interval on the side of $x_2$ because that is where the minimum is. According to the rules:
+$$a = x_1 = -1.056$$
 
-If $f(x_1) > f(x_2)$, we set:
-
-$$a = x_1 = -1.054$$
-
-maintaining $[a,b] = [-1.054, 0.472]$.
+giving $[a,b] = [-1.056, 0.472]$. The old $x_2 = -0.472$ is also an interior point of the new interval (it becomes the new $x_1$), so its value $f(-0.472)$ is reused and only the new $x_2$ has to be evaluated.
 
 **Subsequent Iterations:**
 
@@ -181,10 +181,11 @@ At each iteration, you would similarly compute new $x_1, x_2$, evaluate $f(x_1)$
 2. **Guaranteed reduction** of the search interval by approximately $\frac{1}{\phi}$ (the Golden Ratio) in each iteration ensures steady progress toward locating the minimum.
 3. The method's **robustness** guarantees convergence to a minimum within the provided interval, assuming the function is unimodal.
 4. **Simplicity of implementation** makes the algorithm accessible, as it involves straightforward iterative calculations without the need for complex procedures.
+5. **One function evaluation per iteration**, since one interior point is reused after each reduction, which matters when $f$ is expensive.
 
 ### Limitations
 
 1. **Unimodality required** means the method assumes the function has only one minimum in the interval; multiple minima can lead to convergence to a local minimum or failure to isolate a solution.
 2. **Initial bracketing** of the interval $[a, b]$ containing the minimum is essential, and determining this interval can be challenging if the function's behavior is poorly understood.
 3. The method is **not the fastest** for all problems, particularly when gradient-based methods like Newton’s method or quasi-Newton methods can be used effectively.
-4. **Slow convergence** can occur in flat regions around the minimum, where reductions per iteration provide limited new information for further narrowing the interval.
+4. **Limited attainable accuracy and ties** arise because the method only compares function values. Near a smooth minimum $f$ is flat to first order, so $f(x_1)$ and $f(x_2)$ differ by roughly machine precision once $|x - x^*| \lesssim \sqrt{\epsilon_{\text{mach}}} \approx 10^{-8}$ (relative to the scale of $x^*$); asking for a smaller tolerance cannot improve the result and may stop on a tie or follow rounding noise. An exact tie $f(x_1)=f(x_2)$, for example on a constant plateau, carries no information, and the implementation returns the midpoint of the current interval. The interval still shrinks by the same factor $1/\phi$ per iteration, so convergence is never slowed in flat regions; it is the answer that becomes unreliable.

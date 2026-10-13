@@ -6,7 +6,7 @@ def solve_linear_system(A: np.ndarray, b: np.ndarray) -> np.ndarray:
     augmented = np.hstack((A.astype(float), b.reshape(-1, 1).astype(float)))
     for i in range(n):
         pivot = np.argmax(np.abs(augmented[i:, i])) + i
-        if np.isclose(augmented[pivot, i], 0.0):
+        if np.isclose(augmented[pivot, i], 0.0, atol=1e-12):
             raise ValueError("Matrix is singular or nearly singular.")
         if pivot != i:
             augmented[[i, pivot]] = augmented[[pivot, i]]
@@ -28,8 +28,17 @@ def polynomial_regression(
         raise ValueError("Number of data points must be at least degree + 1.")
     if degree < 0:
         raise ValueError("Degree must be non-negative.")
+    # Use floating point so integer inputs cannot overflow when raised to powers.
+    x_data = np.asarray(x_data, dtype=float)
+    y_data = np.asarray(y_data, dtype=float)
     V = np.vander(x_data, N=degree + 1, increasing=True)
+    # Scale columns to unit norm so the singularity test in solve_linear_system
+    # does not depend on the magnitude of x (powers of x vary enormously).
+    col_norms = np.linalg.norm(V, axis=0)
+    if np.any(col_norms == 0.0):
+        raise ValueError("Matrix is singular or nearly singular.")
+    V = V / col_norms
     AtA = V.T @ V
     AtY = V.T @ y_data
-    coefficients = solve_linear_system(AtA, AtY)
+    coefficients = solve_linear_system(AtA, AtY) / col_norms
     return coefficients

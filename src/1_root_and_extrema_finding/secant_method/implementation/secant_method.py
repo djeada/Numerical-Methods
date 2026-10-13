@@ -14,7 +14,7 @@ def secant_method(
         f_x0 = f(x0)
         f_x1 = f(x1)
         denominator = f_x1 - f_x0
-        if np.isclose(denominator, 0.0):
+        if denominator == 0.0:
             raise ValueError("Denominator is zero. Division by zero encountered.")
         x2 = x1 - f_x1 * (x1 - x0) / denominator
         if np.abs(x2 - x1) < tol:

@@ -62,7 +62,8 @@ def main():
     ax2 = axes[1]
     names = [name for name, _ in ranking]
     scores = [score for _, score in ranking]
-    ax2.barh(names, scores, color=["green", "orange", "blue"])
+    color_by_name = dict(zip(methods.keys(), colors))
+    ax2.barh(names, scores, color=[color_by_name[n] for n in names])
     ax2.set_xlabel("RMSE")
     ax2.set_title("Method Ranking by RMSE")
     ax2.grid(True, axis="x")

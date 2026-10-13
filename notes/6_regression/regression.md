@@ -183,6 +183,15 @@ A common predictive workflow divides data conceptually into:
 
 Repeatedly tuning decisions based on the test set makes it function like validation data and can make the final reported performance optimistic.
 
+### Comparing models in the repository code
+
+The module `src/6_regression/regression_methods_comparison` offers two ways to score candidate models:
+
+- `compare_methods` evaluates each model on the same points it was fitted to, so it reports **training error**. A more flexible model can only lower this number, so ranking by it favours overfitting.
+- `cross_validate_methods` performs $k$-fold cross-validation: every point is predicted by a model fitted without it, and the pooled held-out predictions are scored with the same metrics. Its output can be passed to the same `rank_methods` function, and this is the ranking to use for choosing between models.
+
+Both rankings are available; the training-error one is kept for illustration and backwards compatibility.
+
 ### Bias and variance
 
 Prediction error is often discussed through a bias-variance tradeoff.

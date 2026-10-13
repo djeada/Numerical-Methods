@@ -2,36 +2,19 @@ import numpy as np
 from numpy.linalg import LinAlgError
 
 
-def solve_linear_system(A: np.ndarray, b: np.ndarray) -> np.ndarray:
-    A = A.astype(float)
-    b = b.astype(float)
-    n = A.shape[0]
-    augmented = np.hstack((A, b.reshape(-1, 1)))
-    for i in range(n):
-        max_row = np.argmax(np.abs(augmented[i:, i])) + i
-        pivot = augmented[max_row, i]
-        if np.isclose(pivot, 0.0, atol=1e-12):
-            raise ValueError("Matrix is singular or nearly singular.")
-        if max_row != i:
-            augmented[[i, max_row]] = augmented[[max_row, i]]
-        for j in range(i + 1, n):
-            factor = augmented[j, i] / augmented[i, i]
-            augmented[j] -= factor * augmented[i]
-    x = np.zeros(n)
-    for i in range(n - 1, -1, -1):
-        x[i] = (
-            augmented[i, -1] - np.dot(augmented[i, i + 1 : n], x[i + 1 : n])
-        ) / augmented[i, i]
-    return x
-
-
 def least_squares(A: np.ndarray, b: np.ndarray) -> np.ndarray:
+    """Solve min ||A x - b||_2 through the normal equations A^T A x = A^T b.
+
+    A must have at least as many rows as columns and full column rank.
+    Rows of A that are entirely zero are allowed: they add nothing to
+    A^T A or A^T b, so they only contribute a constant b_i^2 to the
+    residual. Rank deficiency (which includes an all-zero column) is
+    rejected with ValueError.
+    """
     if A.ndim != 2 or A.shape[0] < A.shape[1]:
         raise ValueError("Matrix A must have at least as many rows as columns.")
     if A.shape[0] != b.shape[0]:
         raise ValueError("The number of rows in A must match the size of vector b.")
-    if np.any(np.all(A == 0, axis=1)):
-        raise ValueError("Matrix A contains zero rows.")
     if np.linalg.matrix_rank(A) < A.shape[1]:
         raise ValueError("Matrix A does not have full column rank.")
     A = A.astype(float)

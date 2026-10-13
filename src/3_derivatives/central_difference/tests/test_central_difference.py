@@ -12,7 +12,7 @@ def test_central_difference_constant():
     x = 2.0
     result = central_difference(f, x)
     expected = 0.0
-    assert np.isclose(result, expected, rtol=1e-3)
+    assert np.isclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_linear():
@@ -20,15 +20,15 @@ def test_central_difference_linear():
     x = 1.0
     result = central_difference(f, x)
     expected = 2.0
-    assert np.isclose(result, expected, rtol=1e-3)
+    assert np.isclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_quadratic():
-    f = lambda x: x ** 2
+    f = lambda x: x**2
     x = 3.0
     result = central_difference(f, x)
     expected = 6.0
-    assert np.isclose(result, expected, rtol=1e-3)
+    assert np.isclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_sin():
@@ -36,16 +36,16 @@ def test_central_difference_sin():
     x = np.pi / 4
     result = central_difference(f, x)
     expected = np.cos(x)
-    assert np.isclose(result, expected, rtol=1e-3)
+    assert np.isclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_h_small():
-    f = lambda x: x ** 3
+    f = lambda x: x**3
     x = 2.0
     h = 1e-8
     result = central_difference(f, x, h)
     expected = 12.0
-    assert np.isclose(result, expected, rtol=1e-3)
+    assert np.isclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_gradient_constant():
@@ -53,7 +53,7 @@ def test_central_difference_gradient_constant():
     x = np.array([1.0, 2.0, 3.0])
     result = central_difference_gradient(f, x)
     expected = np.array([0.0, 0.0, 0.0])
-    assert np.allclose(result, expected, rtol=1e-3)
+    assert np.allclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_gradient_linear():
@@ -61,7 +61,7 @@ def test_central_difference_gradient_linear():
     x = np.array([1.0, 2.0])
     result = central_difference_gradient(f, x)
     expected = np.array([2.0, 3.0])
-    assert np.allclose(result, expected, rtol=1e-3)
+    assert np.allclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_gradient_quadratic():
@@ -71,7 +71,7 @@ def test_central_difference_gradient_quadratic():
     x = np.array([2.0, 3.0])
     result = central_difference_gradient(f, x)
     expected = np.array([4.0, 18.0])
-    assert np.allclose(result, expected, rtol=1e-3)
+    assert np.allclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_gradient_sin():
@@ -81,7 +81,7 @@ def test_central_difference_gradient_sin():
     x = np.array([np.pi / 3, np.pi / 6])
     result = central_difference_gradient(f, x)
     expected = np.array([np.cos(x[0]), -np.sin(x[1])])
-    assert np.allclose(result, expected, rtol=1e-3)
+    assert np.allclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_gradient_mixed():
@@ -91,17 +91,17 @@ def test_central_difference_gradient_mixed():
     x = np.array([1.0, 2.0, 3.0])
     result = central_difference_gradient(f, x)
     expected = np.array([2.0, 1.0, 27.0])
-    assert np.allclose(result, expected, rtol=1e-3)
+    assert np.allclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_gradient_high_dimensions():
     def f(x):
-        return np.sum(x ** 2)
+        return np.sum(x**2)
 
-    x = np.random.rand(10)
+    x = np.random.default_rng(0).random(10)
     result = central_difference_gradient(f, x)
     expected = 2 * x
-    assert np.allclose(result, expected, rtol=1e-3)
+    assert np.allclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_gradient_zero_vector():
@@ -111,7 +111,7 @@ def test_central_difference_gradient_zero_vector():
     x = np.zeros(5)
     result = central_difference_gradient(f, x)
     expected = np.zeros(5)
-    assert np.allclose(result, expected, rtol=1e-3)
+    assert np.allclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_gradient_single_element():
@@ -121,7 +121,7 @@ def test_central_difference_gradient_single_element():
     x = np.array([3.0])
     result = central_difference_gradient(f, x)
     expected = np.array([6.0])
-    assert np.allclose(result, expected, rtol=1e-3)
+    assert np.allclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_gradient_non_differentiable():
@@ -131,7 +131,7 @@ def test_central_difference_gradient_non_differentiable():
     x = np.array([0.0])
     result = central_difference_gradient(f, x, h=1e-5)
     expected = 0.0
-    assert np.isclose(result, expected, rtol=1e-3)
+    assert np.isclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_gradient_complex_function():
@@ -141,7 +141,7 @@ def test_central_difference_gradient_complex_function():
     x = np.array([1.0, 2.0])
     result = central_difference_gradient(f, x)
     expected = np.array([2.0 * np.exp(2.0), 1.0 * np.exp(2.0)])
-    assert np.allclose(result, expected, rtol=1e-3)
+    assert np.allclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_gradient_negative_values():
@@ -151,7 +151,7 @@ def test_central_difference_gradient_negative_values():
     x = np.array([-1.0, -2.0])
     result = central_difference_gradient(f, x)
     expected = np.array([3.0, 4.0])
-    assert np.allclose(result, expected, rtol=1e-3)
+    assert np.allclose(result, expected, rtol=1e-6)
 
 
 def test_central_difference_gradient_high_precision():
@@ -161,4 +161,4 @@ def test_central_difference_gradient_high_precision():
     x = np.array([1.0, 1.0])
     result = central_difference_gradient(f, x, h=1e-10)
     expected = np.array([4.0, 4.0])
-    assert np.allclose(result, expected, rtol=1e-3)
+    assert np.allclose(result, expected, rtol=1e-6)

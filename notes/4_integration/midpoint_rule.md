@@ -35,6 +35,16 @@ This summation provides an estimate of the total area under the curve $f(x)$ ove
 
 ![Midpoint Rule Visualization](https://user-images.githubusercontent.com/37275728/190011101-dcc77f54-d47d-4f62-b699-9d1eec9ef109.png)
 
+### Error Term
+
+For a twice continuously differentiable $f$, the composite Midpoint Rule with $n$ subintervals of width $h = \frac{b-a}{n}$ has error
+
+$$
+\int_a^b f(x)\,dx - M_n = \frac{b-a}{24} h^2 f''(\xi), \qquad \xi \in (a, b).
+$$
+
+The rule is exact for polynomials of degree one or lower and is second-order accurate, $O(h^2)$. Its error constant is half that of the Trapezoidal Rule (which is $\frac{b-a}{12}h^2 f''(\xi)$ with the opposite sign).
+
 ### Algorithm Steps
 
 1. Begin by dividing the interval $[a, b]$ into $n$ equal subintervals. The choice of $n$ determines the number of rectangles used in the approximation and affects the accuracy of the result.

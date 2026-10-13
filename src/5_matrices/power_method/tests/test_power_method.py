@@ -90,9 +90,20 @@ def test_power_method_convergence():
 
 
 def test_power_method_non_convergent():
+    # Defective matrix (single Jordan block): convergence to the eigenvector is
+    # sublinear, so the eigenvalue estimate does not settle within the default
+    # tolerance and iteration budget.
     A = np.array([[1, 1], [0, 1]], dtype=float)
-    with pytest.raises(ValueError):
-        power_method(A, tol=1e-12, max_iterations=10)
+    with pytest.raises(ValueError, match="did not converge"):
+        power_method(A)
+
+
+def test_power_method_max_iterations_exhausted():
+    # A well-conditioned problem still fails when given too few iterations.
+    A = np.array([[4, 1], [2, 3]], dtype=float)
+    x0 = np.array([1, 0], dtype=float)
+    with pytest.raises(ValueError, match="did not converge"):
+        power_method(A, x0=x0, tol=1e-14, max_iterations=2)
 
 
 def test_power_method_initial_guess():
@@ -120,3 +131,11 @@ def test_power_method_high_dimensions():
     eigenvalue, eigenvector = power_method(A)
     expected_eigenvalue = max(np.linalg.eigvals(A), key=lambda x: np.abs(x))
     assert np.isclose(eigenvalue, expected_eigenvalue, atol=1e-6)
+
+
+def test_power_method_complex_dominant_eigenvalues():
+    # Rotation by 90 degrees: eigenvalues +-i. The Rayleigh quotient is always 0,
+    # which must not be reported as converged.
+    A = np.array([[0, -1], [1, 0]], dtype=float)
+    with pytest.raises(ValueError, match="did not converge"):
+        power_method(A)

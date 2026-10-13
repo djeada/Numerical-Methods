@@ -232,3 +232,127 @@ def test_laplace_2d_top_boundary_only():
     assert u[0, 5] == pytest.approx(0.0, abs=1e-10)
     assert u[10, 5] > 0.0
     assert u[10, 5] < 100.0
+
+
+def test_laplace_2d_non_square_spacing_quadratic_solution():
+    # u = x^2 - y^2 is harmonic and exactly represented by the 5-point stencil
+    # only if dx != dy is handled by the stencil weights
+    def bc(X, Y):
+        return X**2 - Y**2
+
+    def bc_boundary_only(X, Y):
+        u = np.zeros_like(X)
+        full = bc(X, Y)
+        u[0, :], u[-1, :], u[:, 0], u[:, -1] = (
+            full[0, :],
+            full[-1, :],
+            full[:, 0],
+            full[:, -1],
+        )
+        return u
+
+    x, y, u = laplace_equation_2d(
+        21, 6, (0, 1), (0, 1), bc_boundary_only, tol=1e-10, max_iter=20000
+    )
+    X, Y = np.meshgrid(x, y, indexing="ij")
+    assert np.allclose(u, bc(X, Y), atol=1e-6)
+
+
+def test_wave_explicit_standing_wave_accuracy():
+    x = np.linspace(0, 1, 101)
+    u0 = np.sin(np.pi * x)
+    v0 = np.zeros(len(x))
+    c = 1.0
+    dt = 0.005
+    t, x_out, u = wave_equation_explicit(u0, v0, x, t_end=0.5, dt=dt, c=c)
+    expected = np.cos(np.pi * c * t[-1]) * np.sin(np.pi * x)
+    assert np.allclose(u[-1], expected, atol=1e-3)
+
+
+def test_heat_implicit_matches_exact_decay():
+    x = np.linspace(0, 1, 41)
+    u0 = np.sin(np.pi * x)
+    alpha = 0.1
+    t, x_out, u = heat_equation_implicit(u0, x, t_end=0.5, dt=0.001, alpha=alpha)
+    expected = np.exp(-alpha * np.pi**2 * t[-1]) * np.sin(np.pi * x)
+    assert np.allclose(u[-1], expected, atol=2e-3)
+
+
+def test_heat_explicit_ends_at_t_end_non_multiple():
+    x = np.linspace(0, 1, 11)
+    u0 = np.sin(np.pi * x)
+    t, _, u = heat_equation_explicit(u0, x, t_end=0.1, dt=0.0035, alpha=0.1)
+    assert t[-1] == 0.1
+    assert np.all(np.diff(t) > 0)
+    assert np.all(np.diff(t) <= 0.0035 + 1e-12)
+    assert u.shape[0] == len(t)
+
+
+def test_heat_implicit_ends_at_t_end_non_multiple():
+    x = np.linspace(0, 1, 11)
+    u0 = np.sin(np.pi * x)
+    t, _, u = heat_equation_implicit(u0, x, t_end=0.1, dt=0.0035, alpha=0.1)
+    assert t[-1] == 0.1
+    assert np.all(np.diff(t) <= 0.0035 + 1e-12)
+    assert u.shape[0] == len(t)
+
+
+def test_wave_ends_at_t_end_non_multiple():
+    x = np.linspace(0, 1, 21)
+    u0 = np.sin(np.pi * x)
+    v0 = np.zeros(len(x))
+    t, _, u = wave_equation_explicit(u0, v0, x, t_end=0.1, dt=0.0035, c=1.0)
+    assert t[-1] == 0.1
+    assert np.all(np.diff(t) <= 0.0035 + 1e-12)
+    assert u.shape[0] == len(t)
+
+
+def test_exact_multiples_keep_nominal_grid():
+    x = np.linspace(0, 1, 11)
+    u0 = np.sin(np.pi * x)
+    t, _, _ = heat_equation_implicit(u0, x, t_end=0.1, dt=0.01, alpha=0.1)
+    assert len(t) == 11
+    assert t[-1] == 0.1
+
+
+def test_heat_explicit_non_multiple_accuracy():
+    x = np.linspace(0, 1, 41)
+    u0 = np.sin(np.pi * x)
+    alpha, t_end = 0.1, 0.5
+    t, _, u = heat_equation_explicit(u0, x, t_end=t_end, dt=0.0007, alpha=alpha)
+    expected = np.exp(-alpha * np.pi**2 * t_end) * np.sin(np.pi * x)
+    assert t[-1] == t_end
+    assert np.max(np.abs(u[-1] - expected)) < 5e-4
+
+
+def test_heat_implicit_non_multiple_accuracy():
+    x = np.linspace(0, 1, 41)
+    u0 = np.sin(np.pi * x)
+    alpha, t_end = 0.1, 0.5
+    t, _, u = heat_equation_implicit(u0, x, t_end=t_end, dt=0.0013, alpha=alpha)
+    expected = np.exp(-alpha * np.pi**2 * t_end) * np.sin(np.pi * x)
+    assert t[-1] == t_end
+    assert np.max(np.abs(u[-1] - expected)) < 1e-3
+
+
+def test_wave_non_multiple_accuracy():
+    x = np.linspace(0, 1, 101)
+    u0 = np.sin(np.pi * x)
+    v0 = np.zeros(len(x))
+    t_end = 0.5
+    t, _, u = wave_equation_explicit(u0, v0, x, t_end=t_end, dt=0.0073, c=1.0)
+    expected = np.cos(np.pi * t_end) * np.sin(np.pi * x)
+    assert t[-1] == t_end
+    assert np.max(np.abs(u[-1] - expected)) < 1e-3
+
+
+def test_wave_initial_velocity_non_multiple():
+    # u = sin(pi x) sin(pi t)/pi solves u_tt = u_xx with v0 = sin(pi x)
+    x = np.linspace(0, 1, 101)
+    u0 = np.zeros(len(x))
+    v0 = np.sin(np.pi * x)
+    t_end = 0.37
+    t, _, u = wave_equation_explicit(u0, v0, x, t_end=t_end, dt=0.004, c=1.0)
+    expected = np.sin(np.pi * t_end) / np.pi * np.sin(np.pi * x)
+    assert t[-1] == t_end
+    assert np.max(np.abs(u[-1] - expected)) < 1e-4

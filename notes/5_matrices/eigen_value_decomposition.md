@@ -81,7 +81,7 @@ Not every matrix is guaranteed to have a full set of $n$ linearly independent ei
 I. **Find Eigenvalues**:
 
 - Form the characteristic polynomial $\det(A - \lambda I) = 0$.
-- Solve for $\lambda$. This may be done analytically for small matrices or numerically for larger matrices.
+- Solve for $\lambda$. This may be done analytically for small matrices. For larger matrices, finding the roots of the characteristic polynomial is numerically ill-conditioned, so practical algorithms (such as the QR algorithm) compute eigenvalues without forming the polynomial.
 
 II. **Find Eigenvectors**:
 
@@ -157,9 +157,9 @@ II. **Insights into Matrix Structure**:
 
 The eigendecomposition reveals the intrinsic "modes" of the linear transformation represented by $A$. Eigenvalues show how the transformation scales each eigen-direction, and eigenvectors show the directions of these fundamental modes.
 
-III. **Numerical Stability in Some Computations**:
+III. **Efficiency and Stability for Symmetric Matrices**:
 
-Working with $D$ instead of $A$ can improve numerical stability and make some algorithms more efficient, particularly in areas like principal component analysis, spectral clustering, and other advanced data analysis tasks.
+Working with $D$ instead of $A$ makes some computations much cheaper, particularly in areas like principal component analysis, spectral clustering, and other advanced data analysis tasks. For symmetric (or, more generally, normal) matrices the eigenvector matrix $P$ can be chosen orthogonal (unitary), so $P^{-1} = P^T$ and the decomposition is numerically well-conditioned. For non-normal matrices $P$ can be ill-conditioned, and then $A = P D P^{-1}$ may be computed or used inaccurately; there, orthogonal decompositions such as the Schur form are preferred.
 
 ### Limitations
 
@@ -169,7 +169,7 @@ Some matrices cannot be broken down into a pure eigen decomposition if they do n
 
 II. **Computational Cost for Large Matrices**:
 
-Finding eigenvalues and eigenvectors for large matrices can be computationally expensive. Efficient numerical algorithms and approximations exist, but they may still be costly for very large systems.
+Computing all eigenvalues and eigenvectors of a dense $n \times n$ matrix takes $O(n^3)$ operations (with a sizeable constant) and $O(n^2)$ memory, which becomes expensive for very large systems. Iterative methods such as the power method or Lanczos/Arnoldi iterations compute only a few eigenpairs more cheaply, especially for sparse matrices.
 
 III. **Complex Eigenvalues**:
 

@@ -118,10 +118,8 @@ def test_crc32_empty():
 
 
 def test_crc32_single_byte():
-    # CRC-32 of b"a" is a known value.
-    result = crc32(b"a")
-    assert isinstance(result, int)
-    assert 0 <= result <= 0xFFFFFFFF
+    # CRC-32 of b"a" is 0xE8B7BE43 (same as zlib.crc32).
+    assert crc32(b"a") == 0xE8B7BE43
 
 
 def test_crc32_hello_world():
@@ -158,9 +156,8 @@ def test_fletcher16_single_byte():
 
 def test_fletcher16_abc():
     # "abcde" (bytes 97, 98, 99, 100, 101)
-    result = fletcher16(b"abcde")
-    assert isinstance(result, int)
-    assert 0 <= result <= 0xFFFF
+    # Known Fletcher-16 test vector (Wikipedia): 0xC8F0
+    assert fletcher16(b"abcde") == 0xC8F0
 
 
 def test_fletcher16_type_error():

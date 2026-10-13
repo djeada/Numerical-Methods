@@ -83,7 +83,7 @@ For $i = 1$ to $n$:
 
 $$x_i^{(k+1)} = \frac{b_i - \sum_{j=1}^{i-1} A_{ij} x_j^{(k+1)} - \sum_{j=i+1}^{n} A_{ij} x_j^{(k)}}{A_{ii}}.$$
 
-III. **Convergence Check**: After completing the update for all $i$, check if the solution has converged. A common convergence criterion is to check the norm of the residual $\|A\mathbf{x}^{(k+1)} - \mathbf{b}\|$ or the difference between successive iterates $\|\mathbf{x}^{(k+1)} - \mathbf{x}^{(k)}\|$. If this measure is less than a prescribed tolerance $\varepsilon$, stop; otherwise, proceed to the next iteration.
+III. **Convergence Check**: After completing the update for all $i$, check if the solution has converged. A common convergence criterion is to check the norm of the residual $\|A\mathbf{x}^{(k+1)} - \mathbf{b}\|$ or the difference between successive iterates $\|\mathbf{x}^{(k+1)} - \mathbf{x}^{(k)}\|$. If this measure is less than a prescribed tolerance $\varepsilon$, stop; otherwise, proceed to the next iteration. The implementation uses the difference between successive iterates (2-norm) and raises an error if the iteration cap (`max_iterations`; the old name `max_iter` is a deprecated alias) is reached first.
 
 IV. **Output**: Once the loop terminates, $\mathbf{x}^{(k+1)}$ is considered the converged solution.
 
@@ -167,7 +167,9 @@ $$x^{(3)} \approx 1.43925, \quad y^{(3)} \approx 1.24066.$$
 
 If we continue iterating until the changes in $x$ and $y$ are negligible (for example, less than $10^{-4}$), the method converges to approximately:
 
-$$x \approx 1.04, \quad y \approx 1.60.$$
+$$x \approx 1.4468, \quad y \approx 1.2340$$
+
+(the exact solution is $x = \frac{68}{47}, y = \frac{58}{47}$).
 
 ### Advantages of the Gauss-Seidel Method
 

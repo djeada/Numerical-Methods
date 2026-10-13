@@ -76,18 +76,20 @@ I. Compute the gradient at the current point:
 
 $$g_n = \nabla f(x_n).$$
 
-II. Update the point:
+II. Check for convergence:
+
+- If $\|g_n\| < \epsilon$, stop and return $x_n$.
+- If $n \geq n_{\max}$, stop without convergence.
+
+III. Update the point:
 
 $$x_{n+1} = x_n - \alpha g_n.$$
 
-III. Check for convergence:
-
-- If $\|x_{n+1} - x_n\| < \epsilon$ or $n > n_{\max}$, stop.
-- Otherwise, increment $n = n+1$ and repeat from step I.
+IV. Increment $n = n+1$ and repeat from step I.
 
 **Output:**
 
-- Approximate minimum $x_{n+1}$.
+- Approximate minimum $x_n$.
 - Number of iterations performed.
 
 ### Example

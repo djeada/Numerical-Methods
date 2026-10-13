@@ -234,7 +234,9 @@ $$
 y_{n+1} = R(h\lambda)y_n,
 $$
 
-where $R$ is the method's stability function. Stability requires the numerical amplification to behave consistently with the exact solution.
+where $R$ is the method's stability function. For $\operatorname{Re}\lambda<0$ the exact solution decays, so the numerical solution should satisfy $|R(h\lambda)|\le1$ as well.
+
+For example, forward Euler has $R(z)=1+z$, which restricts $h$ to $|1+h\lambda|\le1$ (for real $\lambda<0$: $h\le2/|\lambda|$). Backward Euler has $R(z)=1/(1-z)$ and satisfies $|R(z)|\le1$ for every $z$ with $\operatorname{Re}z\le0$, so it is stable for any $h$ on decaying modes.
 
 A problem is called **stiff** when rapidly decaying modes force explicit methods to use very small steps for stability even though the physically interesting solution evolves on a much slower time scale.
 

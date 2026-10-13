@@ -1,40 +1,18 @@
-import numpy as np
+import os
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
 
-
-def matrix_inverse(A):
-    """
-    Compute the inverse of a matrix using Gauss-Jordan elimination.
-
-    Parameters:
-        A (numpy.ndarray): Square matrix to invert.
-
-    Returns:
-        numpy.ndarray: Inverse of A.
-    """
-    n = A.shape[0]
-    augmented = np.hstack([A.astype(float), np.eye(n)])
-
-    for col in range(n):
-        # Partial pivoting
-        max_row = np.argmax(np.abs(augmented[col:, col])) + col
-        augmented[[col, max_row]] = augmented[[max_row, col]]
-
-        pivot = augmented[col, col]
-        augmented[col] = augmented[col] / pivot
-
-        for row in range(n):
-            if row != col:
-                factor = augmented[row, col]
-                augmented[row] -= factor * augmented[col]
-
-    return augmented[:, n:]
+# Make the sibling `implementation` package importable when run as a script.
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
+from implementation.inverse_matrix import inverse_matrix  # noqa: E402
 
 
 if __name__ == "__main__":
     A = np.array([[4, 7], [2, 6]], dtype=float)
 
-    A_inv = matrix_inverse(A)
+    A_inv = inverse_matrix(A)
     identity_check = A @ A_inv
 
     print("Matrix A:")

@@ -88,7 +88,7 @@ See [Lagrange multipliers and KKT conditions](lagrange_multipliers_and_kkt.md) f
 
 When both the objective and constraints are linear, the problem becomes a linear program. The feasible set is a polyhedron, and when a finite optimum exists there is an optimal extreme point.
 
-The repository includes a compact simplex implementation. See [linear programming](linear_programming.md).
+The repository includes a compact two-phase simplex implementation that handles negative right-hand sides, equality constraints, and reports infeasible and unbounded problems. See [linear programming](linear_programming.md).
 
 ### Numerical KKT systems
 
@@ -112,7 +112,7 @@ $$
 
 These systems can become ill-conditioned when constraint gradients are nearly dependent or when the problem is poorly scaled.
 
-The repository's equality-constrained routine uses the identity matrix as a simple Hessian approximation and reduces the step length until the KKT residual decreases. That makes the example easy to study, but production solvers use more sophisticated Hessian models and globalization strategies.
+The repository's equality-constrained routine solves exactly this system with $H$ equal to the Hessian of the Lagrangian (analytic if provided, otherwise a central-difference estimate), starting from a least-squares multiplier estimate, and reduces the step length until the KKT residual decreases. Near a regular solution this gives quadratic convergence. Production solvers add Hessian modification for indefinite $H$, merit functions, and inequality handling, which this compact routine omits.
 
 ### Worked example
 

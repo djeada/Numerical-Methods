@@ -31,7 +31,7 @@ Notice that:
 $$A_k = R_k Q_k = Q_k^{-1} A_{k-1} Q_k,$$
 which means $A_k$ is similar to $A_{k-1}$. Since similarity transformations preserve eigenvalues, all $A_k$ share the same eigenvalues as the original matrix $A$.
 
-As $k$ increases, under certain conditions (e.g., a well-chosen shift strategy), the matrix $A_k$ converges to an upper-triangular matrix (or a quasi-upper-triangular form in the real case), whose diagonal entries are the eigenvalues of $A$.
+As $k$ increases, under certain conditions (e.g., when shifts such as the Wilkinson shift are used), the matrix $A_k$ converges to an upper-triangular matrix (or a quasi-upper-triangular form in the real case), whose diagonal entries are the eigenvalues of $A$.
 
 ### Derivation
 
@@ -43,13 +43,13 @@ Two matrices $A$ and $B$ are similar if there exists an invertible matrix $C$ su
 
 II. **QR Decomposition**:
 
-Every invertible (or at least full rank) matrix $A$ can be decomposed into an orthogonal matrix $Q$ and an upper-triangular matrix $R$.
+Every real square matrix $A$ can be decomposed into an orthogonal matrix $Q$ and an upper-triangular matrix $R$ (the factorization is unique if $A$ is invertible and $R$ is required to have a positive diagonal).
 
 III. **Iterative Process**:
 
 By repeatedly factoring $A_{k-1}$ into $Q_k R_k$ and then forming $A_k = R_k Q_k$, we create a sequence of similar matrices $A_0, A_1, A_2, \ldots$. If $A_k$ converges to an upper-triangular matrix, the eigenvalues are the diagonal elements of that limit.
 
-In practice, to ensure rapid convergence and numerical stability, shifts are employed (the so-called "QR algorithm with shifts"). This modification chooses special shifts based on elements of $A_k$ to speed up convergence to eigenvalues.
+In practice, shifts are employed to speed up convergence (the so-called "QR algorithm with shifts"). Each step factors $A_{k-1} - \mu_k I = Q_k R_k$ and forms $A_k = R_k Q_k + \mu_k I$, which is still similar to $A_{k-1}$. A standard choice is the **Wilkinson shift**: $\mu_k$ is the eigenvalue of the trailing $2 \times 2$ block of $A_{k-1}$ that is closest to its bottom-right entry $a_{nn}$. For a real matrix whose trailing block has a complex conjugate pair, no real shift equals an eigenvalue of that block, so both conjugate shifts are applied together in one real step (a double shift). With a good shift the last row of $A_k$ converges to zero very quickly (quadratically, and cubically for symmetric matrices), after which the converged eigenvalue is deflated and the iteration continues on the smaller matrix.
 
 ### Algorithm Steps
 
@@ -98,7 +98,7 @@ Suppose we find:
 $$A = Q_1 R_1,$$
 with
 
-$$Q_1 = \begin{bmatrix}0.8944 & -0.4472 \\ 0.4472 & 0.8944\end{bmatrix}, \quad R_1 = \begin{bmatrix}4.4721 & 1.7889 \\ 0 & 2.2361\end{bmatrix}.$$
+$$Q_1 = \begin{bmatrix}0.8944 & -0.4472 \\ 0.4472 & 0.8944\end{bmatrix}, \quad R_1 = \begin{bmatrix}4.4721 & 2.2361 \\ 0 & 2.2361\end{bmatrix}.$$
 
 II. **Form $A_1$**:
 
@@ -139,3 +139,5 @@ Although efficient algorithms exist, the QR method can be computationally intens
 III. **Convergence Speed for Certain Matrices**:
 
 While generally fast, convergence can be slow if the matrix has certain structures or if shifts are not chosen wisely, making it less practical without proper optimization.
+
+For a dense $n \times n$ matrix, one unshifted QR step costs $O(n^3)$. After a one-time reduction to Hessenberg form ($O(n^3)$), each step costs only $O(n^2)$, and with shifts and deflation the whole eigenvalue computation takes $O(n^3)$ operations.

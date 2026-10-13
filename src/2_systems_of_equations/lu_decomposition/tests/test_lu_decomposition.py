@@ -7,7 +7,7 @@ from ..implementation.lu_decomposition import lu_decomposition, solve_lu
 def test_lu_decomposition_identity():
     A = np.eye(3)
     P, L, U = lu_decomposition(A)
-    assert np.allclose(P @ L @ U, A)
+    assert np.allclose(P.T @ L @ U, A)
     assert np.allclose(L, np.eye(3))
     assert np.allclose(U, np.eye(3))
     assert np.allclose(P, np.eye(3))
@@ -16,7 +16,7 @@ def test_lu_decomposition_identity():
 def test_lu_decomposition_diagonal():
     A = np.diag([2, 3, 4])
     P, L, U = lu_decomposition(A)
-    assert np.allclose(P @ L @ U, A)
+    assert np.allclose(P.T @ L @ U, A)
     assert np.allclose(L, np.eye(3))
     assert np.allclose(U, A)
     assert np.allclose(P, np.eye(3))
@@ -26,8 +26,23 @@ def test_lu_decomposition_random():
     np.random.seed(0)
     A = np.random.rand(4, 4)
     P, L, U = lu_decomposition(A)
-    assert np.allclose(P @ L @ U, A, atol=1e-8)
-    assert np.allclose(L @ U, P.T @ A, atol=1e-8)
+    assert np.allclose(P.T @ L @ U, A, atol=1e-8)
+    assert np.allclose(L @ U, P @ A, atol=1e-8)
+
+
+def test_lu_decomposition_non_symmetric_permutation():
+    # Row swaps form a 3-cycle, so P != P.T; the factorization is P A = L U.
+    A = np.array([[0, 1, 0], [0, 0, 1], [1, 0, 0]], dtype=float)
+    P, L, U = lu_decomposition(A)
+    assert not np.allclose(P, P.T)
+    assert np.allclose(P @ A, L @ U)
+    assert np.allclose(P.T @ L @ U, A)
+
+
+def test_lu_decomposition_small_scale_not_singular():
+    A = 1e-10 * np.eye(2)
+    P, L, U = lu_decomposition(A)
+    assert np.allclose(P.T @ L @ U, A, rtol=1e-12, atol=0)
 
 
 def test_lu_decomposition_singular():

@@ -22,7 +22,7 @@ def inverse_power_method_convergence(A, shift=0.0, max_iterations=50):
         x = y
 
     # True eigenvalues for reference
-    true_eigenvalues = np.sort(np.linalg.eigvals(A).real)
+    true_eigenvalues = np.sort(np.real_if_close(np.linalg.eigvals(A)).real)
 
     plt.figure(figsize=(10, 6))
     plt.plot(
@@ -34,7 +34,9 @@ def inverse_power_method_convergence(A, shift=0.0, max_iterations=50):
     )
     for i, ev in enumerate(true_eigenvalues):
         plt.axhline(
-            y=ev, color=f"C{i + 1}", linestyle="--",
+            y=ev,
+            color=f"C{i + 1}",
+            linestyle="--",
             label=f"True λ{i+1} = {ev:.4f}",
         )
     plt.title("Convergence of Inverse Power Method")

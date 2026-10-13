@@ -10,6 +10,7 @@ def taylor_series(
     derivatives: Callable[[int], float],
 ) -> float:
     k = np.arange(n)
-    factorial = np.cumprod(np.append(1, k[1:]))
-    terms = derivatives(k) / factorial * (x - a) ** k
+    # Float arithmetic: int64 factorials / powers silently overflow for n > 20.
+    factorial = np.cumprod(np.append(1.0, k[1:].astype(float)))
+    terms = derivatives(k) / factorial * (x - a) ** k.astype(float)
     return np.sum(terms)

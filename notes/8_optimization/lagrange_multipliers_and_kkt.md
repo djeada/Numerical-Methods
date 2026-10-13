@@ -110,4 +110,4 @@ h(x)
 \end{bmatrix}
 $$
 
-for equality-constrained problems. The repository implementation applies a Newton-like step to such a residual using a simple Hessian approximation.
+for equality-constrained problems. The repository implementation applies Newton's method to this residual: each step solves the KKT system with the Hessian of the Lagrangian $\nabla^2f+\sum_j\nu_j\nabla^2h_j$ (supplied analytically or estimated by finite differences), and a backtracking search on the residual norm globalizes the iteration. Such a step converges to a KKT point, which need not be a minimizer; the second-order conditions must be checked separately.

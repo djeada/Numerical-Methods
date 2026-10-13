@@ -3,6 +3,55 @@ import numpy as np
 from typing import Callable, Optional
 
 
+def _project_feasible(
+    y: np.ndarray,
+    A_ub: Optional[np.ndarray],
+    b_ub: Optional[np.ndarray],
+    A_eq: Optional[np.ndarray],
+    b_eq: Optional[np.ndarray],
+    tol: float,
+    max_sweeps: int = 5000,
+) -> np.ndarray:
+    """
+    Euclidean projection of y onto {A_ub x <= b_ub, A_eq x = b_eq} using
+    Dykstra's algorithm.
+
+    Plain cyclic projections onto the individual sets only find *a* point
+    of the intersection, not the nearest one, so the correction terms of
+    Dykstra's method are required for an exact projection.
+    """
+    sets = []
+    if A_ub is not None and b_ub is not None:
+        for a_i, b_i in zip(A_ub, b_ub):
+            sets.append(("ub", a_i, b_i))
+    if A_eq is not None and b_eq is not None:
+        sets.append(("eq", A_eq, b_eq))
+
+    x = y.copy()
+    increments = [np.zeros_like(y) for _ in sets]
+
+    for _ in range(max_sweeps):
+        x_prev = x.copy()
+        for k, (kind, a, b) in enumerate(sets):
+            z = x + increments[k]
+            if kind == "ub":
+                violation = a @ z - b
+                x = z - (violation / (a @ a)) * a if violation > 0 else z
+            else:
+                x = z - a.T @ np.linalg.solve(a @ a.T, a @ z - b)
+            increments[k] = z - x
+
+        feasible = True
+        if A_ub is not None and b_ub is not None:
+            feasible = bool(np.all(A_ub @ x - b_ub <= tol))
+        if feasible and A_eq is not None and b_eq is not None:
+            feasible = bool(np.linalg.norm(A_eq @ x - b_eq) <= tol)
+        if feasible and np.linalg.norm(x - x_prev) < tol:
+            break
+
+    return x
+
+
 def quadratic_programming(
     Q: np.ndarray,
     c: np.ndarray,
@@ -16,6 +65,9 @@ def quadratic_programming(
 ) -> np.ndarray:
     """
     Solve a convex quadratic programming problem using projected gradient descent.
+
+    Each gradient step is followed by an exact Euclidean projection onto the
+    feasible polyhedron (computed with Dykstra's algorithm).
 
     Minimizes:
         0.5 * x^T Q x + c^T x
@@ -40,6 +92,8 @@ def quadratic_programming(
 
     Raises:
         ValueError: If Q is not positive semidefinite.
+        ValueError: If Q is (numerically) zero, i.e. the problem is a linear
+            program; use a linear programming solver instead.
         ValueError: If the method does not converge.
     """
     n = Q.shape[0]
@@ -51,28 +105,24 @@ def quadratic_programming(
         x0 = np.zeros(n)
     x = x0.astype(float)
 
-    L = np.max(eigenvalues) + 1e-6
+    # L = ||Q||_2 = lambda_max(Q) is the Lipschitz constant of the gradient,
+    # so the step 1/L guarantees monotone decrease of projected gradient.
+    L = float(np.max(eigenvalues))
+    if L <= tol:
+        raise ValueError(
+            "Q is numerically zero, so this is a linear program with no "
+            "curvature to set a step size; use a linear programming solver."
+        )
     alpha = 1.0 / L
 
     for iteration in range(max_iterations):
         grad = Q @ x + c
         x_new = x - alpha * grad
 
-        if A_ub is not None and b_ub is not None:
-            for _ in range(100):
-                violations = A_ub @ x_new - b_ub
-                if np.all(violations <= tol):
-                    break
-                idx = np.argmax(violations)
-                a_i = A_ub[idx]
-                x_new = x_new - ((a_i @ x_new - b_ub[idx]) / (a_i @ a_i)) * a_i
-
-        if A_eq is not None and b_eq is not None:
-            residual = A_eq @ x_new - b_eq
-            if np.linalg.norm(residual) > tol:
-                x_new = x_new - A_eq.T @ np.linalg.solve(
-                    A_eq @ A_eq.T, residual
-                )
+        if (A_ub is not None and b_ub is not None) or (
+            A_eq is not None and b_eq is not None
+        ):
+            x_new = _project_feasible(x_new, A_ub, b_ub, A_eq, b_eq, tol)
 
         if np.linalg.norm(x_new - x) < tol:
             return x_new

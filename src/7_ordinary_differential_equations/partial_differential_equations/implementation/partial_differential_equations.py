@@ -2,6 +2,17 @@ import numpy as np
 from typing import Callable, Tuple
 
 
+def _time_grid(t_end: float, dt: float) -> np.ndarray:
+    """Time grid 0, dt, 2*dt, ... ending exactly at t_end (last step shortened)."""
+    n_full = int(np.floor(t_end / dt + 1e-9))
+    t = dt * np.arange(n_full + 1)
+    if t_end - t[-1] > 1e-9 * dt:
+        t = np.append(t, t_end)
+    else:
+        t[-1] = t_end
+    return t
+
+
 def heat_equation_explicit(
     u0: np.ndarray,
     x: np.ndarray,
@@ -11,6 +22,16 @@ def heat_equation_explicit(
     bc_left: float = 0.0,
     bc_right: float = 0.0,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Solve u_t = alpha * u_xx with the explicit FTCS scheme.
+
+    Steps have length dt, except that the last one is shortened when
+    t_end / dt is not an integer, so t[-1] == t_end exactly. Stability
+    (alpha*dt/dx^2 <= 1/2) is checked for the nominal dt; the shorter final
+    step is then stable too. Dirichlet boundaries bc_left and bc_right.
+    First order in time, second order in space.
+
+    Returns (t, x, u) with u[n, j] approximating u(t[n], x[j]).
+    """
     if dt <= 0:
         raise ValueError("Time step dt must be positive.")
     if t_end <= 0:
@@ -31,16 +52,16 @@ def heat_equation_explicit(
             "Reduce dt or increase dx."
         )
 
-    n_steps = int(np.ceil(t_end / dt))
-    t = np.linspace(0, n_steps * dt, n_steps + 1)
+    t = _time_grid(t_end, dt)
+    n_steps = len(t) - 1
     u = np.zeros((n_steps + 1, len(x)))
     u[0] = u0.copy()
 
     for n in range(n_steps):
+        rn = alpha * (t[n + 1] - t[n]) / dx**2
         u[n + 1, 0] = bc_left
         u[n + 1, -1] = bc_right
-        for i in range(1, len(x) - 1):
-            u[n + 1, i] = u[n, i] + r * (u[n, i + 1] - 2 * u[n, i] + u[n, i - 1])
+        u[n + 1, 1:-1] = u[n, 1:-1] + rn * (u[n, 2:] - 2 * u[n, 1:-1] + u[n, :-2])
 
     return t, x, u
 
@@ -54,6 +75,15 @@ def heat_equation_implicit(
     bc_left: float = 0.0,
     bc_right: float = 0.0,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Solve u_t = alpha * u_xx with the implicit (backward Euler) scheme.
+
+    Unconditionally stable. Steps have length dt, except that the last one is
+    shortened when t_end / dt is not an integer, so t[-1] == t_end exactly.
+    Dirichlet boundaries bc_left and bc_right. First order in time, second
+    order in space.
+
+    Returns (t, x, u) with u[n, j] approximating u(t[n], x[j]).
+    """
     if dt <= 0:
         raise ValueError("Time step dt must be positive.")
     if t_end <= 0:
@@ -66,28 +96,34 @@ def heat_equation_implicit(
         raise ValueError("Initial condition u0 must match the spatial grid size.")
 
     dx = x[1] - x[0]
-    r = alpha * dt / dx**2
     nx = len(x)
 
-    n_steps = int(np.ceil(t_end / dt))
-    t = np.linspace(0, n_steps * dt, n_steps + 1)
+    t = _time_grid(t_end, dt)
+    n_steps = len(t) - 1
     u = np.zeros((n_steps + 1, nx))
     u[0] = u0.copy()
 
     interior = nx - 2
-    A = np.zeros((interior, interior))
-    for i in range(interior):
-        A[i, i] = 1 + 2 * r
-        if i > 0:
-            A[i, i - 1] = -r
-        if i < interior - 1:
-            A[i, i + 1] = -r
 
+    def build(r: float) -> np.ndarray:
+        A = np.zeros((interior, interior))
+        idx = np.arange(interior)
+        A[idx, idx] = 1 + 2 * r
+        A[idx[1:], idx[:-1]] = -r
+        A[idx[:-1], idx[1:]] = -r
+        return A
+
+    cache: dict = {}
     for n in range(n_steps):
+        h = t[n + 1] - t[n]
+        key = round(h, 15)
+        if key not in cache:
+            cache[key] = build(alpha * h / dx**2)
+        r = alpha * h / dx**2
         b = u[n, 1:-1].copy()
         b[0] += r * bc_left
         b[-1] += r * bc_right
-        u[n + 1, 1:-1] = np.linalg.solve(A, b)
+        u[n + 1, 1:-1] = np.linalg.solve(cache[key], b)
         u[n + 1, 0] = bc_left
         u[n + 1, -1] = bc_right
 
@@ -104,6 +140,17 @@ def wave_equation_explicit(
     bc_left: float = 0.0,
     bc_right: float = 0.0,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Solve u_tt = c^2 * u_xx with the explicit leapfrog scheme.
+
+    The CFL condition c*dt/dx <= 1 is checked for the nominal dt. To hit
+    t_end exactly while keeping a uniform grid (leapfrog needs constant
+    steps), n = ceil(t_end / dt) steps of size dt_eff = t_end / n <= dt are
+    used, so t[-1] == t_end and the CFL condition still holds. The first step
+    uses the initial velocity v0 (Taylor expansion). Second order in time and
+    space. Dirichlet boundaries bc_left and bc_right.
+
+    Returns (t, x, u) with u[n, j] approximating u(t[n], x[j]).
+    """
     if dt <= 0:
         raise ValueError("Time step dt must be positive.")
     if t_end <= 0:
@@ -122,23 +169,21 @@ def wave_equation_explicit(
 
     if r > 1.0:
         raise ValueError(
-            f"CFL condition violated: c*dt/dx = {r} > 1.0. "
-            "Reduce dt or increase dx."
+            f"CFL condition violated: c*dt/dx = {r} > 1.0. " "Reduce dt or increase dx."
         )
 
-    n_steps = int(np.ceil(t_end / dt))
-    t = np.linspace(0, n_steps * dt, n_steps + 1)
+    n_steps = max(int(np.ceil(t_end / dt - 1e-9)), 1)
+    t = np.linspace(0.0, t_end, n_steps + 1)
+    dt = t_end / n_steps  # effective step, <= nominal dt
+    r2 = (c * dt / dx) ** 2
     u = np.zeros((n_steps + 1, len(x)))
     u[0] = u0.copy()
 
-    r2 = r**2
     u[1, 0] = bc_left
     u[1, -1] = bc_right
     for i in range(1, len(x) - 1):
         u[1, i] = (
-            u[0, i]
-            + dt * v0[i]
-            + 0.5 * r2 * (u[0, i + 1] - 2 * u[0, i] + u[0, i - 1])
+            u[0, i] + dt * v0[i] + 0.5 * r2 * (u[0, i + 1] - 2 * u[0, i] + u[0, i - 1])
         )
 
     for n in range(1, n_steps):
@@ -176,11 +221,18 @@ def laplace_equation_2d(
 
     u = bc(X, Y).astype(float)
 
+    # Weighted 5-point stencil; reduces to the plain 0.25 average when dx == dy.
+    wx = (y[1] - y[0]) ** 2
+    wy = (x[1] - x[0]) ** 2
+    denom = 2.0 * (wx + wy)
+
     for _ in range(max_iter):
         u_old = u.copy()
         for i in range(1, nx - 1):
             for j in range(1, ny - 1):
-                u[i, j] = 0.25 * (u[i + 1, j] + u[i - 1, j] + u[i, j + 1] + u[i, j - 1])
+                u[i, j] = (
+                    wx * (u[i + 1, j] + u[i - 1, j]) + wy * (u[i, j + 1] + u[i, j - 1])
+                ) / denom
 
         if np.max(np.abs(u - u_old)) < tol:
             break

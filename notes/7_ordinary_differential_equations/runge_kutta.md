@@ -1,6 +1,6 @@
 ## Runge--Kutta Methods
 
-Runge--Kutta methods advance an ODE solution using several carefully chosen slope evaluations inside each step. They achieve higher-order accuracy without requiring explicit derivatives of $f$ beyond the first derivative already present in the ODE.
+Runge--Kutta methods advance an ODE solution using several carefully chosen slope evaluations inside each step. They achieve higher-order accuracy without requiring derivatives of $f$; only evaluations of $f$ itself are needed.
 
 Consider
 
@@ -174,7 +174,7 @@ $$
 |R(z)|\le1.
 $$
 
-RK4 has a useful explicit stability region but is not A-stable. Strongly stiff systems may still demand impractically small steps.
+On the negative real axis this is roughly $-2.78\le z\le 0$. RK4 has a useful explicit stability region but is not A-stable. Strongly stiff systems may still demand impractically small steps.
 
 ### RK4 Versus Euler and Heun
 
@@ -201,6 +201,10 @@ $$
 $$
 
 Each $k_i$ becomes a vector. This makes RK methods convenient for mechanics, circuits, chemical kinetics, population models, and other coupled systems.
+
+### Repository Implementation
+
+`runge_kutta_4` takes a final time `t_end` and a nominal step `h`. When `(t_end - t0)/h` is not an integer, the last step is shortened so that the returned grid ends exactly at `t_end`; all earlier steps have length `h`. The returned array has shape `(n + 1,)` for a scalar ODE (one component) and `(n + 1, d)` for a system with `d` components.
 
 ### Advantages
 

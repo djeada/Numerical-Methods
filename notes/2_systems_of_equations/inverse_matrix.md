@@ -36,7 +36,9 @@ $$\implies \boldsymbol{x} = A^{-1}\boldsymbol{b}$$
 
 ### Algorithm Steps
 
-Finding the inverse of a matrix is a multi-step process:
+**Implementation note:** the formula above (cofactors and adjugate) is shown for theory and for small hand calculations. It is far too expensive and numerically poor for general use, so the code in this repository computes the inverse by **Gauss-Jordan elimination with partial pivoting**: it row-reduces the augmented matrix $[A \mid I]$ to $[I \mid A^{-1}]$ and raises an error if a pivot is (numerically) zero, i.e. $A$ is singular. The steps below describe the adjugate method.
+
+Finding the inverse of a matrix with the adjugate formula is a multi-step process:
 
 1. Check if the matrix is invertible. A matrix is invertible if it is square (has the same number of rows and columns) and its determinant is not zero. If the matrix is not invertible, stop here, the matrix does not have an inverse.
 2. Calculate the matrix of minors. The minor of each element in the matrix is the determinant of the matrix formed by removing the row and column of that element from the original matrix.
@@ -55,8 +57,8 @@ $$
 
 1. First, check if the matrix is invertible. The determinant of A is (4*6 - 7*2) = 10, which is not zero, so the matrix is invertible.
 2. The minor of 4 is the determinant of the matrix that results from removing the row and column of 4 from A, which is just 6. Similarly, the minor of 7 is 2, the minor of 2 is 7, and the minor of 6 is 4.
-3. The cofactor matrix is obtained by multiplying each minor by (-1)^(i+j). For a 2x2 matrix, this results in the same matrix, as (-1)^(i+j) is 1 for all elements.
-4. The adjugate of A is the transpose of the cofactor matrix, which is the same in this case because A is a 2x2 matrix.
+3. The cofactor matrix is obtained by multiplying each minor by (-1)^(i+j). The off-diagonal entries get a minus sign, so the cofactor matrix is $\begin{bmatrix} 6 & -2 \\ -7 & 4 \end{bmatrix}$.
+4. The adjugate of A is the transpose of the cofactor matrix, which is $\begin{bmatrix} 6 & -7 \\ -2 & 4 \end{bmatrix}$.
 5. The inverse of A is the adjugate divided by the determinant, resulting in:
 
 $$

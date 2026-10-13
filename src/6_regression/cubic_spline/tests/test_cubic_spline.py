@@ -38,6 +38,23 @@ def test_cubic_spline_natural_boundary():
         assert np.isclose(spline(pt), 2 * pt, atol=1e-10)
 
 
+def test_cubic_spline_natural_boundary_second_derivative():
+    """S''(x_0) = S''(x_n) = 0 on non-linear data with non-zero interior S''."""
+    x = np.array([0.0, 1.0, 2.5, 3.0, 5.0])
+    y = np.array([1.0, -2.0, 4.0, 0.5, 3.0])
+    spline = cubic_spline(x, y)
+    h = 1e-4
+    # Interior second derivative (central difference) is clearly non-zero.
+    s_mid = (spline(2.5 + h) - 2 * spline(2.5) + spline(2.5 - h)) / h**2
+    assert abs(s_mid) > 1.0
+    # One-sided second differences equal S'' at the end point plus S''' * h
+    # exactly (each piece is cubic), so they must be ~0 for a natural spline.
+    s_left = (spline(x[0] + 2 * h) - 2 * spline(x[0] + h) + spline(x[0])) / h**2
+    s_right = (spline(x[-1]) - 2 * spline(x[-1] - h) + spline(x[-1] - 2 * h)) / h**2
+    assert abs(s_left) < 1e-2
+    assert abs(s_right) < 1e-2
+
+
 def test_cubic_spline_out_of_bounds_low():
     x = np.array([1, 2, 3], dtype=float)
     y = np.array([2, 4, 6], dtype=float)
@@ -142,6 +159,6 @@ def test_cubic_spline_matches_scipy_scattered():
     ref = CubicSpline(x, y, bc_type="natural")
     pts = np.linspace(x[0], x[-1], 50)
     for pt in pts:
-        assert np.isclose(spline(float(pt)), float(ref(pt)), atol=1e-10), (
-            f"Mismatch at {pt}"
-        )
+        assert np.isclose(
+            spline(float(pt)), float(ref(pt)), atol=1e-10
+        ), f"Mismatch at {pt}"

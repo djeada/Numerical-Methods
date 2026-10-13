@@ -1,45 +1,6 @@
 import pytest
 import numpy as np
-from ..implementation.gauss_seidel import (
-    inverse_matrix,
-    solve_inverse_matrix,
-    gauss_seidel,
-)
-
-
-def test_inverse_matrix_identity():
-    A = np.eye(3)
-    A_inv = inverse_matrix(A)
-    assert np.allclose(A_inv, np.eye(3))
-
-
-def test_inverse_matrix_simple():
-    A = np.array([[4, 7], [2, 6]], dtype=float)
-    expected = np.linalg.inv(A)
-    A_inv = inverse_matrix(A)
-    assert np.allclose(A_inv, expected)
-
-
-def test_inverse_matrix_singular():
-    A = np.array([[1, 2], [2, 4]], dtype=float)
-    with pytest.raises(Exception):
-        inverse_matrix(A)
-
-
-def test_solve_inverse_matrix():
-    A = np.array([[3, 0], [0, 2]], dtype=float)
-    b = np.array([9, 8], dtype=float)
-    expected = np.linalg.solve(A, b)
-    x = solve_inverse_matrix(A, b)
-    assert np.allclose(x, expected)
-
-
-def test_solve_inverse_matrix_large():
-    A = np.random.rand(5, 5)
-    b = np.random.rand(5)
-    x_expected = np.linalg.solve(A, b)
-    x = solve_inverse_matrix(A, b)
-    assert np.allclose(x, x_expected)
+from ..implementation.gauss_seidel import gauss_seidel
 
 
 def test_gauss_seidel_convergence():
@@ -54,7 +15,22 @@ def test_gauss_seidel_no_convergence():
     A = np.array([[1, 2], [3, 4]], dtype=float)
     b = np.array([5, 6], dtype=float)
     with pytest.raises(ValueError):
-        gauss_seidel(A, b, max_iter=5)
+        gauss_seidel(A, b, max_iterations=5)
+
+
+def test_gauss_seidel_max_iter_deprecated_alias():
+    A = np.array([[1, 2], [3, 4]], dtype=float)
+    b = np.array([5, 6], dtype=float)
+    with pytest.warns(DeprecationWarning, match="max_iterations"):
+        with pytest.raises(ValueError, match="did not converge"):
+            gauss_seidel(A, b, max_iter=5)
+    # The alias really is applied: one sweep is not enough, many are.
+    A = np.array([[4, 1], [2, 3]], dtype=float)
+    b = np.array([1, 2], dtype=float)
+    with pytest.warns(DeprecationWarning):
+        with pytest.raises(ValueError):
+            gauss_seidel(A, b, max_iter=1)
+    assert np.allclose(gauss_seidel(A, b, max_iterations=100), np.linalg.solve(A, b))
 
 
 def test_gauss_seidel_with_initial_guess():
@@ -98,12 +74,15 @@ def test_gauss_seidel_large_diagonal():
 
 
 def test_gauss_seidel_4x4_system():
-    A = np.array([
-        [10, -1, 2, 0],
-        [-1, 11, -1, 3],
-        [2, -1, 10, -1],
-        [0, 3, -1, 8],
-    ], dtype=float)
+    A = np.array(
+        [
+            [10, -1, 2, 0],
+            [-1, 11, -1, 3],
+            [2, -1, 10, -1],
+            [0, 3, -1, 8],
+        ],
+        dtype=float,
+    )
     b = np.array([6, 25, -11, 15], dtype=float)
     expected = np.linalg.solve(A, b)
     x = gauss_seidel(A, b)
@@ -118,7 +97,32 @@ def test_gauss_seidel_negative_rhs():
     assert np.allclose(x, expected, atol=1e-6)
 
 
-def test_inverse_matrix_3x3_gauss_seidel():
-    A = np.array([[1, 2, 3], [0, 1, 4], [5, 6, 0]], dtype=float)
-    A_inv = inverse_matrix(A)
-    assert np.allclose(A @ A_inv, np.eye(3), atol=1e-10)
+def test_gauss_seidel_non_square():
+    A = np.array([[1, 2, 3], [4, 5, 6]], dtype=float)
+    b = np.array([7, 8], dtype=float)
+    with pytest.raises(ValueError):
+        gauss_seidel(A, b)
+
+
+def test_gauss_seidel_zero_diagonal():
+    A = np.array([[0, 1], [1, 2]], dtype=float)
+    b = np.array([1, 2], dtype=float)
+    with pytest.raises(ValueError):
+        gauss_seidel(A, b)
+
+
+def test_gauss_seidel_does_not_modify_x0():
+    A = np.array([[4, 1], [2, 3]], dtype=float)
+    b = np.array([1, 2], dtype=float)
+    x0 = np.array([5.0, 5.0])
+    gauss_seidel(A, b, x0=x0)
+    assert np.array_equal(x0, [5.0, 5.0])
+
+
+def test_gauss_seidel_converges_for_spd_where_jacobi_diverges():
+    # SPD but not diagonally dominant: Gauss-Seidel is guaranteed to converge
+    # for SPD matrices (Jacobi diverges on this one, see the Jacobi tests).
+    A = np.full((3, 3), 0.9) + 0.1 * np.eye(3)
+    b = np.array([1.0, 2.0, 3.0])
+    x = gauss_seidel(A, b, epsilon=1e-10, max_iterations=10000)
+    assert np.allclose(x, np.linalg.solve(A, b), atol=1e-6)

@@ -29,7 +29,9 @@ T_{k+1} = \alpha T_k,
 \qquad 0<\alpha<1.
 $$
 
-The choice of $T_0$, $\alpha$, proposal scale, and iteration budget all matter.
+The temperature is lowered after every proposal, so after $k$ iterations $T_k=\alpha^kT_0$. The choice of $T_0$, $\alpha$, proposal scale, and iteration budget all matter.
+
+Other common schedules include linear cooling, $T_k=T_0(1-k/K)$, and logarithmic cooling, $T_k=c/\ln(k+2)$, which is the slow schedule for which convergence in probability to a global minimum can be proved (with $c$ at least the depth of the deepest non-global local minimum).
 
 ![Temperature, objective, and accepted uphill moves](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/simulated_annealing_trace.svg)
 
@@ -52,7 +54,7 @@ The current state can move uphill, so the algorithm separately tracks the best p
 
 ### Convergence theory versus practical schedules
 
-Classical convergence proofs require cooling schedules much slower than those used in most practical code. Geometric cooling is popular because it reaches a useful low-temperature regime quickly, but it trades theoretical guarantees for finite-time performance.
+Classical convergence proofs require logarithmic cooling, which is far slower than the schedules used in most practical code. Geometric cooling is popular because it reaches a useful low-temperature regime quickly, but it trades theoretical guarantees for finite-time performance.
 
 ### Reproducibility
 

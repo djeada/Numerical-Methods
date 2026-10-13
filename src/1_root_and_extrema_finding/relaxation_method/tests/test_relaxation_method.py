@@ -30,23 +30,33 @@ def test_relaxation_quadratic():
     assert np.isclose(root, expected, atol=1e-6)
 
 
-def test_relaxation_sin():
+def test_relaxation_cos():
+    f = lambda x: np.cos(x)
+    root = relaxation_method(f, 1.0, tol=1e-12)
+    # Fixed point of cos (Dottie number)
+    assert np.isclose(root, 0.7390851332151607, atol=1e-10)
+
+
+def test_relaxation_sin_slow_but_converges():
+    # g'(0) = 1, so convergence to the fixed point 0 is sublinear. The step
+    # size criterion |x_new - x| < tol therefore stops well before x is
+    # within tol of the fixed point: the error is ~ (6 * tol)**(1/3).
     f = lambda x: np.sin(x)
-    initial_guess = 2.0
-    root = relaxation_method(f, initial_guess, tol=1e-10)
-    # Fixed point near 0
-    expected = 0.0
-    assert np.isclose(root, expected, atol=1e-2)
+    root = relaxation_method(f, 2.0, tol=1e-6)
+    assert 0.0 < root < 0.05
 
 
-def test_relaxation_non_convergent():
+def test_relaxation_non_convergent_raises():
     f = lambda x: 1 - x
-    initial_guess = 1000.0
-    root = relaxation_method(f, initial_guess, tol=1e-6, max_iterations=100)
-    # Should oscillate between 1 and 0, not converge to a fixed point
-    # Since the method returns after max_iterations, we check it's not close to any fixed point
-    assert not np.isclose(root, 0.0, atol=1e-6)
-    assert not np.isclose(root, 1.0, atol=1e-6)
+    # g'(x) = -1: plain iteration oscillates between 1000 and -999 forever.
+    with pytest.raises(ValueError, match="did not converge"):
+        relaxation_method(f, 1000.0, tol=1e-6, max_iterations=100)
+
+
+def test_relaxation_max_iterations_exhausted_raises():
+    f = lambda x: 0.5 * x + 1
+    with pytest.raises(ValueError, match="did not converge"):
+        relaxation_method(f, 0.0, omega=0.5, tol=1e-12, max_iterations=3)
 
 
 def test_relaxation_exact_fixed_point():
@@ -58,7 +68,7 @@ def test_relaxation_exact_fixed_point():
 
 
 def test_relaxation_close_to_fixed_point():
-    f = lambda x: x - 0.1 * (x ** 3 - x - 2)
+    f = lambda x: x - 0.1 * (x**3 - x - 2)
     initial_guess = 1.5
     root = relaxation_method(f, initial_guess, omega=0.5, tol=1e-10)
     expected = 1.5213797068045676  # Approximate root of x^3 - x - 2 = 0
@@ -83,7 +93,7 @@ def test_relaxation_high_precision():
 
 
 def test_relaxation_initial_guess():
-    f = lambda x: x ** 2 - 2
+    f = lambda x: x**2 - 2
     initial_guess = 1.5
     root = relaxation_method(f, initial_guess)
     # Fixed points: x = 2 and x = -1
@@ -114,3 +124,12 @@ def test_relaxation_omega_adjustment():
     # Fixed point: x = 0.5x + 1 => x = 2
     expected = 2.0
     assert np.isclose(root, expected, atol=1e-6)
+
+
+def test_relaxation_user_supplied_omega_is_used():
+    # g(x) = -2x + 3 has fixed point 1 and g'(x) = -2.
+    # With omega = 1/3 the relaxed map is x -> 1 exactly, so a fixed omega
+    # converges immediately; the adaptive choice (omega = 0.5) would not.
+    f = lambda x: -2.0 * x + 3.0
+    root = relaxation_method(f, 5.0, omega=1.0 / 3.0, tol=1e-12, max_iterations=3)
+    assert np.isclose(root, 1.0, atol=1e-9)

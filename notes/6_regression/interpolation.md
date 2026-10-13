@@ -168,7 +168,7 @@ For $n+1$ nodes:
 | --- | --: | --: | --- |
 | Piecewise linear | $O(n)$ preprocessing or none | $O(\log n)$ interval search | local, continuous |
 | Newton polynomial | $O(n^2)$ divided differences | $O(n)$ | global polynomial |
-| Lagrange polynomial | $O(n^2)$ naive setup, $O(n)$ barycentric setup | $O(n)$ | global polynomial |
+| Lagrange polynomial | none for the direct form; $O(n^2)$ barycentric weights | $O(n^2)$ direct, $O(n)$ barycentric | global polynomial |
 | Natural cubic spline | $O(n)$ with a tridiagonal solver | $O(\log n)$ + constant evaluation | local cubic pieces, $C^2$ |
 | Gaussian RBF | dense solve, typically $O(n^3)$ | $O(n)$ | global, very smooth |
 

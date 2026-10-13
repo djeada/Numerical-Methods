@@ -262,10 +262,10 @@ $$
 where $Q$ has orthonormal columns and $R$ is upper triangular, then
 
 $$
-\| X\boldsymbol{\beta} - \mathbf y\|_2 = \| R\boldsymbol{\beta} - Q^\top\mathbf y\|_2
+\| X\boldsymbol{\beta} - \mathbf y\|_2^2 = \| R\boldsymbol{\beta} - Q^\top\mathbf y\|_2^2 + \|(I - QQ^\top)\mathbf y\|_2^2,
 $$
 
-up to a residual component orthogonal to the column space.
+where the last term is the part of $\mathbf y$ orthogonal to the column space and does not depend on $\boldsymbol{\beta}$.
 
 The coefficient vector can be obtained by solving
 
@@ -355,3 +355,7 @@ For an important least-squares model:
 4. examine residuals rather than reporting coefficients alone;
 5. check for outliers and leverage points;
 6. separate numerical fit quality from predictive validity.
+
+### Notes on the repository implementation
+
+`src/6_regression/least_squares` solves the normal equations through a pseudo-inverse of $X^\top X$ for teaching purposes; QR or SVD of $X$ itself is preferable in practice. The function requires $m\ge n$ and full column rank, and raises `ValueError` otherwise. A row of $X$ that is entirely zero is accepted: it contributes nothing to $X^\top X$ or $X^\top\mathbf y$ and only adds the constant $y_i^2$ to the residual.

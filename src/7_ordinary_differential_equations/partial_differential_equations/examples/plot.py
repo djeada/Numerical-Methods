@@ -13,14 +13,16 @@ def heat_equation_explicit(u0, x, t_end, dt, alpha, bc_left=0.0, bc_right=0.0):
     t_values = [t]
     u_values = [u.copy()]
 
-    while t < t_end - dt / 2:
+    while t < t_end - 1e-9 * dt:
+        h = min(dt, t_end - t)  # shorten the last step so t[-1] == t_end
+        r = alpha * h / dx**2
         u_new = u.copy()
         for i in range(1, nx - 1):
             u_new[i] = u[i] + r * (u[i + 1] - 2 * u[i] + u[i - 1])
         u_new[0] = bc_left
         u_new[-1] = bc_right
         u = u_new
-        t += dt
+        t = t_end if t_end - (t + h) <= 1e-9 * dt else t + h
         t_values.append(t)
         u_values.append(u.copy())
 

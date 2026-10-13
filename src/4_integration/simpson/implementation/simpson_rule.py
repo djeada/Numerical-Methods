@@ -21,9 +21,15 @@ def simpson_rule_multidim(
     mesh = np.meshgrid(*grids, indexing="ij")
     points = np.stack(mesh, axis=-1)
     flat_points = points.reshape(-1, dims)
-    flat_vals = f(flat_points)
-    if isinstance(flat_vals, float):  # Handle scalar output
-        flat_vals = np.full(flat_points.shape[0], flat_vals)
+    # Accept only a scalar or one value per point; otherwise f is per-point.
+    try:
+        flat_vals = np.asarray(f(flat_points), dtype=float)
+        if flat_vals.ndim == 0:
+            flat_vals = np.full(flat_points.shape[0], float(flat_vals))
+        elif flat_vals.shape != (flat_points.shape[0],):
+            raise ValueError("f is not vectorized")
+    except Exception:
+        flat_vals = np.apply_along_axis(f, 1, flat_points)
     vals = flat_vals.reshape([n + 1] * dims)
     h = [(b - a) / n for a, b in bounds]
 
@@ -35,4 +41,4 @@ def simpson_rule_multidim(
         W = np.outer(W, w_1d)
     W = W.reshape([n + 1] * dims)
 
-    return np.sum(vals * W) * np.prod(h) / 3 ** dims
+    return np.sum(vals * W) * np.prod(h) / 3**dims

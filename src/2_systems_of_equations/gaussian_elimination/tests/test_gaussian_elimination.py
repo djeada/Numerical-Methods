@@ -138,3 +138,18 @@ def test_solve_gaussian_elimination_no_solution():
     b = np.array([3, 5], dtype=float)
     with pytest.raises(ValueError):
         solve_gaussian_elimination(A, b)
+
+
+def test_gaussian_elimination_small_scale_not_singular():
+    A = 1e-10 * np.eye(2)
+    b = np.array([1e-10, 2e-10])
+    x = gaussian_elimination(A, b)
+    assert np.allclose(x, [1.0, 2.0])
+
+
+def test_gaussian_elimination_does_not_modify_inputs():
+    A = np.array([[2.0, 1.0], [5.0, 7.0]])
+    b = np.array([11.0, 13.0])
+    A0, b0 = A.copy(), b.copy()
+    gaussian_elimination(A, b)
+    assert np.array_equal(A, A0) and np.array_equal(b, b0)

@@ -103,15 +103,15 @@ def test_gaussian_interpolation_multiple_queries():
 
 
 def test_gaussian_interpolation_matches_scipy():
-    """Notes example: the result must match scipy's polynomial interpolant."""
+    """The result must match scipy's polynomial interpolant."""
     x = np.array([0, 1, 2, 3, 4], dtype=float)
     y = np.array([2.0, 3.5, 5.0, 5.8, 6.0])
     for pt in [0.5, 1.5, 2.5, 3.5]:
         result = gaussian_interpolation(x, y, pt)
         expected = float(BarycentricInterpolator(x, y)(pt))
-        assert np.isclose(result, expected, atol=1e-10), (
-            f"Mismatch at x={pt}: got {result}, expected {expected}"
-        )
+        assert np.isclose(
+            result, expected, atol=1e-10
+        ), f"Mismatch at x={pt}: got {result}, expected {expected}"
 
 
 def test_gaussian_interpolation_non_equally_spaced():
@@ -130,3 +130,19 @@ def test_gaussian_interpolation_sin_vs_scipy():
     for pt in [0.3, 1.7, 2.5, 4.2]:
         result = gaussian_interpolation(x, y, pt)
         assert np.isclose(result, float(ref(pt)), atol=1e-10)
+
+
+def test_gaussian_interpolation_rejects_uneven_tiny_spacing():
+    """Spacing check must be relative to the data scale, not absolute."""
+    x = np.array([0.0, 1.0, 3.0, 6.0]) * 1e-9
+    y = np.array([0.0, 1.0, 9.0, 36.0])
+    with pytest.raises(ValueError, match="equally spaced"):
+        gaussian_interpolation(x, y, 2e-9)
+
+
+def test_gaussian_interpolation_accepts_tiny_and_offset_equal_spacing():
+    x = np.arange(5) * 1e-9
+    y = np.array([0.0, 1.0, 4.0, 9.0, 16.0])
+    assert np.isclose(gaussian_interpolation(x, y, 2.5e-9), 6.25, atol=1e-9)
+    x = 1e6 + 0.1 * np.arange(5)
+    assert np.isclose(gaussian_interpolation(x, y, 1e6 + 0.25), 6.25, atol=1e-6)

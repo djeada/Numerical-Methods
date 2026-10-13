@@ -82,7 +82,7 @@ Set iteration counter $n = 0$.
 
 I. Evaluate $f(x_n)$ and $f'(x_n)$.
 
-II. If $f'(x_n)=0$, the method cannot proceed (division by zero). Stop or choose a new $x_n$.
+II. If $f'(x_n)=0$ (or the step $f(x_n)/f'(x_n)$ is not a finite number), the method cannot proceed (division by zero). Stop with an error or choose a new $x_n$. Only an exactly zero (or overflowing) derivative is rejected; a merely small derivative is legitimate when $f$ itself is small, so no absolute threshold is used.
 
 III. Update:
 
@@ -90,8 +90,8 @@ $$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$$
 
 IV. Check Convergence:
 
-- If $|x_{n+1} - x_n| < \epsilon$ or $|f(x_{n+1})| < \epsilon$, stop.
-- If $n > n_{\max}$, stop.
+- If $|x_{n+1} - x_n| < \epsilon$, stop and return $x_{n+1}$. (The residual $|f(x_{n+1})|$ is not tested, so with a very flat $f$ the returned point can still have a noticeable residual.)
+- If $n_{\max}$ iterations have been performed without meeting this test, stop with an error (non-convergence).
 
 V. Increment $n = n+1$ and repeat from step I.
 

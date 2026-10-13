@@ -24,13 +24,14 @@ def trapezoid_rule_multidim(
     points = np.stack(mesh, axis=-1)
     flat_points = points.reshape(-1, dims)
 
+    # Accept only a scalar or one value per point; otherwise f is per-point.
     try:
-        test_vals = f(flat_points)
-        if np.isscalar(test_vals):
-            flat_vals = np.full(flat_points.shape[0], test_vals)
-        else:
-            flat_vals = test_vals
-    except:
+        flat_vals = np.asarray(f(flat_points), dtype=float)
+        if flat_vals.ndim == 0:
+            flat_vals = np.full(flat_points.shape[0], float(flat_vals))
+        elif flat_vals.shape != (flat_points.shape[0],):
+            raise ValueError("f is not vectorized")
+    except Exception:
         flat_vals = np.apply_along_axis(f, 1, flat_points)
 
     vals = flat_vals.reshape([n + 1] * dims)
@@ -42,4 +43,4 @@ def trapezoid_rule_multidim(
     W = W.reshape([n + 1] * dims)
 
     h = [(b - a) / n for a, b in bounds]
-    return np.sum(vals * W) * np.prod(h) / (2 ** dims)
+    return np.sum(vals * W) * np.prod(h) / (2**dims)

@@ -12,6 +12,8 @@ where $a, b \in \mathbb{F}_p$ and the curve is **non-singular**, meaning the dis
 
 $$4a^3 + 27b^2 \not\equiv 0 \pmod{p}$$
 
+The restriction $p > 3$ is the mathematically correct one for this form: the short Weierstrass equation is obtained by a change of variables that divides by 2 and 3, so it is only valid when the field characteristic is neither 2 nor 3. (Over $\mathbb{F}_2$ and $\mathbb{F}_3$ other normal forms are required.) The implementation therefore rejects $p \le 3$ and singular curves. Primality of $p$ is assumed, not tested.
+
 The set of points on the curve, together with a special **point at infinity** $\mathcal{O}$, forms an abelian group under point addition.
 
 ### Point Addition
@@ -45,13 +47,19 @@ If $y_P = 0$, then $2P = \mathcal{O}$.
 
 Scalar multiplication computes $kP = P + P + \cdots + P$ ($k$ times) efficiently using the **double-and-add** algorithm:
 
-1. Initialize $R = \mathcal{O}$ (point at infinity).
-2. For each bit of $k$ from the most significant to the least significant:
-   - Double: $R = 2R$.
-   - If the current bit is 1: Add: $R = R + P$.
+1. Initialize $R = \mathcal{O}$ (point at infinity) and $T = P$.
+2. For each bit of $k$ from the least significant to the most significant:
+   - If the current bit is 1: Add: $R = R + T$.
+   - Double: $T = 2T$.
 3. Return $R$.
 
+(The equivalent most-significant-bit-first variant doubles $R$ and then conditionally adds $P$; the implementation uses the form above.)
+
 This runs in $O(\log k)$ point operations, making it efficient even for large scalars.
+
+### Input validation
+
+The group-law functions only need the coefficient $a$, so they cannot check the curve or the points by default. Passing the optional keyword `b` to `point_add`, `point_double`, `scalar_multiply` or `ecdh_shared_secret` makes them verify that the curve is non-singular and that every supplied point satisfies the curve equation, raising `ValueError` otherwise. Validating a peer's public key this way defends against invalid-curve attacks. All of these functions always reject $p \le 3$.
 
 ### Elliptic Curve Diffie–Hellman (ECDH)
 

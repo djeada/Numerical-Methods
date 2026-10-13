@@ -9,20 +9,34 @@ def runge_kutta_4(
     t_end: float,
     h: float,
 ) -> Tuple[np.ndarray, np.ndarray]:
+    """Integrate y' = f(t, y) from t0 to t_end with classical fourth-order RK.
+
+    Steps have length h, except that the last one is shortened when
+    (t_end - t0) / h is not an integer, so t[-1] == t_end exactly.
+
+    Returns (t, y). y has shape (n + 1,) when y0 has a single component and
+    (n + 1, d) when y0 has d > 1 components; y[i] approximates y(t[i]).
+    """
     if h <= 0:
         raise ValueError("Step size h must be positive.")
     if t_end < t0:
         raise ValueError("t_end must be greater than or equal to t0.")
-    n_steps = int(np.ceil((t_end - t0) / h))
-    t = np.linspace(t0, t0 + n_steps * h, n_steps + 1)
-    y = np.zeros((n_steps + 1, y0.size))
+    y0 = np.atleast_1d(np.asarray(y0, dtype=float))
+    n_full = int(np.floor((t_end - t0) / h + 1e-9))
+    t = t0 + h * np.arange(n_full + 1)
+    if t_end - t[-1] > 1e-9 * h:
+        t = np.append(t, t_end)  # shortened final step
+    else:
+        t[-1] = t_end
+    y = np.zeros((len(t), y0.size))
     y[0] = y0
-    for i in range(n_steps):
+    for i in range(len(t) - 1):
         ti = t[i]
         yi = y[i]
+        hi = t[i + 1] - ti
         k1 = f(ti, yi)
-        k2 = f(ti + h / 2, yi + h * k1 / 2)
-        k3 = f(ti + h / 2, yi + h * k2 / 2)
-        k4 = f(ti + h, yi + h * k3)
-        y[i + 1] = yi + (h / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
-    return t, y.squeeze()
+        k2 = f(ti + hi / 2, yi + hi * k1 / 2)
+        k3 = f(ti + hi / 2, yi + hi * k2 / 2)
+        k4 = f(ti + hi, yi + hi * k3)
+        y[i + 1] = yi + (hi / 6) * (k1 + 2 * k2 + 2 * k3 + k4)
+    return t, (y.reshape(-1) if y0.size == 1 else y)

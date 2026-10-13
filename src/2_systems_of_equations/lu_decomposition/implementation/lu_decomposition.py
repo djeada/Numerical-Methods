@@ -7,12 +7,13 @@ def lu_decomposition(A: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]
     n: int = A.shape[0]
     if A.shape[0] != A.shape[1]:
         raise ValueError("Matrix A must be square.")
+    tol: float = n * np.finfo(float).eps * np.abs(A).max() if n > 0 else 0.0
     P: np.ndarray = np.eye(n)
     L: np.ndarray = np.zeros((n, n), dtype=float)
     U: np.ndarray = A.copy().astype(float)
     for i in range(n):
         pivot: int = np.argmax(np.abs(U[i:, i])) + i
-        if np.isclose(U[pivot, i], 0.0):
+        if np.abs(U[pivot, i]) <= tol:
             raise ValueError("Matrix is singular.")
         if pivot != i:
             U[[i, pivot]] = U[[pivot, i]]

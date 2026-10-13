@@ -65,11 +65,11 @@ $$|b_k - a_k| = \frac{|b_0 - a_0|}{2^k}$$
 
 IV. **Convergence Criterion**:
 
-The process is repeated until the desired precision $\epsilon$ is reached, i.e., when:
+The process is repeated until the desired precision $\epsilon$ is reached, i.e., when the midpoint $c_k$ is guaranteed to lie within $\epsilon$ of a root (it is the midpoint of the current interval, so its error is at most half the width):
 
-$$|b_k - a_k| < \epsilon$$
+$$\frac{b_k - a_k}{2} < \epsilon$$
 
-or until the maximum number of iterations $n_{\max}$ is exhausted.
+or when $|f(c_k)| < \epsilon$, or until the maximum number of iterations $n_{\max}$ is exhausted (in which case an error is raised).
 
 ### Algorithm Steps
 
@@ -82,6 +82,7 @@ or until the maximum number of iterations $n_{\max}$ is exhausted.
 **Initialization**:
 
 - Set iteration counter $k = 0$.
+- If $|f(a)| < \epsilon$ return $a$; if $|f(b)| < \epsilon$ return $b$. Otherwise require $f(a)f(b) < 0$ (the implementation raises an error if $f(a)f(b) > 0$).
 
 **Iteration**:
 
@@ -91,9 +92,10 @@ $$c = \frac{a+b}{2}$$
 
 II. Evaluate $f(c)$.
 
-III. If $|b-a| < \epsilon$ or $k \geq n_{\max}$:
+III. If $\frac{b-a}{2} < \epsilon$ or $|f(c)| < \epsilon$:
 
 - Stop and take $c$ as the approximate root.
+- If $k \geq n_{\max}$ instead, stop with an error (non-convergence).
 
 IV. Else, determine the sub-interval:
 

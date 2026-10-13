@@ -1,25 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
+import os
 
-
-def picard_method(f, t0, y0, t_end, h, tol=1e-6, max_iterations=1000):
-    """Picard iteration method for solving ODEs."""
-    t_values = [t0]
-    y_values = [np.array(y0, dtype=float)]
-    t = t0
-    y = np.array(y0, dtype=float)
-    while t < t_end - h / 2:
-        y_old = y.copy()
-        for _ in range(max_iterations):
-            y_new = y_old + h * np.array(f(t, y))
-            if np.linalg.norm(y_new - y) < tol:
-                break
-            y = y_new.copy()
-        y = y_new.copy()
-        t += h
-        t_values.append(t)
-        y_values.append(y.copy())
-    return np.array(t_values), np.array(y_values)
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.pardir))
+from implementation.picard import picard_method
 
 
 if __name__ == "__main__":
@@ -34,7 +19,7 @@ if __name__ == "__main__":
     exact = np.exp(-2 * t)
 
     plt.figure(figsize=(10, 6))
-    plt.plot(t, y[:, 0], "m-o", label="Picard's Method", markersize=3)
+    plt.plot(t, y, "m-o", label="Picard's Method", markersize=3)
     plt.plot(t, exact, "r--", label="Exact: $y = e^{-2t}$", linewidth=2)
     plt.xlabel("t")
     plt.ylabel("y")

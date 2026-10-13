@@ -1,13 +1,13 @@
 # test_lagrange_polynomial.py
 import pytest
 import numpy as np
-from scipy.interpolate import lagrange as scipy_lagrange
+from scipy.interpolate import BarycentricInterpolator
 from ..implementation.lagrange_polynomial import lagrange_polynomial
 
 
 def _scipy_ref(x, y, point):
-    """Reference value from scipy.interpolate.lagrange."""
-    return float(scipy_lagrange(x, y)(point))
+    """Reference value from scipy.interpolate.BarycentricInterpolator."""
+    return float(BarycentricInterpolator(x, y)(point))
 
 
 def test_lagrange_polynomial_basic():
@@ -99,13 +99,13 @@ def test_lagrange_polynomial_multiple_queries():
 
 
 def test_lagrange_polynomial_notes_example():
-    """Notes worked example: A(-1,1), B(2,3), C(3,5) → L(x) = x²/3 + x/3 + 1."""
+    """Example: A(-1,1), B(2,3), C(3,5) → L(x) = x²/3 + x/3 + 1."""
     x = np.array([-1.0, 2.0, 3.0])
     y = np.array([1.0, 3.0, 5.0])
     # Data points exact
     for xi, yi in zip(x, y):
         assert np.isclose(lagrange_polynomial(x, y, xi), yi, atol=1e-10)
-    # Query points from notes
+    # Query points
     assert np.isclose(lagrange_polynomial(x, y, 0), 1.0, atol=1e-10)
     assert np.isclose(lagrange_polynomial(x, y, 1), 5 / 3, atol=1e-10)
 
@@ -115,13 +115,15 @@ def test_lagrange_polynomial_matches_scipy():
     datasets = [
         (np.array([0, 1, 2], dtype=float), np.array([1, 3, 2], dtype=float)),
         (np.array([-1, 2, 3], dtype=float), np.array([1, 3, 5], dtype=float)),
-        (np.array([-9, -5, -2.5, 4, 7], dtype=float),
-         np.array([-2, 3, 0, 5, 11], dtype=float)),
+        (
+            np.array([-9, -5, -2.5, 4, 7], dtype=float),
+            np.array([-2, 3, 0, 5, 11], dtype=float),
+        ),
     ]
     for x, y in datasets:
         for pt in np.linspace(x.min(), x.max(), 10):
             ours = lagrange_polynomial(x, y, float(pt))
             ref = _scipy_ref(x, y, float(pt))
-            assert np.isclose(ours, ref, atol=1e-10), (
-                f"Mismatch at {pt}: impl={ours}, scipy={ref}"
-            )
+            assert np.isclose(
+                ours, ref, atol=1e-10
+            ), f"Mismatch at {pt}: impl={ours}, scipy={ref}"

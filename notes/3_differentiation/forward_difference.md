@@ -16,7 +16,15 @@ This formula is derived from the fundamental definition of the derivative, which
 
 The simplicity of the forward difference formula allows for easy implementation in computational algorithms. On the flip side this method introduces an approximation error, which is influenced by the choice of the step size $h$. Selecting an appropriate $h$ is crucial to balancing accuracy and numerical stability in derivative approximations.
 
-When this error is derived via Taylor’s theorem, the remainder can be written explicitly in Lagrange form using an intermediate point $\xi\in(x,x+h)$ (rather than reusing $x$ in that last term). This explicit remainder form is equivalent to the compact $\mathcal{O}(h)$ notation used above.
+Expanding $f(x+h)$ with Taylor's theorem gives the truncation error explicitly. For some intermediate point $\xi\in(x,x+h)$ (rather than reusing $x$ in that last term),
+
+$$
+\frac{f(x+h)-f(x)}{h} = f'(x) + \frac{h}{2}f''(\xi),
+$$
+
+so the error is $\mathcal{O}(h)$: halving $h$ roughly halves the error. The method is exact only for linear functions.
+
+In floating-point arithmetic the subtraction $f(x+h)-f(x)$ also contributes a round-off error of size roughly $\varepsilon\,|f(x)|/h$, where $\varepsilon\approx 2.2\times10^{-16}$ is the machine epsilon in double precision. Balancing it against the truncation error $\frac{h}{2}|f''|$ gives an optimal step of order $h\sim\sqrt{\varepsilon}\approx 10^{-8}$ (scaled by $\sqrt{|f|/|f''|}$), with a best attainable error of about $\sqrt{\varepsilon}\approx 10^{-8}$. Choosing a much smaller $h$ makes the result worse, not better.
 
 ### Example
 

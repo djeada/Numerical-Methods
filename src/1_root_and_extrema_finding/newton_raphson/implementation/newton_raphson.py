@@ -24,16 +24,21 @@ def newton_raphson(
         float: The estimated root of the function.
 
     Raises:
-        ValueError: If the derivative is zero during iteration.
+        ValueError: If the derivative is exactly zero (or the Newton step is not finite).
         ValueError: If the method does not converge within the maximum number of iterations.
     """
     x = x0
     for iteration in range(1, max_iterations + 1):
         fx = f(x)
         dfx = df(x)
-        if np.isclose(dfx, 0.0, atol=1e-12):
+        # Only an exactly zero derivative (or one so small that the step
+        # overflows) is rejected; a fixed absolute threshold would wrongly
+        # reject functions whose natural scale is small, e.g. 1e-20 * (x - 2).
+        with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+            step = fx / dfx if dfx != 0.0 else np.inf
+        if not np.isfinite(step):
             raise ValueError(f"Derivative is zero at iteration {iteration}, x = {x}.")
-        x_new = x - fx / dfx
+        x_new = x - step
         if np.abs(x_new - x) < tol:
             return x_new
         x = x_new

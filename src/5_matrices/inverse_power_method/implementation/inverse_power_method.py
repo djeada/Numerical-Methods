@@ -9,6 +9,18 @@ def inverse_power_method(
     x0: Optional[np.ndarray] = None,
     shift: float = 0.0,
 ) -> Tuple[float, np.ndarray]:
+    """
+    Shifted inverse iteration: find the eigenvalue of A closest to `shift`
+    (the eigenvalue of smallest magnitude when shift = 0) and an eigenvector.
+
+    Each step solves (A - shift*I) y = x and normalizes y. The error shrinks
+    roughly by |lambda_closest - shift| / |lambda_next - shift| per iteration,
+    where lambda_next is the second-closest eigenvalue. The returned eigenvalue
+    is the Rayleigh quotient y^T A y, and iteration stops when it changes by
+    less than `tol` (the eigenvector is then accurate to roughly sqrt(tol) for
+    symmetric A). Raises ValueError for complex eigenvalues, a singular
+    A - shift*I, or if `max_iterations` is exhausted.
+    """
     if A.shape[0] != A.shape[1]:
         raise ValueError("Matrix must be square.")
 
@@ -43,7 +55,12 @@ def inverse_power_method(
 
         eigenvalue_new = np.dot(y, A @ y)
 
-        if np.abs(eigenvalue_new - eigenvalue) < tol:
+        # Also require a small residual: with eigenvalues of equal distance
+        # from the shift the Rayleigh quotient can settle on a non-eigenvalue.
+        residual = np.linalg.norm(A @ y - eigenvalue_new * y)
+        if np.abs(eigenvalue_new - eigenvalue) < tol and residual <= np.sqrt(
+            tol
+        ) * np.linalg.norm(A, 2):
             return eigenvalue_new, y
         eigenvalue = eigenvalue_new
         x = y

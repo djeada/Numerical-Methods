@@ -127,13 +127,18 @@ t = t0
 u = u0
 
 while t < tf:
+    h_n = min(h, tf - t)    # shorten the last step to land on tf
     k1 = f(t, u)
-    predictor = u + h*k1
-    k2 = f(t + h, predictor)
+    predictor = u + h_n*k1
+    k2 = f(t + h_n, predictor)
 
-    u = u + h*(k1 + k2)/2
-    t = t + h
+    u = u + h_n*(k1 + k2)/2
+    t = t + h_n
 ```
+
+### Repository Implementation
+
+`heun_method` takes a final time `t_end` and a nominal step `h`. When `(t_end - t0)/h` is not an integer, the last step is shortened so that the returned grid ends exactly at `t_end`; all earlier steps have length `h`. The returned array has shape `(n + 1,)` for a scalar ODE (one component) and `(n + 1, d)` for a system with `d` components.
 
 ### Accuracy Versus Cost
 
@@ -167,7 +172,7 @@ $$
 |R(z)|\le 1.
 $$
 
-Its stability region is larger than Euler's in some directions, but Heun is still explicit and is not a good default for strongly stiff systems.
+On the negative real axis this is $-2\le z\le 0$, the same interval as for Euler. The region is larger than Euler's disk $|1+z|\le1$ off the real axis, but Heun is still explicit and is not a good default for strongly stiff systems.
 
 ### Advantages
 
