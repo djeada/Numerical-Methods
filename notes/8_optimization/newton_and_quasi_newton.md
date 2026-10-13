@@ -78,7 +78,7 @@ $$
 \rho = \frac{1}{y^\top s}.
 $$
 
-When $y^\top s>0$, positive definiteness is preserved.
+When $y^\top s>0$, positive definiteness is preserved. A line search satisfying the Wolfe curvature condition guarantees $y^\top s>0$ at every step, which is why BFGS is paired with a [Wolfe line search](line_search.md) rather than plain backtracking.
 
 ### Cost comparison
 

@@ -96,9 +96,9 @@ $$A = L \, U$$
 Matrix $L$ has all 1s on the main diagonal and zero entries above the diagonal, while $U$ has zeros below the diagonal. An ASCII depiction for a 3×3 case could look like this:
 
 ```
-        [ a b c ]         [ l11  0   0 ]
-  A  =   [ d e f ]    =    [ l21 l22 0 ]   x   [ u11 u12 u13 ]
-        [ g h i ]         [ l31 l32 l33 ]       [  0   u22 u23 ]
+        [ a b c ]         [  1   0   0 ]
+  A  =   [ d e f ]    =    [ l21  1   0 ]   x   [ u11 u12 u13 ]
+        [ g h i ]         [ l31 l32  1 ]       [  0   u22 u23 ]
 ```
 
 This method is a cornerstone for solving systems of linear equations of the form $Ax = b$, because once $A$ is decomposed into $L$ and $U$, forward and backward substitutions become more efficient.
@@ -109,7 +109,7 @@ SVD factorizes any $m \times n$ matrix $A$ (whether square or rectangular) into 
 
 $$A = U \, \Sigma \, V^T$$
 
-Matrix $U$ is an orthogonal (or unitary in the complicated case) $m \times m$ matrix, $\Sigma$ is an $m \times n$ diagonal matrix (with nonnegative real numbers on the diagonal), and $V$ is an $n \times n$ orthogonal (or unitary) matrix. The superscript $T$ indicates the transpose. SVD highlights the underlying structure of $A$, making it valuable in data compression, noise reduction, and feature extraction.
+Matrix $U$ is an orthogonal (or unitary in the complex case) $m \times m$ matrix, $\Sigma$ is an $m \times n$ diagonal matrix (with nonnegative real numbers on the diagonal), and $V$ is an $n \times n$ orthogonal (or unitary) matrix. The superscript $T$ indicates the transpose. SVD highlights the underlying structure of $A$, making it valuable in data compression, noise reduction, and feature extraction.
 
 #### QR Decomposition
 
@@ -121,7 +121,7 @@ Matrix $Q$ is $m \times m$ and orthogonal, which means $Q^T Q = I$. Matrix $R$ i
 
 ### The Power Method
 
-The Power Method is an iterative approach for finding the largest eigenvalue and the associated eigenvector of a square matrix $A$. You start with an initial vector $x^{(0)}$ and repeatedly apply the matrix to this vector, normalizing each time:
+The Power Method is an iterative approach for finding the eigenvalue of largest magnitude (the dominant eigenvalue) and the associated eigenvector of a square matrix $A$. You start with an initial vector $x^{(0)}$ and repeatedly apply the matrix to this vector, normalizing each time:
 
 $$x^{(k+1)} = \frac{A \, x^{(k)}}{\|A \, x^{(k)}\|}$$
 
@@ -138,7 +138,7 @@ $$\lambda_{\text{approx}} = \frac{(x^{(k)})^T \, A \, x^{(k)}}{(x^{(k)})^T \, x^
 ### Limitations
 
 - Not all matrices are invertible. Those that lack an inverse are termed as singular or degenerate matrices. This poses challenges in numerous matrix methods where the inverse of a matrix is required.
-- Many matrix decomposition methods like LU decomposition, Cholesky decomposition, or QR decomposition, require the matrix to fulfill certain conditions. For instance, the matrix must be square and non-singular for LU decomposition. Such requirements limit the applicability of these methods.
+- Many matrix decomposition methods like LU decomposition, Cholesky decomposition, or QR decomposition, require the matrix to fulfill certain conditions. For instance, LU decomposition without pivoting requires every leading principal submatrix to be non-singular (with row pivoting, $PA = LU$ exists for every square matrix), and Cholesky decomposition requires a symmetric positive definite matrix. Such requirements limit the applicability of these methods.
 - Matrix methods may not always be the most computationally efficient way to solve a given problem, especially for very large matrices. For such cases, iterative methods or approximation methods might be more suitable.
 - Some matrix methods are sensitive to the numerical stability of the problem. This means small changes in the input can result in large changes in the output, which can lead to significant errors.
-- Most matrix methods assume that the matrix elements are real or complicated numbers. However, in some applications (like in computer graphics), the matrix elements can be more complicated objects, which makes these methods less applicable.
+- Most matrix methods assume that the matrix elements are real or complex numbers. However, in some applications (like in computer graphics), the matrix elements can be more complicated objects, which makes these methods less applicable.

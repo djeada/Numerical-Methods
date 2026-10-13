@@ -44,7 +44,7 @@ u_{11} & u_{12} & u_{13} & \cdots & u_{1n} \\
 \end{bmatrix}
 $$
 
-Here, $L$ is lower-triangular with ones on the diagonal, and $U$ is upper-triangular. The factorization is not always guaranteed to exist unless certain conditions are met (e.g., no zero pivots without partial pivoting, or $A$ being nonsingular and well-conditioned).
+Here, $L$ is lower-triangular with ones on the diagonal, and $U$ is upper-triangular. The factorization is not always guaranteed to exist unless certain conditions are met (e.g., all leading principal minors of $A$ being nonzero when no pivoting is used; with partial pivoting, a factorization $PA = LU$ exists for every nonsingular $A$).
 
 ### Derivation
 
@@ -112,7 +112,27 @@ For $i = n$ down to $1$:
 
 $$x_i = \frac{c_i - \sum_{k=i+1}^{n} u_{ik}x_{k}}{u_{ii}}.$$
 
+V. **Partial pivoting (what the implementation does)**:
+
+The steps above assume every pivot $u_{ii}$ is nonzero. The implementation instead performs partial pivoting: at step $i$ it swaps row $i$ with the row $p \geq i$ whose entry in column $i$ has the largest absolute value, recording the swap in a permutation matrix $P$ (and in the already computed columns of $L$), and then eliminates as before. The result is the factorization
+
+$$PA = LU,$$
+
+with $L$ unit lower-triangular, $U$ upper-triangular and $P$ a permutation matrix, returned as `(P, L, U)`. If the largest available pivot is not larger than $n\,\varepsilon_{\text{mach}}\max_{ij}|a_{ij}|$ the matrix is treated as singular and an error is raised.
+
+Solving $A\mathbf{x}=\mathbf{b}$ then reads $PA\mathbf{x} = P\mathbf{b}$, so forward substitution is applied to $P\mathbf{b}$:
+
+$$L\mathbf{c} = P\mathbf{b}, \qquad U\mathbf{x} = \mathbf{c}.$$
+
+The determinant follows from $\det(P)\det(A) = \det(L)\det(U)$. Since $\det(L)=1$ and $\det(P) = (-1)^s$ where $s$ is the number of row swaps,
+
+$$\det(A) = (-1)^{s}\prod_{i=1}^{n} u_{ii}.$$
+
+(Without pivoting, $s=0$ and this reduces to $\det(A)=\prod u_{ii}$.)
+
 ### Example
+
+The example below is worked without pivoting (so $P = I$) to keep the arithmetic simple. The implementation, with partial pivoting, would first swap rows 1 and 2 (the entry $3$ is the largest in the first column) and so produce a different, equally valid factorization $PA = LU$; the solution $\mathbf{x}$ is the same.
 
 Consider the system of equations:
 
@@ -285,7 +305,7 @@ $$x_1 = \frac{c_1 - u_{12}x_2 - u_{13}x_3}{u_{11}} = \frac{1 - 3(0.42029) - (-4)
 
 - Once $A = LU$ is computed, **solving multiple systems $A\mathbf{x} = \mathbf{b}$** becomes efficient, as only forward and backward substitution are required for each new right-hand-side vector $\mathbf{b}$. This is particularly beneficial in applications requiring repeated solves with the same matrix $A$.
 - LU decomposition organizes the **elimination steps into the matrices $L$ (lower triangular) and $U$ (upper triangular)**, simplifying the process and providing a structured representation of the system. Partial pivoting can be incorporated, enhancing numerical stability for a wide range of problems.
-- It allows for the efficient computation of **matrix determinants** (via $\det(A) = \prod u_{ii}$) and matrix inverses, and serves as a building block for advanced numerical techniques, such as eigenvalue computations and solving partial differential equations.
+- It allows for the efficient computation of **matrix determinants** (via $\det(A) = (-1)^{s}\prod u_{ii}$, where $s$ is the number of row swaps in $PA = LU$; $s=0$ without pivoting) and matrix inverses, and serves as a building block for advanced numerical techniques, such as eigenvalue computations and solving partial differential equations.
 
 ### Limitations
 

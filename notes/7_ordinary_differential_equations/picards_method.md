@@ -144,6 +144,17 @@ $$
 
 The iterates approach this solution on intervals where the contraction argument applies.
 
+At $x=1$ the exact value is $2e-2\approx3.4366$, and the iterates give:
+
+| Iterate | $y_n(1)$ | Error at $x=1$ |
+| --- | --: | --: |
+| $y_0$ | $1$ | $2.4366$ |
+| $y_1$ | $2.5$ | $0.9366$ |
+| $y_2$ | $3.1667$ | $0.2699$ |
+| $y_3$ | $3.375$ | $0.0616$ |
+
+The iterate $y_n$ agrees with the Taylor series of the exact solution through the $x^n$ term, so the error shrinks rapidly on this short interval.
+
 ![Picard iteration error decreases with iteration count](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/picard_convergence.svg)
 
 ### An Important Distinction
@@ -179,6 +190,16 @@ This creates two sources of error:
 2. quadrature error from approximating the integral.
 
 The two errors should not be confused.
+
+The repository function `picard_method` in `src/7_ordinary_differential_equations/picard` is **not** Picard iteration on whole functions, despite its name. It is a step-by-step method: on each step it solves the implicit midpoint equation
+
+$$
+y_{n+1} = y_n + h f\left(t_n + \frac{h}{2}, \frac{y_n + y_{n+1}}{2}\right)
+$$
+
+by fixed-point (Picard-style) substitution. The substitution converges when $hL/2<1$, and the resulting method is second-order accurate. The name refers only to the fixed-point iteration used inside each step.
+
+When $(t_\text{end}-t_0)/h$ is not an integer, the last step is shortened so that the returned grid ends exactly at $t_\text{end}$. The returned array has shape `(n + 1,)` for a scalar ODE and `(n + 1, d)` for a system with `d` components.
 
 ### Convergence Caveats
 

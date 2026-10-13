@@ -54,7 +54,7 @@ Thus:
 
 $$\int_D f(x)\, dx \approx V \frac{1}{N}\sum_{i=1}^N f(X_i)$$
 
-The accuracy improves as $\sqrt{N}$, meaning the error decreases proportionally to $1/\sqrt{N}$.
+The standard error of the estimate is $V\sigma/\sqrt{N}$, where $\sigma^2$ is the variance of $f(X)$; the error therefore decreases proportionally to $1/\sqrt{N}$.
 
 ### Algorithm Steps
 
@@ -134,7 +134,7 @@ To achieve high accuracy, a large $N$ may be required, increasing computational 
 
 III. **Randomness**:
 
-The result is a random variable. Each run may give slightly different answers unless a fixed random seed is used. Confidence intervals and variance reduction techniques (e.g., importance sampling, stratified sampling) are often employed.
+The result is a random variable. Different random draws give slightly different answers. The reference implementation uses a fixed default seed (`seed=0`), so repeated runs are reproducible; pass a different `seed`, or `seed=None`, to get independent estimates. Confidence intervals and variance reduction techniques (e.g., importance sampling, stratified sampling) are often employed.
 
 ### Variants and Enhancements
 

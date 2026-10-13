@@ -35,7 +35,18 @@ def test_lagrange_basis_with_modulus():
     x_values = [1, 2, 3]
     # L_0(0) mod 17 = (0-2)/(1-2) * (0-3)/(1-3) mod 17
     result = lagrange_basis(0, x_values, 0, modulus=prime)
-    assert 0 <= result < prime
+    assert result == 3  # 2 * (3/2) = 3
+
+
+def test_lagrange_basis_non_integer_x_values():
+    # x_values must not be truncated to integers
+    assert lagrange_basis(0, [0.5, 1.5], 1.0) == pytest.approx(0.5)
+    assert lagrange_basis(1, [0.5, 1.5], 1.0) == pytest.approx(0.5)
+
+
+def test_lagrange_basis_duplicate_modulo_prime():
+    with pytest.raises(ValueError, match="modulo"):
+        lagrange_basis(0, [1, 8], 0, modulus=7)
 
 
 def test_lagrange_basis_index_out_of_range():
@@ -85,7 +96,12 @@ def test_interpolate_with_modulus():
     x_data = [1, 2, 3]
     y_data = [5, 10, 15]
     result = lagrange_interpolate(x_data, y_data, 0, modulus=prime)
-    assert 0 <= result < prime
+    assert result == 0  # points lie on y = 5x
+    assert lagrange_interpolate(x_data, y_data, 4, modulus=prime) == 20 % prime
+
+
+def test_interpolate_non_integer_x_data():
+    assert lagrange_interpolate([0.5, 1.5], [1.0, 2.0], 1.0) == pytest.approx(1.5)
 
 
 def test_interpolate_with_numpy_arrays():
@@ -146,6 +162,12 @@ def test_generate_shares_threshold_exceeds_num_shares():
 def test_generate_shares_prime_not_greater_than_secret():
     with pytest.raises(ValueError, match="Prime"):
         generate_shares(secret=100, num_shares=3, threshold=2, prime=97)
+
+
+def test_generate_shares_num_shares_not_less_than_prime():
+    # x = prime would be congruent to 0 and leak the secret
+    with pytest.raises(ValueError, match="less than prime"):
+        generate_shares(secret=1, num_shares=7, threshold=2, prime=7)
 
 
 def test_generate_shares_threshold_zero():
@@ -212,8 +234,10 @@ def test_reconstruct_threshold_one():
 def test_reconstruct_fewer_than_threshold_fails():
     secret = 42
     prime = 97
-    shares = generate_shares(secret, num_shares=6, threshold=4, prime=prime)
-    # Only 2 shares, but threshold is 4 — reconstruction should give a wrong answer
+    # Fixed polynomial f(x) = 42 + 15x + 23x^2 + 5x^3 (mod 97), threshold 4
+    shares = [(i, (42 + 15 * i + 23 * i**2 + 5 * i**3) % prime) for i in range(1, 7)]
+    assert reconstruct_secret(shares[:4], prime) == secret
+    # Only 2 shares, but threshold is 4 — reconstruction gives a wrong answer
     recovered = reconstruct_secret(shares[:2], prime)
     assert 0 <= recovered < prime  # still a valid field element
     assert recovered != secret

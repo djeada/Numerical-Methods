@@ -253,7 +253,36 @@ $$
 r\le \frac{1}{2}.
 $$
 
-This is a typical **CFL-type restriction**: refining the spatial grid may force a much smaller time step.
+This follows from von Neumann analysis: substituting a Fourier mode $u_j^n=G^n e^{ikj\Delta x}$ gives the amplification factor
+
+$$
+G = 1 - 4r\sin^2\left(\frac{k\Delta x}{2}\right),
+$$
+
+and $|G|\le1$ for all $k$ exactly when $r\le1/2$. This is a typical restriction of explicit schemes: refining the spatial grid may force a much smaller time step, since $\Delta t$ must shrink like $\Delta x^2$.
+
+Backward Euler in time (an implicit scheme) gives $G=1/(1+4r\sin^2(k\Delta x/2))$, so $|G|\le1$ for every $r$ and the time step is limited only by accuracy.
+
+For the wave equation, the standard explicit leapfrog scheme
+
+$$
+u_j^{n+1} = 2u_j^n - u_j^{n-1} + \left(\frac{c\Delta t}{\Delta x}\right)^2 \left(u_{j-1}^n - 2u_j^n + u_{j+1}^n \right)
+$$
+
+is stable when the **CFL condition**
+
+$$
+\frac{c\,\Delta t}{\Delta x}\le 1
+$$
+
+holds: the numerical domain of dependence must contain the physical one, so a wave may not travel more than one grid cell per time step.
+
+### Time Grid and the Final Step
+
+The solvers cover $[0,T]$ and always return $t_{\text{last}}=T$ exactly, even when $T/\Delta t$ is not an integer.
+
+- **Heat equation (explicit and implicit).** Steps have length $\Delta t$ except the last one, which is shortened to land on $T$. The explicit stability condition $r\le 1/2$ is checked for the nominal $\Delta t$ only; a shorter final step has a smaller $r$ and is therefore stable too.
+- **Wave equation (leapfrog).** Leapfrog needs a uniform step, so the solver uses $n=\lceil T/\Delta t\rceil$ steps of size $\Delta t_{\text{eff}}=T/n\le\Delta t$. The CFL condition checked for the nominal $\Delta t$ then holds for $\Delta t_{\text{eff}}$ as well. The first step is taken from the initial velocity, $u^1_j=u^0_j+\Delta t\,v_j+\tfrac12 r^2(u^0_{j+1}-2u^0_j+u^0_{j-1})$, and the scheme is second order in time and space.
 
 ### Main Numerical Approaches
 

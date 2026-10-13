@@ -91,7 +91,7 @@ Practical Newton-type solvers therefore use one or more safeguards:
 - trust regions;
 - quasi-Newton positive-definite approximations.
 
-The repository implementation intentionally keeps the algorithms compact: fixed-step gradient descent, plain Newton using `numpy.linalg.solve`, and BFGS with a backtracking Wolfe-style line search.
+The repository implementation intentionally keeps the algorithms compact: fixed-step gradient descent, plain Newton using `numpy.linalg.solve`, and BFGS with a strong Wolfe line search (bracketing followed by bisection zoom, see [line search](line_search.md)).
 
 ### BFGS update
 

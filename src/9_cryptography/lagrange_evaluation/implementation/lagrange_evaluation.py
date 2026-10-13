@@ -1,4 +1,4 @@
-import random
+import secrets
 from typing import List, Optional, Tuple, Union
 
 import numpy as np
@@ -41,19 +41,27 @@ def lagrange_basis(
     if len(x_values) != len(set(x_values.tolist())):
         raise ValueError("x_values must contain unique values.")
 
+    if modulus is not None and len({int(v) % modulus for v in x_values}) != len(
+        x_values
+    ):
+        raise ValueError("x_values must be distinct modulo the modulus.")
+
     result: Union[float, int] = 1
 
     for j in range(len(x_values)):
         if j == i:
             continue
-        numerator = x - int(x_values[j])
-        denominator = int(x_values[i]) - int(x_values[j])
-
         if modulus is not None:
+            numerator = x - int(x_values[j])
+            denominator = int(x_values[i]) - int(x_values[j])
             numerator = numerator % modulus
             denominator = denominator % modulus
-            result = (result * numerator * pow(denominator, modulus - 2, modulus)) % modulus
+            result = (
+                result * numerator * pow(denominator, modulus - 2, modulus)
+            ) % modulus
         else:
+            numerator = x - x_values[j]
+            denominator = x_values[i] - x_values[j]
             result = result * numerator / denominator
 
     return result
@@ -101,6 +109,9 @@ def lagrange_interpolate(
 
     if len(x_data) != len(set(x_data.tolist())):
         raise ValueError("x_data must contain unique values.")
+
+    if modulus is not None and len({int(v) % modulus for v in x_data}) != len(x_data):
+        raise ValueError("x_data must be distinct modulo the modulus.")
 
     result: Union[float, int] = 0
 
@@ -152,15 +163,19 @@ def generate_shares(
             f"Threshold ({threshold}) must be <= num_shares ({num_shares})."
         )
 
+    if num_shares >= prime:
+        raise ValueError(
+            f"num_shares ({num_shares}) must be less than prime ({prime}); "
+            "otherwise share x-coordinates repeat modulo the prime or hit x = 0."
+        )
+
     if prime <= secret:
         raise ValueError(
             f"Prime ({prime}) must be strictly greater than the secret ({secret})."
         )
 
     # Build a random polynomial of degree (threshold - 1) with constant term = secret
-    coefficients = [secret] + [
-        random.randrange(0, prime) for _ in range(threshold - 1)
-    ]
+    coefficients = [secret] + [secrets.randbelow(prime) for _ in range(threshold - 1)]
 
     shares: List[Tuple[int, int]] = []
     for i in range(1, num_shares + 1):

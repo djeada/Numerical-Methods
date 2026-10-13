@@ -3,8 +3,13 @@ Elliptic Curve Arithmetic over Prime Finite Fields
 
 Provides core operations on elliptic curves of the form
     y² ≡ x³ + ax + b  (mod p)
-where *p* is a prime, together with a simple ECDH key-exchange
-helper.
+where *p* is a prime greater than 3 (the short Weierstrass form is only
+valid in characteristic other than 2 and 3), together with a simple ECDH
+key-exchange helper.
+
+The group-law functions take the curve coefficient *a* but not *b* (it is
+not needed by the formulas).  Pass the optional keyword ``b`` to have the
+curve and the input points validated before computing.
 
 Points are represented as ``(x, y)`` tuples.  The *point at
 infinity* (identity element) is represented by ``None``.
@@ -21,6 +26,28 @@ Point = Optional[Tuple[int, int]]
 # ------------------------------------------------------------------
 
 
+def _validate_field(p: int) -> None:
+    """Raise unless *p* is a valid characteristic (p > 3) for short
+    Weierstrass form.  Primality of *p* is assumed, not tested.
+
+    Raises:
+        ValueError: If *p* is not greater than 3.
+    """
+    if p <= 3:
+        raise ValueError(f"Prime p must be > 3, got {p}.")
+
+
+def _validate_inputs(
+    points: Tuple[Point, ...], a: int, b: Optional[int], p: int
+) -> None:
+    """Validate the field and, when *b* is supplied, the curve and points."""
+    _validate_field(p)
+    if b is not None:
+        _validate_curve(a, b, p)
+        for point in points:
+            _validate_point_on_curve(point, a, b, p)
+
+
 def _validate_curve(a: int, b: int, p: int) -> None:
     """Validate that curve parameters define a non-singular curve.
 
@@ -30,16 +57,14 @@ def _validate_curve(a: int, b: int, p: int) -> None:
         p: Prime modulus of the finite field.
 
     Raises:
-        ValueError: If *p* is not greater than 2 or the curve is singular.
+        ValueError: If *p* is not greater than 3 or the curve is singular.
     """
-    if p <= 2:
-        raise ValueError(f"Prime p must be > 2, got {p}.")
+    _validate_field(p)
 
     discriminant = (4 * pow(a, 3) + 27 * pow(b, 2)) % p
     if discriminant == 0:
         raise ValueError(
-            f"Singular curve: 4a³ + 27b² ≡ 0 (mod {p}). "
-            "Choose different a, b, or p."
+            f"Singular curve: 4a³ + 27b² ≡ 0 (mod {p}). " "Choose different a, b, or p."
         )
 
 
@@ -89,7 +114,7 @@ def is_on_curve(point: Point, a: int, b: int, p: int) -> bool:
     return lhs == rhs
 
 
-def point_add(P: Point, Q: Point, a: int, p: int) -> Point:
+def point_add(P: Point, Q: Point, a: int, p: int, b: Optional[int] = None) -> Point:
     """Add two points on the elliptic curve.
 
     Handles the following special cases:
@@ -104,11 +129,18 @@ def point_add(P: Point, Q: Point, a: int, p: int) -> Point:
         Q: Second point (or ``None``).
         a: Coefficient *a* of the curve equation.
         p: Prime modulus defining the finite field.
+        b: Optional coefficient *b*; if given, the curve and both points
+            are validated.
 
     Returns:
         The sum ``P + Q`` on the curve, or ``None`` for the point at
         infinity.
+
+    Raises:
+        ValueError: If ``p <= 3``, or (when *b* is given) the curve is
+            singular or a point is not on the curve.
     """
+    _validate_inputs((P, Q), a, b, p)
     if P is None:
         return Q
     if Q is None:
@@ -131,7 +163,7 @@ def point_add(P: Point, Q: Point, a: int, p: int) -> Point:
     return (x_r, y_r)
 
 
-def point_double(P: Point, a: int, p: int) -> Point:
+def point_double(P: Point, a: int, p: int, b: Optional[int] = None) -> Point:
     """Double a point on the elliptic curve.
 
     If *P* is the point at infinity or has *y = 0* the result is
@@ -141,11 +173,18 @@ def point_double(P: Point, a: int, p: int) -> Point:
         P: The point to double (or ``None``).
         a: Coefficient *a* of the curve equation.
         p: Prime modulus defining the finite field.
+        b: Optional coefficient *b*; if given, the curve and the point
+            are validated.
 
     Returns:
         The point ``2P`` on the curve, or ``None`` for the point at
         infinity.
+
+    Raises:
+        ValueError: If ``p <= 3``, or (when *b* is given) the curve is
+            singular or the point is not on the curve.
     """
+    _validate_inputs((P,), a, b, p)
     if P is None:
         return None
 
@@ -161,7 +200,7 @@ def point_double(P: Point, a: int, p: int) -> Point:
     return (x_r, y_r)
 
 
-def scalar_multiply(k: int, P: Point, a: int, p: int) -> Point:
+def scalar_multiply(k: int, P: Point, a: int, p: int, b: Optional[int] = None) -> Point:
     """Compute ``k * P`` using the double-and-add algorithm.
 
     Args:
@@ -169,15 +208,20 @@ def scalar_multiply(k: int, P: Point, a: int, p: int) -> Point:
         P: A point on the curve (or ``None``).
         a: Coefficient *a* of the curve equation.
         p: Prime modulus defining the finite field.
+        b: Optional coefficient *b*; if given, the curve and the point
+            are validated.
 
     Returns:
         The point ``k * P``, or ``None`` for the point at infinity.
 
     Raises:
         ValueError: If *k* is negative.
+        ValueError: If ``p <= 3``, or (when *b* is given) the curve is
+            singular or the point is not on the curve.
     """
     if k < 0:
         raise ValueError(f"Scalar k must be non-negative, got {k}.")
+    _validate_inputs((P,), a, b, p)
 
     if k == 0 or P is None:
         return None
@@ -199,6 +243,7 @@ def ecdh_shared_secret(
     public_key: Point,
     a: int,
     p: int,
+    b: Optional[int] = None,
 ) -> Point:
     """Compute the ECDH shared secret.
 
@@ -209,15 +254,17 @@ def ecdh_shared_secret(
         public_key: The other party's public-key point on the curve.
         a: Coefficient *a* of the curve equation.
         p: Prime modulus defining the finite field.
+        b: Optional coefficient *b*; if given, the curve and the public
+            key are validated (this rejects invalid-curve attacks).
 
     Returns:
         The shared-secret point on the curve.
 
     Raises:
         ValueError: If *private_key* is not a positive integer.
+        ValueError: If ``p <= 3``, or (when *b* is given) the curve is
+            singular or the public key is not on the curve.
     """
     if private_key <= 0:
-        raise ValueError(
-            f"Private key must be a positive integer, got {private_key}."
-        )
-    return scalar_multiply(private_key, public_key, a, p)
+        raise ValueError(f"Private key must be a positive integer, got {private_key}.")
+    return scalar_multiply(private_key, public_key, a, p, b)

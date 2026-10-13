@@ -16,15 +16,15 @@ def test_midpoint_rule_linear():
     f = lambda x: 2.0 * x + 3.0
     a, b, n = 0.0, 5.0, 1000
     result = midpoint_rule(f, a, b, n)
-    expected = 2.0 * (b ** 2 - a ** 2) / 2 + 3.0 * (b - a)
+    expected = 2.0 * (b**2 - a**2) / 2 + 3.0 * (b - a)
     assert np.isclose(result, expected, rtol=1e-6)
 
 
 def test_midpoint_rule_quadratic():
-    f = lambda x: x ** 2
+    f = lambda x: x**2
     a, b, n = 0.0, 3.0, 1000
     result = midpoint_rule(f, a, b, n)
-    expected = (b ** 3 - a ** 3) / 3
+    expected = (b**3 - a**3) / 3
     assert np.isclose(result, expected, rtol=1e-6)
 
 
@@ -52,7 +52,7 @@ def test_midpoint_rule_single_interval():
 
 
 def test_midpoint_rule_negative_bounds():
-    f = lambda x: x ** 2
+    f = lambda x: x**2
     a, b, n = -1.0, 1.0, 1000
     result = midpoint_rule(f, a, b, n)
     expected = 2.0 / 3
@@ -80,7 +80,7 @@ def test_midpoint_rule_multidim_linear():
     f = lambda x: x[0] + x[1]
     bounds = [(0.0, 2.0), (0.0, 3.0)]
     n = 1000
-    result = midpoint_rule_multidim(lambda x: np.sum(x, axis=-1), bounds, n)
+    result = midpoint_rule_multidim(f, bounds, n)
     expected = 15
     assert np.isclose(result, expected, rtol=1e-4)
 
@@ -90,7 +90,7 @@ def test_midpoint_rule_multidim_quadratic():
     bounds = [(0.0, 1.0), (0.0, 1.0)]
     n = 1000
     result = midpoint_rule_multidim(f, bounds, n)
-    expected = 0
+    expected = 1 / 3 + 1 / 3
     assert np.isclose(result, expected, rtol=1e-4)
 
 

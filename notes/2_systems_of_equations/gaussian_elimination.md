@@ -74,7 +74,7 @@ The end result is an upper-triangular system that can be solved starting from th
 
 **Input**: An augmented matrix $[A|\mathbf{b}]$ representing the system $A\mathbf{x} = \mathbf{b}$.
 
-**Output**: A solution vector $\mathbf{x}$ if it exists, or detection of no solution or infinitely many solutions.
+**Output**: A solution vector $\mathbf{x}$ if the system has a unique solution. In general the procedure can also reveal no solution or infinitely many solutions (a zero row in the reduced matrix). The implementation handles square systems only and returns just $\mathbf{x}$ (not the triangular matrix); when no usable pivot is found (the largest candidate is not larger than $n\,\varepsilon_{\text{mach}}\max_{ij}|a_{ij}|$) it raises an error for a singular or nearly singular matrix, without distinguishing "no solution" from "infinitely many". The helper `solve_gaussian_elimination` additionally rounds the result to 8 decimals.
 
 **Step-by-Step Procedure**:
 
@@ -93,11 +93,11 @@ II. **Forward Elimination** (to reach upper-triangular form):
 
 For $i = 1$ to $n$:
 
-II.I. **Partial Pivoting (if desired)**: Find the row (pivotRow) below (and including) the current row $i$ that has the largest absolute value in column $i$. Swap the current row $i$ with pivotRow to reduce numerical instability.
+II.I. **Partial Pivoting (always performed by the implementation)**: Find the row (pivotRow) below (and including) the current row $i$ that has the largest absolute value in column $i$. Swap the current row $i$ with pivotRow to reduce numerical instability.
 
 II.II. **Pivot Normalization**: Divide the entire $i$-th row by $a_{ii}$ (the pivot) to make the pivot element equal to 1.
 
-III.III. **Elimination**: For each row $j > i$, subtract $a_{ji}$ times the $i$-th row from the $j$-th row to make the elements below the pivot zero.
+II.III. **Elimination**: For each row $j > i$, subtract $a_{ji}$ times the $i$-th row from the $j$-th row to make the elements below the pivot zero.
 
 After these steps, the matrix is in row echelon form:
 
@@ -232,7 +232,7 @@ The solution is $\mathbf{x} = (2, 3, -1)^\top$.
 
 ### Advantages
 
-- Gaussian elimination has **general applicability** to any $n \times n$ system of linear equations, and it can also identify cases where no solution or infinitely many solutions exist in non-square systems.
+- Gaussian elimination has **general applicability** to any $n \times n$ system of linear equations, and the general procedure can also identify cases where no solution or infinitely many solutions exist, including non-square systems (the implementation in this repository handles square systems only and reports a singular matrix as an error).
 - The method serves as a **foundation for advanced techniques** like LU decomposition and QR decomposition, forming a building block for many numerical algorithms.
 - It can be used to **determine the rank of a matrix** and to compute the inverse of a matrix when applicable by applying the procedure to the augmented matrix $[A | I]$.
 

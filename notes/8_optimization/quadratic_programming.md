@@ -55,7 +55,7 @@ where $\Pi_C$ denotes Euclidean projection.
 
 ![Gradient step followed by projection to a feasible set](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/quadratic_programming_projection.svg)
 
-The repository implementation uses this idea in a simplified form: it takes a gradient step, projects violated half-space inequalities one at a time, and then corrects affine equality residuals.
+The repository implementation uses this idea in a simplified form: it takes a gradient step and then projects onto the feasible polyhedron with Dykstra's algorithm, which cycles through the individual half-spaces and the affine equality set and carries correction terms between sweeps.
 
 ### Step size for a quadratic
 
@@ -71,11 +71,13 @@ $$
 \nabla f(x) = Qx + c.
 $$
 
-If $Q\succeq0$, the largest eigenvalue is a Lipschitz constant for the gradient. A common conservative fixed step is therefore approximately
+If $Q\succeq0$, the largest eigenvalue $\lambda_{\max}(Q)=\|Q\|_2$ is a Lipschitz constant $L$ for the gradient. The fixed step used by the repository is therefore
 
 $$
-\alpha = \frac{1}{\lambda_{\max}(Q)}.
+\alpha = \frac{1}{L} = \frac{1}{\|Q\|_2}.
 $$
+
+If $Q$ is numerically zero the problem is a linear program: the gradient is constant, there is no curvature from which to derive a step, and the routine raises an error instead of guessing a step. Use a linear programming solver in that case.
 
 ### KKT system for equality-constrained QP
 
@@ -116,4 +118,4 @@ This linear-algebra viewpoint is central to active-set and interior-point method
 
 ### Numerical caveats
 
-Sequentially projecting violated inequalities is easy to understand but is not the same as computing the exact Euclidean projection onto a general polyhedron. For difficult constraint geometries, a dedicated QP solver is preferable.
+Simply projecting onto the constraints one after another yields a feasible point but not the nearest one, which can make projected gradient stall at a non-optimal point; the correction terms of Dykstra's algorithm are what restore the exact projection. Dykstra converges only linearly, so for large or difficult constraint sets a dedicated QP solver is preferable.

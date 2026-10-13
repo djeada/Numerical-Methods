@@ -53,8 +53,8 @@ def main() -> None:
     print(f"  Bob private key   : {bob_private}")
     print(f"  Bob public key    : {bob_public}")
 
-    shared_alice = ecdh_shared_secret(alice_private, bob_public, a, p)
-    shared_bob = ecdh_shared_secret(bob_private, alice_public, a, p)
+    shared_alice = ecdh_shared_secret(alice_private, bob_public, a, p, b=b)
+    shared_bob = ecdh_shared_secret(bob_private, alice_public, a, p, b=b)
 
     print(f"  Alice shared secret: {shared_alice}")
     print(f"  Bob shared secret  : {shared_bob}")

@@ -32,13 +32,29 @@ def test_taylor_series_cos():
 
 
 def test_taylor_series_ln():
+    # f(x) = ln(x) at a = 1: f(1) = 0, f^(k)(1) = (-1)^(k-1) (k-1)!
     def ln_derivatives(k: np.ndarray) -> np.ndarray:
         result = np.zeros_like(k, dtype=float)
-        result[k > 0] = (-1) ** (k[k > 0] - 1) / k[k > 0]
+        for i, order in enumerate(k):
+            if order > 0:
+                result[i] = (-1.0) ** (int(order) - 1) * float(
+                    math.factorial(int(order) - 1)
+                )
         return result
 
-    with pytest.warns(RuntimeWarning, match="divide by zero encountered in divide"):
-        taylor_series(math.log, 1, 100, 2, ln_derivatives)
+    # n = 100 > 20 would overflow int64 factorials
+    approx = taylor_series(math.log, 1, 100, 1.5, ln_derivatives)
+    assert np.isfinite(approx)
+    assert math.isclose(approx, math.log(1.5), rel_tol=1e-10)
+
+
+def test_taylor_series_large_integer_offset_no_overflow():
+    def exp_derivatives(k: np.ndarray) -> np.ndarray:
+        return np.ones_like(k, dtype=float)
+
+    # integer x - a raised to powers > 62 overflows int64 if not cast to float
+    approx = taylor_series(math.exp, 0, 80, 3, exp_derivatives)
+    assert math.isclose(approx, math.exp(3), rel_tol=1e-10)
 
 
 def test_taylor_series_error():

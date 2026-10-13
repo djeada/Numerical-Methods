@@ -12,7 +12,7 @@ from implementation.thin_plate_spline_interpolation import (
     thin_plate_spline_interpolation,
 )
 
-# ── Notes Example 2: non-planar saddle-like data ──────────────────────────
+# ── Example 2: non-planar saddle-like data ──────────────────────────
 x_data = np.array([0.0, 1.0, 0.0, 1.0])
 y_data = np.array([0.0, 0.0, 1.0, 1.0])
 z_data = np.array([1.0, 0.0, 0.0, 1.0])
@@ -61,6 +61,6 @@ ax3.set_title(f"|Difference| (max = {diff.max():.2e})")
 ax3.set_xlabel("x")
 ax3.set_ylabel("y")
 
-plt.suptitle("Thin Plate Spline: Implementation vs scipy (Notes Example 2)")
+plt.suptitle("Thin Plate Spline: Implementation vs scipy (Example 2: saddle-like data)")
 plt.tight_layout()
 plt.show()

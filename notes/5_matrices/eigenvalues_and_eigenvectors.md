@@ -46,5 +46,6 @@ $$
 
 ### Limitations
 
-- Eigenvalues and eigenvectors do not exist for all matrices. Specifically, non-square matrices lack these properties.
-- For large matrices, the computation of eigenvalues and eigenvectors can be computationally demanding, potentially slowing down analyses or algorithm implementations.
+- Eigenvalues and eigenvectors are defined only for square matrices. A real matrix may have complex eigenvalues, and not every square matrix has a full set of linearly independent eigenvectors (defective matrices).
+- For large matrices, the computation of eigenvalues and eigenvectors can be computationally demanding (about $O(n^3)$ operations for a dense $n \times n$ matrix), potentially slowing down analyses or algorithm implementations.
+- Forming the characteristic polynomial and solving for its roots, as in the hand calculation above, is numerically unreliable for larger matrices, especially with repeated eigenvalues; library routines use methods such as the QR algorithm instead.

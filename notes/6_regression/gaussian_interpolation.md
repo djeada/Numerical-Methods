@@ -314,3 +314,12 @@ s(\mathbf x) = \sum_j \lambda_j e^{-\varepsilon^2\|\mathbf x-\mathbf x_j\|_2^2}.
 $$
 
 This dimension-independent form is one reason RBF interpolation is useful for scattered data.
+
+### Code in this repository
+
+The folder `src/6_regression/gaussian_interpolation` contains two different methods:
+
+- `implementation/gaussian_rbf.py` (`GaussianRBFInterpolator`) implements the Gaussian radial basis function interpolation described in this note, and `examples/plot_gaussian_rbf.py` plots it;
+- `implementation/gaussian_interpolation.py`, together with `examples/example.ipynb` and `examples/plot.py`, implements **Gauss's central-difference formulas** for equally spaced nodes. That is a polynomial interpolant (it reproduces the same polynomial as Lagrange or Newton interpolation) and is unrelated to Gaussian kernels.
+
+The shared folder name is historical; the two should not be confused.

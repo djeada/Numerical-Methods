@@ -1,4 +1,9 @@
 # gaussian_interpolation.py
+#
+# Gauss's forward/backward central-difference polynomial interpolation for
+# equally spaced nodes. This is NOT Gaussian radial basis function (RBF)
+# interpolation; that method lives in gaussian_rbf.py in this folder and is the
+# subject of notes/6_regression/gaussian_interpolation.md.
 import numpy as np
 from math import factorial
 
@@ -107,8 +112,11 @@ def gaussian_interpolation(
     n = len(x_data) - 1
     h = float(x_data[1] - x_data[0])
 
+    # Scale-relative tolerance: a fixed absolute tolerance would accept
+    # arbitrarily uneven spacing whenever the nodes are tiny (e.g. ~1e-9).
     diffs = np.diff(x_data.astype(float))
-    if not np.allclose(diffs, h, rtol=1e-10):
+    tol = 1e-9 * abs(h) + 8 * np.finfo(float).eps * np.max(np.abs(x_data))
+    if not np.all(np.abs(diffs - h) <= tol):
         raise ValueError("X data must be equally spaced for Gaussian interpolation.")
 
     diff_table = _build_difference_table(y_data.astype(float))

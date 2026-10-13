@@ -117,29 +117,29 @@ def test_tps_exact_match_all_corners():
     z = np.array([1.0, 0.0, 0.0, 1.0])
     for xi, yi, zi in zip(x, y, z):
         result = thin_plate_spline_interpolation(x, y, z, (xi, yi))
-        assert np.isclose(result, zi, atol=1e-8), (
-            f"Mismatch at ({xi},{yi}): got {result}, expected {zi}"
-        )
+        assert np.isclose(
+            result, zi, atol=1e-8
+        ), f"Mismatch at ({xi},{yi}): got {result}, expected {zi}"
 
 
-def test_tps_notes_example_planar():
-    """Notes Example 1: data lies on the plane z = x + y."""
+def test_tps_planar_data_exact():
+    """Planar data on z = x + y is reproduced exactly (affine part)."""
     x = np.array([0.0, 1.0, 0.0, 1.0])
     y = np.array([0.0, 0.0, 1.0, 1.0])
     z = np.array([0.0, 1.0, 1.0, 2.0])
     for pt in [(0.5, 0.5), (0.25, 0.75), (0.3, 0.7)]:
         result = thin_plate_spline_interpolation(x, y, z, pt)
-        assert np.isclose(result, pt[0] + pt[1], atol=1e-8), (
-            f"Planar mismatch at {pt}: got {result}, expected {pt[0]+pt[1]}"
-        )
+        assert np.isclose(
+            result, pt[0] + pt[1], atol=1e-8
+        ), f"Planar mismatch at {pt}: got {result}, expected {pt[0]+pt[1]}"
 
 
-def test_tps_notes_example_nonplanar():
-    """Notes Example 2: non-planar saddle-like data."""
+def test_tps_saddle_data_midpoint():
+    """Non-planar saddle-like data."""
     x = np.array([0.0, 1.0, 0.0, 1.0])
     y = np.array([0.0, 0.0, 1.0, 1.0])
     z = np.array([1.0, 0.0, 0.0, 1.0])
-    # Midpoint value = 0.5 by symmetry (verified in notes)
+    # Midpoint value = 0.5 by symmetry
     assert np.isclose(
         thin_plate_spline_interpolation(x, y, z, (0.5, 0.5)), 0.5, atol=1e-8
     )
@@ -160,6 +160,36 @@ def test_tps_matches_scipy_scattered():
     for pt in [(1.0, 1.0), (2.0, 3.0), (0.5, 2.5)]:
         result = thin_plate_spline_interpolation(x, y, z, pt)
         expected = _scipy_tps(x, y, z, pt)
-        assert np.isclose(result, expected, atol=1e-8), (
-            f"Mismatch at {pt}: got {result}, expected {expected}"
+        assert np.isclose(
+            result, expected, atol=1e-8
+        ), f"Mismatch at {pt}: got {result}, expected {expected}"
+
+
+def test_tps_collinear_points_raise_value_error():
+    x = np.array([0.0, 1.0, 2.0, 3.0])
+    y = 2.0 * x + 1.0
+    z = np.array([0.0, 1.0, 4.0, 9.0])
+    with pytest.raises(ValueError, match="collinear"):
+        thin_plate_spline_interpolation(x, y, z, (1.5, 4.0))
+
+
+def test_tps_collinear_axis_aligned_and_scaled():
+    z = np.array([1.0, 2.0, 3.0])
+    with pytest.raises(ValueError, match="collinear"):
+        thin_plate_spline_interpolation(
+            np.array([0.0, 1.0, 2.0]), np.zeros(3), z, (0.5, 0.0)
         )
+    # Collinearity is detected relative to scale, for tiny and huge coordinates.
+    for scale in (1e-8, 1e8):
+        t = np.array([0.0, 1.0, 2.0, 5.0]) * scale
+        with pytest.raises(ValueError, match="collinear"):
+            thin_plate_spline_interpolation(t, -3.0 * t, np.arange(4.0), (scale, 0.0))
+
+
+def test_tps_no_implicit_meshgrid_mode():
+    """x and y must match z_data length; grid-shaped input is not expanded."""
+    gx = np.array([0.0, 1.0, 2.0])
+    gy = np.array([0.0, 1.0])
+    z = np.arange(6.0)
+    with pytest.raises(ValueError):
+        thin_plate_spline_interpolation(gx, gy, z, (0.5, 0.5))

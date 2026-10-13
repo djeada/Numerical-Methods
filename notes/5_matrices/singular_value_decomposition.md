@@ -41,7 +41,7 @@ I. Compute the eigenvalues of $A^{T}A$. These eigenvalues $\lambda_i$ are non-ne
 
 II. The singular values of $A$ are defined as $\sigma_i = \sqrt{\lambda_i}$.
 
-III. The eigenvectors of $A^{T}A$ form the columns of $V$, and the eigenvectors of $AA^{T}$ form the columns of $U$.
+III. The eigenvectors of $A^{T}A$ form the columns of $V$, and the eigenvectors of $AA^{T}$ form the columns of $U$ (with signs chosen consistently, e.g. $u_i = A v_i / \sigma_i$).
 
 Since every real matrix $A$ gives rise to a non-negative, symmetric matrix $A^{T}A$, and since such matrices are always diagonalizable, SVD is guaranteed to exist for any matrix $A$.
 
@@ -79,45 +79,41 @@ $$A = \begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix}.$$
 
 I. Compute $A^{T}A$:
 
-$$A^{T}A = \begin{bmatrix} 3 & 2 \\ 4 & 1 \end{bmatrix}^{T}\begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix} = \begin{bmatrix} 3 & 4 \\ 2 & 1 \end{bmatrix}^{T}\begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix} = \begin{bmatrix}13 & 14 \\ 14 & 17\end{bmatrix}.$$
+$$A^{T}A = \begin{bmatrix} 3 & 2 \\ 4 & 1 \end{bmatrix}\begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix} = \begin{bmatrix}13 & 14 \\ 14 & 17\end{bmatrix}.$$
 
 II. Find the eigenvalues of $A^{T}A$:
 
 Solve $\det(A^{T}A - \lambda I) = 0$:
 
-$$(13 - \lambda)(17 - \lambda) - 14^2 = 0.$$
+$$(13 - \lambda)(17 - \lambda) - 14^2 = \lambda^2 - 30\lambda + 25 = 0.$$
 
-Solving yields $\lambda_1 = 30$ and $\lambda_2 = 0$.
+Solving yields $\lambda_1 = 15 + 10\sqrt{2} \approx 29.1421$ and $\lambda_2 = 15 - 10\sqrt{2} \approx 0.8579$.
 
 III. Singular values:
 
-$$\sigma_1 = \sqrt{30}, \quad \sigma_2 = \sqrt{0} = 0.$$
+$$\sigma_1 = \sqrt{\lambda_1} \approx 5.3983, \quad \sigma_2 = \sqrt{\lambda_2} \approx 0.9262.$$
 
-IV. Eigenvectors of $A^{T}A$ for $\lambda_1=30$:
+(Check: $\sigma_1 \sigma_2 = |\det A| = 5$.)
 
-One such eigenvector (normalized) is:
+IV. Eigenvectors of $A^{T}A$ (normalized):
 
-$$v_1 = \frac{1}{\sqrt{2}}\begin{bmatrix}1 \\ 1\end{bmatrix}.$$
-
-For $\lambda_2=0$, a corresponding eigenvector is:
-
-$$v_2 = \frac{1}{\sqrt{2}}\begin{bmatrix}-1 \\ 1\end{bmatrix}.$$
+$$v_1 \approx \begin{bmatrix}0.6552 \\ 0.7555\end{bmatrix}, \quad v_2 \approx \begin{bmatrix}-0.7555 \\ 0.6552\end{bmatrix}.$$
 
 Hence:
 
-$$V = \begin{bmatrix}\frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}}\end{bmatrix}.$$
+$$V \approx \begin{bmatrix}0.6552 & -0.7555 \\ 0.7555 & 0.6552\end{bmatrix}.$$
 
-V. To find $U$, use $U = A V \Sigma^{-1}$ for the non-zero singular values:
+V. To find $U$, use $u_i = \frac{1}{\sigma_i} A v_i$ for the non-zero singular values:
 
-$$U = \begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix}\begin{bmatrix}\frac{1}{\sqrt{2}} \\ \frac{1}{\sqrt{2}}\end{bmatrix}\frac{1}{\sqrt{30}}$$
+$$u_1 \approx \begin{bmatrix}0.9239 \\ 0.3827\end{bmatrix}, \quad u_2 \approx \begin{bmatrix}0.3827 \\ -0.9239\end{bmatrix},$$
 
-yields
+so
 
-$$U = \begin{bmatrix}\frac{2}{\sqrt{5}} & -\frac{1}{\sqrt{5}} \\ \frac{1}{\sqrt{5}} & \frac{2}{\sqrt{5}}\end{bmatrix}.$$
+$$U \approx \begin{bmatrix}0.9239 & 0.3827 \\ 0.3827 & -0.9239\end{bmatrix}.$$
 
 VI. Assemble SVD:
 
-$$\Sigma = \begin{bmatrix}\sqrt{30} & 0 \\ 0 & 0\end{bmatrix}$$
+$$\Sigma \approx \begin{bmatrix}5.3983 & 0 \\ 0 & 0.9262\end{bmatrix}$$
 
 $$A = U \Sigma V^{T}.$$
 
@@ -147,4 +143,4 @@ While the decomposition yields orthogonal factors and non-negative singular valu
 
 III. **No Direct Eigenvalue Information of Original A**:
 
-The singular values are related to the eigenvalues of $A^{T}A$ (or $AA^{T}$), not directly to the eigenvalues of $A$ itself. Thus, SVD does not directly provide the eigenvalues of $A$ unless $A$ is also diagonalizable in the usual sense.
+The singular values are related to the eigenvalues of $A^{T}A$ (or $AA^{T}$), not directly to the eigenvalues of $A$ itself. Thus, SVD does not directly provide the eigenvalues of $A$, except when $A$ is normal (e.g., symmetric), in which case the singular values are the absolute values of the eigenvalues.

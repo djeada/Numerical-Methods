@@ -9,6 +9,14 @@ def power_method(
     max_iterations: int = 1000,
     x0: Optional[np.ndarray] = None,
 ) -> Tuple[float, np.ndarray]:
+    """
+    Power method: estimate the eigenvalue of largest magnitude of a real
+    matrix A and a unit eigenvector. Convergence is linear with rate
+    |lambda_2| / |lambda_1| and requires a unique dominant eigenvalue and a
+    starting vector with a component along its eigenvector. Raises ValueError
+    for a zero iterate or if `max_iterations` is exhausted (which is also what
+    happens for complex dominant eigenvalues, where the estimate oscillates).
+    """
     if A.shape[0] != A.shape[1]:
         raise ValueError("Matrix must be square.")
     n = A.shape[0]
@@ -28,15 +36,14 @@ def power_method(
         if np.dot(x_old, x_new) < 0:
             x_new = -x_new
         eigenvalue_new = np.dot(A @ x_old, x_new)
-        if np.abs(eigenvalue_new - eigenvalue) < tol:
-            if not np.isclose(
-                eigenvalue_new.imag if np.iscomplex(eigenvalue_new) else 0, 0, atol=tol
-            ):
-                raise ValueError("Matrix has complex eigenvalues.")
-            eigenvalue_new = eigenvalue_new.real
-            x_new = x_new.real
+        # The eigenvalue estimate settling is not enough on its own (for a
+        # rotation it is stuck at 0), so also require a small residual.
+        residual = np.linalg.norm(A @ x_new - eigenvalue_new * x_new)
+        if np.abs(eigenvalue_new - eigenvalue) < tol and residual <= np.sqrt(
+            tol
+        ) * np.linalg.norm(A, 2):
             x_new[np.abs(x_new) < 1e-10] = 0.0
-            return eigenvalue_new, x_new
+            return float(eigenvalue_new), x_new
         eigenvalue = eigenvalue_new
         x = x_new
     raise ValueError(

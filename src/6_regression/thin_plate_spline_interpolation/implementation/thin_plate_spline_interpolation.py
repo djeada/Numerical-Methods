@@ -26,19 +26,24 @@ def thin_plate_spline_interpolation(
 
     Parameters
     ----------
-    x_data, y_data : 1-D arrays of spatial coordinates (must not be collinear)
+    x_data, y_data : 1-D arrays of spatial coordinates, one entry per data
+        point (a flattened grid is passed as flattened coordinate arrays of
+        the same length as z_data; there is no implicit meshgrid mode).
+        The points must be distinct and must not all lie on one line.
     z_data : 1-D array of function values
     point  : (x, y) tuple at which to evaluate the interpolant
 
     Returns
     -------
     Interpolated value at *point*.
+
+    Raises
+    ------
+    ValueError
+        If the array lengths differ, fewer than three points are given,
+        points are duplicated, or all points are collinear (the affine part
+        of the surface is then undetermined and the system is singular).
     """
-    if z_data.size == x_data.size * y_data.size and z_data.size > x_data.size:
-        X, Y = np.meshgrid(x_data, y_data)
-        x_data = X.ravel()
-        y_data = Y.ravel()
-        z_data = z_data.ravel()
     if x_data.shape[0] != y_data.shape[0] or x_data.shape[0] != z_data.shape[0]:
         raise ValueError("X, Y, and Z vectors must have equal number of elements.")
     if x_data.shape[0] < 3:
@@ -53,6 +58,16 @@ def thin_plate_spline_interpolation(
     z_data = z_data.astype(float)
 
     N = x_data.shape[0]
+
+    # Collinear sites make [K P; P^T 0] singular. The rank of the centred
+    # coordinates is scale-relative (SVD tolerance based on the largest
+    # singular value), so it does not depend on the units of x and y.
+    centred = np.column_stack((x_data - x_data.mean(), y_data - y_data.mean()))
+    if np.linalg.matrix_rank(centred) < 2:
+        raise ValueError(
+            "Data points are collinear; thin plate spline interpolation "
+            "requires points that do not all lie on one line."
+        )
 
     # Kernel matrix K_{ij} = φ(‖pᵢ − pⱼ‖)
     K = np.zeros((N, N))
@@ -69,7 +84,12 @@ def thin_plate_spline_interpolation(
     system = np.vstack((np.hstack((K, P)), np.hstack((P.T, np.zeros((3, 3))))))
     b = np.hstack((z_data, np.zeros(3)))
 
-    coefficients = np.linalg.solve(system, b)
+    try:
+        coefficients = np.linalg.solve(system, b)
+    except np.linalg.LinAlgError as exc:
+        raise ValueError(
+            "Thin plate spline system is singular for the given data."
+        ) from exc
     w = coefficients[:N]
     a = coefficients[N:]
 

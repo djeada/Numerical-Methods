@@ -70,7 +70,7 @@ In an iterative scheme, at iteration $k+1$, you use the old values $x_j^{(k)}$ o
 
 $$x_i^{(k+1)} = \frac{b_i - \sum_{j \ne i} a_{ij} x_j^{(k)}}{a_{ii}}.$$
 
-This process defines the Jacobi iteration. The method converges if the spectral radius of the iteration matrix $D^{-1}(L+U)$ is less than one, which is guaranteed if $A$ is strictly diagonally dominant or meets certain sufficient conditions (e.g., symmetric positive definite under some constraints).
+This process defines the Jacobi iteration. The method converges for every initial guess if and only if the spectral radius of the iteration matrix $T_J = -D^{-1}(L+U)$ is less than one, $\rho(T_J) < 1$ (necessary and sufficient). Checking this directly requires eigenvalues, so in practice one uses sufficient conditions, the most common being that $A$ is strictly diagonally dominant (by rows, $|a_{ii}| > \sum_{j\neq i}|a_{ij}|$, or by columns), which implies $\rho(T_J)<1$. Being symmetric positive definite is **not** sufficient for Jacobi: an SPD matrix can have $\rho(T_J) \geq 1$ (for example, $3\times 3$ with $1$ on the diagonal and $0.9$ off the diagonal has $\rho(T_J)=1.8$), in which case the iteration diverges. (Gauss-Seidel, in contrast, converges for every SPD matrix.)
 
 ### Algorithm Steps
 
@@ -89,7 +89,7 @@ $$
 
 III. **Convergence Check**:
 
-After computing $\mathbf{x}^{(k+1)}$, check if $\|\mathbf{x}^{(k+1)} - \mathbf{x}^{(k)}\|$ (or $\|A\mathbf{x}^{(k+1)}-\mathbf{b}\|$) is less than a given tolerance $\varepsilon$. If yes, stop; otherwise, continue iterating.
+After computing $\mathbf{x}^{(k+1)}$, check if $\|\mathbf{x}^{(k+1)} - \mathbf{x}^{(k)}\|$ (or $\|A\mathbf{x}^{(k+1)}-\mathbf{b}\|$) is less than a given tolerance $\varepsilon$. If yes, stop; otherwise, continue iterating. The implementation uses the first criterion with the infinity norm, and raises an error if the iteration cap (`max_iterations`) is reached first.
 
 ### Example
 
@@ -140,16 +140,16 @@ x^{(3)} = \frac{5 + 1.5}{2} = \frac{6.5}{2} = 3.25, \quad
 y^{(3)} = \frac{7 - 3.66665}{3} = \frac{3.33335}{3} = 1.1111167.
 $$
 
-Continue iterating until $|x^{(k+1)} - x^{(k)}|$ and $|y^{(k+1)} - y^{(k)}|$ are below a desired tolerance (e.g., $10^{-4}$). Over many iterations, the values will approach the true solution (which, by direct solving, is $x=3, y= \frac{4}{3} \approx 1.3333$). The Jacobi iterations gradually "home in" on this solution.
+Continue iterating until $|x^{(k+1)} - x^{(k)}|$ and $|y^{(k+1)} - y^{(k)}|$ are below a desired tolerance (e.g., $10^{-4}$). Over many iterations, the values will approach the true solution (which, by direct solving, is $x=\frac{22}{7} \approx 3.1429, y= \frac{9}{7} \approx 1.2857$). The Jacobi iterations gradually "home in" on this solution.
 
 ### Advantages
 
 - The **simplicity of implementation** is a key advantage of the Jacobi method, as each new approximation depends solely on values from the previous iteration, making the algorithm straightforward to code and understand.
 - The Jacobi method supports **parallelization** effectively because each component $x_i^{(k+1)}$ depends only on values $x_j^{(k)}$ from the previous iteration. This allows computations for all $i$ to be performed simultaneously, leveraging modern parallel computing hardware such as multi-core CPUs or GPUs.
-- The method offers **wide applicability** as it can be used for any system where the diagonal elements of $A$ are nonzero. While convergence is guaranteed under diagonal dominance, additional techniques such as relaxation can expand its usability.
+- The method is **easy to apply** to any system whose diagonal elements are nonzero (a zero diagonal entry makes the update undefined). Nonzero diagonal only makes the iteration *defined*, not convergent: convergence is guaranteed under strict diagonal dominance (or, more generally, whenever $\rho(D^{-1}(L+U)) < 1$), and techniques such as relaxation can expand its usability.
 
 ### Limitations
 
-- **Diagonal dominance or specific convergence conditions** are necessary for the Jacobi method to work effectively. Without these, the method may fail to converge, oscillate, or converge at an impractically slow rate.
+- **Convergence is conditional**: it requires $\rho(D^{-1}(L+U)) < 1$, which strict diagonal dominance is sufficient (but not necessary) for. Symmetric positive definiteness is not enough. Without such a condition, the method may diverge, oscillate, or converge at an impractically slow rate.
 - The Jacobi method suffers from **slow convergence** compared to more advanced iterative methods like Gauss-Seidel or conjugate gradient methods. Its relative inefficiency often makes it less attractive for practical applications unless used as part of a preconditioning strategy.
 - The method exhibits **sensitivity to the initial guess**. Although a poor initial guess does not affect the correctness of the final solution if convergence occurs, it can significantly increase the number of iterations needed or result in stagnation near suboptimal values.

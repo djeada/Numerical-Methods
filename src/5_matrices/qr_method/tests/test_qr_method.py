@@ -116,3 +116,57 @@ def test_qr_algorithm_with_shifts_non_square():
     A = np.random.rand(4, 5)
     with pytest.raises(ValueError):
         qr_algorithm_with_shifts(A)
+
+
+@pytest.mark.parametrize("method", [qr_algorithm, qr_algorithm_with_shifts])
+def test_qr_algorithm_complex_pair_not_at_top(method):
+    # Real eigenvalue 3 dominates, so the complex pair ends up in the trailing 2x2 block
+    A = np.array([[3, 0, 0], [0, 0, -1], [0, 1, 0]], dtype=float)
+    eigenvalues = method(A)
+    expected = np.linalg.eigvals(A)
+    assert np.allclose(np.sort_complex(eigenvalues), np.sort_complex(expected))
+
+
+@pytest.mark.parametrize("method", [qr_algorithm, qr_algorithm_with_shifts])
+def test_qr_algorithm_two_complex_pairs(method):
+    A = np.array(
+        [[0, -1, 0, 0], [1, 0, 0, 0], [0, 0, 0, -2], [0, 0, 2, 0]], dtype=float
+    )
+    eigenvalues = method(A)
+    expected = np.linalg.eigvals(A)
+    assert np.allclose(np.sort_complex(eigenvalues), np.sort_complex(expected))
+
+
+def test_qr_algorithm_with_shifts_wilkinson_shift_choice():
+    # Triangular blocks with eigenvalues 1.1 and 2.9: the shift is the one
+    # closest to the corner entry, not the one of larger magnitude.
+    from ..implementation.qr_method import _wilkinson_shift
+
+    block = np.array([[2.9, 0.1], [0.0, 1.1]])
+    assert np.isclose(_wilkinson_shift(block), 1.1)
+    block = np.array([[1.1, 0.1], [0.0, 2.9]])
+    assert np.isclose(_wilkinson_shift(block), 2.9)
+    # complex pair: no real Wilkinson shift
+    assert _wilkinson_shift(np.array([[0.0, -1.0], [1.0, 0.0]])) is None
+
+
+@pytest.mark.parametrize("seed", range(25))
+def test_qr_algorithm_with_shifts_random_nonsymmetric(seed):
+    rng = np.random.default_rng(seed)
+    n = int(rng.integers(6, 13))
+    A = rng.standard_normal((n, n))
+    eigenvalues = qr_algorithm_with_shifts(A)
+    expected = np.linalg.eigvals(A)
+    assert np.allclose(
+        np.sort_complex(eigenvalues), np.sort_complex(expected), atol=1e-6
+    )
+
+
+@pytest.mark.parametrize("seed", range(10))
+def test_qr_algorithm_with_shifts_random_symmetric(seed):
+    rng = np.random.default_rng(100 + seed)
+    n = int(rng.integers(6, 13))
+    B = rng.standard_normal((n, n))
+    A = B + B.T
+    eigenvalues = qr_algorithm_with_shifts(A)
+    assert np.allclose(eigenvalues, np.linalg.eigvalsh(A), atol=1e-6)

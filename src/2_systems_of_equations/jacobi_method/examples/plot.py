@@ -1,47 +1,36 @@
-import numpy as np
+import os
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
+
+# Make the sibling `implementation` package importable when run as a script.
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
+from implementation.jacobi_method import jacobi_method  # noqa: E402
 
 
-def jacobi_method(A, b, x0=None, max_iterations=100, tol=1e-8):
+def jacobi_error_history(A, b, x0=None, max_iterations=100, tol=1e-8):
     """
-    Solve the linear system Ax = b using the Jacobi iterative method.
+    Record ||x_new - x||_inf at every Jacobi iteration.
 
-    Parameters:
-        A (numpy.ndarray): Coefficient matrix (n x n).
-        b (numpy.ndarray): Right-hand side vector (n,).
-        x0 (numpy.ndarray): Initial guess for the solution (n,).
-        max_iterations (int): Maximum number of iterations.
-        tol (float): Convergence tolerance.
-
-    Returns:
-        x (numpy.ndarray): Approximate solution vector.
-        errors (list): List of errors at each iteration.
+    The implementation only returns the final solution, so the history needed
+    for the convergence plot is recomputed here (same update and stopping rule).
     """
     n = len(b)
-    if x0 is None:
-        x = np.zeros_like(b, dtype=float)
-    else:
-        x = x0.copy()
-
+    x = np.zeros(n) if x0 is None else x0.astype(float)
     errors = []
-
-    for k in range(max_iterations):
+    for _ in range(max_iterations):
         x_new = np.zeros_like(x)
-
         for i in range(n):
             sum1 = np.dot(A[i, :i], x[:i])
             sum2 = np.dot(A[i, i + 1 :], x[i + 1 :])
             x_new[i] = (b[i] - sum1 - sum2) / A[i, i]
-
         error = np.linalg.norm(x_new - x, ord=np.inf)
         errors.append(error)
-        x = x_new.copy()
-
+        x = x_new
         if error < tol:
-            print(f"Converged after {k + 1} iterations.")
             break
-
-    return x, errors
+    return errors
 
 
 if __name__ == "__main__":
@@ -50,7 +39,8 @@ if __name__ == "__main__":
     b = np.array([6, 20], dtype=float)
     x0 = np.array([0, 0], dtype=float)
 
-    x, errors = jacobi_method(A, b, x0)
+    x = jacobi_method(A, b, x0)
+    errors = jacobi_error_history(A, b, x0)
     x_exact = np.linalg.solve(A, b)
     print(f"Jacobi solution: {x}")
     print(f"Exact solution:  {x_exact}")

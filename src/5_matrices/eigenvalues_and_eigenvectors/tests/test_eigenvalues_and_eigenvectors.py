@@ -109,7 +109,6 @@ def test_eigen_decomposition_complex_eigenvalues():
         )
 
 
-@pytest.mark.skip()
 def test_eigen_decomposition_repeated_eigenvalues():
     A = np.array([[3, 0, 0], [0, 3, 0], [0, 0, 3]], dtype=float)
     eigenvalues = find_eigenvalues(A)
@@ -180,3 +179,52 @@ def test_eigenvectors_verify_equation():
             Av = A @ v
             lv = lam * v
             assert np.allclose(Av, lv, atol=0.5)
+
+
+def test_eigenvectors_defective_matrix_free_variable_not_last():
+    # A - 0*I = [[0, 1], [0, 0]] has no pivot in column 0, so the free variable
+    # is the first one and the only eigenvector is [1, 0].
+    A = np.array([[0, 1], [0, 0]], dtype=float)
+    eigenvectors = find_eigenvectors(A)
+    for i in range(2):
+        assert np.allclose(A @ eigenvectors[:, i], 0)
+        assert np.isclose(np.linalg.norm(eigenvectors[:, i]), 1.0)
+
+
+def test_eigenvectors_rank_one_nilpotent_3x3():
+    A = np.array([[0, 0, 1], [0, 0, 0], [0, 0, 0]], dtype=float)
+    eigenvalues = find_eigenvalues(A)
+    eigenvectors = find_eigenvectors(A)
+    for i in range(3):
+        assert np.allclose(A @ eigenvectors[:, i], eigenvalues[i] * eigenvectors[:, i])
+
+
+def test_eigenvectors_repeated_eigenvalue_full_basis():
+    # Eigenvalue 2 has multiplicity 2 and two independent eigenvectors; the
+    # eigenvector basis must be complete (P invertible), not a repeated vector.
+    A = np.array([[2, 0, 0], [0, 2, 1], [0, 0, 5]], dtype=float)
+    eigenvalues = find_eigenvalues(A)
+    P = find_eigenvectors(A)
+    assert np.linalg.matrix_rank(P) == 3
+    for i in range(3):
+        assert np.allclose(A @ P[:, i], eigenvalues[i] * P[:, i], atol=1e-6)
+        assert np.isclose(np.linalg.norm(P[:, i]), 1.0)
+
+
+def test_eigenvectors_repeated_eigenvalue_rotated_symmetric():
+    rng = np.random.default_rng(3)
+    Q, _ = np.linalg.qr(rng.standard_normal((4, 4)))
+    A = Q @ np.diag([1.0, 1.0, 1.0, 7.0]) @ Q.T
+    eigenvalues = find_eigenvalues(A)
+    P = find_eigenvectors(A)
+    assert np.linalg.matrix_rank(P, tol=1e-6) == 4
+    assert np.allclose(P @ np.diag(eigenvalues) @ np.linalg.inv(P), A, atol=1e-5)
+
+
+def test_eigenvectors_defective_repeated_eigenvalue():
+    # Jordan block: one eigenvector only, so the basis cannot be completed.
+    A = np.array([[3, 1], [0, 3]], dtype=float)
+    P = find_eigenvectors(A)
+    for i in range(2):
+        assert np.allclose(A @ P[:, i], 3 * P[:, i], atol=1e-6)
+    assert np.linalg.matrix_rank(P, tol=1e-6) == 1

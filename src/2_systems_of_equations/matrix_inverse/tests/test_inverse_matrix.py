@@ -99,3 +99,21 @@ def test_solve_inverse_matrix_diagonal():
     x = solve_inverse_matrix(A, b)
     expected = np.array([3.0, 3.0, 3.0])
     assert np.allclose(x, expected)
+
+
+def test_inverse_matrix_nearly_singular_float_rounding():
+    # Rank 2, but elimination leaves a rounding-level pivot instead of exact 0.
+    A = 0.1 * np.arange(1, 10, dtype=float).reshape(3, 3)
+    with pytest.raises(ValueError):
+        inverse_matrix(A)
+
+
+def test_inverse_matrix_small_scale_not_singular():
+    A = 1e-10 * np.eye(2)
+    assert np.allclose(inverse_matrix(A), 1e10 * np.eye(2))
+
+
+def test_inverse_matrix_non_square():
+    A = np.array([[1, 2, 3], [4, 5, 6]], dtype=float)
+    with pytest.raises(ValueError):
+        inverse_matrix(A)

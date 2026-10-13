@@ -308,3 +308,7 @@ $$
 plus an affine polynomial and side constraints.
 
 TPS interpolation is especially associated with smooth surface deformation and scattered spatial interpolation.
+
+### Code in this repository
+
+`src/6_regression/thin_plate_spline_interpolation` takes one coordinate pair and one value per data point. It raises `ValueError` for fewer than three points, duplicate sites, or collinear sites (the affine part is then not determined and the block system is singular).

@@ -60,11 +60,12 @@ if __name__ == "__main__":
     # Define the function and its derivatives
     f = lambda x: np.exp(x)
     df = [
+        lambda x: np.exp(x),  # f(x)
         lambda x: np.exp(x),  # f'(x)
         lambda x: np.exp(x),  # f''(x)
         lambda x: np.exp(x),  # f'''(x)
-        lambda x: np.exp(x),
-    ]  # Higher derivatives (all the same for exp)
+        lambda x: np.exp(x),  # f''''(x)
+    ]  # One entry per term (all derivatives of exp are exp)
 
     a = 0  # Point of expansion
     x_range = np.linspace(-2, 2, 400)  # Range of x values

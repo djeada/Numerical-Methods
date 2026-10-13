@@ -83,6 +83,7 @@ In essence, the choice of $g(x)$ greatly influences the convergence behavior. A 
 
 - A function $f(x)$ and a corresponding $g(x)$ such that $f(x)=0$ is equivalent to $x=g(x)$.
 - An initial guess $x_0$.
+- Optionally a relaxation factor $\omega$ (see below); if it is not given, it is chosen adaptively at every step.
 - A tolerance $\epsilon >0$ or a maximum number of iterations $n_{\max}$.
 
 **Initialization:**
@@ -91,21 +92,40 @@ Set iteration counter $n=0$.
 
 **Iteration:**
 
-I. Compute the next approximation:
+I. Compute the next approximation (with $\omega = 1$ this is the plain iteration; the general relaxed step is given in the next section):
 
-$$x_{n+1} = g(x_n)$$
+$$x_{n+1} = (1-\omega)\,x_n + \omega\, g(x_n)$$
 
 II. Check convergence:
 
-- If $|x_{n+1}-x_n|< \epsilon$ or $|f(x_{n+1})|< \epsilon$, stop.
-- If $n>n_{\max}$, stop.
+- If $|x_{n+1}-x_n|< \epsilon$, stop and return $x_{n+1}$. (The residual $|g(x_{n+1}) - x_{n+1}|$ is not tested separately.)
+- If $n_{\max}$ iterations have been performed without meeting this test, stop with an error (non-convergence).
 
 III. Otherwise, set $n = n+1$ and repeat from step I.
 
 **Output:**
 
-- Approximate root: $x_{n+1}$.
+- Approximate root: $x_{n+1}$ (an error is raised instead if the iteration did not converge).
 - Number of iterations performed.
+
+### Relaxation Factor
+
+The implementation does not iterate $x_{n+1}=g(x_n)$ directly but a *relaxed* step with a factor $\omega$:
+
+$$x_{n+1} = (1-\omega)\,x_n + \omega\, g(x_n).$$
+
+Every fixed point of $g$ is a fixed point of this map for any $\omega \neq 0$, and the derivative of the relaxed map at $\alpha$ is
+
+$$1 - \omega\,(1 - g'(\alpha)).$$
+
+So $\omega$ can turn a diverging iteration ($|g'(\alpha)| \geq 1$) into a converging one, by making this derivative small in absolute value.
+
+- **User-supplied $\omega$:** if a value is passed it is used unchanged at every step.
+- **Adaptive $\omega$ (default):** at each iterate $x_n$ the slope $g'(x_n)$ is estimated with a central difference ($h = 10^{-8}$) and
+
+$$\omega_n = \begin{cases} -\dfrac{1}{g'(x_n)}, & |g'(x_n)| \geq 1,\\[2mm] 1, & |g'(x_n)| < 1. \end{cases}$$
+
+Where the plain iteration already contracts ($|g'|<1$) nothing is changed. Where it would not, $\omega_n=-1/g'(x_n)$ gives a relaxed-map derivative $1/g'(x_n)$, of absolute value at most $1$ (strictly less than $1$ when $|g'(x_n)|>1$). This is a heuristic: it uses only local slope information, and for $|g'|=1$ (for example $g(x)=1-x$) the step is the plain one and the iteration need not converge.
 
 ### Example
 

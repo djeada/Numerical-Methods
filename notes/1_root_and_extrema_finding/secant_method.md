@@ -74,8 +74,9 @@ $$x_{n+1} = x_n - f(x_n) \frac{x_n - x_{n-1}}{f(x_n)-f(x_{n-1})}$$
 
 III. Check for convergence:
 
-- If $|x_{n+1}-x_n|< \epsilon$ or $|f(x_{n+1})|< \epsilon$, stop.
-- If $n > n_{\max}$, stop.
+- If $|x_{n+1}-x_n|< \epsilon$, stop and return $x_{n+1}$. (The residual $|f(x_{n+1})|$ is not tested.)
+- If $n_{\max}$ iterations have been performed without meeting this test, stop with an error (non-convergence).
+- If $f(x_n) = f(x_{n-1})$ exactly, the update is undefined (division by zero) and the method stops with an error.
 
 IV. Update indices: $n = n+1$ and repeat step I.
 
@@ -104,15 +105,6 @@ Update:
 $$
 x_2 = x_1 - f(x_1) \frac{x_1 - x_0}{f(x_1)-f(x_0)} = 1 - (-3)
 \frac{1-0}{(-3)-(-4)} = 1 - (-3) \frac{1}{-3+4} = 1 - (-3 \times 1) = 1 + 3 = 4.
-$$
-
-Check carefully:
-
-Actually, let's compute step-by-step to avoid confusion:
-
-$$
-x_2 = 1 - (-3) \frac{1-0}{-3-(-4)} = 1 - (-3) \frac{1}{-3+4} = 1 - (-3)
-\frac{1}{1} = 1 + 3 = 4.
 $$
 
 **Iteration 2:**
@@ -145,15 +137,13 @@ $$
 
 $$= 1.6 - (-1.44) \frac{-2.4}{-13.44}$$
 
-$$= 1.6 - (-1.44) \frac{-2.4}{-13.44}$$
-
 Compute inside:
 
-$$\frac{-2.4}{-13.44} = 0.1786 \text{(approx)}, \quad (-1.44)\times0.1786 = -0.2572$$
+$$\frac{-2.4}{-13.44} = 0.1786 \text{(approx)}, \quad (-1.44)\times0.1786 = -0.2571$$
 
 So:
 
-$$x_4 = 1.6 - (-0.2572) = 1.6 + 0.2572 = 1.8572$$
+$$x_4 = 1.6 - (-0.2571) = 1.6 + 0.2571 = 1.8571$$
 
 Repeating further will bring the sequence closer to $x=2$.
 

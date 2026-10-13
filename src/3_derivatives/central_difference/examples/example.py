@@ -1,9 +1,15 @@
 """
 Calculate the derivative of f(x) = cos(x) at PI/3.
 """
+
+import os
+import sys
+
 import numpy as np
 import matplotlib.pyplot as plt
-from central_difference import central_difference
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+from implementation.central_difference import central_difference
 
 
 def function(x):

@@ -102,8 +102,9 @@ t = t0
 u = u0
 
 while t < tf:
-    u = u + h*f(t, u)
-    t = t + h
+    h_n = min(h, tf - t)    # shorten the last step to land on tf
+    u = u + h_n*f(t, u)
+    t = t + h_n
 ```
 
 For a system
@@ -117,6 +118,10 @@ the same formula applies componentwise:
 $$
 \mathbf{u}_{n+1} = \mathbf{u}_n + h\mathbf{f}(t_n,\mathbf{u}_n).
 $$
+
+### Repository Implementation
+
+`euler_method` takes a final time `t_end` and a nominal step `h`. When `(t_end - t0)/h` is not an integer, the last step is shortened so that the returned grid ends exactly at `t_end`; all earlier steps have length `h`. The returned array has shape `(n + 1,)` for a scalar ODE (one component) and `(n + 1, d)` for a system with `d` components.
 
 ### Step Size and Stability
 

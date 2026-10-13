@@ -12,12 +12,12 @@ def eigen_decomposition_visualize(A):
     """
     # Compute eigenvalues and eigenvectors
     eigenvalues, eigenvectors = eig(A)
-    D = np.diag(eigenvalues)  # Diagonal matrix D
+    D = np.real_if_close(np.diag(eigenvalues))  # Diagonal matrix D
     P = eigenvectors  # Matrix P with eigenvectors as columns
     P_inv = inv(P)  # Inverse of P
 
     # Verify decomposition A = P D P^{-1}
-    A_reconstructed = P @ D @ P_inv
+    A_reconstructed = np.real_if_close(P @ D @ P_inv)
 
     # Print results
     print("Original Matrix A:")

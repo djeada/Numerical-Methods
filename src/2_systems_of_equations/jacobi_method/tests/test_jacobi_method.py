@@ -28,6 +28,20 @@ def test_jacobi_symmetric_positive_definite():
     assert np.allclose(x, expected, atol=1e-8)
 
 
+def test_jacobi_spd_but_not_guaranteed_to_converge():
+    # SPD (eigenvalues 2.8, 0.1, 0.1) but not diagonally dominant: the Jacobi
+    # iteration matrix has spectral radius 1.8 > 1, so Jacobi diverges even
+    # though the system is perfectly solvable. SPD alone is not sufficient.
+    A = np.full((3, 3), 0.9) + 0.1 * np.eye(3)
+    assert np.all(np.linalg.eigvalsh(A) > 0)
+    D = np.diag(np.diag(A))
+    rho = max(abs(np.linalg.eigvals(np.eye(3) - np.linalg.solve(D, A))))
+    assert rho > 1
+    b = np.array([1.0, 2.0, 3.0])
+    with pytest.raises(ValueError, match="did not converge"):
+        jacobi_method(A, b, max_iterations=500)
+
+
 def test_jacobi_non_diagonally_dominant():
     A = np.array([[1, 2], [3, 4]], dtype=float)
     b = np.array([5, 11], dtype=float)

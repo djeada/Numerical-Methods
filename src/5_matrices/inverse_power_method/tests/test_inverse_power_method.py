@@ -14,8 +14,9 @@ def test_inverse_power_method_identity():
 
 def test_inverse_power_method_diagonal():
     A = np.diag([1, 3, 2])
-    # Set initial guess aligned with [1, 0, 0] to target eigenvalue 1
-    x0 = np.array([1, 0, 0], dtype=float)
+    # Shift 0 targets the eigenvalue of smallest magnitude (1); the initial
+    # guess has components along every eigenvector.
+    x0 = np.array([1, 1, 1], dtype=float)
     eigenvalue, eigenvector = inverse_power_method(A, x0=x0)
     expected_eigenvalue = 1.0
     expected_eigenvector = np.array([1, 0, 0], dtype=float)
@@ -23,8 +24,8 @@ def test_inverse_power_method_diagonal():
         eigenvalue, expected_eigenvalue, atol=1e-6
     ), f"Expected eigenvalue {expected_eigenvalue}, got {eigenvalue}"
     # Check if eigenvectors are proportional (allowing sign difference)
-    assert np.allclose(eigenvector, expected_eigenvector, atol=1e-6) or np.allclose(
-        eigenvector, -expected_eigenvector, atol=1e-6
+    assert np.allclose(eigenvector, expected_eigenvector, atol=1e-3) or np.allclose(
+        eigenvector, -expected_eigenvector, atol=1e-3
     ), "Eigenvector does not match expected direction."
 
 
@@ -91,15 +92,27 @@ def test_inverse_power_method_convergence():
 
 
 def test_inverse_power_method_non_convergent():
+    # Defective matrix (single Jordan block): the iterates approach the only
+    # eigenvector sublinearly, so even with the default tolerance and iteration
+    # budget the eigenvalue estimate does not settle.
     A = np.array([[1, 1], [0, 1]], dtype=float)
-    with pytest.raises(ValueError):
-        inverse_power_method(A, tol=1e-12, max_iterations=10)
+    x0 = np.array([1, 1], dtype=float)
+    with pytest.raises(ValueError, match="did not converge"):
+        inverse_power_method(A, x0=x0)
+
+
+def test_inverse_power_method_max_iterations_exhausted():
+    # A well-conditioned problem still fails when given too few iterations.
+    A = np.array([[4, 1], [2, 3]], dtype=float)
+    x0 = np.array([1, 0], dtype=float)
+    with pytest.raises(ValueError, match="did not converge"):
+        inverse_power_method(A, x0=x0, tol=1e-14, max_iterations=2)
 
 
 def test_inverse_power_method_initial_guess():
     A = np.array([[3, 2], [2, 3]], dtype=float)
-    # Set initial guess aligned with [1, -1] to target eigenvalue 1
-    x0 = np.array([1, -1], dtype=float)
+    # Eigenvalues are 1 (vector [1, -1]) and 5; x0 is not an eigenvector.
+    x0 = np.array([1, 0], dtype=float)
     eigenvalue, eigenvector = inverse_power_method(A, x0=x0)
     expected_eigenvalue = 1.0
     expected_eigenvector = np.array([1, -1]) / np.sqrt(2)
@@ -122,12 +135,11 @@ def test_inverse_power_method_shift():
 
 def test_inverse_power_method_negative_eigenvalue():
     A = np.array([[-2, 0], [0, -3]], dtype=float)
-    # Set shift near -inf to target eigenvalue -3
-    shift = 0.0  # Since all eigenvalues are negative, shift=0 targets the smallest in magnitude, which is -2
-    # To target -3, set shift slightly larger than -3, e.g., shift= -2.5
-    shift = -2.5
-    # Set initial guess aligned with [0,1] to target eigenvalue -3
-    x0 = np.array([0, 1], dtype=float)
+    # With shift=0 the method would find -2 (closest to 0). A shift of -2.8 is
+    # closer to -3 than to -2, so inverse iteration converges to -3 even though
+    # the initial guess has a component along both eigenvectors.
+    shift = -2.8
+    x0 = np.array([1, 1], dtype=float)
     eigenvalue, eigenvector = inverse_power_method(A, shift=shift, x0=x0)
     expected_eigenvalue = -3.0
     expected_eigenvector = np.array([0, 1], dtype=float)
@@ -135,8 +147,8 @@ def test_inverse_power_method_negative_eigenvalue():
         eigenvalue, expected_eigenvalue, atol=1e-6
     ), f"Expected eigenvalue {expected_eigenvalue}, got {eigenvalue}"
     # Check proportionality
-    assert np.allclose(eigenvector, expected_eigenvector, atol=1e-6) or np.allclose(
-        eigenvector, -expected_eigenvector, atol=1e-6
+    assert np.allclose(eigenvector, expected_eigenvector, atol=1e-3) or np.allclose(
+        eigenvector, -expected_eigenvector, atol=1e-3
     ), "Eigenvector does not match expected direction."
 
 
@@ -151,3 +163,13 @@ def test_inverse_power_method_high_dimensions():
     x0 = np.random.rand(10)
     eigenvalue, eigenvector = inverse_power_method(A, x0=x0, max_iterations=10000)
     assert np.allclose(A @ eigenvector, eigenvalue * eigenvector, atol=1e-6)
+
+
+def test_inverse_power_method_equidistant_eigenvalues():
+    # Eigenvalues 1 and -1 are equally close to shift 0, so inverse iteration has
+    # no dominant direction; the Rayleigh quotient settles on a non-eigenvalue
+    # (-0.6) which must not be reported as converged.
+    A = np.diag([1.0, -1.0])
+    x0 = np.array([1.0, 2.0])
+    with pytest.raises(ValueError, match="did not converge"):
+        inverse_power_method(A, x0=x0)

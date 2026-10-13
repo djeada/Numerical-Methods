@@ -62,7 +62,18 @@ A correct LP solver must distinguish:
 - **unbounded**: feasible points can improve the objective without limit;
 - **infeasible**: no point satisfies all constraints.
 
-The educational simplex implementation in this repository assumes a simple initial slack basis and is not a full Phase-I/Phase-II production solver. In particular, general infeasible starts require additional machinery.
+The repository's `linear_programming` implements the **two-phase simplex method** for
+
+$$
+\min c^\top x\quad\text{s.t.}\quad A_{\text{ub}}x\le b_{\text{ub}},\; A_{\text{eq}}x=b_{\text{eq}},\; x\ge0.
+$$
+
+A constraint $a^\top x\ge\beta$ is passed as $-a^\top x\le-\beta$.
+
+- **Phase I.** Rows whose slack variable cannot start in the basis (negative right-hand side after adding slacks, or equalities) get an artificial variable $t_i\ge0$. Phase I minimizes $\sum_it_i$. If the optimum is positive, no feasible point exists and a `ValueError` ("infeasible") is raised. Otherwise the final basis is a basic feasible solution; artificial variables left in the basis at level zero are pivoted out, and rows that are linear combinations of others are dropped.
+- **Phase II.** The original objective is priced out against that basis and ordinary simplex pivots run. If an entering column has no positive entry, the problem is unbounded and a `ValueError` ("unbounded") is raised.
+
+Pivoting uses Dantzig's most-negative-reduced-cost rule and switches to Bland's smallest-index rule after a run of degenerate pivots to avoid cycling. Results agree with `scipy.optimize.linprog` on randomized test problems with mixed-sign right-hand sides. It remains a dense-tableau teaching solver, not a production code.
 
 ### Worked example
 

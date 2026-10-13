@@ -9,7 +9,7 @@ def test_least_squares_simple():
     b = np.array([4, 5, 6])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]
-    assert np.allclose(x, expected, atol=0.1)
+    assert np.allclose(x, expected, atol=1e-8)
 
 
 def test_least_squares_overdetermined():
@@ -17,7 +17,7 @@ def test_least_squares_overdetermined():
     b = np.array([2, 3, 4, 5])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]
-    assert np.allclose(x, expected, atol=0.1)
+    assert np.allclose(x, expected, atol=1e-8)
 
 
 def test_least_squares_exact_solution():
@@ -25,7 +25,7 @@ def test_least_squares_exact_solution():
     b = np.array([1, -1])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]
-    assert np.allclose(x, expected, atol=0.1)
+    assert np.allclose(x, expected, atol=1e-8)
 
 
 def test_least_squares_singular():
@@ -47,7 +47,7 @@ def test_least_squares_zero_vector():
     b = np.array([0, 0])
     x = least_squares(A, b)
     expected = np.array([0, 0])
-    assert np.allclose(x, expected, atol=0.1)
+    assert np.allclose(x, expected, atol=1e-8)
 
 
 def test_least_squares_large_matrix():
@@ -56,6 +56,9 @@ def test_least_squares_large_matrix():
     x_true = np.random.rand(10)
     b = A @ x_true + np.random.randn(100) * 0.01
     x_est = least_squares(A, b)
+    # Must be the exact least-squares solution ...
+    assert np.allclose(x_est, np.linalg.lstsq(A, b, rcond=None)[0], atol=1e-8)
+    # ... which, with noise sigma = 0.01, recovers the generating vector.
     assert np.allclose(x_est, x_true, atol=1e-2)
 
 
@@ -64,7 +67,7 @@ def test_least_squares_single_variable():
     b = np.array([2, 4, 6])
     x = least_squares(A, b)
     expected = np.array([2.0])
-    assert np.allclose(x, expected, atol=0.1)
+    assert np.allclose(x, expected, atol=1e-8)
 
 
 def test_least_squares_with_intercept_design_matrix():
@@ -81,7 +84,7 @@ def test_least_squares_negative_values():
     b = np.array([0, 0, 2])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]
-    assert np.allclose(x, expected, atol=0.1)
+    assert np.allclose(x, expected, atol=1e-8)
 
 
 def test_least_squares_fractional_solution():
@@ -89,7 +92,7 @@ def test_least_squares_fractional_solution():
     b = np.array([1.0, 2.0, 3.0])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]
-    assert np.allclose(x, expected, atol=0.1)
+    assert np.allclose(x, expected, atol=1e-8)
 
 
 def test_least_squares_high_precision():
@@ -110,9 +113,21 @@ def test_least_squares_inconsistent_system():
         least_squares(A, b)
 
 
-def test_least_squares_zero_rows():
+def test_least_squares_zero_rows_allowed():
+    # A zero row adds nothing to A^T A or A^T b, whatever the value of b_i.
     A = np.array([[1, 2], [0, 0], [3, 4]])
-    b = np.array([5, 0, 11])
+    for b_zero in (0.0, 7.0):
+        b = np.array([5, b_zero, 11])
+        x = least_squares(A, b)
+        expected = np.linalg.lstsq(A, b, rcond=None)[0]
+        assert np.allclose(x, expected, atol=1e-8)
+    assert np.allclose(x, [1.0, 2.0], atol=1e-8)
+
+
+def test_least_squares_zero_column_rejected():
+    # An all-zero column makes the matrix rank deficient.
+    A = np.array([[1, 0], [2, 0], [3, 0]])
+    b = np.array([1, 2, 3])
     with pytest.raises(ValueError):
         least_squares(A, b)
 
@@ -122,7 +137,7 @@ def test_least_squares_exact_match():
     b = np.array([3, 4])
     x = least_squares(A, b)
     expected = np.array([3, 4])
-    assert np.allclose(x, expected, atol=0.1)
+    assert np.allclose(x, expected, atol=1e-8)
 
 
 def test_least_squares_multiple_answers():
@@ -138,4 +153,4 @@ def test_least_squares_highly_correlated():
     b = np.array([2.0001, 4.0002, 6.0003])
     x = least_squares(A, b)
     expected = np.linalg.lstsq(A, b, rcond=None)[0]
-    assert np.allclose(x, expected, atol=0.1)
+    assert np.allclose(x, expected, atol=1e-8)

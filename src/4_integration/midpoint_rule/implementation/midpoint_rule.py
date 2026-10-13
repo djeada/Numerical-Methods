@@ -22,10 +22,15 @@ def midpoint_rule_multidim(
     grids = [np.linspace(a + h_i / 2, b - h_i / 2, n) for (a, b), h_i in zip(bounds, h)]
     mesh = np.meshgrid(*grids, indexing="ij")
     points = np.stack(mesh, axis=-1).reshape(-1, len(bounds))
+    # Try f on all points at once; accept only a scalar or one value per point.
+    # A per-point f (e.g. lambda x: x[0] + x[1]) would otherwise silently
+    # misinterpret the (N, dims) array, so fall back to row-by-row evaluation.
     try:
-        values = f(points)
-    except:
+        values = np.asarray(f(points), dtype=float)
+        if values.ndim == 0:
+            values = np.full(points.shape[0], float(values))
+        elif values.shape != (points.shape[0],):
+            raise ValueError("f is not vectorized")
+    except Exception:
         values = np.apply_along_axis(f, 1, points)
-    if np.isscalar(values):
-        values = np.full(points.shape[0], values, dtype=float)
     return np.prod(h) * np.sum(values)

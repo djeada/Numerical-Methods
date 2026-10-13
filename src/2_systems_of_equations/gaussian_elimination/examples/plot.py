@@ -1,54 +1,28 @@
-import numpy as np
+import os
+import sys
+
 import matplotlib.pyplot as plt
+import numpy as np
 
-
-def gaussian_elimination(A, b):
-    """
-    Solve the linear system Ax = b using Gaussian elimination with back substitution.
-
-    Parameters:
-        A (numpy.ndarray): Coefficient matrix (n x n).
-        b (numpy.ndarray): Right-hand side vector (n,).
-
-    Returns:
-        x (numpy.ndarray): Solution vector.
-    """
-    n = len(b)
-    # Augmented matrix
-    Ab = np.hstack([A, b.reshape(-1, 1)])
-
-    # Forward elimination
-    for i in range(n):
-        # Partial pivoting: Find the maximum element in the current column
-        max_row = np.argmax(np.abs(Ab[i:n, i])) + i
-        if i != max_row:
-            Ab[[i, max_row]] = Ab[[max_row, i]]
-
-        # Normalize pivot row
-        Ab[i] = Ab[i] / Ab[i, i]
-
-        # Eliminate below
-        for j in range(i + 1, n):
-            Ab[j] -= Ab[j, i] * Ab[i]
-
-    # Back substitution
-    x = np.zeros(n)
-    for i in range(n - 1, -1, -1):
-        x[i] = Ab[i, -1] - np.sum(Ab[i, i + 1 : n] * x[i + 1 : n])
-
-    return x
+# Make the sibling `implementation` package importable when run as a script.
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
+from implementation.gaussian_elimination import gaussian_elimination  # noqa: E402
 
 
 def plot_gaussian_elimination_process(A, b):
     """
     Visualize the step-by-step process of Gaussian elimination.
 
+    The implementation only returns the solution, so the forward elimination
+    is repeated here (same partial pivoting and pivot normalization) to record
+    the intermediate augmented matrices.
+
     Parameters:
         A (numpy.ndarray): Coefficient matrix.
         b (numpy.ndarray): Right-hand side vector.
     """
     n = len(b)
-    Ab = np.hstack([A, b.reshape(-1, 1)])
+    Ab = np.hstack([A.astype(float), b.reshape(-1, 1).astype(float)])
     steps = [Ab.copy()]
 
     # Forward elimination with visualization steps
@@ -80,6 +54,7 @@ if __name__ == "__main__":
     print("Solving system using Gaussian elimination:")
     solution = gaussian_elimination(A, b)
     print(f"Solution: {solution}")
+    print(f"Check (np.linalg.solve): {np.linalg.solve(A, b)}")
 
     # Visualize the elimination process
     plot_gaussian_elimination_process(A, b)

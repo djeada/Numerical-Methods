@@ -1,10 +1,10 @@
 ## Trapezoidal Rule
 
-The Trapezoidal Rule is a fundamental numerical integration technique employed to approximate definite integrals, especially when an exact antiderivative of the function is difficult or impossible to determine analytically. This method is widely used in various fields such as engineering, physics, and economics due to its simplicity and effectiveness. The core idea behind the Trapezoidal Rule is to estimate the area under a curve by dividing it into a series of trapezoids, rather than relying solely on simpler geometric shapes like rectangles. By approximating the region under the graph of a function with trapezoids, this method provides a better fit to the actual curve, thereby enhancing the accuracy of the integral approximation compared to basic methods like the Rectangle (Midpoint) Rule.
+The Trapezoidal Rule is a fundamental numerical integration technique employed to approximate definite integrals, especially when an exact antiderivative of the function is difficult or impossible to determine analytically. This method is widely used in various fields such as engineering, physics, and economics due to its simplicity and effectiveness. The core idea behind the Trapezoidal Rule is to estimate the area under a curve by dividing it into a series of trapezoids, rather than relying solely on simpler geometric shapes like rectangles. By approximating the region under the graph of a function with trapezoids, this method provides a better fit to the actual curve, thereby enhancing the accuracy of the integral approximation compared to basic methods like the left or right Rectangle Rule.
 
 ### Mathematical Formulation
 
-The mathematical foundation of the Trapezoidal Rule is based on the assumption that the region under the graph of a function $f(x)$ over a given interval $[a, b]$ can be approximated by a trapezoid. A trapezoid is a quadrilateral with at least one pair of parallel sides, which in this context are the lines connecting the points $(a, f(a))$ and $(b, f(b))$. The area of this trapezoid provides an estimate of the definite integral of the function over the interval $[a, b]$.
+The mathematical foundation of the Trapezoidal Rule is based on the assumption that the region under the graph of a function $f(x)$ over a given interval $[a, b]$ can be approximated by a trapezoid. A trapezoid is a quadrilateral with at least one pair of parallel sides, which in this context are the vertical segments at $x = a$ and $x = b$ of lengths $f(a)$ and $f(b)$, while the top side is the line connecting the points $(a, f(a))$ and $(b, f(b))$. The area of this trapezoid provides an estimate of the definite integral of the function over the interval $[a, b]$.
 
 The basic formula for the Trapezoidal Rule when applied to a single interval $[a, b]$ is:
 
@@ -37,6 +37,16 @@ This summation effectively aggregates the contributions of each trapezoid to est
 ![Trapezoidal Rule Visualization](https://user-images.githubusercontent.com/37275728/188944637-3e912cfb-f8f2-40f4-b664-c4e5cf81a64f.png)
 
 In this diagram, each trapezoid corresponds to a subinterval $[x_i, x_{i+1}]$, with the parallel sides representing the function values $f(x_i)$ and $f(x_{i+1})$. The height of each trapezoid is the width $h$ of the subinterval, and the area of each trapezoid contributes to the overall approximation of the integral.
+
+### Error Term
+
+For a twice continuously differentiable $f$, the composite Trapezoidal Rule with $n$ subintervals of width $h = \frac{b-a}{n}$ satisfies
+
+$$
+\int_a^b f(x)\,dx - T_n = -\frac{b-a}{12} h^2 f''(\xi), \qquad \xi \in (a, b).
+$$
+
+The rule is exact for polynomials of degree one or lower and is second-order accurate, $O(h^2)$. For convex functions ($f'' > 0$) it overestimates the integral.
 
 ### Algorithm Steps
 
@@ -157,9 +167,9 @@ This example highlights the practical application of the Trapezoidal Rule and il
 ### Advantages
 
 - The Trapezoidal Rule is straightforward to **understand** and implement, making it accessible to students and practitioners alike. The method relies on basic arithmetic operations and function evaluations at specific points, without requiring complex algorithms or iterative procedures.
-- Compared to the Rectangle Rule, which approximates the area under a curve using rectangles based on function values at specific points (such as midpoints), the Trapezoidal Rule often provides a more **accurate** approximation. This increased accuracy stems from the method's ability to account for the linear trend between two consecutive points, effectively averaging the function's behavior over each subinterval.
+- Compared to the Rectangle Rule, which approximates the area under a curve using rectangles based on function values at the left or right endpoints, the Trapezoidal Rule often provides a more **accurate** approximation (the Midpoint Rule, however, is typically about twice as accurate as the Trapezoidal Rule for the same number of subintervals). This increased accuracy stems from the method's ability to account for the linear trend between two consecutive points, effectively averaging the function's behavior over each subinterval.
 - The Trapezoidal Rule is versatile and can be applied to a broad spectrum of **functions**, including those that are linear, polynomial, or exhibit smooth curvature. It is particularly effective for functions that do not have extreme fluctuations or sharp bends within the interval of integration.
-- The method is computationally **efficient**, especially for functions that are computationally inexpensive to evaluate. Since the Trapezoidal Rule requires only two function evaluations per subinterval, it scales well with increasing numbers of subintervals, maintaining reasonable computational demands even for large-scale problems.
+- The method is computationally **efficient**, especially for functions that are computationally inexpensive to evaluate. Since the composite Trapezoidal Rule requires only one new function evaluation per subinterval (adjacent subintervals share endpoints), it scales well with increasing numbers of subintervals, maintaining reasonable computational demands even for large-scale problems.
 - The Trapezoidal Rule serves as a foundational **technique** in numerical integration, providing a basis for more advanced methods such as Simpson's Rule and Gaussian Quadrature. Understanding the principles of the Trapezoidal Rule facilitates the comprehension and implementation of these more sophisticated techniques.
 
 ### Limitations
