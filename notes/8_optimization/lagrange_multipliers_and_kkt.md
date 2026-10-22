@@ -92,13 +92,13 @@ Only active inequality constraints can exert a first-order force on the optimum.
 
 KKT conditions are not automatically necessary at every constrained optimum. Regularity assumptions are needed to rule out degenerate constraint geometry. Common examples include LICQ and Slater's condition in convex optimization.
 
-### Regularity and Second-Order Conditions
+### Regularity and second-order conditions
 
 LICQ means that the gradients of all equalities and active inequalities are linearly independent at the candidate point. It makes the normal-direction description well behaved. Without a qualification, a true optimum need not have KKT multipliers: minimize $f(x)=x$ subject to $h(x)=x^2=0$. The only feasible point is zero, but stationarity would require $1+\nu\cdot0=0$, which is impossible.
 
 For an equality-constrained problem at a regular stationary point, the Hessian of the **Lagrangian**, not just the objective, controls curvature along feasible tangent directions. The necessary condition is $d^\top\nabla_{xx}^2\mathcal L\,d\geq0$ for every $d$ satisfying $J_hd=0$. Strict positivity for every nonzero such direction is a sufficient local-minimum condition under the usual smoothness assumptions. With inequalities, the corresponding second-order test uses the appropriate critical cone.
 
-### Worked Inequality and Multiplier Sign
+### Worked inequality and multiplier sign
 
 Minimize $(x-2)^2$ subject to $g(x)=x-1\leq0$. The unconstrained minimizer is infeasible, so the constrained solution is $x^*=1$. Stationarity gives $2(1-2)+\lambda=0$, hence $\lambda=2\geq0$, and complementary slackness holds because $g(1)=0$.
 

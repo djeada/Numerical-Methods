@@ -63,7 +63,7 @@ $$
 
 helps classify a stationary point. If $H(x^*)$ is positive definite, $x^*$ is a strict local minimum. If it is negative definite, $x^*$ is a strict local maximum. An indefinite Hessian indicates a saddle.
 
-### What a Singular Hessian Does and Does Not Tell Us
+### What a singular Hessian does and does not tell us
 
 At an interior local minimum, a twice-differentiable objective has zero gradient and positive-semidefinite Hessian. Positive definiteness is a sufficient condition for a strict local minimum, but it is not necessary. In one dimension, $x^4$, $-x^4$, and $x^3$ all have zero first and second derivatives at zero, yet zero is respectively a minimum, a maximum, and neither. A semidefinite or zero Hessian therefore requires higher-order or direct analysis.
 

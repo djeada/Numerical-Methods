@@ -1,6 +1,6 @@
 # Convex Optimization
 
-Convex optimization is the best-behaved major class of continuous optimization. Its defining advantage is structural rather than algorithmic:
+Convex optimization minimizes a convex objective over a convex feasible set. Its structure provides a useful guarantee before an algorithm is chosen: a point that is locally optimal is also globally optimal. Supporting-hyperplane inequalities and, when applicable, KKT multipliers turn that geometric property into conditions that can be checked mathematically. The central statement is:
 
 > For a convex objective over a convex feasible set, every local minimum is global.
 
@@ -44,7 +44,7 @@ $$
 
 for every $x$ in the domain.
 
-### Why Every Local Minimum Is Global
+### Why every local minimum is global
 
 Suppose $x^*$ were a local minimum but a feasible $y$ had $f(y)<f(x^*)$. Convexity of the feasible set keeps $x_\theta=(1-\theta)x^*+\theta y$ feasible, and convexity of the objective gives
 

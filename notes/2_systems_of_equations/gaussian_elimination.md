@@ -1,12 +1,12 @@
 # Gaussian Elimination
 
-Gaussian elimination is a fundamental algorithmic procedure in linear algebra used to solve systems of linear equations, find matrix inverses, and determine the rank of matrices. The procedure systematically applies elementary row operations to transform a given matrix into an upper-triangular form (row echelon form), from which the solution to the system (if it exists and is unique) can be readily determined by back substitution.
+Gaussian elimination solves a linear system by applying elementary row operations to its augmented matrix. Each operation preserves the solution set while eliminating a coefficient below a pivot. The process produces an upper-triangular system, which can be solved from the last equation upward by back substitution when the pivots are usable and the solution is unique. The same row-operation framework also helps determine matrix rank and can be extended to compute an inverse. For singular or rectangular systems, row-echelon structure reveals whether equations are dependent or inconsistent, rather than necessarily producing one solution vector.
 
 From a conceptual viewpoint, Gaussian elimination provides a structured approach to eliminating unknowns step-by-step. Geometrically, each linear equation represents a hyperplane in $n$-dimensional space, and the solution of the system corresponds to the intersection point(s) of these hyperplanes. Gaussian elimination successively "clears out" the variables, enabling a direct path to the solution (or revealing inconsistencies or infinite solution sets if they exist).
 
 ![Eliminating coefficients to obtain a triangular linear system](https://github.com/user-attachments/assets/54011276-5a17-4666-8fbf-91d92ee9c30e)
 
-## Mathematical Formulation
+## Mathematical formulation
 
 Consider a system of $n$ linear equations with $n$ unknowns:
 
@@ -60,19 +60,19 @@ where $U$ is an upper-triangular matrix. Once in this form, the solution $\mathb
 
 The derivation of Gaussian elimination closely mirrors the logic of systematic elimination of variables from a set of equations:
 
-I. **Elimination of $x_1$ from equations 2 through $n$**:
+**Step 1: Elimination of $x_1$ from equations 2 through $n$.**
 
 Suppose the first pivot (the leading element in the first row) is $a_{11}$. By using row operations, we can eliminate the $x_1$-term from all equations below the first. This is achieved by subtracting suitable multiples of the first row from subsequent rows.
 
-II. **Elimination of $x_2$ from equations 3 through $n$**:
+**Step 2: Elimination of $x_2$ from equations 3 through $n$.**
 
 After the first step, the second row now has a leading coefficient (pivot) in the second column. Using this pivot, we eliminate the $x_2$-term from all equations below the second.
 
-III. **Continue this process** until the last pivot $a_{nn}$ (in the $n$-th row) is in place. If at any stage a pivot is zero, we interchange rows (partial pivoting) to bring a nonzero pivot into the pivot position.
+**Step 3: Continue this process.** until the last pivot $a_{nn}$ (in the $n$-th row) is in place. If at any stage a pivot is zero, we interchange rows (partial pivoting) to bring a nonzero pivot into the pivot position.
 
 The end result is an upper-triangular system that can be solved starting from the last equation and moving upward (back substitution).
 
-### Elimination Multipliers and Pivoting
+### Elimination multipliers and pivoting
 
 At stage $k$, for an unnormalized pivot row, set $m_{ik}=a_{ik}/a_{kk}$ for each $i>k$ and perform
 
@@ -88,7 +88,7 @@ In exact arithmetic, a reduced row $[0\ \cdots\ 0\mid c]$ with $c\ne0$ proves in
 
 For dense matrices, factorization costs about $2n^3/3$ floating point operations, while a triangular solve costs $O(n^2)$. This distinction leads directly to storing and reusing an [LU factorization](lu_decomposition.md).
 
-## Algorithm Steps
+## Algorithm steps
 
 **Input**: An augmented matrix $[A|\mathbf{b}]$ representing the system $A\mathbf{x} = \mathbf{b}$.
 
@@ -96,7 +96,7 @@ For dense matrices, factorization costs about $2n^3/3$ floating point operations
 
 **Step-by-Step Procedure**:
 
-I. **Form the augmented matrix**:
+**Step 1: Form the augmented matrix.**
 
 $$
 [A|\mathbf{b}] = \begin{bmatrix}
@@ -107,7 +107,7 @@ a_{n1} & a_{n2} & \cdots & a_{nn} & b_n
 \end{bmatrix}
 $$
 
-II. **Forward Elimination** (to reach upper-triangular form):
+**Step 2: Forward elimination.** (to reach upper-triangular form):
 
 For $i = 1$ to $n$:
 
@@ -130,7 +130,7 @@ $$
 
 where $*$ represents arbitrary numbers obtained during the process.
 
-III. **Back Substitution**:
+**Step 3: Back substitution.**
 
 Starting from the last equation:
 
@@ -156,7 +156,7 @@ $$
 \end{aligned}
 $$
 
-I. **Augmented Matrix**:
+**Step 1: Augmented matrix.**
 
 $$
 [A|\mathbf{b}] = \begin{bmatrix}
@@ -166,7 +166,7 @@ $$
 \end{bmatrix}
 $$
 
-II. **Forward Elimination**:
+**Step 2: Forward elimination.**
 
 For this hand calculation, retain the original row order to keep the fractions simple; the implementation with partial pivoting would swap rows 1 and 2 first and reach the same solution by different intermediate matrices. The first pivot in this unpivoted calculation is $a_{11}=2$. Normalize the first row by dividing by 2:
 
@@ -237,7 +237,7 @@ $$
 \end{bmatrix}
 $$
 
-III. **Back Substitution**:
+**Step 3: Back substitution.**
 
 From the last equation: $-1 \cdot z = 1 \implies z = -1$.
 Substitute $z = -1$ into second equation:
@@ -258,6 +258,6 @@ The solution is $\mathbf{x} = (2, 3, -1)^\top$.
 
 ## Limitations
 
-- **Numerical instability** is a concern due to round-off errors, particularly without pivoting. Partial or full pivoting mitigates this issue but may require additional computational steps.
+- **Numerical instability** is a concern due to roundoff errors, particularly without pivoting. Partial or full pivoting mitigates this issue but may require additional computational steps.
 - The method’s **computational cost**, proportional to $O(n^3)$ operations, can become prohibitive for large-scale systems, making it less efficient than iterative methods for such cases.
 - A **zero pivot element** halts the process unless row interchanges are performed. Pivoting is necessary to avoid division by zero and to maintain algorithmic stability.

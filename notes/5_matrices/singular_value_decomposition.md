@@ -1,10 +1,10 @@
 # Singular Value Decomposition (SVD)
 
-Singular Value Decomposition (SVD) is a fundamental matrix decomposition technique widely used in numerous areas of science, engineering, and data analysis. Unlike the Eigenvalue Decomposition (EVD), which is restricted to square and diagonalizable matrices, SVD applies to any rectangular matrix. It provides a way of expressing a given $m \times n$ matrix as the product of three simpler matrices, revealing critical insights into the structure and properties of the original matrix. These properties are useful in tasks such as dimensionality reduction, noise filtering, image compression, and solving ill-conditioned systems of linear equations.
+Singular value decomposition (SVD) expresses a matrix as orthogonal or unitary coordinate changes surrounding a rectangular diagonal scaling. It exists for every real or complex matrix, including rectangular and rank-deficient matrices, whereas a diagonal eigenvalue decomposition requires a diagonalizable square matrix. The singular values quantify how strongly the transformation acts along paired input and output directions. This makes SVD useful for dimensionality reduction, noise filtering, image compression, and least-squares problems, particularly when rank or conditioning is uncertain. The factorization separates these questions into explicit quantities: the positive singular values describe the nonzero action of the matrix, and zero singular values identify directions that it maps to zero.
 
 ![Orthogonal factors and singular values of a matrix](https://github.com/user-attachments/assets/1479f467-1d30-4f80-84e2-4c996d4b09fc)
 
-## Mathematical Formulation
+## Mathematical formulation
 
 Given any $m \times n$ matrix $A$, the SVD factorizes $A$ into:
 
@@ -39,7 +39,7 @@ Here, $\Sigma$ is rectangular diagonal: $\Sigma_{ii}=\sigma_i$ for $i\leq p$, wi
 
 The SVD is closely related to the eigenvalue decompositions of the matrices $A^{T}A$ and $AA^{T}$. Both $A^{T}A$ and $AA^{T}$ are symmetric, positive semi-definite matrices, and thus have non-negative real eigenvalues.
 
-I. Compute the eigenvalues of $A^{T}A$. These eigenvalues $\lambda_i$ are non-negative.
+**Step 1.** Compute the eigenvalues of $A^{T}A$. These eigenvalues $\lambda_i$ are non-negative.
 
 II. The singular values of $A$ are defined as $\sigma_i = \sqrt{\lambda_i}$.
 
@@ -47,7 +47,7 @@ III. The eigenvectors of $A^{T}A$ form the columns of $V$, and the eigenvectors 
 
 Since every real matrix $A$ gives rise to a non-negative, symmetric matrix $A^{T}A$, and since such matrices are always diagonalizable, SVD is guaranteed to exist for any matrix $A$.
 
-### Completing the Derivation and Handling Rank Deficiency
+### Completing the derivation and handling rank deficiency
 
 Choose orthonormal eigenvectors $v_i$ of $A^\top A$. For each $\sigma_i>0$, define $u_i=Av_i/\sigma_i$. Then
 
@@ -67,29 +67,29 @@ The Gram-matrix construction below explains existence and is suitable for hand c
 
 The pseudoinverse is $A^+=V_r\Sigma_r^{-1}U_r^\top$ and gives the minimum-norm least-squares solution $A^+b$. Keeping only the largest $k$ singular values yields $A_k=\sum_{i=1}^k\sigma_i u_iv_i^\top$, with $\|A-A_k\|_2=\sigma_{k+1}$ when $k<r$. This quantifies the compression error rather than assuming that every small singular value is noise.
 
-## Algorithm Steps
+## Algorithm steps
 
-I. **Form $A^{T}A$**:
+**Step 1: Form $A^{T}A$.**
 
 Compute the $n \times n$ matrix $A^{T}A$.
 
-II. **Compute Eigenvalues and Eigenvectors of $A^{T}A$**:
+**Step 2: Compute eigenvalues and eigenvectors of $A^{T}A$.**
 
 Solve $(A^{T}A) v = \lambda v$ to find all eigenvalues $\lambda_i \ge 0$ and corresponding eigenvectors $v_i$.
 
-III. **Obtain Singular Values**:
+**Step 3: Obtain singular values.**
 
 Sort the eigenvalues in decreasing order and take $\sigma_i = \sqrt{\lambda_i}$. These form the diagonal entries of $\Sigma$.
 
-IV. **Form $V$**:
+**Step 4: Form $V$.**
 
 The eigenvectors $v_i$ of $A^{T}A$ are arranged as columns to form the matrix $V$.
 
-V. **Form $U$**:
+**Step 5: Form $U$.**
 
 Similarly, find the eigenvectors of $AA^{T}$ use $u_i=Av_i/\sigma_i$ for each positive singular value. Complete these columns to an orthonormal basis to obtain the full $U$. A rectangular or rank-deficient $\Sigma$ has no ordinary matrix inverse.
 
-VI. **Assemble the SVD**:
+**Step 6: Assemble the SVD.**
 
 With $U, \Sigma, V$ computed, $A = U \Sigma V^{T}$.
 
@@ -101,13 +101,13 @@ $$
 A = \begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix}.
 $$
 
-I. Compute $A^{T}A$:
+**Step 1.** Compute $A^{T}A$:
 
 $$
 A^{T}A = \begin{bmatrix} 3 & 2 \\ 4 & 1 \end{bmatrix}\begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix} = \begin{bmatrix}13 & 14 \\ 14 & 17\end{bmatrix}.
 $$
 
-II. Find the eigenvalues of $A^{T}A$:
+**Step 2.** Find the eigenvalues of $A^{T}A$:
 
 Solve $\det(A^{T}A - \lambda I) = 0$:
 
@@ -149,7 +149,7 @@ $$
 U \approx \begin{bmatrix}0.9239 & 0.3827 \\ 0.3827 & -0.9239\end{bmatrix}.
 $$
 
-VI. Assemble SVD:
+**Step 6.** Assemble SVD:
 
 $$
 \Sigma \approx \begin{bmatrix}5.3983 & 0 \\ 0 & 0.9262\end{bmatrix}
@@ -185,4 +185,4 @@ While the decomposition yields orthogonal factors and non-negative singular valu
 
 III. **No Direct Eigenvalue Information of Original A**:
 
-The singular values are related to the eigenvalues of $A^{T}A$ (or $AA^{T}$), not directly to the eigenvalues of $A$ itself. Thus, SVD does not directly provide the eigenvalues of $A$, except when $A$ is normal (e.g., symmetric), in which case the singular values are the absolute values of the eigenvalues.
+The singular values are related to the eigenvalues of $A^{T}A$ (or $AA^{T}$), not directly to the eigenvalues of $A$ itself. For a normal matrix, including a real symmetric matrix, the singular values equal the magnitudes of its eigenvalues. They still do not determine the signs or complex phases of those eigenvalues. For example, $\operatorname{diag}(2,1)$ and $\operatorname{diag}(-2,1)$ have the same singular values but different eigenvalues. The eigenvalue problem and singular-value problem therefore retain distinct information even in this special case.

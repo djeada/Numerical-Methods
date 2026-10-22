@@ -34,10 +34,12 @@ $$
 At a regular constrained optimum, no feasible tangent direction can decrease the objective. Therefore the objective gradient must lie in the span of the constraint gradient:
 
 $$
-\nabla f(x^*) + \lambda\nabla h(x^*) = 0.
+\nabla f(x^*) + \nu\nabla h(x^*) = 0.
 $$
 
 This is the Lagrange-multiplier condition.
+
+The equality multiplier $\nu$ can have either sign. Below, $\lambda_i$ is reserved for the nonnegative multipliers of inequalities written as $g_i\leq0$. Keeping those conventions separate makes the stationarity and sensitivity formulas consistent.
 
 ## Inequality constraints
 
@@ -114,7 +116,7 @@ These systems can become ill-conditioned when constraint gradients are nearly de
 
 The repository's equality-constrained routine solves exactly this system with $H$ equal to the Hessian of the Lagrangian (analytic if provided, otherwise a central-difference estimate), starting from a least-squares multiplier estimate, and reduces the step length until the KKT residual decreases. Near a regular solution this gives quadratic convergence. Production solvers add Hessian modification for indefinite $H$, merit functions, and inequality handling, which this compact routine omits.
 
-### Deriving the Equality KKT Linear System
+### Deriving the equality KKT linear system
 
 Collect the equality stationarity and feasibility equations into
 

@@ -8,7 +8,7 @@ $$
 
 Not all matrices have an inverse. Only square matrices (those with the same number of rows and columns) are eligible to have an inverse, and even then, some do not. A matrix has an inverse if and only if it is non-singular, i.e., its determinant is not zero.
 
-## Mathematical Formulation
+## Mathematical formulation
 
 For an invertible square matrix $A$ of order $n$, the adjugate formula expresses the inverse as:
 
@@ -20,7 +20,7 @@ Here $\det(A)$ is the determinant of $A$, and $\operatorname{adj}(A)$ is its adj
 
 The adjugate is the transpose of the cofactor matrix $C$. Its entries are $c_{ij}=(-1)^{i+j}\det(M_{ij})$, where $M_{ij}$ is the submatrix obtained by deleting row $i$ and column $j$ of $A$. The determinant $\det(M_{ij})$ is the corresponding minor.
 
-## Using the Inverse to Solve Matrix Equations
+## Using the inverse to solve matrix equations
 
 For an invertible coefficient matrix, the inverse gives an algebraic expression for the solution of the following system:
 
@@ -42,7 +42,7 @@ $$
 \implies \boldsymbol{x} = A^{-1}\boldsymbol{b}
 $$
 
-### Why the Adjugate Formula Works
+### Why the adjugate formula works
 
 Cofactor expansion along row $i$ gives $\sum_k a_{ik}c_{ik}=\det(A)$. If the cofactors come from a different row $j\ne i$, the same sum is the determinant of a matrix with two equal rows, and is therefore zero. Thus
 
@@ -56,7 +56,7 @@ There is also a computational interpretation: column $j$ of $A^{-1}$ solves $A\m
 
 When the goal is only $A\mathbf{x}=\mathbf{b}$, solve that system with the factors directly. Forming all columns of $A^{-1}$ computes more information than the solve needs and can destroy sparsity. The adjugate expression is useful for proofs and small examples; determinant size alone is not a reliable numerical conditioning test because it changes strongly under scaling.
 
-## Algorithm Steps
+## Algorithm steps
 
 **Implementation note:** the formula above (cofactors and adjugate) is shown for theory and for small hand calculations. It is far too expensive and numerically poor for general use, so the code in this repository computes the inverse by **Gauss-Jordan elimination with partial pivoting**: it row-reduces the augmented matrix $[A \mid I]$ to $[I \mid A^{-1}]$ and raises an error if a pivot is (numerically) zero, i.e. $A$ is singular. The steps below describe the adjugate method.
 
@@ -88,6 +88,18 @@ A^{-1} = \frac{1}{10} \begin{bmatrix} 6 & -7 \\
 -2 & 4\\ \end{bmatrix} = \begin{bmatrix} 0.6 & -0.7 \\
 -0.2 & 0.4\\ \end{bmatrix}
 $$
+
+## Checking a computed inverse
+
+For the worked matrix, multiplying in either order gives
+
+$$
+\begin{bmatrix}4&7\\2&6\end{bmatrix}
+\begin{bmatrix}0.6&-0.7\\-0.2&0.4\end{bmatrix}
+=\begin{bmatrix}1&0\\0&1\end{bmatrix}.
+$$
+
+In floating point arithmetic, inspect $\|A\widehat B-I\|$ and, when useful, $\|\widehat BA-I\|$ for the computed inverse $\widehat B$. These residuals check the defining identities. Their scale and the conditioning of $A$ still matter when interpreting the accuracy of individual inverse entries; a printed matrix that looks plausible is not itself a verification.
 
 ## Advantages
 

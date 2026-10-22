@@ -63,7 +63,7 @@ points. This makes exhaustive gridding useful for low-dimensional verification b
 
 If a one-dimensional interval has spacing $h$, the nearest grid point is at most $h/2$ away from the true minimizer. In multiple dimensions the geometric discretization error grows with the cell diagonal.
 
-### Turning Grid Spacing into an Objective Bound
+### Turning grid spacing into an objective bound
 
 On a full box grid with uniform coordinate spacing $h$, every point in the box is within Euclidean distance $\delta=h\sqrt n/2$ of a grid point, assuming the grid includes the box endpoints. If $f$ is $L$-Lipschitz and $f_{\mathrm{grid}}$ is the best sampled value, then
 
@@ -94,7 +94,7 @@ This is why stochastic global methods usually report the **best point found**, n
 
 ## Hybrid strategies
 
-A powerful practical pattern is:
+One practical approach uses the following sequence:
 
 1. use a global method or multi-start sampling to locate promising basins;
 2. refine the best candidates with a fast local solver;
@@ -102,6 +102,8 @@ A powerful practical pattern is:
 4. repeat with different seeds when stochastic uncertainty matters.
 
 This separates broad exploration from precise local convergence.
+
+Repeated starts improve coverage only to the extent that the starting distribution reaches useful basins. If independent starts each have probability $q$ of reaching the target basin, then $m$ starts miss it with probability $(1-q)^m$. This explains the benefit of repetition under a fixed sampling model, but the unknown basin probability prevents the formula from serving as a generic global-optimality certificate.
 
 ## Reproducibility
 

@@ -24,7 +24,9 @@ Imagine the line $y = x$ and the curve $y = g(x)$. A fixed point $\alpha$ is a p
 
 The iteration takes a guess $x_n$, and then maps it to $x_{n+1}=g(x_n)$. If these iterations hone in on the intersection, the sequence converges to the root $\alpha$.
 
-## Mathematical Formulation
+The first task is algebraic: choose a fixed-point equation that is equivalent to the original root problem on the intended domain. The second is numerical: check that its iteration attracts nearby points. Dividing by an expression that can vanish, squaring an equation, or introducing a square root can change the solution set or its domain, so equivalence should be established before a convergence argument is applied.
+
+## Mathematical formulation
 
 **Starting Point:**
 
@@ -65,7 +67,7 @@ If the derivative of $g(x)$ in the region around the fixed point is less than 1 
 
 ## Derivation
 
-I. **From Root to Fixed Point Problem:**
+**Step 1: From root to fixed point problem.**
 
 Suppose we have $f(x)=0$. We isolate $x$ on one side:
 
@@ -75,7 +77,7 @@ $$
 
 If $\alpha$ solves $f(\alpha)=0$, then $g(\alpha)=\alpha$.
 
-II. **Fixed-Point Iteration:**
+**Step 2: Fixed-point iteration.**
 
 Define a sequence $\{x_n\}$ by choosing an initial guess $x_0$ and applying:
 
@@ -83,7 +85,7 @@ $$
 x_{n+1} = g(x_n).
 $$
 
-III. **Convergence Insight:**
+**Step 3: Convergence insight.**
 
 Consider a point $\alpha$ such that $g(\alpha)=\alpha$. If we expand $g$ near $\alpha$:
 
@@ -95,7 +97,7 @@ If $|g'(\alpha)|<1$, then iterating this process will reduce the error $|h|$ at 
 
 In essence, the choice of $g(x)$ greatly influences the convergence behavior. A poorly chosen $g(x)$ may lead to divergence or very slow convergence.
 
-### A Convergence Guarantee and an Error Estimate
+### A convergence guarantee and an error estimate
 
 A useful sufficient condition is to find a closed interval $I=[a,b]$ with $g(I)\subseteq I$ and a uniform bound $|g'(x)|\leq q<1$ throughout $I$. The first condition keeps every iterate in the interval; the second makes $g$ a contraction. There is then a unique fixed point $\alpha$ in $I$, and every $x_0\in I$ converges to it.
 
@@ -115,7 +117,7 @@ Thus a small step is a certified position-error estimate only when a contraction
 
 In the worked example, $g(x)=(x^2+2)/3$ maps $[0,1]$ into $[2/3,1]$ and satisfies $|g'(x)|\leq2/3$ there. Starting at zero therefore converges to $1$. At the other fixed point, $g'(2)=4/3$, so the plain iteration is locally unstable. The algebraic rearrangement determines which root is attractive.
 
-## Algorithm Steps
+## Algorithm steps
 
 **Input:**
 
@@ -130,13 +132,13 @@ Set iteration counter $n=0$.
 
 **Iteration:**
 
-I. Compute the next approximation (with $\omega = 1$ this is the plain iteration; the general relaxed step is given in the next section):
+**Step 1.** Compute the next approximation (with $\omega = 1$ this is the plain iteration; the general relaxed step is given in the next section):
 
 $$
 x_{n+1} = (1-\omega)\,x_n + \omega\, g(x_n)
 $$
 
-II. Check convergence:
+**Step 2.** Check convergence:
 
 - If $|x_{n+1}-x_n|< \epsilon$, stop and return $x_{n+1}$. (The residual $|g(x_{n+1}) - x_{n+1}|$ is not tested separately.)
 - If $n_{\max}$ iterations have been performed without meeting this test, stop with an error (non-convergence).
@@ -148,7 +150,7 @@ III. Otherwise, set $n = n+1$ and repeat from step I.
 - Approximate root: $x_{n+1}$ (an error is raised instead if the iteration did not converge).
 - Number of iterations performed, if tracked as a diagnostic. The repository function `relaxation_method` returns only the approximate point, rather than a point-and-count pair.
 
-## Relaxation Factor
+## Relaxation factor
 
 The implementation does not iterate $x_{n+1}=g(x_n)$ directly but a *relaxed* step with a factor $\omega$:
 

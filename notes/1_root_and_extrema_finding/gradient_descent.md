@@ -1,6 +1,6 @@
 # Gradient Descent
 
-Gradient Descent is a fundamental first-order optimization algorithm widely used in mathematics, statistics, machine learning, and artificial intelligence. Its principal aim is to find the minimum of a given differentiable function $f(x)$. Instead of searching blindly, it uses gradient information — the direction of steepest increase — to iteratively move toward a minimum by taking steps in the opposite direction, known as the steepest descent direction.
+Gradient descent is a first-order method for minimizing a differentiable objective in mathematics, statistics, machine learning, and artificial intelligence. At the current point, the gradient gives the direction of steepest local increase in the Euclidean norm. The method moves in the opposite direction, using a positive step size to control the distance traveled. Each update therefore combines two decisions: which direction reduces the local linear model, and how far that model can be trusted. Its low cost per iteration makes gradient descent useful when the number of variables is large and second derivatives are expensive.
 
 Because it only requires the gradient of the function rather than its Hessian or other higher-order derivatives, gradient descent is often the method of choice for large-scale optimization problems. For instance, in machine learning, gradient descent is the backbone of training many models, from linear regression to deep neural networks.
 
@@ -12,7 +12,7 @@ Imagine the function $f(x)$ as a landscape of hills and valleys. Gradient descen
 
 In higher dimensions (e.g., $x \in \mathbb{R}^n$), this idea generalizes similarly, just with gradients represented as vectors.
 
-## Mathematical Formulation
+## Mathematical formulation
 
 Given a differentiable function $f : \mathbb{R}^n \to \mathbb{R}$, we want to solve:
 
@@ -20,12 +20,12 @@ $$
 \min_{x \in \mathbb{R}^n} f(x)
 $$
 
-**Gradient Descent Update Rule**:
+**gradient descent Update Rule**:
 
-At iteration $n$, we have the current approximation $x_n$. The gradient at $x_n$, denoted $\nabla f(x_n)$, points in the direction of greatest increase of $f$. To move towards a minimum, we take a step opposite to the gradient direction:
+At iteration $k$, we have the current approximation $x_k$. The gradient at $x_k$, denoted $\nabla f(x_k)$, points in the direction of greatest increase of $f$. To move towards a minimum, we take a step opposite to the gradient direction:
 
 $$
-x_{n+1} = x_n - \alpha \nabla f(x_n)
+x_{k+1} = x_k - \alpha \nabla f(x_k)
 $$
 
 where $\alpha > 0$ is the learning rate (also called the step size).
@@ -35,39 +35,39 @@ where $\alpha > 0$ is the learning rate (also called the step size).
 - The **gradient $\nabla f(x)$** collects the first partial derivatives in a vector. Its inner product with a unit direction gives the directional derivative, and its own direction gives the steepest local increase in the Euclidean norm.
 - The **learning rate $\alpha$** controls how far the iterate moves along the negative gradient. A large value can overshoot the minimum or cause divergence; a small value may require many iterations. A useful choice depends on the curvature of the objective, as the derivation below makes precise.
 
-Over successive iterations, provided the learning rate is chosen suitably and the function is well-behaved (e.g., convex), $x_n$ converges to a point $x^*$ where $\nabla f(x^*) = 0$, indicating a critical point, often a minimum.
+Over successive iterations, provided the learning rate is chosen suitably and the function is well-behaved (e.g., convex), $x_k$ converges to a point $x^*$ where $\nabla f(x^*) = 0$, indicating a critical point, often a minimum.
 
 ## Derivation
 
-I. **First-Order Taylor Expansion**:
+**Step 1: First-order Taylor expansion.**
 
-Consider the first-order Taylor expansion of $f$ at $x_n$:
-
-$$
-f(x_{n+1}) \approx f(x_n) + \nabla f(x_n)^\top (x_{n+1} - x_n)
-$$
-
-To reduce $f$, we want $x_{n+1}$ to move in a direction that decreases this linear approximation. The direction that maximally decreases $f$ is the opposite of $\nabla f(x_n)$.
-
-II. **Steepest Descent**:
-
-The direction of steepest descent is given by $-\nabla f(x_n)$. To decide how far to move in that direction, we introduce the learning rate $\alpha$. Thus, the next iterate is:
+Consider the first-order Taylor expansion of $f$ at $x_k$:
 
 $$
-x_{n+1} = x_n - \alpha \nabla f(x_n)
+f(x_{k+1}) \approx f(x_k) + \nabla f(x_k)^\top (x_{k+1} - x_k)
 $$
 
-III. **Convergence Considerations**:
+To reduce $f$, we want $x_{k+1}$ to move in a direction that decreases this linear approximation. The direction that maximally decreases $f$ is the opposite of $\nabla f(x_k)$.
+
+**Step 2: Steepest descent.**
+
+The direction of steepest descent is given by $-\nabla f(x_k)$. To decide how far to move in that direction, we introduce the learning rate $\alpha$. Thus, the next iterate is:
+
+$$
+x_{k+1} = x_k - \alpha \nabla f(x_k)
+$$
+
+**Step 3: Convergence considerations.**
 
 For a convex objective with an $L$-Lipschitz gradient and an attained minimum in $\mathbb R^n$, a fixed step $0<\alpha\leq1/L$ gives the usual convergence guarantee to a minimizer. Under these assumptions, the sequence satisfies:
 
 $$
-\lim_{n \to \infty} x_n = x^*
+\lim_{k \to \infty} x_k = x^*
 $$
 
 where $x^*$ is a minimizer of $f$.
 
-### Why the Step Decreases the Objective
+### Why the step decreases the objective
 
 For a unit vector $d$, the directional derivative is $\nabla f(x)^\top d$. By the Cauchy–Schwarz inequality,
 
@@ -85,45 +85,45 @@ $$
 
 Thus $0<\alpha<2/L$ guarantees a decrease whenever the gradient is nonzero. The common choice $\alpha\leq1/L$ gives a convenient margin. Convexity makes a stationary point globally optimal; strong convexity also ensures uniqueness and a linear convergence rate. For a nonconvex function, a small gradient establishes approximate stationarity, which may also occur near a saddle point.
 
-For the example $f(x)=x^2$, the update becomes $x_{n+1}=(1-2\alpha)x_n$, so $x_n=(1-2\alpha)^n x_0$. Convergence requires $|1-2\alpha|<1$, or $0<\alpha<1$. With $\alpha=0.1$, the factor is $0.8$, explaining every value in the worked example.
+For the example $f(x)=x^2$, the update becomes $x_{k+1}=(1-2\alpha)x_k$, so $x_k=(1-2\alpha)^k x_0$. Convergence requires $|1-2\alpha|<1$, or $0<\alpha<1$. With $\alpha=0.1$, the factor is $0.8$, explaining every value in the worked example.
 
-## Algorithm Steps
+## Algorithm steps
 
 **Input:**
 
 - A differentiable function $f(x)$.
 - A starting point $x_0$.
 - A learning rate $\alpha > 0$.
-- A convergence tolerance $\epsilon > 0$ or a maximum number of iterations $n_{\max}$.
+- A convergence tolerance $\epsilon > 0$ or a maximum number of iterations $k_{\max}$.
 
 **Initialization:**
 
-Set $n = 0$.
+Set $k = 0$.
 
 **Iteration:**
 
-I. Compute the gradient at the current point:
+**Step 1.** Compute the gradient at the current point:
 
 $$
-g_n = \nabla f(x_n).
+g_k = \nabla f(x_k).
 $$
 
-II. Check for convergence:
+**Step 2.** Check for convergence:
 
-- If $\|g_n\| < \epsilon$, stop and return $x_n$.
-- If $n \geq n_{\max}$, stop without convergence.
+- If $\|g_k\| < \epsilon$, stop and return $x_k$.
+- If $k \geq k_{\max}$, stop without convergence.
 
-III. Update the point:
+**Step 3.** Update the point:
 
 $$
-x_{n+1} = x_n - \alpha g_n.
+x_{k+1} = x_k - \alpha g_k.
 $$
 
-IV. Increment $n = n+1$ and repeat from step I.
+**Step 4.** Increment $k = k+1$ and repeat from step I.
 
 **Output:**
 
-- Approximate minimum $x_n$.
+- Approximate minimum $x_k$.
 - Number of iterations performed, if tracked as a diagnostic. The repository function `gradient_descent` returns only the approximate point, rather than a point-and-count pair.
 
 ## Example
@@ -175,7 +175,7 @@ $$
 x_3 = x_2 - \alpha f'(x_2) = 3.2 - 0.1 \cdot 6.4 = 3.2 - 0.64 = 2.56.
 $$
 
-Continuing this process, we observe that $x_n$ keeps getting closer to 0. Over many iterations, the point will approach the exact minimum at $x = 0$.
+Continuing this process, we observe that $x_k$ keeps getting closer to 0. Over many iterations, the point will approach the exact minimum at $x = 0$.
 
 ## Advantages
 

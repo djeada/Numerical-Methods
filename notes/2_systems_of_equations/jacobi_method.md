@@ -1,12 +1,12 @@
 # Jacobi Method
 
-The Jacobi method is a classical iterative algorithm used to approximate the solution of a system of linear equations $A\mathbf{x} = \mathbf{b}$. Instead of attempting to solve the system directly using methods such as Gaussian elimination, the Jacobi method iteratively refines an initial guess for the solution. With each iteration, it uses the previous iteration’s values to compute new approximations, progressively moving closer to the true solution, provided certain conditions on the coefficient matrix $A$ are met.
+Jacobi iteration approximates the solution of a linear system $A\mathbf x=\mathbf b$ by repeatedly updating every component from the previous iterate. Each row is solved for the variable on its diagonal, with all other components held at their old values during that sweep. The resulting vector becomes the input to the next sweep. This avoids the factorization used by direct methods such as Gaussian elimination and makes the component updates independent within an iteration. Whether the approximations approach the exact solution depends on the coefficient matrix and its splitting; the ability to compute an update alone does not establish convergence.
 
 One of the key characteristics of the Jacobi method is that each component of the solution vector is updated using only values from the previous iteration. This makes the method amenable to parallelization, as each component’s update is independent from the others at a given iteration.
 
 ![Jacobi updates computed from the previous iterate](https://github.com/user-attachments/assets/4974bdab-baec-4cde-af8c-77ed2a30e8bf)
 
-## Mathematical Formulation
+## Mathematical formulation
 
 Consider the linear system:
 
@@ -90,7 +90,7 @@ $$
 
 This process defines the Jacobi iteration. The method converges for every initial guess if and only if the spectral radius of the iteration matrix $T_J = -D^{-1}(L+U)$ is less than one, $\rho(T_J) < 1$ (necessary and sufficient). Checking this directly requires eigenvalues, so in practice one uses sufficient conditions, the most common being that $A$ is strictly diagonally dominant (by rows, $|a_{ii}| > \sum_{j\neq i}|a_{ij}|$, or by columns), which implies $\rho(T_J)<1$. Being symmetric positive definite is **not** sufficient for Jacobi: an SPD matrix can have $\rho(T_J) \geq 1$ (for example, $3\times 3$ with $1$ on the diagonal and $0.9$ off the diagonal has $\rho(T_J)=1.8$), in which case the iteration diverges. (Gauss-Seidel, in contrast, converges for every SPD matrix.)
 
-### Why Diagonal Dominance Is Sufficient
+### Why diagonal dominance is sufficient
 
 Let $\mathbf{e}^{(k)}=\mathbf{x}^{(k)}-\mathbf{x}^*$ denote the error. Subtract the exact equation from the update to obtain
 
@@ -114,13 +114,13 @@ For the worked example, $q=1/2$, so the infinity norm of a completed step bounds
 
 Keep separate old and new vectors during a Jacobi sweep. Overwriting components and reusing them immediately changes the algorithm into Gauss–Seidel iteration.
 
-## Algorithm Steps
+## Algorithm steps
 
-I. **Initialization**:
+**Step 1: Initialization.**
 
 Choose an initial guess $\mathbf{x}^{(0)} = (x_1^{(0)}, x_2^{(0)}, \ldots, x_n^{(0)})^\top$. A common choice is the zero vector or a small random vector.
 
-II. **Iterative Update**:
+**Step 2: Iterative update.**
 
 For $k = 0,1,2,\ldots$ (until convergence):
 
@@ -129,7 +129,7 @@ x_i^{(k+1)} = \frac{b_i - \sum_{j=1, j \ne i}^{n} a_{ij} x_j^{(k)}}{a_{ii}}, \qu
 i = 1, 2, \ldots, n.
 $$
 
-III. **Convergence Check**:
+**Step 3: Convergence check.**
 
 After computing $\mathbf{x}^{(k+1)}$, check if $\|\mathbf{x}^{(k+1)} - \mathbf{x}^{(k)}\|$ (or $\|A\mathbf{x}^{(k+1)}-\mathbf{b}\|$) is less than a given tolerance $\varepsilon$. If yes, stop; otherwise, continue iterating. The implementation uses the first criterion with the infinity norm, and raises an error if the iteration cap (`max_iterations`) is reached first.
 
@@ -195,7 +195,7 @@ Continue iterating until $|x^{(k+1)} - x^{(k)}|$ and $|y^{(k+1)} - y^{(k)}|$ are
 ## Advantages
 
 - The **simplicity of implementation** is a key advantage of the Jacobi method, as each new approximation depends solely on values from the previous iteration, making the algorithm straightforward to code and understand.
-- The Jacobi method supports **parallelization** effectively because each component $x_i^{(k+1)}$ depends only on values $x_j^{(k)}$ from the previous iteration. This allows computations for all $i$ to be performed simultaneously, leveraging modern parallel computing hardware such as multi-core CPUs or GPUs.
+- The Jacobi method supports **parallelization** effectively because each component $x_i^{(k+1)}$ depends only on values $x_j^{(k)}$ from the previous iteration. This allows computations for all $i$ to be performed simultaneously, using modern parallel computing hardware such as multi-core CPUs or GPUs.
 - The method is **easy to apply** to any system whose diagonal elements are nonzero (a zero diagonal entry makes the update undefined). Nonzero diagonal only makes the iteration *defined*, not convergent: convergence is guaranteed under strict diagonal dominance (or, more generally, whenever $\rho(D^{-1}(L+U)) < 1$), and techniques such as relaxation can expand its usability.
 
 ## Limitations

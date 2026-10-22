@@ -1,8 +1,8 @@
 # Matrix Methods
 
-Matrices are often described as rectangular arrays of numbers organized into rows and columns, and they form the bedrock of numerous processes in numerical methods. People use them for solving systems of linear equations, transforming geometric data, and carrying out many algorithmic tasks that lie at the heart of applied mathematics and engineering. The flexibility and power of matrix operations arise from their ability to compactly represent large sets of data or complicated transformations. Numerical methods built around matrices become necessary whenever problems need consistent and systematic solutions, such as in high-dimensional computations or iterative methods for optimization.
+Matrices organize numbers into rows and columns and represent linear transformations, systems of equations, and collections of data. Their dimensions determine which operations are defined, while their structure determines which numerical methods are appropriate. In applied mathematics and engineering, the same matrix notation can describe a geometric transformation, a coupled physical model, a high-dimensional calculation, or a local optimization step. This note introduces the basic operations and the factorizations used throughout the repository. The central numerical idea is to use a matrix's structure: triangular factors simplify solves, orthogonal factors preserve lengths, and singular values expose rank and sensitivity. These representations make large calculations systematic without requiring every task to be reduced to an explicit inverse.
 
-## Representation of Matrices
+## Representation of matrices
 
 A matrix is denoted by an uppercase letter, while its elements are commonly denoted by the corresponding lowercase letter with subscripts indicating row and column position. For instance, a generic 3×3 matrix $A$ might look like this:
 
@@ -24,11 +24,11 @@ One way to visualize a 3×3 matrix is with a diagram that shows the rows and col
 
 Rows are horizontal sequences of elements, and columns are vertical sequences. This basic structure underpins all matrix-based numerical methods, from simple multiplication to more advanced decompositions.
 
-## Common Matrix Operations
+## Common matrix operations
 
 Matrix operations include addition, multiplication, inversion, and determinant calculation. Each plays an important role in numerical algorithms.
 
-### Matrix Addition
+### Matrix addition
 
 When adding two matrices $A$ and $B$ of the same dimension, you add each element in $A$ to the corresponding element in $B$. This is expressed by:
 
@@ -36,7 +36,7 @@ $$
 C = A + B \quad \Longrightarrow \quad c_{ij} = a_{ij} + b_{ij}
 $$
 
-### Scalar Multiplication
+### Scalar multiplication
 
 In scalar multiplication, you multiply every element of a matrix by the same scalar:
 
@@ -44,7 +44,7 @@ $$
 C = kA \quad \Longrightarrow \quad c_{ij} = k \cdot a_{ij}
 $$
 
-### Matrix Multiplication
+### Matrix multiplication
 
 Multiplying two matrices of appropriate dimensions involves taking the dot product of each row of the first matrix with each column of the second. If $A$ is an $(m \times n)$ matrix and $B$ is an $(n \times p)$ matrix, then their product $C = AB$ is an $(m \times p)$ matrix where:
 
@@ -62,7 +62,7 @@ $$
 
 For example, $c_{23}=a_{21}b_{13}+a_{22}b_{23}$. The shared inner dimension determines the summation, and the outer dimensions determine the shape of the result. Matrix multiplication generally does not commute: $AB$ and $BA$ can have different sizes, or different values when both are defined.
 
-### Matrix Inversion
+### Matrix inversion
 
 An invertible matrix $A$ of dimension $n \times n$ has an inverse $A^{-1}$ such that:
 
@@ -83,11 +83,11 @@ $$
 
 A non-zero determinant indicates that $A$ is invertible, while a zero determinant means that $A$ is singular.
 
-## Matrix Decompositions
+## Matrix decompositions
 
 Matrix decompositions break a matrix into products of simpler or special-purpose matrices. They help solve complicated problems systematically.
 
-### LU Decomposition
+### LU decomposition
 
 LU decomposition (or factorization) writes a square matrix $A$ as the product of a lower triangular matrix $L$ and an upper triangular matrix $U$. Symbolically:
 
@@ -107,7 +107,7 @@ This unpivoted form assumes suitable nonzero pivots. With row pivoting, use $PA=
 
 This method is a cornerstone for solving systems of linear equations of the form $Ax = b$, because once $A$ is decomposed into $L$ and $U$, forward and backward substitutions become more efficient.
 
-### Singular Value Decomposition (SVD)
+### Singular value decomposition (SVD)
 
 SVD factorizes any $m \times n$ matrix $A$ (whether square or rectangular) into three matrices:
 
@@ -117,7 +117,7 @@ $$
 
 Matrix $U$ is an orthogonal (or unitary in the complex case) $m \times m$ matrix, $\Sigma$ is an $m \times n$ diagonal matrix (with nonnegative real numbers on the diagonal), and $V$ is an $n \times n$ orthogonal (or unitary) matrix. The superscript $T$ indicates the transpose. SVD highlights the underlying structure of $A$, making it valuable in data compression, noise reduction, and feature extraction.
 
-### QR Decomposition
+### QR decomposition
 
 QR decomposition takes a matrix $A$ of size $m \times n$ (often $m \geq n$) and expresses it as:
 
@@ -127,9 +127,9 @@ $$
 
 Matrix $Q$ is $m \times m$ and orthogonal, which means $Q^T Q = I$. Matrix $R$ is $m \times n$ and upper triangular. This decomposition appears in algorithms for solving least squares problems and eigenvalue calculations. Its ability to transform a matrix into an upper-triangular form via orthogonal operations simplifies numerical analyses, since orthogonal transformations are known for preserving numerical stability.
 
-## The Power Method
+## The power method
 
-The Power Method is an iterative approach for finding the eigenvalue of largest magnitude (the dominant eigenvalue) and the associated eigenvector of a square matrix $A$. You start with an initial vector $x^{(0)}$ and repeatedly apply the matrix to this vector, normalizing each time:
+The power method is an iterative approach for finding the eigenvalue of largest magnitude (the dominant eigenvalue) and the associated eigenvector of a square matrix $A$. You start with an initial vector $x^{(0)}$ and repeatedly apply the matrix to this vector, normalizing each time:
 
 $$
 x^{(k+1)} = \frac{A \, x^{(k)}}{\|A \, x^{(k)}\|}
@@ -141,7 +141,7 @@ $$
 \lambda_{\text{approx}} = \frac{(x^{(k)})^T \, A \, x^{(k)}}{(x^{(k)})^T \, x^{(k)}}
 $$
 
-## Choosing a Decomposition
+## Choosing a decomposition
 
 | Goal or structure | Useful factorization | Key reason |
 | --- | --- | --- |

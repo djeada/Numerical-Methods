@@ -93,7 +93,7 @@ which is conceptually simple but often a poor numerical representation for solvi
 
 The representation matters numerically even when the underlying polynomial is the same.
 
-### Existence and Uniqueness of the Polynomial
+### Existence and uniqueness of the polynomial
 
 The Lagrange basis constructs an interpolating polynomial explicitly, so existence follows for distinct nodes. For uniqueness, suppose $p$ and $q$ both have degree at most $n$ and match the same $n+1$ data values. Their difference has $n+1$ distinct zeros but degree at most $n$, so it must be the zero polynomial. Thus Lagrange, Newton, and monomial representations describe the same polynomial in exact arithmetic.
 
@@ -147,7 +147,7 @@ This expression shows two sources of error:
 
 Adding more equally spaced nodes does not automatically improve a global polynomial interpolant. Node placement and numerical stability matter.
 
-### Approximation Error and Data Sensitivity Are Different
+### Approximation error and data sensitivity are different
 
 The remainder formula assumes exact values $y_i=f(x_i)$. If the values are perturbed by $\delta y_i$, the polynomial changes by $\delta p(x)=\sum_i\delta y_iL_i(x)$. Therefore,
 

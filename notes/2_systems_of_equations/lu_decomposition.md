@@ -1,10 +1,10 @@
 # LU Decomposition
 
-LU Decomposition (or LU Factorization) is a powerful and widely used technique in numerical linear algebra for solving systems of linear equations, computing inverses, and determining determinants. The core idea is to factorize a given square matrix $A$ into the product of a lower-triangular matrix $L$ and an upper-triangular matrix $U$. This approach is particularly useful as it reduces complex operations such as solving $A \mathbf{x} = \mathbf{b}$ into simpler, more structured subproblems. Once the decomposition $A = LU$ is found, solving the system becomes a matter of performing forward and backward substitutions, which are both computationally inexpensive compared to other direct methods like Gaussian elimination performed from scratch for each right-hand-side vector $\mathbf{b}$.
+LU decomposition, or LU factorization, stores Gaussian elimination as a product of triangular matrices. In the unpivoted form, $A=LU$, where $L$ is lower triangular and $U$ is upper triangular; with row pivoting, the convention used here is $PA=LU$. The factors support linear-system solves, determinant calculations, and inverse calculations without repeating elimination from the beginning. To solve $A\mathbf x=\mathbf b$, first solve a lower-triangular system for an intermediate vector and then an upper-triangular system for $\mathbf x$. These substitution steps are inexpensive compared with the initial factorization, so retaining the factors is especially useful when the same matrix is paired with several right-hand sides.
 
 ![Lower- and upper-triangular factors in an LU decomposition](https://github.com/user-attachments/assets/bff6e465-54b0-49b6-b53e-c8061217bf9b)
 
-## Mathematical Formulation
+## Mathematical formulation
 
 Consider a square $n \times n$ matrix $A$:
 
@@ -48,6 +48,8 @@ $$
 
 Here, $L$ is lower-triangular with ones on the diagonal, and $U$ is upper-triangular. The factorization is not always guaranteed to exist unless certain conditions are met (e.g., all leading principal minors of $A$ being nonzero when no pivoting is used; with partial pivoting, a factorization $PA = LU$ exists for every nonsingular $A$).
 
+The formulas below use the Doolittle convention, which fixes every diagonal entry of $L$ to one. Specifying that diagonal removes a scaling ambiguity between the two triangular factors and makes the stored elimination multipliers easier to interpret.
+
 ## Derivation
 
 The derivation of the LU decomposition closely follows the steps of Gaussian elimination. Gaussian elimination transforms the matrix $A$ into an upper-triangular matrix by adding multiples of one row to another. These multipliers can be stored in the entries of a lower-triangular matrix $L$.
@@ -82,7 +84,7 @@ III. After the first column is dealt with, the submatrix of $A$ (excluding the f
 
 IV. This process continues recursively until $A$ is fully decomposed into $L$ and $U$.
 
-### Recovering the Factor Formulas
+### Recovering the factor formulas
 
 The $(i,j)$ entry of $A=LU$ is $a_{ij}=\sum_k l_{ik}u_{kj}$. Triangularity removes most terms. For $i\leq j$, only $k\leq i$ remain, and $l_{ii}=1$, giving
 
@@ -102,15 +104,15 @@ Row swaps change the factorization to $PA=LU$. The same permutation must act on 
 
 Dense factorization costs $O(n^3)$ once, followed by $O(n^2)$ for each new right-hand side. Reusing the factors therefore avoids repeating elimination and usually avoids the extra work of forming an explicit inverse. In the example below, exact arithmetic gives $(x_1,x_2,x_3)=(-5/23,29/69,-1/23)$, which can be substituted into the original equations to verify the rounded results.
 
-## Algorithm Steps
+## Algorithm steps
 
 Given an $n \times n$ matrix $A$, the LU decomposition algorithm without pivoting can be described as follows:
 
-I. **Initialization**:
+**Step 1: Initialization.**
 
 Set $L = I$ (the $n \times n$ identity matrix) and $U = 0$ (the $n \times n$ zero matrix).
 
-II. **Main Loop** (for $i = 1$ to $n$):
+**Step 2: Main loop.** (for $i = 1$ to $n$):
 
 Compute the diagonal and upper elements of $U$:
 
@@ -130,7 +132,7 @@ $$
 
 III. After these loops complete, $A = LU$ is obtained.
 
-IV. **Solving $A\mathbf{x} = \mathbf{b}$**:
+**Step 4: Solving $A\mathbf{x} = \mathbf{b}$.**
 
 Forward substitution for $L\mathbf{c} = \mathbf{b}$:
 
@@ -148,7 +150,7 @@ $$
 x_i = \frac{c_i - \sum_{k=i+1}^{n} u_{ik}x_{k}}{u_{ii}}.
 $$
 
-V. **Partial pivoting (what the implementation does)**:
+**Step 5: Partial pivoting (what the implementation does).**
 
 The steps above assume every pivot $u_{ii}$ is nonzero. The implementation instead performs partial pivoting: at step $i$ it swaps row $i$ with the row $p \geq i$ whose entry in column $i$ has the largest absolute value, recording the swap in a permutation matrix $P$ (and in the already computed columns of $L$), and then eliminates as before. The result is the factorization
 
@@ -200,7 +202,7 @@ $$
 \mathbf{b} = \begin{bmatrix} 1 \\ -2 \\ 3 \end{bmatrix}
 $$
 
-**Step-by-Step LU Decomposition**
+**Step-by-Step LU decomposition**
 
 **Step 1: Initialize**
 

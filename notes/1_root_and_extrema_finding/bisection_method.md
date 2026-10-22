@@ -1,6 +1,6 @@
 # Bisection Method
 
-The bisection method is a classical root-finding technique used extensively in numerical analysis to locate a root of a continuous function $f(x)$ within a specified interval $[a, b]$. It belongs to the family of **bracketing methods**, which use intervals known to contain a root and systematically reduce these intervals until the solution is approximated to a desired level of accuracy. While it is not the fastest method, it is revered for its simplicity, guaranteed convergence (under appropriate conditions), and ease of implementation.
+Bisection approximates a real root of a continuous function $f$ by repeatedly halving an interval $[a,b]$ whose endpoints have opposite signs. It is a **bracketing method**: each update preserves an interval known to contain at least one root, rather than relying on a single guess. Its main advantages are a simple implementation, a reliable existence argument, and a position-error bound that follows directly from the interval width. Faster methods can need fewer iterations, but bisection offers predictable progress when only function evaluations and a valid initial bracket are available.
 
 Physically and mathematically, the idea is that if a function $f(x)$ crosses the $x$-axis, then there exists a point $x = \alpha$ such that $f(\alpha) = 0$. If the function is continuous and changes sign over an interval $[a,b]$ (that is, $f(a)f(b) < 0$), then by the Intermediate Value Theorem, there must be at least one root in that interval. The bisection method exploits this fact by repeatedly halving the interval until the resulting interval is sufficiently small to approximate the root.
 
@@ -10,7 +10,7 @@ Physically and mathematically, the idea is that if a function $f(x)$ crosses the
 
 In the above conceptual plot, the function $f(x)$ crosses the x-axis somewhere between $a$ and $b$. The bisection step chooses the midpoint $c = \frac{a+b}{2}$ to test the sign of $f(c)$. Depending on the sign, the algorithm halves the interval, guaranteeing that the root remains within the new interval. This halving process is repeated iteratively.
 
-## Mathematical Formulation
+## Mathematical formulation
 
 Consider a continuous function $f : \mathbb{R} \to \mathbb{R}$. Suppose that we know there is at least one root in the interval $[a, b]$. By the Intermediate Value Theorem, if $f(a)f(b) < 0$, there must exist at least one $\alpha \in (a, b)$ such that $f(\alpha) = 0$.
 
@@ -29,7 +29,7 @@ In either case, we have reduced the interval size by a factor of 2. After $n$ st
 
 ## Derivation
 
-I. **Assumption**: We start with a continuous function $f(x)$ and an initial bracketing interval $[a_0, b_0]$ such that:
+**Step 1: Assumption.** We start with a continuous function $f(x)$ and an initial bracketing interval $[a_0, b_0]$ such that:
 
 $$
 f(a_0)f(b_0) < 0.
@@ -37,7 +37,7 @@ $$
 
 This ensures the existence of at least one root $\alpha$ in $(a_0, b_0)$.
 
-II. **First Iteration**:
+**Step 2: First iteration.**
 
 Compute the midpoint:
 
@@ -52,7 +52,7 @@ Evaluate $f(c_1)$:
 
 In either case, the new interval $[a_1, b_1]$ is half the size of $[a_0, b_0]$, and still contains the root.
 
-III. **Subsequent Iterations**:
+**Step 3: Subsequent iterations.**
 
 At the $k$-th iteration:
 
@@ -77,7 +77,7 @@ $$
 |b_k - a_k| = \frac{|b_0 - a_0|}{2^k}
 $$
 
-IV. **Convergence Criterion**:
+**Step 4: Convergence criterion.**
 
 The process is repeated until the desired position tolerance $\epsilon$ is reached. After $k$ interval reductions, the midpoint of the current bracket is $c_{k+1}=(a_k+b_k)/2$. It is guaranteed to lie within $\epsilon$ of a root when:
 
@@ -87,7 +87,7 @@ $$
 
 or when $|f(c_k)| < \epsilon$, or until the maximum number of iterations $n_{\max}$ is exhausted (in which case an error is raised).
 
-### Error Bound and Iteration Count
+### Error bound and iteration count
 
 The indexing matters: $c_k$ is computed from $[a_{k-1},b_{k-1}]$, before the $k$-th reduction. Therefore, for a root $\alpha$ retained by the brackets,
 
@@ -107,7 +107,7 @@ A residual test $|f(c_k)|<\epsilon_f$ measures a different quantity. It bounds t
 
 If an endpoint or midpoint is an exact root, return it before testing the sign change. In floating point arithmetic, compare signs rather than multiplying very large function values. A midpoint equal to an endpoint signals that the interval cannot be refined further at the current precision.
 
-## Algorithm Steps
+## Algorithm steps
 
 **Input**:
 
@@ -122,13 +122,13 @@ If an endpoint or midpoint is an exact root, return it before testing the sign c
 
 **Iteration**:
 
-I. Compute the midpoint:
+**Step 1.** Compute the midpoint:
 
 $$
 c = \frac{a+b}{2}
 $$
 
-II. Evaluate $f(c)$.
+**Step 2.** Evaluate $f(c)$.
 
 III. If $\frac{b-a}{2} < \epsilon$ or $|f(c)| < \epsilon$:
 
@@ -140,7 +140,7 @@ IV. Else, determine the sub-interval:
 - If $f(a)f(c) < 0$, set $b = c$.
 - Else, set $a = c$.
 
-V. Increment iteration counter $k = k+1$ and go back to step I.
+**Step 5.** Increment iteration counter $k = k+1$ and go back to step I.
 
 **Output**:
 

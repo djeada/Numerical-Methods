@@ -35,7 +35,7 @@ $$
 
 This rapid local convergence is the main attraction of Newton's method.
 
-### A More Explicit Quadratic-Convergence Argument
+### A more explicit quadratic-convergence argument
 
 Let $x^*$ have zero gradient and nonsingular Hessian, write $e=x-x^*$, and let $B(x)=\nabla^2 f(x)$. The fundamental theorem of calculus along the segment gives
 
@@ -98,7 +98,7 @@ $$
 
 When $y^\top s>0$, positive definiteness is preserved. A line search satisfying the Wolfe curvature condition guarantees $y^\top s>0$ at every step, which is why BFGS is paired with a [Wolfe line search](line_search.md) rather than plain backtracking.
 
-### Verifying the BFGS Secant Equation
+### Verifying the BFGS secant equation
 
 The gradient change is an averaged curvature action,
 

@@ -127,7 +127,7 @@ Therefore the new term vanishes at every old node. The correction can enforce th
 
 ![Partial sums of the Newton polynomial](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/newton_partial_sums.svg)
 
-### Computing the New Correction Coefficient
+### Computing the new correction coefficient
 
 The new interpolation condition at $x_{k+1}$ gives
 
@@ -212,6 +212,22 @@ As with Lagrange interpolation, high degree and poor node placement can cause la
 When nodes are equally spaced, divided differences are closely related to finite-difference tables. This leads to classical Newton forward and backward interpolation formulas.
 
 The general divided-difference form is more flexible because it does **not** require equal spacing.
+
+### Deriving the equally spaced form
+
+If $x_i=x_0+ih$ with $h\ne0$, define forward differences by $\Delta y_i=y_{i+1}-y_i$ and apply the same operation repeatedly. The divided-difference recursion then gives
+
+$$
+f[x_i,\ldots,x_{i+k}]=\frac{\Delta^k y_i}{k!h^k}.
+$$
+
+For the normalized coordinate $s=(x-x_0)/h$, the Newton product is $\prod_{j=0}^{k-1}(x-x_j)=h^k s(s-1)\cdots(s-k+1)$. Substitution cancels the powers of $h$ and yields
+
+$$
+P_n(x)=y_0+s\Delta y_0+\frac{s(s-1)}{2!}\Delta^2y_0+\cdots.
+$$
+
+For the existing three-point example, $h=1$, $\Delta y_0=2$, and $\Delta^2y_0=-3$, so the expression is $1+2s-\tfrac32s(s-1)$. This derives the connection to a finite-difference table; it is not an additional assumption needed by the general Newton form.
 
 ## Numerical considerations
 

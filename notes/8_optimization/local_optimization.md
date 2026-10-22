@@ -38,7 +38,7 @@ $$
 p_k = -H_k\nabla f(x_k).
 $$
 
-### Checking That a Direction Really Descends
+### Checking that a direction really descends
 
 Taylor expansion along $p$ gives $f(x+\alpha p)=f(x)+\alpha\nabla f(x)^\top p+o(\alpha)$ as $\alpha\to0^+$. A negative directional derivative therefore guarantees improvement for a sufficiently small positive step, although it does not establish that a full step is safe.
 
@@ -85,6 +85,8 @@ e_{k+1}\le c e_k^2,
 $$
 
 respectively.
+
+For linear convergence the factor satisfies $0<c<1$. In the quadratic bound, a fixed positive constant need not be below one: it is the square of an already small error that gives the rapid reduction. These are local, asymptotic statements. Since the true minimizer is usually unknown during a solve, practical diagnostics use gradients, accepted steps, and residuals rather than assuming that the error $e_k$ is directly observable.
 
 ![Idealized local convergence rates](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/local_convergence_rates.svg)
 

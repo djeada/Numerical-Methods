@@ -34,7 +34,7 @@ Mutation adds random perturbations to selected genes. It maintains diversity and
 
 ![Population evolution toward a low-objective basin](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/genetic_algorithm_population.svg)
 
-## Feasibility and a Complete Generation
+## Feasibility and a complete generation
 
 For a box $\ell\leq x\leq u$, componentwise blend crossover with $\alpha_i\in[0,1]$ keeps every child coordinate between the corresponding parent coordinates, so feasible parents produce box-feasible children. This does not preserve arbitrary coupled constraints: componentwise mixing uses different weights in different coordinates. A common scalar convex-combination weight preserves a convex feasible set, but neither form preserves a general nonconvex set.
 

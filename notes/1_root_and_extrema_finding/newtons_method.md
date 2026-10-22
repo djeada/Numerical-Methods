@@ -1,6 +1,6 @@
 # Newton's Method
 
-Newton's method (or the Newton-Raphson method) is a powerful root-finding algorithm that exploits both the value of a function and its first derivative to rapidly refine approximations to its roots. Unlike bracketing methods that work by enclosing a root between two points, Newton's method is an **open method**, requiring only a single initial guess. When it does converge, it does so very quickly, often achieving quadratic convergence. However, the method offers no guarantees of convergence from any arbitrary starting point, and it requires that you can compute (or approximate) the derivative of the function.
+Newton's method, also called the Newton–Raphson method, approximates a root using the function value and its first derivative at the current point. It replaces the nearby curve by its tangent line and uses that line's zero as the next approximation. This is an **open method**: one starting guess is sufficient to define an update, and a sign-changing bracket is not required. Near a smooth simple root, a sufficiently close starting guess can give quadratic convergence. From an arbitrary starting point, however, the tangent may lead away from the root, leave the function's domain, or have an unusable slope. The derivation below separates the update formula from the assumptions that make it converge.
 
 Physically and geometrically, Newton's method can be viewed as follows: starting from an initial guess $x_0$, you draw the tangent line to the curve $y = f(x)$ at the point $(x_0, f(x_0))$. The intersection of this tangent line with the $x$-axis provides a better approximation to the root than $x_0$, assuming certain conditions on the function and the initial guess. Repeating this procedure iteratively refines the approximation.
 
@@ -12,7 +12,7 @@ Imagine the curve $f(x) = x^2 -4$:
 
 At $x_0 = 3$, the tangent line is drawn. Its intersection with the x-axis is the next approximation $x_1$. Repeating this yields even better approximations rapidly converging to the exact root $x=2$.
 
-## Mathematical Formulation
+## Mathematical formulation
 
 Let $f:\mathbb{R} \to \mathbb{R}$ be a differentiable function. We wish to solve:
 
@@ -45,11 +45,11 @@ This gives the iterative scheme for Newton’s method.
 
 ## Derivation
 
-I. **Assumption of Differentiability:**
+**Step 1: Assumption of differentiability.**
 
 We assume $f$ is at least once differentiable near the root. This allows us to use local linearization.
 
-II. **Local Linear Approximation:**
+**Step 2: Local linear approximation.**
 
 Near a guess $x_n$, write:
 
@@ -57,7 +57,7 @@ $$
 f(x) \approx f(x_n) + f'(x_n)(x - x_n)
 $$
 
-III. **Solving for the Root of the Linear Approximation:**
+**Step 3: Solving for the root of the linear approximation.**
 
 Set $f(x)=0$ in the linear approximation:
 
@@ -71,7 +71,7 @@ $$
 x \approx x_n - \frac{f(x_n)}{f'(x_n)}
 $$
 
-IV. **Iteration:**
+**Step 4: Iteration.**
 
 Define:
 
@@ -81,7 +81,7 @@ $$
 
 As $n \to \infty$, if the sequence converges, $x_n \to x^*$ where $f(x^*)=0$. Under suitable conditions (e.g., if $f$ is well-behaved and the initial guess is sufficiently close to the actual root), Newton's method converges quadratically to the root.
 
-### Deriving Quadratic Convergence
+### Deriving quadratic convergence
 
 Let $r$ be a simple root, let $e_n=x_n-r$, and suppose $f$ has a continuous second derivative near $r$. Taylor expansion about $x_n$ gives, for a point $\xi_n$ between $r$ and $x_n$,
 
@@ -101,7 +101,27 @@ For a root of multiplicity $m>1$, substituting $f(x)=(x-r)^m h(x)$ instead gives
 
 The numerical example below rounds values for display. Keep full precision in the actual iteration, since feeding rounded values back into the update can conceal the expected convergence rate.
 
-## Algorithm Steps
+## Extension to nonlinear systems
+
+For a vector equation $F(x)=0$ with $x\in\mathbb R^n$, the first-order model is $F(x_k+p)\approx F(x_k)+J_F(x_k)p$, where $J_F$ is the Jacobian. Set the model to zero, solve
+
+$$
+J_F(x_k)p_k=-F(x_k),\qquad x_{k+1}=x_k+p_k,
+$$
+
+and recompute the Jacobian at the new point. This is a linear-system solve at each iteration, rather than an instruction to form $J_F^{-1}$ explicitly.
+
+For example, take $F(x,y)=(x^2+y^2-5,\ x-y-1)^\top$ and start at $(1.5,0.5)$. The first correction solves
+
+$$
+\begin{bmatrix}3&1\\1&-1\end{bmatrix}
+\begin{bmatrix}p_x\\p_y\end{bmatrix}
+=\begin{bmatrix}2.5\\0\end{bmatrix},
+$$
+
+so $p_x=p_y=0.625$ and the new point is $(2.125,1.125)$. Further steps approach the root $(2,1)$. The repository's `newton_raphson_system` uses this Jacobian-based update. Singular or poorly conditioned Jacobians require the same care as small derivatives in the scalar method; see [linear systems](../2_systems_of_equations/systems_of_equations.md) for the solve and residual concepts.
+
+## Algorithm steps
 
 **Input:**
 
@@ -116,22 +136,22 @@ Set iteration counter $n = 0$.
 
 **Iteration:**
 
-I. Evaluate $f(x_n)$ and $f'(x_n)$.
+**Step 1.** Evaluate $f(x_n)$ and $f'(x_n)$.
 
 II. If $f'(x_n)=0$ (or the step $f(x_n)/f'(x_n)$ is not a finite number), the method cannot proceed (division by zero). Stop with an error or choose a new $x_n$. Only an exactly zero (or overflowing) derivative is rejected; a merely small derivative is legitimate when $f$ itself is small, so no absolute threshold is used.
 
-III. Update:
+**Step 3.** Update:
 
 $$
 x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}
 $$
 
-IV. Check Convergence:
+**Step 4.** Check Convergence:
 
 - If $|x_{n+1} - x_n| < \epsilon$, stop and return $x_{n+1}$. (The residual $|f(x_{n+1})|$ is not tested. A small step can coexist with a noticeable residual when the derivative is large, and rounding can also cause stagnation; the step test alone is not a residual guarantee.)
 - If $n_{\max}$ iterations have been performed without meeting this test, stop with an error (non-convergence).
 
-V. Increment $n = n+1$ and repeat from step I.
+**Step 5.** Increment $n = n+1$ and repeat from step I.
 
 **Output:**
 

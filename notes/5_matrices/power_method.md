@@ -1,6 +1,6 @@
 # Power Method
 
-The power method is a fundamental iterative algorithm for estimating the eigenvalue of largest magnitude and its associated eigenvector for a given matrix. This technique is particularly appealing when dealing with large and sparse matrices, where direct eigenvalue computations (e.g., via the characteristic polynomial) are computationally expensive or numerically unstable. The power method capitalizes on the property that repeated multiplication by a matrix $A$ can align a nonzero initial vector with the dominant eigendirection, provided the starting vector has a nonzero component in that direction and the dominant eigenvalue has strictly largest magnitude. The eigenbasis argument below states the assumptions explicitly.
+The power method estimates an eigenvalue of largest magnitude and its associated eigendirection by repeatedly multiplying a vector by a matrix and normalizing the result. Each multiplication strengthens the contribution from a strictly dominant eigenvalue relative to smaller ones. For the eigenbasis argument below, the matrix is diagonalizable and the initial vector must have a nonzero component in the dominant direction. A wide magnitude gap makes this separation fast; a small gap makes it slow. Because the main operation is a matrix-vector product, the method is useful for large sparse matrices when only one eigenpair is needed. It avoids forming a characteristic polynomial or computing a full decomposition, while normalization controls the growth or decay of the vector's length.
 
 ![Power iterates approaching a dominant eigendirection](https://github.com/user-attachments/assets/e48ec2b5-fd18-4886-a4b9-497c73aae0de)
 
@@ -13,7 +13,7 @@ The power method is a fundamental iterative algorithm for estimating the eigenva
 - The power method can be **extended** to find multiple eigenvalues by deflating the matrix after each dominant eigenvalue is found.
 - It is widely used in applications such as Google's PageRank algorithm to determine the importance of web pages.
 
-## Mathematical Formulation
+## Mathematical formulation
 
 Given an $n \times n$ matrix $A$ and an initial guess $x^{(0)}$, the power method iterates as follows:
 
@@ -31,7 +31,7 @@ $$
 
 These steps are repeated until convergence. Convergence occurs when the vector $x^{(k)}$ no longer changes significantly between iterations while successive eigenvalue estimates often stabilize as well. These are distinct checks, and neither alone is as informative as the eigenpair residual described below.
 
-## Inverse Power Method for the Smallest Eigenvalue
+## Inverse power method for the smallest eigenvalue
 
 If we are interested in the eigenvalue of $A$ with the smallest magnitude, we can use the inverse power method. For invertible $A$, the eigenvalues of $A^{-1}$ are the reciprocals of the eigenvalues of $A$ (with the same eigenvectors). Thus, applying the power method to $A^{-1}$ instead of $A$ yields the eigenvector of the eigenvalue of $A$ with the smallest magnitude, and the reciprocal of the dominant eigenvalue of $A^{-1}$ gives that eigenvalue. In practice $A^{-1}$ is never formed; each step solves $A y^{(k)} = x^{(k)}$.
 
@@ -85,7 +85,7 @@ and the Rayleigh quotient $\frac{x^{(k)T} A x^{(k)}}{x^{(k)T} x^{(k)}}$ tends to
 
 Thus, under the stated assumptions, the power method approaches the dominant eigendirection $v_1$, up to sign or phase, and its Rayleigh quotient approaches $\lambda_1$. The distinction between vector convergence and direction convergence matters for the stopping test.
 
-### Direction, Convergence Factor, and Stopping
+### Direction, convergence factor, and stopping
 
 Dividing the eigenbasis expansion by $\lambda_1^k$ leaves terms proportional to $(\lambda_j/\lambda_1)^k$. The asymptotic direction-error factor is therefore $|\lambda_2/\lambda_1|$, assuming the relevant coefficients are nonzero. A strict gap is enough for the standard convergence argument; a wide gap makes convergence fast.
 
@@ -99,18 +99,18 @@ Use a suitably scaled norm of $r_k$ as the stopping measure. If $Ax^{(k)}=0$, no
 
 A small eigenpair residual measures satisfaction of the equation. For a normal matrix it also bounds distance to the spectrum after division by $\|x^{(k)}\|_2$; a nonnormal matrix can be more sensitive. For inverse iteration with a fixed shift, factor $A-\sigma I$ once and reuse triangular solves instead of explicitly inverting it.
 
-## Algorithm Steps
+## Algorithm steps
 
-I. **Initialize**: Choose an initial vector $x^{(0)}$ (random or based on domain knowledge).
+**Step 1: Initialize.** Choose an initial vector $x^{(0)}$ (random or based on domain knowledge).
 
-II. **Iterative Step**: For $k=0,1,2,\dots$:
+**Step 2: Iterative step.** For $k=0,1,2,\dots$:
 
 - Compute $y^{(k)} = A x^{(k)}$.
 - Normalize $x^{(k+1)} = \frac{y^{(k)}}{\|y^{(k)}\|}$.
 
-III. **Convergence Check**: Stop when $\|x^{(k+1)} - x^{(k)}\|$ is sufficiently small, or when changes in the estimated eigenvalue become negligible.
+**Step 3: Convergence check.** Stop when $\|x^{(k+1)} - x^{(k)}\|$ is sufficiently small, or when changes in the estimated eigenvalue become negligible.
 
-IV. **Eigenvalue Approximation**: Once converged, estimate the dominant eigenvalue as:
+**Step 4: Eigenvalue approximation.** Once converged, estimate the dominant eigenvalue as:
 
 $$
 \lambda_{\text{max}} \approx \frac{x^{(k)T} A x^{(k)}}{x^{(k)T} x^{(k)}}.

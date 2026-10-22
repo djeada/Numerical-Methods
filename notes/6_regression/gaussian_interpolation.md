@@ -207,7 +207,7 @@ This creates a classic RBF tradeoff:
 
 The value of $\varepsilon$ should not be chosen solely by visual preference.
 
-### Reading the Matrix and Scaling the Shape Parameter
+### Reading the matrix and scaling the shape parameter
 
 In the symmetric three-point example, write $a=e^{-1}$ and $b=e^{-4}$. Symmetry gives $\lambda_0=\lambda_2=u$ and $\lambda_1=v$, so the matrix equations reduce to
 
@@ -265,19 +265,19 @@ I. validate that all data sites are distinct;
 
 II. choose $\varepsilon>0$;
 
-III. construct the dense matrix
+**Step 3.** Construct the dense matrix
 
 $$
 A_{ij} = e^{-\varepsilon^2(x_i-x_j)^2};
 $$
 
-IV. solve
+**Step 4.** Solve
 
 $$
 A\boldsymbol{\lambda} = \mathbf y;
 $$
 
-V. evaluate new queries with
+**Step 5.** Evaluate new queries with
 
 $$
 s(x) = \sum_j \lambda_j e^{-\varepsilon^2(x-x_j)^2}.
@@ -306,6 +306,8 @@ $$
 with $\alpha>0$.
 
 That is no longer exact interpolation, but it can trade a small data mismatch for improved stability and smoothing.
+
+The data residual at the sites makes the change explicit: $\mathbf r=\mathbf y-A\boldsymbol\lambda=\alpha\boldsymbol\lambda$. The mismatch is controlled by the regularized system rather than forced to zero. This kernel regularization should also be distinguished from putting a Euclidean coefficient penalty directly on $\|A\boldsymbol\lambda-\mathbf y\|_2^2$: that different objective gives normal equations $(A^\top A+\alpha I)\boldsymbol\lambda=A^\top\mathbf y$. Stating the system or objective prevents the word “regularization” from hiding a change of model.
 
 ## Higher dimensions
 

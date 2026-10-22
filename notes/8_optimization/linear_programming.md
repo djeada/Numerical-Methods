@@ -54,7 +54,7 @@ For minimization, reduced costs indicate whether introducing a nonbasic variable
 
 A ratio test chooses the leaving variable so that feasibility is preserved.
 
-### Reduced Costs and the Ratio Test
+### Reduced costs and the ratio test
 
 In equality standard form $A_Bx_B+A_Nx_N=b$, choose an invertible basis matrix $B=A_B$ and set the nonbasic variables to zero. The basic point is feasible when $x_B=B^{-1}b\geq0$. Increasing nonbasic variable $x_j$ by $\theta\geq0$ changes the basic variables to
 

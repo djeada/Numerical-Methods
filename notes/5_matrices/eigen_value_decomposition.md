@@ -1,12 +1,12 @@
 # Eigenvalue Decomposition (EVD)
 
-Eigenvalue Decomposition (EVD), also known as Eigendecomposition, is a fundamental operation in linear algebra that breaks down a square matrix into a simpler form defined by its eigenvalues and eigenvectors. This decomposition provides deep insights into the properties and structure of a matrix, enabling simplifications in numerous computations such as matrix powers, transformations, and the solution of systems of linear equations. In many applications — from vibration analysis in engineering to principal component analysis in data science — EVD plays a critical role.
+Eigenvalue decomposition, also called eigendecomposition, expresses a diagonalizable square matrix in a basis of its eigenvectors. In that basis, the transformation acts independently along each eigenvector by multiplying it by the corresponding eigenvalue. Changing back to the original coordinates gives the factorization $A=PDP^{-1}$. This separates the directions of the transformation from their scale factors and simplifies calculations such as matrix powers and linear differential equations. In applications including vibration analysis and principal component analysis, the factors describe modes or directions of variation. The key qualification is diagonalizability: a square matrix must have enough independent eigenvectors for the change of basis to be invertible.
 
 The key idea is that certain square matrices can be represented as a product of a matrix of their eigenvectors and a diagonal matrix of their eigenvalues. This diagonalization separates the scaling factors (eigenvalues) from the directions of transformations (eigenvectors) encoded by the original matrix.
 
 ![Eigenvectors and eigenvalues in a matrix decomposition](https://github.com/user-attachments/assets/75c28eaf-d800-44cc-98cd-c0d9a9c5f14b)
 
-## Mathematical Formulation
+## Mathematical formulation
 
 Consider an $n \times n$ matrix $A$ that has $n$ linearly independent eigenvectors over the field being used. Its diagonal eigenvalue decomposition is:
 
@@ -86,7 +86,7 @@ $$
 
 Not every matrix is guaranteed to have a full set of $n$ linearly independent eigenvectors. If it does, the matrix is said to be diagonalizable, and the above decomposition is possible. If not, the matrix cannot be decomposed purely into this form.
 
-### When Diagonalization Exists
+### When diagonalization exists
 
 Distinct eigenvalues guarantee independent eigenvectors, but repeated eigenvalues need closer examination. The **algebraic multiplicity** of an eigenvalue counts its occurrences in the characteristic polynomial; its **geometric multiplicity** is the dimension of $\ker(A-\lambda I)$. Diagonalization is possible exactly when these multiplicities agree for every eigenvalue.
 
@@ -108,24 +108,24 @@ $$
 
 Multiplying $PDP^{-1}$ reconstructs $\begin{bmatrix}4&1\\2&3\end{bmatrix}$, giving an explicit check of the decomposition. Computing $AP-PD$ is also a useful verification that avoids forming an inverse.
 
-## Algorithm Steps
+## Algorithm steps
 
-I. **Find Eigenvalues**:
+**Step 1: Find eigenvalues.**
 
 - Form the characteristic polynomial $\det(A - \lambda I) = 0$.
 - Solve for $\lambda$. This may be done analytically for small matrices. For larger matrices, finding the roots of the characteristic polynomial is numerically ill-conditioned, so practical algorithms (such as the QR algorithm) compute eigenvalues without forming the polynomial.
 
-II. **Find Eigenvectors**:
+**Step 2: Find eigenvectors.**
 
 - For each eigenvalue $\lambda_i$, solve $(A - \lambda_i I)v_i = 0$.
 - Ensure each eigenvector $v_i$ is normalized or scaled consistently.
 
-III. **Form $P$ and $D$**:
+**Step 3: Form $P$ and $D$.**
 
 - Construct $D$ as the diagonal matrix with eigenvalues on the diagonal.
 - Construct $P$ with eigenvectors as columns.
 
-IV. **Verify Invertibility of $P$**:
+**Step 4: Verify invertibility of $P$.**
 
 - If $P$ is invertible, then $A = P D P^{-1}$.
 
@@ -140,7 +140,7 @@ A = \begin{bmatrix}
 \end{bmatrix}
 $$
 
-I. **Find Eigenvalues**:
+**Step 1: Find eigenvalues.**
 
 The characteristic polynomial:
 
@@ -159,7 +159,7 @@ Solve $\lambda^2 -7\lambda +10=0$:
 
 The roots are $\lambda_1=5$ and $\lambda_2=2$.
 
-II. **Find Eigenvectors**:
+**Step 2: Find eigenvectors.**
 
 For $\lambda_1 = 5$:
 
@@ -177,7 +177,7 @@ $$
 
 Solve $(A-2I)v=0$ leads to $v_2 = [-1,2]^T$.
 
-III. **Form $P$ and $D$**:
+**Step 3: Form $P$ and $D$.**
 
 $$
 P = \begin{bmatrix}1 & -1 \\ 1 & 2\end{bmatrix}, \quad D = \begin{bmatrix}5 & 0 \\ 0 & 2\end{bmatrix}

@@ -1,6 +1,6 @@
 # Heun's Method
 
-Heun's method improves Euler's method by using information from both ends of each step. It is a second-order explicit Runge--Kutta method and is also known as the **explicit trapezoidal method** or **improved Euler method**.
+Heun's method improves Euler's method by using information from both ends of each step. It is a second-order explicit Runge–Kutta method and is also known as the **explicit trapezoidal method** or **improved Euler method**.
 
 For the IVP
 
@@ -13,7 +13,7 @@ Euler uses only the slope at the beginning of a step. Heun first predicts the en
 
 ![Heun predictor-corrector geometry](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/heun_predictor_corrector.svg)
 
-## Predictor-Corrector Form
+## Predictor-corrector form
 
 Given $(t_n,u_n)$ and step size $h$:
 
@@ -31,7 +31,7 @@ $$
 
 The predictor is an Euler step. The corrector replaces Euler's single slope by the average of the start and predicted-end slopes.
 
-## Why the Average Helps
+## Why the average helps
 
 The exact solution satisfies
 
@@ -57,7 +57,7 @@ Halving $h$ therefore reduces the global error by roughly a factor of four.
 
 ![Heun converges faster than Euler as the step is refined](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/heun_error_vs_step.svg)
 
-### Verifying Second-Order Accuracy
+### Verifying second-order accuracy
 
 Start a step from the exact value $u=u(t_n)$ and assume the derivatives needed below are bounded. Write $f=f(t_n,u)$, and use $f_u$ for the derivative with respect to the state. Taylor expansion of the predicted-end slope gives
 
@@ -77,7 +77,7 @@ The Euler predictor differs from the true endpoint by $O(h^2)$. A Lipschitz $f$ 
 
 Heun performs one correction. Solving the endpoint trapezoidal equation implicitly is a different method with different stability properties. Repeating corrections would require a separate convergence argument rather than automatically turning the explicit method into an unconditionally stable solver.
 
-## Worked Example
+## Worked example
 
 Use
 
@@ -122,7 +122,7 @@ $$
 
 The exact value is $e^{0.1}\approx1.105170918$, so Heun is much closer than Euler with the same step size.
 
-## Runge--Kutta Interpretation
+## Runge–Kutta interpretation
 
 Heun can be written as
 
@@ -138,7 +138,17 @@ $$
 u_{n+1} = u_n + \frac{h}{2}(k_1 + k_2).
 $$
 
-This is a two-stage explicit Runge--Kutta method. It uses two evaluations of $f$ per step instead of one.
+This is a two-stage explicit Runge–Kutta method. It uses two evaluations of $f$ per step instead of one.
+
+### Distinguishing the two common second-order formulas
+
+Heun's endpoint predictor and averaged-slope update differ from the explicit midpoint method, which evaluates a predicted **midpoint** and uses that slope alone:
+
+$$
+k_1=f(t_n,u_n),\qquad k_2=f(t_n+h/2,u_n+hk_1/2),\qquad u_{n+1}=u_n+hk_2.
+$$
+
+Both methods have order two and the same stability polynomial on $u'=\lambda u$, but they generally produce different values on nonlinear equations. Names such as “improved Euler” can vary between references; the stage formulas identify the actual algorithm unambiguously.
 
 ## Algorithm
 
@@ -156,11 +166,11 @@ while t < tf:
     t = t + h_n
 ```
 
-## Repository Implementation
+## Repository implementation
 
 `heun_method` takes a final time `t_end` and a nominal step `h`. When `(t_end - t0)/h` is not an integer, the last step is shortened so that the returned grid ends exactly at `t_end`; all earlier steps have length `h`. The returned array has shape `(n + 1,)` for a scalar ODE (one component) and `(n + 1, d)` for a system with `d` components.
 
-## Accuracy Versus Cost
+## Accuracy versus cost
 
 Compared with Euler:
 
@@ -199,7 +209,7 @@ On the negative real axis this is $-2\le z\le 0$, the same interval as for Euler
 - Second-order accuracy with a simple formula.
 - Easy to understand as a predictor-corrector method.
 - More accurate than Euler for a similar conceptual complexity.
-- Useful as a building block for more general Runge--Kutta schemes.
+- Useful as a building block for more general Runge–Kutta schemes.
 
 ## Limitations
 

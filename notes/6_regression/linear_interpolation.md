@@ -156,7 +156,7 @@ $$
 
 This explains the familiar second-order behavior: if the maximum interval width is reduced by roughly a factor of two, the interpolation error for a smooth function often decreases by roughly a factor of four.
 
-### Deriving the Interpolation Remainder
+### Deriving the interpolation remainder
 
 For an interior query $x$ that is not a node, choose $C$ so that
 
@@ -170,21 +170,25 @@ For convex $f$, the factor $(x-x_i)(x-x_{i+1})$ is nonpositive, so $f(x)\leq L_i
 
 The interpolation weights provide a simple stability result. If each endpoint value changes by at most $\delta$ while the nodes remain fixed, the in-interval value changes by at most $(1-t)\delta+t\delta=\delta$. During extrapolation the absolute weights sum to more than one and can amplify those errors.
 
+### Accuracy of values and slopes
+
+The second-order bound above concerns the interpolated **function value**. The slope on a segment is a forward secant difference, so for a smooth function it generally approximates the derivative at the left endpoint only to first order. A small value error therefore does not imply an equally accurate derivative estimate. If the application uses slopes or curvature, choose and assess the interpolation method for those quantities as well as for its values at the nodes.
+
 ## Algorithm
 
 For a single query in sorted data:
 
-I. verify that the query lies in the permitted range;
+**Step 1.** Verify that the query lies in the permitted range;
 
-II. locate the interval $[x_i,x_{i+1}]$ containing the query;
+**Step 2.** Locate the interval $[x_i,x_{i+1}]$ containing the query;
 
-III. compute
+**Step 3.** Compute
 
 $$
 t = \frac{x-x_i}{x_{i+1}-x_i};
 $$
 
-IV. return
+**Step 4.** Return
 
 $$
 (1 - t)y_i + t y_{i+1}.

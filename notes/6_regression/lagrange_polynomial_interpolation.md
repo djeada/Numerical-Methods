@@ -87,6 +87,8 @@ contributes a polynomial that has the correct value $y_j$ at one node and vanish
 
 Although the basis functions are tied to individual nodes, the final polynomial is global. Changing one node or data value generally changes the polynomial everywhere.
 
+These basis values are interpolation weights, not probabilities: they sum to one but can be negative. In the worked example at $x=1.5$, $(L_0,L_1,L_2)=(-1/8,3/4,3/8)$. The contribution from the first sample is negative even though its observed value is positive. This explains why a polynomial interpolant, unlike an in-interval linear segment, can overshoot the range of the data.
+
 ## Worked example
 
 Interpolate the three points
@@ -177,7 +179,7 @@ $$
 
 An implementation should detect this case rather than evaluate a formula containing division by zero.
 
-### Deriving the Barycentric Formula
+### Deriving the barycentric formula
 
 Let $\omega(x)=\prod_{m=0}^n(x-x_m)$. Away from the nodes, the product definition gives $L_j(x)=\omega(x)w_j/(x-x_j)$. Also $\sum_jL_j(x)=1$: this sum is a degree-at-most-$n$ polynomial that equals one at all $n+1$ nodes, so uniqueness makes it identically one.
 
