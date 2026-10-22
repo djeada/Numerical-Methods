@@ -1,4 +1,4 @@
-## Secant Method
+# Secant Method
 
 The Secant Method is a root-finding algorithm used in numerical analysis to approximate the zeros of a given function $f(x)$. It can be regarded as a derivative-free variant of Newton's method. Instead of computing the derivative $f'(x)$ at each iteration (as done in Newton’s method), it approximates the derivative by using two previously computed points. This approach allows the Secant Method to be applied even when the function is not easily differentiable, and under suitable conditions, it often converges faster than simpler bracket-based methods (like the bisection method).
 
@@ -8,51 +8,81 @@ Conceptually, the Secant Method constructs a secant line between two points $(x_
 
 Imagine plotting the function $f(x)$:
 
-![secant\_method](https://github.com/user-attachments/assets/5e904eb0-1c4f-499a-9937-39fcdb210fde)
+![Secant-line intercepts approximating a root](https://github.com/user-attachments/assets/5e904eb0-1c4f-499a-9937-39fcdb210fde)
 
 The intersection of the secant line with the x-axis gives the next approximation $x_{n+1}$. Repeating this procedure leads to progressively better approximations of the root, assuming the method converges.
 
-### Mathematical Formulation
+## Mathematical Formulation
 
 Consider a continuous function $f(x)$ for which we want to solve $f(x)=0$. The Secant Method starts with two initial approximations $x_0$ and $x_1$, and then generates a sequence $\{x_n\}$ according to:
 
-$$x_{n+1} = x_n - f(x_n) \frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}$$
+$$
+x_{n+1} = x_n - f(x_n) \frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}
+$$
 
 This formula approximates the derivative $f'(x_n)$ by the finite difference:
 
-$$f'(x_n) \approx \frac{f(x_n)-f(x_{n-1})}{x_n - x_{n-1}}$$
+$$
+f'(x_n) \approx \frac{f(x_n)-f(x_{n-1})}{x_n - x_{n-1}}
+$$
 
 By replacing $f'(x_n)$ with the above approximation in the Newton's method formula, we arrive at the Secant Method formula.
 
-### Derivation
+## Derivation
 
 I. **Starting from Newton’s Method**:
 
 Newton’s method update rule is:
 
-$$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}.$$
+$$
+x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}.
+$$
 
 II. **Approximating the Derivative**:
 
 If the derivative $f'(x_n)$ is difficult to compute or unknown, we can use a finite difference approximation based on the two most recent points:
 
-$$f'(x_n) \approx \frac{f(x_n)-f(x_{n-1})}{x_n - x_{n-1}}.$$
+$$
+f'(x_n) \approx \frac{f(x_n)-f(x_{n-1})}{x_n - x_{n-1}}.
+$$
 
 III. **Substitute into Newton’s Formula**:
 
 Replacing $f'(x_n)$ with this approximation gives:
 
-$$x_{n+1} = x_n - \frac{f(x_n)}{\frac{f(x_n)-f(x_{n-1})}{x_n - x_{n-1}}}.$$
+$$
+x_{n+1} = x_n - \frac{f(x_n)}{\frac{f(x_n)-f(x_{n-1})}{x_n - x_{n-1}}}.
+$$
 
 IV. **Simplify the Expression**:
 
 By rearranging, we get:
 
-$$x_{n+1} = x_n - f(x_n) \frac{x_n - x_{n-1}}{f(x_n)-f(x_{n-1})}.$$
+$$
+x_{n+1} = x_n - f(x_n) \frac{x_n - x_{n-1}}{f(x_n)-f(x_{n-1})}.
+$$
 
 This is the Secant Method iteration formula.
 
-### Algorithm Steps
+### Why the Convergence Order Is the Golden Ratio
+
+For a sufficiently smooth function near a simple root $r$, the local errors $e_n=x_n-r$ satisfy, to leading order,
+
+$$
+e_{n+1}\approx C e_n e_{n-1},\qquad C=\frac{f''(r)}{2f'(r)}.
+$$
+
+This relation follows by expanding the two function values in the secant formula about $r$: the linear terms cancel, leaving the product of the two previous errors. If the asymptotic order is $p$, so $|e_n|\approx A|e_{n-1}|^p$, then $|e_{n-1}|$ scales like $|e_n|^{1/p}$. The error relation therefore requires
+
+$$
+p=1+\frac1p,\qquad p^2-p-1=0,\qquad p=\frac{1+\sqrt5}{2}.
+$$
+
+This is a local result for sufficiently close, distinct starting values at a simple root; it is not a guarantee for every continuous function. If the leading constant vanishes, the order can differ.
+
+The denominator must be checked **before** division. Equal function values make the secant horizontal, while nearly equal values can magnify evaluation errors into a very large step. Unlike false position, secant iteration retains the latest two iterates rather than a sign-changing bracket, so the next point may lie outside the previous interval. Caching the surviving function value would require only one new evaluation per iteration after initialization. The compact repository implementation recomputes both function values at each step, so its evaluation count follows that implementation choice.
+
+## Algorithm Steps
 
 **Input:**
 
@@ -68,9 +98,11 @@ Set $n=1$ (since we already have $x_0$ and $x_1$).
 
 I. Evaluate $f(x_{n})$ and $f(x_{n-1})$.
 
-II. Compute:
+II. First check that $f(x_n)-f(x_{n-1})$ is nonzero and that the resulting arithmetic is finite. Then compute:
 
-$$x_{n+1} = x_n - f(x_n) \frac{x_n - x_{n-1}}{f(x_n)-f(x_{n-1})}$$
+$$
+x_{n+1} = x_n - f(x_n) \frac{x_n - x_{n-1}}{f(x_n)-f(x_{n-1})}
+$$
 
 III. Check for convergence:
 
@@ -83,17 +115,21 @@ IV. Update indices: $n = n+1$ and repeat step I.
 **Output:**
 
 - Approximate root $x_{n+1}$.
-- Number of iterations performed.
+- Number of iterations performed, if tracked as a diagnostic. The repository function `secant_method` returns only the approximate point, rather than a point-and-count pair.
 
-### Example
+## Example
 
 **Given Function:**
 
-$$f(x) = x^2 - 4.$$
+$$
+f(x) = x^2 - 4.
+$$
 
 We know the roots are $x=\pm 2$. Suppose we do not know the roots in advance and start with:
 
-$$x_0 = 0, \quad x_1 = 1$$
+$$
+x_0 = 0, \quad x_1 = 1
+$$
 
 **Iteration 1:**
 
@@ -135,27 +171,33 @@ x_4 = x_3 - f(x_3) \frac{x_3 - x_2}{f(x_3)-f(x_2)} = 1.6 - (-1.44)
 \frac{1.6-4}{-1.44-12}
 $$
 
-$$= 1.6 - (-1.44) \frac{-2.4}{-13.44}$$
+$$
+= 1.6 - (-1.44) \frac{-2.4}{-13.44}
+$$
 
 Compute inside:
 
-$$\frac{-2.4}{-13.44} = 0.1786 \text{(approx)}, \quad (-1.44)\times0.1786 = -0.2571$$
+$$
+\frac{-2.4}{-13.44} = 0.1786 \text{(approx)}, \quad (-1.44)\times0.1786 = -0.2571
+$$
 
 So:
 
-$$x_4 = 1.6 - (-0.2571) = 1.6 + 0.2571 = 1.8571$$
+$$
+x_4 = 1.6 - (-0.2571) = 1.6 + 0.2571 = 1.8571
+$$
 
 Repeating further will bring the sequence closer to $x=2$.
 
 However, let's simplify by noting that if we start closer to the root, the method converges faster. For example, if we start with $x_0=0$ and $x_1=1$, after the first step we got $x_2=4$, which moved us away initially, but subsequent steps pull the approximation toward $x=2$. Adjusting initial guesses (e.g., starting with $x_0=1$ and $x_1=3$) might yield quicker convergence to the root $x=2$.
 
-### Advantages
+## Advantages
 
 - The secant method avoids requiring an **analytic derivative**, unlike Newton’s method, which is particularly useful for functions that are difficult or impossible to differentiate analytically.
 - Convergence in the secant method is typically **faster than linear convergence**, which is common in the bisection method, though it is not as fast as the quadratic convergence seen in Newton's method.
 - The secant method is easy to **implement due to its simple iterative formula**, which relies only on function evaluations and does not require derivative or interval-based calculations.
 
-### Limitations
+## Limitations
 
 - Convergence is not **guaranteed**, as poor initial guesses can cause divergence or failure to find a root.
 - Functions with **multiple roots** pose challenges because the secant method may converge to an unintended root if the initial guesses are closer to a different zero.

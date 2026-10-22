@@ -1,12 +1,12 @@
-## Checksum Algorithms
+# Checksum Algorithms
 
 Checksum algorithms are methods for computing a small, fixed-size value from a block of data. They serve as a simple mechanism to detect accidental changes or corruption in data during transmission or storage. While not cryptographically secure, checksums are fundamental to error detection in digital systems.
 
-### Luhn Algorithm
+## Luhn Algorithm
 
 The Luhn algorithm (also known as the "modulus 10" algorithm) is a checksum formula used to validate identification numbers such as credit card numbers, IMEI numbers, and national identification numbers.
 
-#### Mathematical Formulation
+### Mathematical Formulation
 
 Given a number string $d_1 d_2 \ldots d_n$:
 
@@ -17,11 +17,21 @@ IV. The number is valid if the total modulo 10 is zero.
 
 For computing a check digit for payload $d_1 d_2 \ldots d_{n-1}$:
 
-$$\text{check digit} = (10 - (S \mod 10)) \mod 10$$
+$$
+\text{check digit} = (10 - (S \mod 10)) \mod 10
+$$
 
 where $S$ is the Luhn sum of the payload digits.
 
-#### Example
+### Check-Digit Parity and Detection Limits
+
+For validation, the rightmost check digit is kept unchanged, and doubling starts at the next digit to its left. For generation, reserve that final position first: equivalently, append a zero placeholder and compute the transformed payload sum $S$. Applying the validation parity directly to the unextended payload would double the wrong positions.
+
+The doubled-digit transform is $T(d)=2d$ for $d<5$ and $T(d)=2d-9$ for $d\geq5$. Subtracting nine is the same as adding the two decimal digits of a doubled value between $10$ and $18$. The check digit $c=(-S)\bmod10$ then makes $S+c$ divisible by ten. For payload `7992739871`, the transformed sum is $67$, so $c=3$ and the completed number is `79927398713`.
+
+Luhn detects every single-digit substitution but not every adjacent transposition: swapping `09` and `90` can preserve the sum. Passing the check establishes consistency with the checksum, not that an identification number is issued, active, or authentic.
+
+### Example
 
 Validate the number 79927398713:
 
@@ -43,15 +53,17 @@ Sum = $3 + 2 + 7 + 7 + 9 + 6 + 7 + 4 + 9 + 9 + 7 = 70$
 
 Since $70 \mod 10 = 0$, the number is valid.
 
-### CRC-32
+## CRC-32
 
 The Cyclic Redundancy Check (CRC-32) is a widely used error-detection algorithm based on polynomial division over $\text{GF}(2)$ (the Galois field with two elements).
 
-#### Mathematical Formulation
+### Mathematical Formulation
 
-A message $M(x)$ is treated as a polynomial over $\text{GF}(2)$. The CRC is computed as:
+A message bit string is treated as a polynomial $M(x)$ over $\operatorname{GF}(2)$. In the basic zero-initialized polynomial construction, the raw remainder is:
 
-$$\text{CRC} = M(x) \cdot x^{32} \mod G(x)$$
+$$
+R(x) = M(x)x^{32}\bmod G(x)
+$$
 
 where $G(x)$ is the generator polynomial. The standard CRC-32 generator is:
 
@@ -62,48 +74,78 @@ $$
 
 In the reflected (LSB-first) implementation, the polynomial constant is $\texttt{0xEDB88320}$.
 
-#### Algorithm Steps
+### Algorithm Steps
 
 1. Initialize a 32-bit CRC register to $\texttt{0xFFFFFFFF}$.
 2. For each byte of input, XOR it with the low byte of the CRC register.
 3. For each of the 8 bits, if the LSB is 1, shift right and XOR with the polynomial; otherwise, just shift right.
 4. After processing all bytes, XOR the CRC register with $\texttt{0xFFFFFFFF}$.
 
-### Fletcher-16
+### Connecting the Polynomial and Register Views
+
+Over $\operatorname{GF}(2)$, coefficients are bits and subtraction is XOR. Multiplication by $x$ shifts a bit pattern; polynomial long division removes a leading term by XORing a shifted copy of the generator. In the basic construction, appending the remainder produces $C(x)=M(x)x^{32}+R(x)$, which is divisible by $G(x)$ because addition and subtraction coincide.
+
+The common reflected CRC-32 convention described by the register steps also specifies an all-ones initial register, bit reflection, and a final all-ones XOR. Those conventions modify the raw polynomial construction; the raw expression alone does not fully specify the reported checksum. With the leading $x^{32}$ coefficient omitted, the ordinary polynomial constant is `0x04C11DB7`; the reflected shift-right constant is `0xEDB88320`.
+
+A useful check vector for these conventions is the ASCII byte string `123456789`, whose CRC-32 is `0xCBF43926`. The empty byte string gives zero. Byte order when storing that integer is another format choice, separate from bit reflection. [RFC 1952](https://www.rfc-editor.org/rfc/rfc1952) specifies the gzip CRC-32 convention and gives sample update code.
+
+## Fletcher-16
 
 The Fletcher checksum is a position-dependent checksum that uses two running sums to detect both value and positional errors.
 
-#### Mathematical Formulation
+### Mathematical Formulation
 
 Given a byte sequence $b_1, b_2, \ldots, b_n$:
 
-$$S_1 = \sum_{i=1}^{n} b_i \mod 255$$
+$$
+S_1 = \sum_{i=1}^{n} b_i \mod 255
+$$
 
-$$S_2 = \sum_{i=1}^{n} S_1^{(i)} \mod 255$$
+$$
+S_2 = \sum_{i=1}^{n} S_1^{(i)} \mod 255
+$$
 
 where $S_1^{(i)}$ is the value of $S_1$ after processing byte $i$.
 
 The Fletcher-16 checksum is:
 
-$$\text{Fletcher-16} = S_2 \cdot 256 + S_1$$
+$$
+\text{Fletcher-16} = S_2 \cdot 256 + S_1
+$$
 
-### Adler-32
+Initialize both sums to zero and update $S_1\leftarrow(S_1+b_i)\bmod255$, then $S_2\leftarrow(S_2+S_1)\bmod255$ for each byte. Expanding the nested sum shows
+
+$$
+S_2=\sum_{i=1}^n(n-i+1)b_i\bmod255.
+$$
+
+Earlier bytes contribute to more running sums, which makes the result position-sensitive. For bytes $(1,2,3)$, the successive first sums are $1,3,6$, giving $S_1=6$, $S_2=10$, and checksum `0x0A06`. Reordering the last two bytes changes $S_2$ to $11$, although other changes can cancel modulo $255$ and escape detection.
+
+## Adler-32
 
 Adler-32 is a checksum algorithm similar to Fletcher but uses modulus 65521 (the largest prime less than $2^{16}$) for better distribution properties.
 
-#### Mathematical Formulation
+### Mathematical Formulation
 
 Given a byte sequence $b_1, b_2, \ldots, b_n$:
 
-$$A = 1 + \sum_{i=1}^{n} b_i \mod 65521$$
+$$
+A = \left(1 + \sum_{i=1}^{n} b_i\right)\bmod65521
+$$
 
-$$B = \sum_{i=1}^{n} A^{(i)} \mod 65521$$
+$$
+B = \sum_{i=1}^{n} A^{(i)} \mod 65521
+$$
 
 The Adler-32 checksum is:
 
-$$\text{Adler-32} = B \cdot 65536 + A$$
+$$
+\text{Adler-32} = B \cdot 65536 + A
+$$
 
-#### Example
+Initialize $A=1$ and $B=0$. After each byte, update $A\leftarrow(A+b_i)\bmod65521$, followed by $B\leftarrow(B+A)\bmod65521$. Thus $B=[n+\sum_i(n-i+1)b_i]\bmod65521$; the extra $n$ comes from the initial value of $A$. The empty input has Adler-32 value $1$. The byte encoding matters: a checksum operates on bytes, not abstract characters. [RFC 1950](https://www.rfc-editor.org/rfc/rfc1950) defines these initialization and update conventions.
+
+### Example
 
 Compute Adler-32 for the ASCII string "Wikipedia":
 
@@ -121,16 +163,18 @@ Starting with $A = 1$, $B = 0$:
 | i | 105 | 823 | 3662 |
 | a | 97 | 920 | 4582 |
 
-$$\text{Adler-32} = 4582 \times 65536 + 920 = \texttt{0x11E60398}$$
+$$
+\text{Adler-32} = 4582 \times 65536 + 920 = \texttt{0x11E60398}
+$$
 
-### Advantages
+## Advantages
 
 - **Speed:** Checksum algorithms are computationally inexpensive and suitable for real-time verification.
 - **Simplicity:** Implementations are straightforward and require minimal resources.
 - **Wide adoption:** CRC-32 and Luhn are industry standards used in networking protocols, storage systems, and financial systems.
-- **Position sensitivity:** Fletcher and Adler checksums detect reordering errors that simpler sum-based methods miss.
+- **Position sensitivity:** Fletcher and Adler checksums detect many reordering errors that a simple sum misses, because their second accumulators weight positions differently. They do not detect every possible reordering or correlated change.
 
-### Limitations
+## Limitations
 
 - **Not cryptographically secure:** Checksums are designed for error detection, not for security. An adversary can easily craft data with a desired checksum.
 - **Limited error detection:** Simple checksums may fail to detect certain patterns of multi-bit errors.

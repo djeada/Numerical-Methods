@@ -1,10 +1,10 @@
-## Linear Systems of Equations
+# Linear Systems of Equations
 
 A *linear system of equations* is a collection of one or more linear equations involving the same set of variables. Such systems arise in diverse areas such as engineering, economics, physics, and computer science. The overarching goal is to find values of the variables that simultaneously satisfy all equations.
 
 When working with linear systems, representing the equations in *matrix form* proves to be highly efficient. This matrix-based representation underpins a variety of numerical methods—such as Gaussian elimination, LU decomposition, and iterative techniques—used for both small and large-scale problems.
 
-### Mathematical Formulation
+## Mathematical Formulation
 
 A general linear system with $n$ variables $x_1, x_2, \ldots, x_n$ can be expressed as:
 
@@ -56,13 +56,15 @@ In this form:
 
 Expressing the system in matrix form allows us to apply well-studied algebraic procedures and computational routines to solve for $\mathbf{x}$.
 
-### Criteria for a Unique Solution
+## Criteria for a Unique Solution
 
 A system $\mathbf{A}\mathbf{x} = \mathbf{b}$ of $n$ linear equations in $n$ unknowns has a *unique* solution if and only if any one (and thus all) of the following equivalent conditions holds:
 
 I. **Non-zero determinant**:
 
-$$\det(\mathbf{A}) \neq 0$$  
+$$
+\det(\mathbf{A}) \neq 0
+$$
 
 A non-zero determinant indicates that the matrix $\mathbf{A}$ is *invertible*.
 
@@ -84,7 +86,27 @@ Similarly, the rows of $\mathbf{A}$ are also linearly independent. No row can be
 
 If any of these criteria fail (e.g., $\det(\mathbf{A}) = 0$), the system does not have a unique solution: it may either have *no solution* (inconsistent system) or *infinitely many solutions* (underdetermined system).
 
-### Example
+## Rank, Residuals, and Sensitivity
+
+For a general $m\times n$ system, consistency requires $\operatorname{rank}(A)=\operatorname{rank}([A\mid\mathbf{b}])$. A consistent system has a unique solution exactly when this rank is $n$; otherwise it has free variables. If the ranks differ, there is no exact solution, and a [least-squares approximation](../6_regression/least_squares.md) may be appropriate.
+
+For a nonsingular square matrix, define the residual of an approximation $\widehat{\mathbf{x}}$ as $\mathbf{r}=\mathbf{b}-A\widehat{\mathbf{x}}$. Since $A\mathbf{x}=\mathbf{b}$,
+
+$$
+\mathbf{x}-\widehat{\mathbf{x}}=A^{-1}\mathbf{r}.
+$$
+
+For a compatible induced matrix norm and nonzero $\mathbf{b}$, this implies
+
+$$
+\frac{\|\mathbf{x}-\widehat{\mathbf{x}}\|}{\|\mathbf{x}\|}\leq\kappa(A)\frac{\|\mathbf{r}\|}{\|\mathbf{b}\|},\qquad \kappa(A)=\|A\|\|A^{-1}\|.
+$$
+
+The **condition number** describes sensitivity of the mathematical problem, whereas **stability** describes how an algorithm propagates rounding. Pivoting improves elimination stability but does not change an ill-conditioned problem into a well-conditioned one. A small residual therefore needs to be interpreted with the condition number and the accuracy of the input data.
+
+For a dense square system, pivoted LU is a standard direct approach. SPD systems admit Cholesky factorization; large sparse systems often benefit from iterative methods and preconditioners. The expression $\mathbf{x}=A^{-1}\mathbf{b}$ is a theoretical identity, while factorization is usually the practical way to compute the solution.
+
+## Example
 
 Consider the following system of three linear equations in three unknowns $x, y, z$:
 
@@ -126,16 +148,18 @@ To solve this system, one may use:
 
 Each approach exploits the structure of linear systems to systematically isolate the solution for $\mathbf{x}$.
 
-### Advantages
+For this example the solution is $(x,y,z)=(1,-2,-2)$. Substitution gives $3-4+2=1$, $2+4-8=-2$, and $-1-1+2=0$, checking all three equations independently of the chosen solver.
+
+## Advantages
 
 - Matrix methods, such as Gaussian elimination, provide a *systematic framework* for solving linear systems, making both theoretical understanding and practical implementation more straightforward.
 - Representing a system of equations as $\mathbf{A}\mathbf{x} = \mathbf{b}$ creates a *compact representation* that reduces complexity, especially for systems involving many equations and variables.
 - Computational efficiency benefits from *scalability*, as many matrix-based algorithms have predictable complexities, and optimized libraries like BLAS and LAPACK are designed to utilize modern hardware capabilities.
 - Properties of the system can be analyzed using *matrix insights*, such as the determinant to assess solution existence or uniqueness, or matrix decompositions (e.g., LU, QR, SVD) to reveal structure and enhance solving methods.
 
-### Limitations
+## Limitations
 
 - When the matrix $\mathbf{A}$ is *singular* or nearly singular, solutions may not exist, may be infinite, or may be numerically unstable due to amplified computational errors.
 - Solving large systems can be computationally expensive since direct methods like Gaussian elimination scale with $O(n^3)$, and dense matrices increase memory requirements significantly.
-- Numerical instability can arise from *ill-conditioned* matrices where small changes in $\mathbf{A}$ or $\mathbf{b}$ lead to large deviations in the solution, requiring techniques like pivoting or iterative refinement to mitigate errors.
+- *Ill-conditioned* matrices amplify small changes in $\mathbf A$ or $\mathbf b$ into larger changes in the solution. Pivoting controls arithmetic error growth, and iterative refinement can improve a computed residual, but neither removes sensitivity to uncertainty already present in the supplied data.
 - Sparse systems can be inefficiently handled if treated as dense, leading to unnecessary computational and memory overhead unless *specialized sparse techniques* are employed.

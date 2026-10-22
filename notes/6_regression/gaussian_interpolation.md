@@ -1,4 +1,4 @@
-## Gaussian Radial Basis Function Interpolation
+# Gaussian Radial Basis Function Interpolation
 
 Gaussian radial basis function (RBF) interpolation builds a smooth interpolant from Gaussian functions centered at the data sites.
 
@@ -30,7 +30,7 @@ The figure shows the **unweighted basis functions**, with centers $x_j=0,1,2,3$ 
 
 The individual basis functions do not interpolate the observations. The interpolant $s(x)$ is their weighted sum, and the coefficients $\lambda_j$ need not equal the data values or be positive. The basis functions also need not sum to one.
 
-### The Gaussian kernel
+## The Gaussian kernel
 
 The Gaussian radial basis function is
 
@@ -66,7 +66,7 @@ $$
 
 When reading code or papers, always check which convention is being used.
 
-### Interpolation system
+## Interpolation system
 
 Applying the condition
 
@@ -94,7 +94,7 @@ $$
 
 For distinct data sites and $\varepsilon>0$, the Gaussian kernel is strictly positive definite. In exact arithmetic, the matrix is therefore symmetric positive definite and the interpolation problem has a unique solution.
 
-### Do not form the inverse explicitly
+## Do not form the inverse explicitly
 
 The mathematical identity
 
@@ -108,7 +108,7 @@ For a dense symmetric positive-definite matrix, Cholesky factorization is a natu
 
 Explicitly computing $A^{-1}$ usually costs more, stores more information than needed, and can amplify numerical error.
 
-### Worked example
+## Worked example
 
 Use
 
@@ -190,7 +190,7 @@ $$
 
 The interpolant still passes through all three supplied data values exactly in exact arithmetic.
 
-### Why the shape parameter matters
+## Why the shape parameter matters
 
 The shape parameter affects both the visual shape of the interpolant and the conditioning of the linear system.
 
@@ -207,7 +207,21 @@ This creates a classic RBF tradeoff:
 
 The value of $\varepsilon$ should not be chosen solely by visual preference.
 
-### Conditioning
+### Reading the Matrix and Scaling the Shape Parameter
+
+In the symmetric three-point example, write $a=e^{-1}$ and $b=e^{-4}$. Symmetry gives $\lambda_0=\lambda_2=u$ and $\lambda_1=v$, so the matrix equations reduce to
+
+$$
+(1+b)u+av=0,\qquad 2au+v=\tfrac12.
+$$
+
+Thus $v=\tfrac12/[1-2a^2/(1+b)]$ and $u=-av/(1+b)$. This supplies the missing algebra behind the reported coefficients and explains why negative outer coefficients are needed to reproduce the zero endpoint values.
+
+For fixed distinct sites, $\varepsilon\to0$ makes every matrix entry tend to one. The limiting all-ones matrix has rank one, explaining the loss of conditioning for flat Gaussians. As $\varepsilon\to\infty$, off-diagonal entries tend to zero and $A$ tends to the identity, but very narrow kernels can give poor values between the sites despite this favorable matrix conditioning.
+
+The meaningful quantity is the dimensionless distance $\varepsilon|x_i-x_j|$. If coordinates are rescaled as $\widetilde x=cx$ with $c>0$, choose $\widetilde\varepsilon=\varepsilon/c$ to retain the same kernel. In several dimensions, coordinate scaling determines the distance geometry as well as the numerical conditioning.
+
+## Conditioning
 
 The condition number
 
@@ -226,7 +240,7 @@ A useful workflow is to inspect both:
 
 Large coefficients with heavy cancellation can be a warning sign even when the final interpolated values still look reasonable.
 
-### Derivatives
+## Derivatives
 
 The Gaussian interpolant is infinitely differentiable.
 
@@ -245,7 +259,7 @@ $$
 
 No explicit derivative-matching equations are needed because there are no piecewise joins.
 
-### Algorithm
+## Algorithm
 
 I. validate that all data sites are distinct;
 
@@ -269,7 +283,7 @@ $$
 s(x) = \sum_j \lambda_j e^{-\varepsilon^2(x-x_j)^2}.
 $$
 
-### Complexity
+## Complexity
 
 For $N=n+1$ sites, a straightforward dense implementation requires roughly:
 
@@ -279,7 +293,7 @@ For $N=n+1$ sites, a straightforward dense implementation requires roughly:
 
 These costs become important for large datasets. Specialized approximations, local RBF methods, iterative solvers, or fast kernel techniques may then be needed.
 
-### Interpolation is not smoothing
+## Interpolation is not smoothing
 
 The system above enforces exact interpolation. If the data are noisy, reproducing every observation may be undesirable.
 
@@ -293,7 +307,7 @@ with $\alpha>0$.
 
 That is no longer exact interpolation, but it can trade a small data mismatch for improved stability and smoothing.
 
-### Higher dimensions
+## Higher dimensions
 
 Gaussian RBF interpolation extends directly to points
 
@@ -315,7 +329,7 @@ $$
 
 This dimension-independent form is one reason RBF interpolation is useful for scattered data.
 
-### Code in this repository
+## Code in this repository
 
 The folder `src/6_regression/gaussian_interpolation` contains two different methods:
 

@@ -1,16 +1,18 @@
-## Gauss-Seidel Method
+# Gauss-Seidel Method
 
 The Gauss-Seidel method is a classical iterative method for solving systems of linear equations of the form $A\mathbf{x} = \mathbf{b}$, where $A$ is an $n \times n$ matrix, $\mathbf{x}$ is the vector of unknowns $(x_1, x_2, \ldots, x_n)$, and $\mathbf{b}$ is a known vector. Unlike direct methods such as Gaussian elimination, iterative methods build successively better approximations to the solution. The Gauss-Seidel method specifically uses previously computed (and more up-to-date) components of the solution vector within the same iteration, resulting in typically faster convergence than the Jacobi method.
 
-Physically and numerically, the idea behind the Gauss-Seidel method can be interpreted as performing a sequence of "relaxations": starting from some initial guess, the method progressively reduces the residual (the discrepancy $A\mathbf{x}-\mathbf{b}$) by adjusting one variable at a time, immediately using the most recent updates. The algorithm is simple to implement and is widely used for large and sparse systems, such as those arising in discretized partial differential equations, engineering simulations, and large-scale scientific computations.
+Physically and numerically, the idea behind the Gauss-Seidel method can be interpreted as performing a sequence of "relaxations": starting from some initial guess, the method adjusts one variable at a time to satisfy its current equation, immediately using the most recent updates. The residual is the discrepancy $A\mathbf{x}-\mathbf{b}$; its norm need not decrease after every component update or even after every complete sweep. The algorithm is simple to implement and is widely used for large and sparse systems, such as those arising in discretized partial differential equations, engineering simulations, and large-scale scientific computations.
 
-![output(24)](https://github.com/user-attachments/assets/eb1338bd-5923-4e76-a837-4e3dd684678f)
+![Gauss–Seidel updates using newly computed components](https://github.com/user-attachments/assets/eb1338bd-5923-4e76-a837-4e3dd684678f)
 
-### Mathematical Formulation
+## Mathematical Formulation
 
 Consider a system of $n$ linear equations with $n$ unknowns:
 
-$$A\mathbf{x} = \mathbf{b},$$
+$$
+A\mathbf{x} = \mathbf{b},
+$$
 where
 
 $$
@@ -38,7 +40,9 @@ If $A$ is nonsingular (invertible), there exists a unique solution $\mathbf{x}^*
 
 The Gauss-Seidel method arises from decomposing the matrix $A$ into a lower-triangular part, a strict upper-triangular part, and possibly a diagonal part. One common decomposition is:
 
-$$A = L + D + U$$
+$$
+A = L + D + U
+$$
 
 where:
 
@@ -48,20 +52,26 @@ where:
 
 Another way to write the update rule is to solve each equation for the unknown on its diagonal in terms of the other unknowns. The Gauss-Seidel iteration formula is typically given as:
 
-$$x_i^{(k+1)} = \frac{b_i - \sum_{j=1}^{i-1} A_{ij} x_j^{(k+1)} - \sum_{j=i+1}^{n} A_{ij} x_j^{(k)}}{A_{ii}},$$
+$$
+x_i^{(k+1)} = \frac{b_i - \sum_{j=1}^{i-1} A_{ij} x_j^{(k+1)} - \sum_{j=i+1}^{n} A_{ij} x_j^{(k)}}{A_{ii}},
+$$
 for $i = 1, 2, \ldots, n$.
 
 In other words, when computing $x_i^{(k+1)}$, all the updated values $x_1^{(k+1)}, \ldots, x_{i-1}^{(k+1)}$ are already used, while $x_{i+1}^{(k)}, \ldots, x_n^{(k)}$ remain from the previous iteration.
 
-### Derivation
+## Derivation
 
 Starting from the linear system $A\mathbf{x} = \mathbf{b}$, write the $i$-th equation explicitly:
 
-$$A_{ii} x_i + \sum_{\substack{j=1 \\ j \neq i}}^{n} A_{ij} x_j = b_i.$$
+$$
+A_{ii} x_i + \sum_{\substack{j=1 \\ j \neq i}}^{n} A_{ij} x_j = b_i.
+$$
 
 Rearranging for $x_i$, we get:
 
-$$x_i = \frac{b_i - \sum_{j \neq i} A_{ij} x_j}{A_{ii}}.$$
+$$
+x_i = \frac{b_i - \sum_{j \neq i} A_{ij} x_j}{A_{ii}}.
+$$
 
 The essence of the Gauss-Seidel method is to "sweep" through the equations in a certain order (usually $i = 1, 2, \ldots, n$), and for each $i$-th equation, replace $x_i$ with the newly computed value. The key difference from the Jacobi method is that as soon as we compute $x_i^{(k+1)}$, we use this updated value in subsequent computations within the same iteration step $k+1$. Thus, for the iteration step $k+1$:
 
@@ -71,7 +81,31 @@ The essence of the Gauss-Seidel method is to "sweep" through the equations in a 
 
 The process is essentially a fixed-point iteration. Under certain conditions, such as $A$ being strictly diagonally dominant or symmetric positive definite, this iteration converges to the true solution $\mathbf{x}^*$.
 
-### Algorithm Steps
+### Matrix Iteration and Convergence
+
+Using the splitting $A=D+L+U$, collect all the newly updated components on the left:
+
+$$
+(D+L)\mathbf{x}^{(k+1)}=\mathbf{b}-U\mathbf{x}^{(k)}.
+$$
+
+Provided the diagonal entries are nonzero, this lower-triangular system can be solved by one forward sweep. The iteration matrix is $T_{GS}=-(D+L)^{-1}U$; the inverse is notation for analysis, not a matrix to form in the algorithm. Subtracting the exact solution gives
+
+$$
+\mathbf{e}^{(k+1)}=T_{GS}\mathbf{e}^{(k)},\qquad \mathbf{e}^{(k)}=T_{GS}^{\,k}\mathbf{e}^{(0)}.
+$$
+
+Convergence from every starting vector holds exactly when the spectral radius $\rho(T_{GS})$, the largest eigenvalue magnitude, is less than one. Strict diagonal dominance and symmetric positive definiteness are useful sufficient conditions. For an SPD matrix, the same updates can be viewed as exact coordinate minimizations of $\tfrac12\mathbf{x}^\top A\mathbf{x}-\mathbf{b}^\top\mathbf{x}$, which has a unique minimum.
+
+For the two-equation example below,
+
+$$
+T_{GS}=\begin{bmatrix}0&1/5\\0&-7/40\end{bmatrix},\qquad \rho(T_{GS})=7/40=0.175.
+$$
+
+The negative nonzero eigenvalue explains the alternating errors. Variable ordering changes the triangular splitting and can affect convergence. A small change between sweeps should be interpreted together with the residual and the conditioning of $A$.
+
+## Algorithm Steps
 
 **Step-by-step procedure:**
 
@@ -81,7 +115,9 @@ II. **Iterative Update**: For iteration $k = 0, 1, 2, \ldots$ until convergence:
 
 For $i = 1$ to $n$:
 
-$$x_i^{(k+1)} = \frac{b_i - \sum_{j=1}^{i-1} A_{ij} x_j^{(k+1)} - \sum_{j=i+1}^{n} A_{ij} x_j^{(k)}}{A_{ii}}.$$
+$$
+x_i^{(k+1)} = \frac{b_i - \sum_{j=1}^{i-1} A_{ij} x_j^{(k+1)} - \sum_{j=i+1}^{n} A_{ij} x_j^{(k)}}{A_{ii}}.
+$$
 
 III. **Convergence Check**: After completing the update for all $i$, check if the solution has converged. A common convergence criterion is to check the norm of the residual $\|A\mathbf{x}^{(k+1)} - \mathbf{b}\|$ or the difference between successive iterates $\|\mathbf{x}^{(k+1)} - \mathbf{x}^{(k)}\|$. If this measure is less than a prescribed tolerance $\varepsilon$, stop; otherwise, proceed to the next iteration. The implementation uses the difference between successive iterates (2-norm) and raises an error if the iteration cap (`max_iterations`; the old name `max_iter` is a deprecated alias) is reached first.
 
@@ -117,23 +153,31 @@ II. $7x + 8y = 20$
 
 **Initialization**:
 
-$$x^{(0)} = 0, y^{(0)} = 0$$
+$$
+x^{(0)} = 0, y^{(0)} = 0
+$$
 
 **Iteration 1** ($k=0$ to $k=1$):
 
 Update $x$:
 
-$$x^{(1)} = \frac{6 - (-1)\cdot y^{(0)}}{5} = \frac{6 - 0}{5} = \frac{6}{5} = 1.2.$$
+$$
+x^{(1)} = \frac{6 - (-1)\cdot y^{(0)}}{5} = \frac{6 - 0}{5} = \frac{6}{5} = 1.2.
+$$
 
 Update $y$:
 
 Here, we use the newly computed $x^{(1)} = 1.2$:
 
-$$y^{(1)} = \frac{20 - 7 \cdot (1.2)}{8} = \frac{20 - 8.4}{8} = \frac{11.6}{8} = 1.45.$$
+$$
+y^{(1)} = \frac{20 - 7 \cdot (1.2)}{8} = \frac{20 - 8.4}{8} = \frac{11.6}{8} = 1.45.
+$$
 
 After first iteration:
 
-$$x^{(1)} = 1.2, \quad y^{(1)} = 1.45.$$
+$$
+x^{(1)} = 1.2, \quad y^{(1)} = 1.45.
+$$
 
 **Iteration 2** ($k=1$ to $k=2$):
 
@@ -141,43 +185,57 @@ Using $x^{(1)} = 1.2$ and $y^{(1)} = 1.45$:
 
 Update $x$:
 
-$$x^{(2)} = \frac{6 - (-1)\cdot(1.45)}{5} = \frac{6 + 1.45}{5} = \frac{7.45}{5} = 1.49.$$
+$$
+x^{(2)} = \frac{6 - (-1)\cdot(1.45)}{5} = \frac{6 + 1.45}{5} = \frac{7.45}{5} = 1.49.
+$$
 
 Update $y$:
 
 Using $x^{(2)} = 1.49$:
 
-$$y^{(2)} = \frac{20 - 7 \cdot (1.49)}{8} = \frac{20 - 10.43}{8} = \frac{9.57}{8} = 1.19625.$$
+$$
+y^{(2)} = \frac{20 - 7 \cdot (1.49)}{8} = \frac{20 - 10.43}{8} = \frac{9.57}{8} = 1.19625.
+$$
 
 After second iteration:
 
-$$x^{(2)} = 1.49, \quad y^{(2)} = 1.19625.$$
+$$
+x^{(2)} = 1.49, \quad y^{(2)} = 1.19625.
+$$
 
 **Iteration 3** ($k=2$ to $k=3$):
 
 Using $x^{(2)} = 1.49$ and $y^{(2)} = 1.19625$:
 
-$$x^{(3)} = \frac{6 - (-1)\cdot(1.19625)}{5} = \frac{6 + 1.19625}{5} = \frac{7.19625}{5} = 1.43925.$$
+$$
+x^{(3)} = \frac{6 - (-1)\cdot(1.19625)}{5} = \frac{6 + 1.19625}{5} = \frac{7.19625}{5} = 1.43925.
+$$
 
-$$y^{(3)} = \frac{20 - 7 \cdot (1.43925)}{8} = \frac{20 - 10.07475}{8} = \frac{9.92525}{8} = 1.24065625.$$
+$$
+y^{(3)} = \frac{20 - 7 \cdot (1.43925)}{8} = \frac{20 - 10.07475}{8} = \frac{9.92525}{8} = 1.24065625.
+$$
 
 After third iteration:
 
-$$x^{(3)} \approx 1.43925, \quad y^{(3)} \approx 1.24066.$$
+$$
+x^{(3)} \approx 1.43925, \quad y^{(3)} \approx 1.24066.
+$$
 
 If we continue iterating until the changes in $x$ and $y$ are negligible (for example, less than $10^{-4}$), the method converges to approximately:
 
-$$x \approx 1.4468, \quad y \approx 1.2340$$
+$$
+x \approx 1.4468, \quad y \approx 1.2340
+$$
 
 (the exact solution is $x = \frac{68}{47}, y = \frac{58}{47}$).
 
-### Advantages of the Gauss-Seidel Method
+## Advantages of the Gauss-Seidel Method
 
 - The Gauss-Seidel method often achieves **faster convergence than the Jacobi method** because it uses the most recent updates of variables during the same iteration, particularly effective for well-conditioned or diagonally dominant systems.
 - **Memory requirements are minimal** since the method only needs storage for the matrix $A$, the vector $\mathbf{b}$, and the current iterate $\mathbf{x}^{(k)}$, making it efficient for large sparse systems.
 - The method’s **ease of implementation** lies in its simple iterative formulas, which avoid the need for complex matrix factorizations and can be adapted for certain parallel computing environments.
 
-### Limitations of the Gauss-Seidel Method
+## Limitations of the Gauss-Seidel Method
 
 - Convergence is not **assured unless specific conditions** are met, such as when $A$ is strictly diagonally dominant or symmetric positive definite, and it can fail or converge very slowly otherwise.
 - Updates in the Gauss-Seidel method are **sequential in nature**, as each variable depends on previously updated variables from the same iteration, which restricts straightforward parallelization.

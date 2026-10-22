@@ -1,16 +1,18 @@
-## Gaussian Elimination
+# Gaussian Elimination
 
 Gaussian elimination is a fundamental algorithmic procedure in linear algebra used to solve systems of linear equations, find matrix inverses, and determine the rank of matrices. The procedure systematically applies elementary row operations to transform a given matrix into an upper-triangular form (row echelon form), from which the solution to the system (if it exists and is unique) can be readily determined by back substitution.
 
 From a conceptual viewpoint, Gaussian elimination provides a structured approach to eliminating unknowns step-by-step. Geometrically, each linear equation represents a hyperplane in $n$-dimensional space, and the solution of the system corresponds to the intersection point(s) of these hyperplanes. Gaussian elimination successively "clears out" the variables, enabling a direct path to the solution (or revealing inconsistencies or infinite solution sets if they exist).
 
-![gaussian\_elimination](https://github.com/user-attachments/assets/54011276-5a17-4666-8fbf-91d92ee9c30e)
+![Eliminating coefficients to obtain a triangular linear system](https://github.com/user-attachments/assets/54011276-5a17-4666-8fbf-91d92ee9c30e)
 
-### Mathematical Formulation
+## Mathematical Formulation
 
 Consider a system of $n$ linear equations with $n$ unknowns:
 
-$$A\mathbf{x} = \mathbf{b},$$
+$$
+A\mathbf{x} = \mathbf{b},
+$$
 where
 
 $$
@@ -54,7 +56,7 @@ $$
 
 where $U$ is an upper-triangular matrix. Once in this form, the solution $\mathbf{x}$ can be found by back substitution.
 
-### Derivation
+## Derivation
 
 The derivation of Gaussian elimination closely mirrors the logic of systematic elimination of variables from a set of equations:
 
@@ -70,7 +72,23 @@ III. **Continue this process** until the last pivot $a_{nn}$ (in the $n$-th row)
 
 The end result is an upper-triangular system that can be solved starting from the last equation and moving upward (back substitution).
 
-### Algorithm Steps
+### Elimination Multipliers and Pivoting
+
+At stage $k$, for an unnormalized pivot row, set $m_{ik}=a_{ik}/a_{kk}$ for each $i>k$ and perform
+
+$$
+R_i\leftarrow R_i-m_{ik}R_k,\qquad b_i\leftarrow b_i-m_{ik}b_k.
+$$
+
+The same row operation must act on the right-hand side to preserve the solution set. Dividing the pivot row by its pivot first is an equivalent convention; the component formulas below use that normalized form.
+
+Partial pivoting selects the largest available magnitude in the current column **before** dividing. For example, $\begin{bmatrix}0&1\\1&1\end{bmatrix}$ is nonsingular but has a zero first pivot; swapping its rows lets elimination proceed. A tiny pivot can similarly create large multipliers and amplify rounding, even when it is not exactly zero.
+
+In exact arithmetic, a reduced row $[0\ \cdots\ 0\mid c]$ with $c\ne0$ proves inconsistency. A zero coefficient row with zero right-hand side introduces a redundant equation; if fewer than $n$ independent pivots remain in a consistent square system, free variables produce infinitely many solutions. Numerical singularity uses a scale-dependent threshold rather than an exact determinant test, so a software rejection can also indicate a nearly singular problem.
+
+For dense matrices, factorization costs about $2n^3/3$ floating point operations, while a triangular solve costs $O(n^2)$. This distinction leads directly to storing and reusing an [LU factorization](lu_decomposition.md).
+
+## Algorithm Steps
 
 **Input**: An augmented matrix $[A|\mathbf{b}]$ representing the system $A\mathbf{x} = \mathbf{b}$.
 
@@ -118,13 +136,15 @@ Starting from the last equation:
 
 For $i = n$ down to 1:
 
-$$x_i = c_i - \sum_{k=i+1}^{n} u_{ik} x_k.$$
+$$
+x_i = c_i - \sum_{k=i+1}^{n} u_{ik} x_k.
+$$
 
 Since $u_{ii}=1$ after normalization, $x_i$ can be directly computed. (If not normalized, divide by $u_{ii}$.)
 
 This process yields the solution vector $\mathbf{x}$.
 
-### Example
+## Example
 
 **Given System**:
 
@@ -148,7 +168,7 @@ $$
 
 II. **Forward Elimination**:
 
-Pivot in first row is $a_{11} = 2$. Normalize the first row by dividing by 2:
+For this hand calculation, retain the original row order to keep the fractions simple; the implementation with partial pivoting would swap rows 1 and 2 first and reach the same solution by different intermediate matrices. The first pivot in this unpivoted calculation is $a_{11}=2$. Normalize the first row by dividing by 2:
 
 $$
 \begin{bmatrix}
@@ -162,7 +182,7 @@ Eliminate $x$-terms in row 2 and row 3 using row 1:
 For row 2: Add 3 times row 1:
 
 $$
-(-3)R_1 + R_2 \to R_2 \implies
+(3)R_1 + R_2 \to R_2 \implies
 R_2 = \begin{bmatrix}
 0 & 0.5 & 0.5 & 1
 \end{bmatrix}
@@ -230,13 +250,13 @@ $x + 0.5(3) -0.5(-1) = 4 \implies x + 1.5 + 0.5 = 4 \implies x = 2$.
 
 The solution is $\mathbf{x} = (2, 3, -1)^\top$.
 
-### Advantages
+## Advantages
 
 - Gaussian elimination has **general applicability** to any $n \times n$ system of linear equations, and the general procedure can also identify cases where no solution or infinitely many solutions exist, including non-square systems (the implementation in this repository handles square systems only and reports a singular matrix as an error).
 - The method serves as a **foundation for advanced techniques** like LU decomposition and QR decomposition, forming a building block for many numerical algorithms.
 - It can be used to **determine the rank of a matrix** and to compute the inverse of a matrix when applicable by applying the procedure to the augmented matrix $[A | I]$.
 
-### Limitations
+## Limitations
 
 - **Numerical instability** is a concern due to round-off errors, particularly without pivoting. Partial or full pivoting mitigates this issue but may require additional computational steps.
 - The method’s **computational cost**, proportional to $O(n^3)$ operations, can become prohibitive for large-scale systems, making it less efficient than iterative methods for such cases.

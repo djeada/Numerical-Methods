@@ -1,23 +1,27 @@
-## Eigenvalue Decomposition (EVD)
+# Eigenvalue Decomposition (EVD)
 
 Eigenvalue Decomposition (EVD), also known as Eigendecomposition, is a fundamental operation in linear algebra that breaks down a square matrix into a simpler form defined by its eigenvalues and eigenvectors. This decomposition provides deep insights into the properties and structure of a matrix, enabling simplifications in numerous computations such as matrix powers, transformations, and the solution of systems of linear equations. In many applications — from vibration analysis in engineering to principal component analysis in data science — EVD plays a critical role.
 
 The key idea is that certain square matrices can be represented as a product of a matrix of their eigenvectors and a diagonal matrix of their eigenvalues. This diagonalization separates the scaling factors (eigenvalues) from the directions of transformations (eigenvectors) encoded by the original matrix.
 
-![output(19)](https://github.com/user-attachments/assets/75c28eaf-d800-44cc-98cd-c0d9a9c5f14b)
+![Eigenvectors and eigenvalues in a matrix decomposition](https://github.com/user-attachments/assets/75c28eaf-d800-44cc-98cd-c0d9a9c5f14b)
 
-### Mathematical Formulation
+## Mathematical Formulation
 
-Consider an $n \times n$ matrix $A$. The Eigenvalue Decomposition of $A$ is given by:
+Consider an $n \times n$ matrix $A$ that has $n$ linearly independent eigenvectors over the field being used. Its diagonal eigenvalue decomposition is:
 
-$$A = P D P^{-1},$$
+$$
+A = P D P^{-1},
+$$
 where:
 
 I. **Eigenvalues ($\lambda_i$)**:
 
 The eigenvalues of $A$ are the roots of the characteristic polynomial:
 
-$$\det(A - \lambda I) = 0.$$
+$$
+\det(A - \lambda I) = 0.
+$$
 
 If we solve this polynomial equation and find $n$ eigenvalues (not necessarily distinct), we denote them as $\lambda_1, \lambda_2, \ldots, \lambda_n$.
 
@@ -25,7 +29,9 @@ II. **Eigenvectors ($v_i$)**:
 
 For each eigenvalue $\lambda_i$, we find the corresponding eigenvector $v_i$ by solving:
 
-$$(A - \lambda_i I) v_i = 0.$$
+$$
+(A - \lambda_i I) v_i = 0.
+$$
 
 Each eigenvector $v_i$ is a nonzero vector associated with the eigenvalue $\lambda_i$.
 
@@ -56,11 +62,13 @@ $$
 
 If $A$ is diagonalizable, and if the $v_i$ are chosen to be linearly independent, then $P$ is invertible and $A = P D P^{-1}$.
 
-### Derivation
+## Derivation
 
 The derivation of EVD follows naturally from the definition of eigenvalues and eigenvectors. For each eigenvalue $\lambda_i$, we have:
 
-$$A v_i = \lambda_i v_i.$$
+$$
+A v_i = \lambda_i v_i.
+$$
 
 If we gather all eigenvectors into the matrix $P$ and consider how $A$ acts on the columns of $P$:
 
@@ -72,11 +80,35 @@ $$
 
 If $P$ is invertible, we can write:
 
-$$A = P D P^{-1}.$$
+$$
+A = P D P^{-1}.
+$$
 
 Not every matrix is guaranteed to have a full set of $n$ linearly independent eigenvectors. If it does, the matrix is said to be diagonalizable, and the above decomposition is possible. If not, the matrix cannot be decomposed purely into this form.
 
-### Algorithm Steps
+### When Diagonalization Exists
+
+Distinct eigenvalues guarantee independent eigenvectors, but repeated eigenvalues need closer examination. The **algebraic multiplicity** of an eigenvalue counts its occurrences in the characteristic polynomial; its **geometric multiplicity** is the dimension of $\ker(A-\lambda I)$. Diagonalization is possible exactly when these multiplicities agree for every eigenvalue.
+
+For example,
+
+$$
+J=\begin{bmatrix}1&1\\0&1\end{bmatrix}
+$$
+
+has eigenvalue $1$ twice, but $(J-I)v=0$ forces the second component to zero. Its eigenspace is only one-dimensional, so no invertible eigenvector matrix $P$ exists. In contrast, the identity matrix has the same repeated eigenvalue and a full eigenvector basis.
+
+For a real symmetric matrix, the spectral theorem gives $A=QDQ^\top$ with orthonormal eigenvectors and real eigenvalues. For a complex normal matrix, the corresponding statement is $A=QDQ^*$, where $Q^*$ denotes the conjugate transpose. Orthogonality avoids amplification from an ill-conditioned change of basis. A general matrix still has a Schur decomposition with an orthogonal or unitary factor even if it is not diagonalizable; Jordan form is mainly a theoretical description because it is highly sensitive to perturbations.
+
+For the example below, $\det P=3$ and
+
+$$
+P^{-1}=\frac13\begin{bmatrix}2&1\\-1&1\end{bmatrix}.
+$$
+
+Multiplying $PDP^{-1}$ reconstructs $\begin{bmatrix}4&1\\2&3\end{bmatrix}$, giving an explicit check of the decomposition. Computing $AP-PD$ is also a useful verification that avoids forming an inverse.
+
+## Algorithm Steps
 
 I. **Find Eigenvalues**:
 
@@ -97,7 +129,7 @@ IV. **Verify Invertibility of $P$**:
 
 - If $P$ is invertible, then $A = P D P^{-1}$.
 
-### Example
+## Example
 
 Let:
 
@@ -112,7 +144,9 @@ I. **Find Eigenvalues**:
 
 The characteristic polynomial:
 
-$$\det(A - \lambda I) = \det\begin{bmatrix}4 - \lambda & 1 \\ 2 & 3 - \lambda\end{bmatrix} = (4-\lambda)(3-\lambda) - 2 = 0.$$
+$$
+\det(A - \lambda I) = \det\begin{bmatrix}4 - \lambda & 1 \\ 2 & 3 - \lambda\end{bmatrix} = (4-\lambda)(3-\lambda) - 2 = 0.
+$$
 
 Expanding:
 
@@ -129,25 +163,33 @@ II. **Find Eigenvectors**:
 
 For $\lambda_1 = 5$:
 
-$$(A - 5I)=\begin{bmatrix}-1 & 1 \\ 2 & -2\end{bmatrix}.$$
+$$
+(A - 5I)=\begin{bmatrix}-1 & 1 \\ 2 & -2\end{bmatrix}.
+$$
 
 Solve $(A-5I)v=0$ leads to $v_1 = [1,1]^T$.
 
 For $\lambda_2 = 2$:
 
-$$(A - 2I)=\begin{bmatrix}2 & 1 \\ 2 & 1\end{bmatrix}$$
+$$
+(A - 2I)=\begin{bmatrix}2 & 1 \\ 2 & 1\end{bmatrix}
+$$
 
 Solve $(A-2I)v=0$ leads to $v_2 = [-1,2]^T$.
 
 III. **Form $P$ and $D$**:
 
-$$P = \begin{bmatrix}1 & -1 \\ 1 & 2\end{bmatrix}, \quad D = \begin{bmatrix}5 & 0 \\ 0 & 2\end{bmatrix}$$
+$$
+P = \begin{bmatrix}1 & -1 \\ 1 & 2\end{bmatrix}, \quad D = \begin{bmatrix}5 & 0 \\ 0 & 2\end{bmatrix}
+$$
 
 Thus:
 
-$$A = P D P^{-1}.$$
+$$
+A = P D P^{-1}.
+$$
 
-### Advantages
+## Advantages
 
 I. **Simplification of Computations**:
 
@@ -159,13 +201,13 @@ The eigendecomposition reveals the intrinsic "modes" of the linear transformatio
 
 III. **Efficiency and Stability for Symmetric Matrices**:
 
-Working with $D$ instead of $A$ makes some computations much cheaper, particularly in areas like principal component analysis, spectral clustering, and other advanced data analysis tasks. For symmetric (or, more generally, normal) matrices the eigenvector matrix $P$ can be chosen orthogonal (unitary), so $P^{-1} = P^T$ and the decomposition is numerically well-conditioned. For non-normal matrices $P$ can be ill-conditioned, and then $A = P D P^{-1}$ may be computed or used inaccurately; there, orthogonal decompositions such as the Schur form are preferred.
+Working with $D$ instead of $A$ makes some computations much cheaper, particularly in areas like principal component analysis, spectral clustering, and other advanced data analysis tasks. For symmetric (or, more generally, normal) matrices the eigenvector matrix $P$ can be chosen orthogonal (unitary), so $P^{-1}=P^T$ in the real orthogonal case, or $P^{-1}=P^*$ in the complex unitary case. This makes the change of basis well-conditioned, although clustered eigenvalues can still make individual eigenvectors sensitive. For non-normal matrices $P$ can be ill-conditioned, and then $A = P D P^{-1}$ may be computed or used inaccurately; there, orthogonal decompositions such as the Schur form are preferred.
 
-### Limitations
+## Limitations
 
 I. **Not All Matrices Are Diagonalizable**:
 
-Some matrices cannot be broken down into a pure eigen decomposition if they do not have enough linearly independent eigenvectors. For such matrices, more generalized decompositions like the Jordan normal form are required.
+Some matrices cannot be broken down into a pure eigen decomposition if they do not have enough linearly independent eigenvectors. Jordan normal form supplies a theoretical description for such matrices, while Schur form supplies an orthogonal or unitary representation useful for numerical computation. A diagonal eigenvalue factorization itself is unavailable.
 
 II. **Computational Cost for Large Matrices**:
 

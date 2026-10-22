@@ -1,4 +1,4 @@
-## Convex Optimization
+# Convex Optimization
 
 Convex optimization is the best-behaved major class of continuous optimization. Its defining advantage is structural rather than algorithmic:
 
@@ -6,7 +6,7 @@ Convex optimization is the best-behaved major class of continuous optimization. 
 
 That fact turns first-order or KKT conditions into global certificates of optimality.
 
-### Convex sets
+## Convex sets
 
 A set $C\subseteq\mathbb{R}^n$ is convex if
 
@@ -18,7 +18,7 @@ for every $x,y\in C$ and every $\theta\in[0,1]$.
 
 Examples include affine subspaces, half-spaces, Euclidean balls, boxes, and polyhedra.
 
-### Convex functions
+## Convex functions
 
 A function $f$ is convex when
 
@@ -44,7 +44,25 @@ $$
 
 for every $x$ in the domain.
 
-### Strong convexity
+### Why Every Local Minimum Is Global
+
+Suppose $x^*$ were a local minimum but a feasible $y$ had $f(y)<f(x^*)$. Convexity of the feasible set keeps $x_\theta=(1-\theta)x^*+\theta y$ feasible, and convexity of the objective gives
+
+$$
+f(x_\theta)\leq(1-\theta)f(x^*)+\theta f(y)<f(x^*)
+$$
+
+for every $0<\theta\leq1$. Taking $\theta$ arbitrarily small contradicts local minimality. This proof depends on both convexity assumptions.
+
+For a differentiable convex objective on a convex feasible set $C$, optimality is equivalent to
+
+$$
+\nabla f(x^*)^\top(y-x^*)\geq0\qquad\text{for every }y\in C.
+$$
+
+Sufficiency follows directly from the first-order lower bound. In an unconstrained domain this reduces to $\nabla f(x^*)=0$; at a boundary it generally does not.
+
+## Strong convexity
 
 A differentiable function is $\mu$-strongly convex if
 
@@ -52,9 +70,9 @@ $$
 f(y)\ge f(x) + \nabla f(x)^\top(y - x) + \frac{\mu}{2}\| y - x\|_2^2.
 $$
 
-Strong convexity implies a unique minimizer and enables explicit convergence-rate bounds for first-order methods.
+For $\mu>0$, strong convexity implies that a minimizer, if it exists, is unique and enables explicit convergence-rate bounds for first-order methods. A continuous strongly convex function on all of $\mathbb R^n$ attains its minimum; on a restricted nonclosed domain, attainment must be checked separately.
 
-### Smoothness and conditioning
+## Smoothness and conditioning
 
 If the gradient is $L$-Lipschitz,
 
@@ -70,7 +88,7 @@ $$
 
 plays the role of a condition number.
 
-### Convex constrained problems
+## Convex constrained problems
 
 A standard convex problem has the form
 
@@ -91,7 +109,9 @@ where $f$ and every $g_i$ are convex and the equality constraints are affine.
 
 Under a suitable constraint qualification such as Slater's condition, the KKT conditions are necessary and sufficient for optimality.
 
-### Quadratic programming
+For a differentiable convex problem, any point and multipliers satisfying KKT already certify global optimality. A qualification such as Slater’s condition is used to guarantee the existence of such multipliers at an optimum. One common form of Slater’s condition asks for a point in the relative interior of the domain that satisfies the affine equalities and all inequalities strictly.
+
+## Quadratic programming
 
 A convex quadratic program has objective
 
@@ -107,7 +127,7 @@ $$
 
 The repository implementation checks the eigenvalues of $Q$ and then uses a projected-gradient style iteration. See [quadratic programming](quadratic_programming.md) for details.
 
-### Convexity checks in computation
+## Convexity checks in computation
 
 Randomly testing Jensen's inequality at sampled points can find violations, but passing random tests does **not** prove convexity. Analytical structure is preferable:
 
@@ -118,7 +138,7 @@ Randomly testing Jensen's inequality at sampled points can find violations, but 
 
 The repository's `is_convex_function` helper should therefore be read as a numerical diagnostic, not a proof.
 
-### Worked example
+## Worked example
 
 Consider
 
@@ -151,6 +171,6 @@ $$
 
 Because the objective is convex, this stationary point is automatically the unique global minimum.
 
-### Modeling lessons
+## Modeling lessons
 
 Before choosing a generic nonlinear solver, ask whether the problem can be expressed as a convex one. A correct convex formulation can transform an apparently difficult search problem into one with global guarantees and reliable numerical methods.

@@ -1,4 +1,4 @@
-## Regression
+# Regression
 
 Regression models the relationship between one or more predictors and a response variable. Unlike interpolation, regression generally does **not** try to pass exactly through every observation. Instead, it chooses model parameters that balance data fit with a chosen model structure.
 
@@ -27,7 +27,7 @@ The central question is not just “How closely can the model fit these data?”
 
 ![Regression models with different complexity](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/regression_model_complexity.svg)
 
-### Regression versus interpolation
+## Regression versus interpolation
 
 Interpolation imposes exact constraints:
 
@@ -45,7 +45,7 @@ This difference reflects different assumptions.
 
 Use interpolation when the supplied values should be treated as exact samples of an underlying function. Use regression when the observations contain noise, unexplained variation, or measurement error and the goal is to estimate a trend or predictive relationship.
 
-### Linear regression
+## Linear regression
 
 A model is called **linear regression** when it is linear in its unknown coefficients.
 
@@ -75,9 +75,9 @@ $$
 \mathrm{RSS}(\boldsymbol{\beta}) = \|\mathbf y - X\boldsymbol{\beta}\|_2^2.
 $$
 
-See `least_squares.md` for the linear-algebra derivation and numerical solution methods.
+See [Least Squares](least_squares.md) for the linear-algebra derivation and numerical solution methods.
 
-### Polynomial regression is still linear regression
+## Polynomial regression is still linear regression
 
 A polynomial model such as
 
@@ -101,7 +101,7 @@ $$
 
 It can therefore be fit with the same least-squares machinery as a straight line.
 
-### Residuals
+## Residuals
 
 For each observation,
 
@@ -121,7 +121,9 @@ A useful residual plot can reveal:
 
 A small average residual is not sufficient. A model can have systematic residual patterns and still have a deceptively good aggregate error metric.
 
-### Common error metrics
+In ordinary least squares with an unpenalized intercept, the residuals sum to zero by the normal equations, regardless of whether the mean model is appropriate. Residual patterns and held-out errors therefore convey information that the mean residual cannot.
+
+## Common error metrics
 
 The residual sum of squares is
 
@@ -149,7 +151,7 @@ $$
 
 RMSE penalizes large residuals more heavily. MAE is less dominated by isolated large errors.
 
-### Coefficient of determination
+## Coefficient of determination
 
 For a model with an intercept, a common summary is
 
@@ -161,7 +163,9 @@ An $R^2$ near one indicates that the fitted model explains a large fraction of t
 
 However, $R^2$ does not establish causality, does not guarantee useful predictions, and generally increases when additional predictors are added even if they provide little real value.
 
-### Underfitting and overfitting
+The $R^2$ formula requires nonzero variation in the response; it is undefined when all $y_i$ are equal. Its usual monotonicity applies to nested ordinary least-squares fits on the same training data. Out-of-sample $R^2$ can be negative when predictions are worse than the evaluation-set mean.
+
+## Underfitting and overfitting
 
 A model that is too simple can miss important structure. This is **underfitting**.
 
@@ -173,7 +177,7 @@ The training error usually decreases as model flexibility increases. Predictive 
 
 This is why model selection should use held-out data, cross-validation, or another out-of-sample assessment rather than training error alone.
 
-### Train, validation, and test data
+## Train, validation, and test data
 
 A common predictive workflow divides data conceptually into:
 
@@ -183,16 +187,16 @@ A common predictive workflow divides data conceptually into:
 
 Repeatedly tuning decisions based on the test set makes it function like validation data and can make the final reported performance optimistic.
 
-### Comparing models in the repository code
+## Comparing models in the repository code
 
 The module `src/6_regression/regression_methods_comparison` offers two ways to score candidate models:
 
-- `compare_methods` evaluates each model on the same points it was fitted to, so it reports **training error**. A more flexible model can only lower this number, so ranking by it favours overfitting.
+- `compare_methods` evaluates each model on the same points it was fitted to, so it reports **training error**. For nested model families solved to their least-squares optima, added flexibility cannot increase training RSS. Ranking arbitrary fitted methods by training error alone also risks overfitting, although monotonic improvement is not guaranteed for nonnested models or imperfect optimization.
 - `cross_validate_methods` performs $k$-fold cross-validation: every point is predicted by a model fitted without it, and the pooled held-out predictions are scored with the same metrics. Its output can be passed to the same `rank_methods` function, and this is the ranking to use for choosing between models.
 
 Both rankings are available; the training-error one is kept for illustration and backwards compatibility.
 
-### Bias and variance
+## Bias and variance
 
 Prediction error is often discussed through a bias-variance tradeoff.
 
@@ -203,12 +207,24 @@ A rigid model tends to have:
 
 A highly flexible model tends to have:
 
-- lower training bias;
+- often lower approximation bias when its added flexibility captures the underlying relationship;
 - higher sensitivity to the particular dataset.
 
 Regularization and model selection control this tradeoff.
 
-### Regularization
+### Deriving the Bias–Variance Decomposition
+
+At a fixed predictor $\mathbf x$, suppose a new response is $Y=f_*(\mathbf x)+\varepsilon$, with zero-mean noise of variance $\sigma^2$ independent of the training data. The fitted prediction $\widehat f(\mathbf x)$ varies with the training sample. Add and subtract its mean inside the squared prediction error; the cross terms have zero expectation. This gives
+
+$$
+\mathbb E[(Y-\widehat f(\mathbf x))^2]=\sigma^2+\bigl(f_*(\mathbf x)-\mathbb E[\widehat f(\mathbf x)]\bigr)^2+\operatorname{Var}(\widehat f(\mathbf x)).
+$$
+
+The terms are irreducible response noise, squared bias, and variation of the estimator. This is a statement about repeated sampling at a fixed predictor, rather than a decomposition of one observed training residual. Added flexibility may reduce bias while increasing variance, so lower training error need not mean lower prediction error.
+
+For time-ordered observations or grouped samples, validation splits should preserve the deployment structure. Randomly separating related observations can leak information and make held-out performance look better than it will be on future or independent groups. Fit scaling and other preprocessing on the training portion of each split as well.
+
+## Regularization
 
 Ridge regression modifies least squares by adding
 
@@ -233,13 +249,13 @@ $$
 
 which can drive some coefficients exactly to zero.
 
-### Scaling predictors
+## Scaling predictors
 
 Scaling matters when predictors have very different magnitudes, especially under regularization.
 
 For example, a predictor measured in meters and another measured in micrometers produce coefficient scales that are not directly comparable. Standardizing predictors can improve conditioning and make regularization act more uniformly.
 
-### Assumptions and interpretation
+## Assumptions and interpretation
 
 Classical linear-regression inference is often introduced with assumptions such as:
 
@@ -251,13 +267,13 @@ Classical linear-regression inference is often introduced with assumptions such 
 
 Prediction can still be useful when some classical inference assumptions are imperfect, but uncertainty estimates and coefficient interpretation need more care.
 
-### Correlation is not causation
+## Correlation is not causation
 
 A regression coefficient describes an association conditional on the variables included in the model and the modeling assumptions.
 
 It does not, by itself, prove that changing a predictor would cause the response to change. Causal interpretation needs study design or additional causal assumptions.
 
-### Extrapolation
+## Extrapolation
 
 A regression equation can be evaluated outside the observed predictor range, but the result may be unsupported by data.
 
@@ -265,7 +281,7 @@ Polynomial regression is particularly dangerous for extrapolation because higher
 
 A model should record the range of data on which it was fit and treat predictions far outside that range with caution.
 
-### Practical regression workflow
+## Practical regression workflow
 
 1. inspect and clean the data;
 2. identify the response and candidate predictors;

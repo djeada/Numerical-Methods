@@ -1,4 +1,4 @@
-## Linear Programming
+# Linear Programming
 
 A linear program optimizes a linear objective over linear constraints. A common minimization form is
 
@@ -15,9 +15,9 @@ $$
 
 The feasible region is a polyhedron.
 
-### Why vertices matter
+## Why vertices matter
 
-If a linear program has a finite optimum, at least one optimum occurs at an extreme point of the feasible polyhedron. In two dimensions these are polygon vertices.
+For a feasible linear program in the nonnegative-variable form above, an attained finite optimum has an optimal extreme point. The unrestricted statement needs care: a polyhedron containing lines may have no vertices, even when a finite optimal value is attained. In two dimensions these are polygon vertices.
 
 ![Linear-programming geometry and an optimal vertex](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/linear_programming_geometry.svg)
 
@@ -29,7 +29,7 @@ $$
 
 are parallel hyperplanes. Moving them in the improving direction until they last touch the feasible region reveals the optimum geometrically.
 
-### Slack variables
+## Slack variables
 
 An inequality
 
@@ -46,7 +46,7 @@ $$
 
 Slack variables convert the inequalities into equalities while measuring unused capacity.
 
-### Simplex idea
+## Simplex idea
 
 The simplex method maintains a basis corresponding to a basic feasible solution and moves between adjacent vertices.
 
@@ -54,7 +54,25 @@ For minimization, reduced costs indicate whether introducing a nonbasic variable
 
 A ratio test chooses the leaving variable so that feasibility is preserved.
 
-### Unboundedness and infeasibility
+### Reduced Costs and the Ratio Test
+
+In equality standard form $A_Bx_B+A_Nx_N=b$, choose an invertible basis matrix $B=A_B$ and set the nonbasic variables to zero. The basic point is feasible when $x_B=B^{-1}b\geq0$. Increasing nonbasic variable $x_j$ by $\theta\geq0$ changes the basic variables to
+
+$$
+x_B(\theta)=B^{-1}b-\theta B^{-1}A_j.
+$$
+
+The objective changes by $\theta\overline c_j$, where
+
+$$
+\overline c_j=c_j-c_B^\top B^{-1}A_j
+$$
+
+is the reduced cost. For minimization, a negative reduced cost is an improving candidate. Let $d=B^{-1}A_j$. Feasibility requires $\theta\leq(x_B)_i/d_i$ wherever $d_i>0$; the minimum of these ratios identifies a leaving variable. If no component of $d$ is positive, that feasible direction permits unbounded improvement. A zero minimum ratio is a degenerate pivot and may change the basis without changing the point or objective.
+
+These formulas use inverse notation to derive the relationships; implementations can obtain the quantities by factorization solves. Phase I is needed when an initial feasible basis is unavailable, because the ratio test preserves existing feasibility rather than creating it from an arbitrary point.
+
+## Unboundedness and infeasibility
 
 A correct LP solver must distinguish:
 
@@ -75,7 +93,7 @@ A constraint $a^\top x\ge\beta$ is passed as $-a^\top x\le-\beta$.
 
 Pivoting uses Dantzig's most-negative-reduced-cost rule and switches to Bland's smallest-index rule after a run of degenerate pivots to avoid cycling. Results agree with `scipy.optimize.linprog` on randomized test problems with mixed-sign right-hand sides. It remains a dense-tableau teaching solver, not a production code.
 
-### Worked example
+## Worked example
 
 Maximize
 
@@ -121,6 +139,8 @@ $$
 
 larger than at the other feasible vertices.
 
-### Numerical notes
+The other vertices are $(0,0)$, $(4,0)$, and $(0,3.5)$, with values $0$, $20$, and $14$. A dual certificate also proves optimality without enumerating vertices: multiply the first inequality by $2$ and the second by $1$. Adding gives $5x_1+4x_2\leq2(8)+7=23$, attained at $(3,2)$. To pass this maximization to a minimization interface, use objective vector $c=(-5,-4)$.
+
+## Numerical notes
 
 Degeneracy can produce zero-length pivots and cycling. Real solvers use anti-cycling rules, presolve, scaling, sparse linear algebra, and often dual-simplex or interior-point variants.

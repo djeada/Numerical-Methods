@@ -1,4 +1,4 @@
-## Newton Polynomial Interpolation
+# Newton Polynomial Interpolation
 
 Newton interpolation represents the same unique polynomial obtained by Lagrange interpolation, but in a form that is easier to build incrementally.
 
@@ -21,7 +21,7 @@ The key advantage is structural: when a new point is added, the previously compu
 
 ![Incremental construction of a Newton interpolant](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/newton_incremental_construction.svg)
 
-### Divided differences
+## Divided differences
 
 The zeroth-order divided differences are simply the data values:
 
@@ -57,7 +57,7 @@ $$
 
 and so on.
 
-### Worked example
+## Worked example
 
 Use the points
 
@@ -109,7 +109,7 @@ $$
 P_2(1.5) = 2.875.
 $$
 
-### Why the construction is incremental
+## Why the construction is incremental
 
 Suppose $P_k(x)$ already interpolates the first $k+1$ nodes. Adding $x_{k+1}$ introduces one new term:
 
@@ -127,7 +127,19 @@ Therefore the new term vanishes at every old node. The correction can enforce th
 
 ![Partial sums of the Newton polynomial](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/newton_partial_sums.svg)
 
-### Divided-difference table
+### Computing the New Correction Coefficient
+
+The new interpolation condition at $x_{k+1}$ gives
+
+$$
+a_{k+1}=\frac{y_{k+1}-P_k(x_{k+1})}{\prod_{j=0}^k(x_{k+1}-x_j)}.
+$$
+
+The denominator is nonzero because the nodes are distinct. This coefficient is precisely the divided difference $f[x_0,\ldots,x_{k+1}]$. Evaluating $P_k$ in nested form and building the product both take $O(k)$ work, explaining the cost of appending one point.
+
+For example, start with $(0,1),(1,3)$, giving $P_1(x)=1+2x$. The new point $(2,2)$ has discrepancy $2-P_1(2)=2-5=-3$, while the product is $(2-0)(2-1)=2$. Thus $a_2=-3/2$, agreeing with the divided-difference table.
+
+## Divided-difference table
 
 For implementation, the coefficients can be computed in place.
 
@@ -145,11 +157,13 @@ $$
 
 for increasing divided-difference order $j$ and appropriate indices $i$.
 
+More precisely, let $j=1,\ldots,n$ and, for each $j$, update $i=n,n-1,\ldots,j$ in **descending** order. Each update then reads the two coefficients from the previous order before either has been overwritten. Ascending order would reuse a newly updated value and corrupt the table. After all orders, the array contains $a_i=f[x_0,\ldots,x_i]$.
+
 A full divided-difference table uses $O(n^2)$ storage, but only the coefficient diagonal is needed for evaluation. An in-place implementation can therefore reduce storage to $O(n)$.
 
 The arithmetic cost to build all coefficients is $O(n^2)$.
 
-### Nested evaluation
+## Nested evaluation
 
 The Newton form should not be evaluated by separately computing every long product.
 
@@ -170,7 +184,7 @@ for k = n-1, ..., 0:
     value = a_k + (x - x_k) * value
 ```
 
-### Relationship to Lagrange interpolation
+## Relationship to Lagrange interpolation
 
 For the same $n+1$ distinct nodes and values, Lagrange and Newton interpolation produce the same polynomial.
 
@@ -181,7 +195,7 @@ The difference is the representation:
 
 Because the underlying polynomial is identical, both forms have the same approximation error in exact arithmetic.
 
-### Error formula
+## Error formula
 
 If $f$ has $n+1$ continuous derivatives, then
 
@@ -193,13 +207,13 @@ for some $\xi_x$ in the interval of interest.
 
 As with Lagrange interpolation, high degree and poor node placement can cause large oscillations.
 
-### Equal spacing and finite differences
+## Equal spacing and finite differences
 
 When nodes are equally spaced, divided differences are closely related to finite-difference tables. This leads to classical Newton forward and backward interpolation formulas.
 
 The general divided-difference form is more flexible because it does **not** require equal spacing.
 
-### Numerical considerations
+## Numerical considerations
 
 Newton interpolation avoids solving a Vandermonde system, but it is still a global high-degree polynomial method. Its numerical behavior can deteriorate when:
 
@@ -216,7 +230,7 @@ Useful safeguards include:
 - checking interpolation residuals at the nodes;
 - comparing against a barycentric Lagrange implementation.
 
-### Complexity
+## Complexity
 
 For $n+1$ points:
 

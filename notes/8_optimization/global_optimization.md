@@ -1,4 +1,4 @@
-## Global Optimization
+# Global Optimization
 
 Global optimization seeks the best feasible point across the entire search region rather than only within the basin of a starting point.
 
@@ -18,7 +18,7 @@ for every $x\in\Omega$.
 
 The challenge is that a non-convex objective can contain many local minima, flat regions, discontinuities, or noise.
 
-### A multimodal benchmark
+## A multimodal benchmark
 
 The one-dimensional Rastrigin function
 
@@ -36,7 +36,7 @@ $$
 
 A local descent method started near $x=3$ can settle in a nearby basin instead of finding the origin.
 
-### Three strategies in the repository
+## Three strategies in the repository
 
 The implementation includes:
 
@@ -51,7 +51,7 @@ Detailed notes:
 - [Simulated annealing](simulated_annealing.md)
 - [Genetic algorithms](genetic_algorithms.md)
 
-### Grid search and the curse of dimensionality
+## Grid search and the curse of dimensionality
 
 With $N$ points per coordinate in $n$ dimensions, a full Cartesian grid contains
 
@@ -63,7 +63,19 @@ points. This makes exhaustive gridding useful for low-dimensional verification b
 
 If a one-dimensional interval has spacing $h$, the nearest grid point is at most $h/2$ away from the true minimizer. In multiple dimensions the geometric discretization error grows with the cell diagonal.
 
-### Exploration versus exploitation
+### Turning Grid Spacing into an Objective Bound
+
+On a full box grid with uniform coordinate spacing $h$, every point in the box is within Euclidean distance $\delta=h\sqrt n/2$ of a grid point, assuming the grid includes the box endpoints. If $f$ is $L$-Lipschitz and $f_{\mathrm{grid}}$ is the best sampled value, then
+
+$$
+f_{\mathrm{grid}}-L\delta\leq f^*\leq f_{\mathrm{grid}}.
+$$
+
+The upper bound comes from an evaluated feasible point. For the lower bound, any point has a nearby grid value, and Lipschitz continuity limits how much lower its objective can be. Without a valid $L$, spacing controls distance but supplies no certified objective gap. Equality constraints or narrow feasible regions can also make a Cartesian grid miss all feasible points.
+
+For the Rastrigin example, $f(x)=x^2+10[1-\cos(2\pi x)]\geq0$, and equality requires $x=0$. This proves the claimed global minimum analytically and supplies a benchmark against which a stochastic run can be checked. Generic black-box objectives rarely supply such a certificate.
+
+## Exploration versus exploitation
 
 Global methods must balance two goals:
 
@@ -74,13 +86,13 @@ Too much exploitation causes premature convergence to a local minimum. Too much 
 
 Simulated annealing controls this balance through temperature. Genetic algorithms use selection pressure, crossover, mutation, and population diversity.
 
-### No free finite-time guarantee
+## No free finite-time guarantee
 
 For a generic black-box function, a finite number of samples cannot certify a true global optimum without additional assumptions. Strong guarantees require structure such as Lipschitz bounds, interval arithmetic, convexity, or exhaustive combinatorial reasoning.
 
 This is why stochastic global methods usually report the **best point found**, not a mathematical proof of global optimality.
 
-### Hybrid strategies
+## Hybrid strategies
 
 A powerful practical pattern is:
 
@@ -91,6 +103,6 @@ A powerful practical pattern is:
 
 This separates broad exploration from precise local convergence.
 
-### Reproducibility
+## Reproducibility
 
 Stochastic optimization should expose and record random seeds. Report the number of function evaluations, not only iterations, because different algorithms can perform very different amounts of work per iteration.
