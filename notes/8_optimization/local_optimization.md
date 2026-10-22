@@ -1,10 +1,10 @@
-## Local Optimization
+# Local Optimization
 
 Local optimization methods refine a starting point using information about the objective near the current iterate. They are the default tools for smooth numerical optimization because they can converge rapidly with far fewer evaluations than global search.
 
 The tradeoff is fundamental: on a non-convex objective, the answer may depend on the initial point.
 
-### Descent directions
+## Descent directions
 
 For a differentiable objective, a vector $p_k$ is a descent direction at $x_k$ if
 
@@ -38,7 +38,15 @@ $$
 p_k = -H_k\nabla f(x_k).
 $$
 
-### The Rosenbrock valley
+### Checking That a Direction Really Descends
+
+Taylor expansion along $p$ gives $f(x+\alpha p)=f(x)+\alpha\nabla f(x)^\top p+o(\alpha)$ as $\alpha\to0^+$. A negative directional derivative therefore guarantees improvement for a sufficiently small positive step, although it does not establish that a full step is safe.
+
+For steepest descent, $g^\top p=-\|g\|_2^2<0$ whenever $g\ne0$. For Newton with a positive-definite Hessian $B$, $p=-B^{-1}g$ gives $g^\top p=-g^\top B^{-1}g<0$. The same argument applies to BFGS when its inverse approximation is positive definite. An indefinite curvature matrix removes this guarantee and explains the need for safeguards.
+
+At convergence, a small gradient establishes approximate stationarity, rather than a global or even local minimum by itself. In constrained problems the appropriate test is a projected-gradient or KKT residual, since the ordinary gradient need not vanish at a boundary optimum.
+
+## The Rosenbrock valley
 
 The Rosenbrock function
 
@@ -52,7 +60,7 @@ has a unique global minimum at $(1,1)$, but its narrow curved valley makes it di
 
 Gradient descent makes inexpensive iterations but often zig-zags. Newton and quasi-Newton methods spend more work per iteration to learn the valley geometry.
 
-### Convergence rates
+## Convergence rates
 
 Near a sufficiently regular minimizer, common asymptotic rates are:
 
@@ -80,7 +88,7 @@ respectively.
 
 ![Idealized local convergence rates](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/local_convergence_rates.svg)
 
-### Why plain Newton can fail
+## Why plain Newton can fail
 
 The Newton direction is not guaranteed to be a descent direction when the Hessian is indefinite. Far from a minimizer it can point toward a maximum, a saddle, or simply take an enormous step.
 
@@ -93,7 +101,7 @@ Practical Newton-type solvers therefore use one or more safeguards:
 
 The repository implementation intentionally keeps the algorithms compact: fixed-step gradient descent, plain Newton using `numpy.linalg.solve`, and BFGS with a strong Wolfe line search (bracketing followed by bisection zoom, see [line search](line_search.md)).
 
-### BFGS update
+## BFGS update
 
 Define
 
@@ -118,7 +126,7 @@ If $H_k$ is positive definite and $y_k^\top s_k>0$, the update preserves positiv
 
 See [Newton and quasi-Newton methods](newton_and_quasi_newton.md) for the derivation and numerical interpretation.
 
-### Worked quadratic example
+## Worked quadratic example
 
 For
 
@@ -150,7 +158,7 @@ $$
 
 Newton reaches it in one exact step from any starting point because the quadratic model is the function itself. Gradient descent generally needs multiple steps and its rate is controlled by the eigenvalue ratio $8/2=4$.
 
-### Practical diagnostics
+## Practical diagnostics
 
 For a local solver, report more than the final point. Useful diagnostics include:
 

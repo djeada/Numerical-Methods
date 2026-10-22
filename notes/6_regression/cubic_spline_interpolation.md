@@ -1,4 +1,4 @@
-## Cubic Spline Interpolation
+# Cubic Spline Interpolation
 
 A cubic spline interpolates data with a sequence of cubic polynomials rather than one high-degree polynomial across the entire interval.
 
@@ -18,7 +18,7 @@ The pieces are joined so that the function, first derivative, and second derivat
 
 ![Natural cubic spline through irregularly spaced knots](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/cubic_spline_piecewise_curve.svg)
 
-### Why use piecewise cubics?
+## Why use piecewise cubics?
 
 A straight-line interpolant is simple and local, but it has slope discontinuities at the nodes. A single high-degree polynomial is smooth, but it can oscillate strongly and becomes increasingly sensitive as the number of nodes grows.
 
@@ -29,7 +29,7 @@ Cubic splines occupy a useful middle ground:
 - the linear system has a sparse tridiagonal structure;
 - after setup, evaluating one query requires only one cubic segment.
 
-### Segment definition
+## Segment definition
 
 On interval $[x_i,x_{i+1}]$, write
 
@@ -41,7 +41,7 @@ For $n$ intervals there are $4n$ segment coefficients.
 
 They are determined by four types of conditions.
 
-#### 1\. Interpolation
+### 1. Interpolation
 
 Each segment matches its endpoint values:
 
@@ -50,7 +50,7 @@ S_i(x_i) = y_i,
 \qquad S_i(x_{i+1}) = y_{i+1}.
 $$
 
-#### 2\. First-derivative continuity
+### 2. First-derivative continuity
 
 At an interior knot,
 
@@ -58,7 +58,7 @@ $$
 S_{i-1}'(x_i) = S_i'(x_i).
 $$
 
-#### 3\. Second-derivative continuity
+### 3. Second-derivative continuity
 
 Also require
 
@@ -66,7 +66,7 @@ $$
 S_{i-1}''(x_i) = S_i''(x_i).
 $$
 
-#### 4\. Two boundary conditions
+### 4. Two boundary conditions
 
 The interior conditions alone do not uniquely determine the spline. Two endpoint conditions are required.
 
@@ -81,7 +81,7 @@ Other common choices are clamped, periodic, and not-a-knot boundary conditions.
 
 A natural boundary condition sets the endpoint **curvature** to zero; it does not set the endpoint slope to zero.
 
-### Solving with knot second derivatives
+## Solving with knot second derivatives
 
 A convenient derivation introduces
 
@@ -117,7 +117,29 @@ $$
 
 The right-hand side measures the change in neighboring secant slopes. If the data are locally close to a straight line, that difference is small; if the slope changes strongly, the spline needs more curvature.
 
-### Recovering the cubic coefficients
+### Deriving the Tridiagonal System
+
+A cubic has a linear second derivative. Interpolating that derivative between its endpoint values gives
+
+$$
+S_i''(x)=M_i\frac{x_{i+1}-x}{h_i}+M_{i+1}\frac{x-x_i}{h_i}.
+$$
+
+Integrate twice and choose the integration constants so that $S_i(x_i)=y_i$ and $S_i(x_{i+1})=y_{i+1}$. The endpoint first derivatives are then
+
+$$
+S_i'(x_i)=\frac{y_{i+1}-y_i}{h_i}-\frac{h_i}{6}(2M_i+M_{i+1}),
+$$
+
+$$
+S_i'(x_{i+1})=\frac{y_{i+1}-y_i}{h_i}+\frac{h_i}{6}(M_i+2M_{i+1}).
+$$
+
+Equating $S_{i-1}'(x_i)$ and $S_i'(x_i)$ and multiplying by six produces the displayed tridiagonal equation. Only three neighboring curvatures appear, explaining the sparse structure.
+
+Counting conditions gives the same result: the $2n$ endpoint-value conditions, $n-1$ first-derivative matches, and $n-1$ second-derivative matches total $4n-2$. The two boundary conditions supply the remaining equations for the $4n$ coefficients. With positive interval widths, the natural-spline interior matrix is strictly diagonally dominant, which supports a pivot-free tridiagonal solve.
+
+## Recovering the cubic coefficients
 
 Once the $M_i$ values are known,
 
@@ -146,7 +168,7 @@ S_i(x) = a_i + b_i\Delta x + c_i\Delta x^2 + d_i\Delta x^3,
 \qquad \Delta x = x - x_i.
 $$
 
-### Why the joins are smooth
+## Why the joins are smooth
 
 The second derivative on a segment is
 
@@ -170,7 +192,7 @@ Adjacent segments therefore share the same second derivative at each knot. The t
 
 ![First and second derivatives of a natural cubic spline](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/cubic_spline_derivatives.svg)
 
-### Worked example
+## Worked example
 
 Use
 
@@ -238,7 +260,9 @@ $$
 \boxed{S(0.5)=0.34375}.
 $$
 
-### Algorithm
+The second piece is $S_1(x)=0.5-0.75(x-1)^2+0.25(x-1)^3$. At the shared knot $x=1$, both pieces have value $0.5$, slope $0$, and second derivative $-1.5$. At $x=0$ and $x=2$, the second derivatives are zero. These checks verify both the interpolation and the natural boundary conditions.
+
+## Algorithm
 
 For a natural cubic spline:
 
@@ -260,9 +284,9 @@ VI. compute $(a_i,b_i,c_i,d_i)$ for each interval;
 
 VII. for each query, locate its interval and evaluate the corresponding cubic.
 
-The Thomas algorithm solves a nonsingular tridiagonal system in $O(n)$ time and $O(n)$ storage.
+For this strictly diagonally dominant natural-spline system, the Thomas algorithm gives a pivot-free solve in $O(n)$ time and $O(n)$ storage. A general nonsingular tridiagonal matrix does not automatically have safe nonzero pivots, so the same claim requires care outside this spline setting.
 
-### Evaluation cost
+## Evaluation cost
 
 After preprocessing, a query requires:
 
@@ -275,7 +299,7 @@ $$
 S_i(x) = a_i + \Delta x \left[b_i + \Delta x(c_i + \Delta x d_i) \right].
 $$
 
-### Boundary conditions matter
+## Boundary conditions matter
 
 Different endpoint conditions produce different interpolants even when all interior data are identical.
 
@@ -293,7 +317,7 @@ $$
 
 When comparing with a library, make sure the boundary condition matches. A library default may not be natural.
 
-### Numerical behavior and limitations
+## Numerical behavior and limitations
 
 Cubic splines usually avoid the dramatic oscillations of high-degree global polynomials, but they are not automatically shape preserving.
 

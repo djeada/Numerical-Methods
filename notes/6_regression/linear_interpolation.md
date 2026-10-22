@@ -1,4 +1,4 @@
-## Linear Interpolation
+# Linear Interpolation
 
 Linear interpolation estimates a value between two known points by assuming the function is a straight line over that interval.
 
@@ -31,7 +31,7 @@ When $x$ lies between the endpoints, $0\le t\le1$, so the result is a weighted a
 
 ![Geometry of linear interpolation](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/linear_interpolation_geometry.svg)
 
-### Geometric interpretation
+## Geometric interpretation
 
 The slope between the two samples is
 
@@ -55,7 +55,7 @@ $$
 
 sum to one. That has an important consequence: if $x$ is between $x_0$ and $x_1$, then $L(x)$ lies between $y_0$ and $y_1$. A single linear segment cannot overshoot its two endpoint values.
 
-### Worked example
+## Worked example
 
 Take
 
@@ -90,7 +90,7 @@ $$
 
 The calculation can also be read geometrically: the query is $40\%$ of the way from $x_0$ to $x_1$, so its interpolated value is $40\%$ of the way from $y_0$ to $y_1$.
 
-### Piecewise linear interpolation
+## Piecewise linear interpolation
 
 For many ordered data points
 
@@ -122,7 +122,7 @@ $$
 
 which is constant on that interval. At an interior node, the slope usually jumps from one secant slope to the next.
 
-### Why grid refinement helps
+## Why grid refinement helps
 
 For a smooth function, shorter intervals usually make the straight-line approximation more accurate.
 
@@ -156,7 +156,21 @@ $$
 
 This explains the familiar second-order behavior: if the maximum interval width is reduced by roughly a factor of two, the interpolation error for a smooth function often decreases by roughly a factor of four.
 
-### Algorithm
+### Deriving the Interpolation Remainder
+
+For an interior query $x$ that is not a node, choose $C$ so that
+
+$$
+g(t)=f(t)-L_i(t)-C(t-x_i)(t-x_{i+1})
+$$
+
+vanishes at $t=x_i,x,x_{i+1}$. Rolle's theorem applied twice gives a point $\xi_x$ with $g''(\xi_x)=0$. Since $L_i''=0$ and the quadratic product has second derivative $2$, this gives $C=f''(\xi_x)/2$. Evaluating the defining equation at $t=x$ proves the error formula above. At either endpoint the error is zero directly.
+
+For convex $f$, the factor $(x-x_i)(x-x_{i+1})$ is nonpositive, so $f(x)\leq L_i(x)$: the chord lies above the curve. This is also the geometric reason the trapezoidal rule overestimates integrals of convex functions.
+
+The interpolation weights provide a simple stability result. If each endpoint value changes by at most $\delta$ while the nodes remain fixed, the in-interval value changes by at most $(1-t)\delta+t\delta=\delta$. During extrapolation the absolute weights sum to more than one and can amplify those errors.
+
+## Algorithm
 
 For a single query in sorted data:
 
@@ -180,7 +194,7 @@ A binary search locates the interval in $O(\log n)$ time. The interpolation itse
 
 For many sorted queries, a single pass through the nodes and queries can avoid repeating binary searches.
 
-### Numerical details
+## Numerical details
 
 The formula
 
@@ -197,9 +211,9 @@ Important checks include:
 - decide whether to clamp, reject, or extrapolate out-of-range queries;
 - use a data type with sufficient precision for the scale of the coordinates.
 
-When $x_i$ and $x_{i+1}$ are extremely large but very close together relative to machine precision, the difference $x_{i+1}-x_i$ can lose relative accuracy. Rescaling or shifting the coordinate system can help.
+When $x_i$ and $x_{i+1}$ are extremely large but very close together relative to machine precision, the difference $x_{i+1}-x_i$ can lose relative accuracy. Shifting or rescaling coordinates before storing or evaluating them can help. Once two distinct coordinates have already rounded to the same floating point number, a later shift cannot recover their lost separation.
 
-### Extrapolation
+## Extrapolation
 
 If $x$ lies outside $[x_i,x_{i+1}]$, the same formula still produces a number, but then either
 
@@ -213,7 +227,7 @@ The weights are no longer both between zero and one, and the result is linear ex
 
 Extrapolation can be reasonable over a short distance when a linear trend is justified, but it should not be treated as automatically reliable.
 
-### Advantages
+## Advantages
 
 Linear interpolation is attractive because it is:
 
@@ -224,7 +238,7 @@ Linear interpolation is attractive because it is:
 - free from overshoot inside each interval;
 - easy to update when new nodes are added.
 
-### Limitations
+## Limitations
 
 Its main limitation is smoothness. The interpolant is only piecewise linear, so corners appear at most interior nodes. If derivatives are important, a cubic spline or another smooth method may be a better choice.
 

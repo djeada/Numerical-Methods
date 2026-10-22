@@ -1,4 +1,4 @@
-## Picard's Iteration Method
+# Picard's Iteration Method
 
 Picard iteration turns an initial value problem into a sequence of integral approximations. It is important less as a production ODE solver than as the constructive idea behind a fundamental existence-and-uniqueness theorem.
 
@@ -17,7 +17,7 @@ $$
 
 Picard's method replaces the unknown function inside the integral with the previous approximation.
 
-### Picard Iteration
+## Picard Iteration
 
 Choose an initial function, often
 
@@ -35,7 +35,7 @@ Each iteration produces a new function, not merely a single number.
 
 ![Successive Picard iterates approaching the exact solution](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/picard_iterates.svg)
 
-### Fixed-Point Interpretation
+## Fixed-Point Interpretation
 
 Define an operator
 
@@ -57,7 +57,7 @@ $$
 
 If $T$ is a contraction on a suitable function space, the contraction mapping theorem guarantees convergence to a unique fixed point.
 
-### Why the Lipschitz Condition Appears
+## Why the Lipschitz Condition Appears
 
 Suppose
 
@@ -68,7 +68,7 @@ $$
 Then on a short interval $|t-t_0|\le a$,
 
 $$
-|(Ty)(t) - (Tz)(t)| \le \int_{t_0}^{t} L|y(s) - z(s)|\, ds.
+|(Ty)(t) - (Tz)(t)| \le \int_{\min(t,t_0)}^{\max(t,t_0)} L|y(s) - z(s)|\, ds.
 $$
 
 Using the supremum norm,
@@ -85,7 +85,25 @@ $$
 
 then $T$ is a contraction. This is the core idea behind the local Picard--Lindelof theorem.
 
-### Worked Example
+### Keeping the Iterates Inside the Theorem's Domain
+
+The contraction estimate is only part of the argument: $T$ must also map the chosen function space into itself. Suppose $f$ is continuous and bounded by $M$ on the rectangle $|t-t_0|\leq a$, $|y-y_0|\leq b$. Restrict attention to continuous functions in the state band and choose $a$ so that $aM\leq b$. Then
+
+$$
+|(Ty)(t)-y_0|\leq aM\leq b,
+$$
+
+so $T$ preserves that band. Combining this with $q=La<1$ gives a contraction on a closed set of continuous functions in the supremum norm. The fixed point solves the integral equation and, by differentiation, the original IVP.
+
+The simple contraction condition is sufficient, not necessary. In the linear worked example, $L=1$ and the displayed evaluation point $x=1$ makes $La=1$, so the strict one-step contraction bound does not establish convergence on $[0,1]$. Repeated integration supplies a sharper factorial estimate:
+
+$$
+|y_n(x)-y(x)|\leq\frac{x^n}{n!}\|y_0-y\|_{\infty,[0,1]},\qquad 0\leq x\leq1.
+$$
+
+It follows by applying $|y_{n+1}(x)-y(x)|\leq\int_0^x|y_n(t)-y(t)|\,dt$ repeatedly. Since $1/n!\to0$, the table at $x=1$ is justified even though the simpler contraction test is inconclusive there.
+
+## Worked Example
 
 Consider
 
@@ -157,7 +175,7 @@ The iterate $y_n$ agrees with the Taylor series of the exact solution through th
 
 ![Picard iteration error decreases with iteration count](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/picard_convergence.svg)
 
-### An Important Distinction
+## An Important Distinction
 
 Picard iteration is sometimes described as a numerical method, but a direct implementation can be expensive because every iteration requires a new integral over an entire function.
 
@@ -168,7 +186,7 @@ In practical numerical integration, methods such as Runge--Kutta usually provide
 - understanding fixed-point methods,
 - motivating iterative schemes for integral and differential equations.
 
-### Numerical Implementation
+## Numerical Implementation
 
 If the integral cannot be evaluated analytically, choose grid points
 
@@ -199,9 +217,11 @@ $$
 
 by fixed-point (Picard-style) substitution. The substitution converges when $hL/2<1$, and the resulting method is second-order accurate. The name refers only to the fixed-point iteration used inside each step.
 
+For an inner iterate $v^{(m)}$, the map is $v\mapsto y_n+hf(t_n+h/2,(y_n+v)/2)$, whose Lipschitz factor is $q=hL/2$. If $q<1$, the remaining inner-solve error after an update is bounded by $q\|v^{(m+1)}-v^{(m)}\|/(1-q)$. The implicit midpoint method is second order when its nonlinear solves are sufficiently accurate; a loose inner tolerance can dominate the time-discretization error. Moreover, an implicit method's stability does not guarantee that this particular fixed-point solver converges for a large step.
+
 When $(t_\text{end}-t_0)/h$ is not an integer, the last step is shortened so that the returned grid ends exactly at $t_\text{end}$. The returned array has shape `(n + 1,)` for a scalar ODE and `(n + 1, d)` for a system with `d` components.
 
-### Convergence Caveats
+## Convergence Caveats
 
 Picard iteration may fail or become inconvenient when:
 

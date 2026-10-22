@@ -1,4 +1,4 @@
-## Ordinary Differential Equations
+# Ordinary Differential Equations
 
 An **ordinary differential equation (ODE)** relates an unknown function of one independent variable to one or more of its derivatives. ODEs are the natural language of dynamical systems: they describe how a state changes when its instantaneous rate of change is known.
 
@@ -10,7 +10,7 @@ $$
 
 The word *ordinary* means that derivatives are taken with respect to a single independent variable. If several independent variables appear, the corresponding equation is a partial differential equation.
 
-### From a Model to a Trajectory
+## From a Model to a Trajectory
 
 A common first-order form is
 
@@ -37,9 +37,9 @@ $$
 y' = r y\left(1 - \frac{y}{K}\right)
 $$
 
-has equilibria at $y=0$ and $y=K$. When $0<y<K$, the derivative is positive; when $y>K$, it is negative. This qualitative information already reveals the long-term behavior without solving the equation explicitly.
+with $r>0$ and $K>0$ has equilibria at $y=0$ and $y=K$. When $0<y<K$, the derivative is positive; when $y>K$, it is negative. This qualitative information already reveals the long-term behavior without solving the equation explicitly.
 
-### Initial Value Problems and Boundary Value Problems
+## Initial Value Problems and Boundary Value Problems
 
 An **initial value problem (IVP)** specifies all required conditions at one point. For a second-order ODE,
 
@@ -64,9 +64,9 @@ $$
 
 IVPs are naturally advanced forward or backward in the independent variable. BVPs usually require different numerical ideas such as shooting or finite differences.
 
-### Classification
+## Classification
 
-#### Order
+### Order
 
 The order is the highest derivative present.
 
@@ -74,7 +74,7 @@ The order is the highest derivative present.
 - $y''+3y'+2y=0$ is second order.
 - $y^{(4)}+y=0$ is fourth order.
 
-#### Linear and Nonlinear ODEs
+### Linear and Nonlinear ODEs
 
 A linear $n$th-order ODE has the form
 
@@ -104,13 +104,13 @@ $$
 
 are nonlinear.
 
-#### Homogeneous and Nonhomogeneous Linear Equations
+### Homogeneous and Nonhomogeneous Linear Equations
 
 A linear equation is homogeneous when $g(t)=0$. Otherwise it is nonhomogeneous.
 
-### Converting Higher-Order Equations to First-Order Systems
+## Converting Higher-Order Equations to First-Order Systems
 
-Numerical solvers are usually written for first-order systems. Any higher-order ODE can be rewritten in that form.
+Numerical solvers are usually written for first-order systems. A higher-order ODE can be rewritten in that form when it can be solved locally for its highest derivative. An implicit or singular equation may instead require a differential-algebraic formulation.
 
 For
 
@@ -141,9 +141,9 @@ $$
 \mathbf{u}' = \mathbf{f}(t,\mathbf{u}).
 $$
 
-The same conversion works for arbitrary order.
+For order $n$, define $u_1=y,u_2=y',\ldots,u_n=y^{(n-1)}$. Then $u_j'=u_{j+1}$ for $j<n$, and the final equation comes from the isolated highest derivative. The initial values of all $n$ components must also be supplied.
 
-### Existence and Uniqueness
+## Existence and Uniqueness
 
 For
 
@@ -167,7 +167,13 @@ $$
 
 This condition prevents nearby solution curves from splitting unpredictably.
 
-### Analytical Versus Numerical Solutions
+### Local Does Not Mean Global
+
+Continuity and a local Lipschitz condition establish existence and uniqueness only on some neighborhood of the initial point. A solution can leave the domain or become unbounded in finite time. For example, $y'=y^2$, $y(0)=1$ has the unique solution $y(t)=1/(1-t)$, which cannot be extended as a finite-valued solution through $t=1$.
+
+Continuity alone does not guarantee uniqueness. The problem $y'=2\sqrt{|y|}$, $y(0)=0$ admits the zero solution and solutions that remain zero until a chosen time $a\geq0$ and then follow $(t-a)^2$. The right-hand side is continuous but not locally Lipschitz at zero. These examples show why a numerical trajectory must be interpreted within the mathematical domain of the IVP.
+
+## Analytical Versus Numerical Solutions
 
 Some ODEs have closed-form solutions. Many important nonlinear systems do not.
 
@@ -195,7 +201,7 @@ Their accuracy can differ dramatically at the same step size.
 
 ![Accuracy comparison for several time-stepping methods](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/ode_method_accuracy.svg)
 
-### Local and Global Error
+## Local and Global Error
 
 A one-step method advances by
 
@@ -218,7 +224,21 @@ on a fixed interval as $h\to0$.
 
 Euler has order $1$, Heun order $2$, and classical RK4 order $4$.
 
-### Stability and Stiffness
+### Error Conventions and Convergence Conditions
+
+These notes call the **unscaled one-step defect** the local truncation error: starting from the exact value, a method of order $p$ has defect $O(h^{p+1})$. Some texts divide that defect by $h$ and call the resulting $O(h^p)$ quantity the local truncation error. The conventions describe the same method but attach different exponents to the term “local.”
+
+A stable one-step propagation bound has the form
+
+$$
+e_{n+1}\leq(1+Ch)e_n+Kh^{p+1}.
+$$
+
+Over a fixed interval, summing this recurrence gives $e_n=O(h^p)$ when the initial error is controlled. Thus consistency, smoothness, and stability together justify the global orders listed above. Reducing $h$ cannot compensate for an incorrect model, uncertain initial conditions, or a solution singularity.
+
+For a scaled local-error estimate $E=\max_i |e_i|/(\mathrm{atol}_i+\mathrm{rtol}|u_i|)$, a controller typically accepts a trial step when $E\leq1$. The absolute tolerance controls components near zero, while relative tolerance controls components with appreciable magnitude. A rejected trial step is recomputed with a smaller step rather than included in the trajectory.
+
+## Stability and Stiffness
 
 Accuracy alone does not guarantee a good numerical solution.
 
@@ -242,7 +262,7 @@ A problem is called **stiff** when rapidly decaying modes force explicit methods
 
 In stiff regimes, implicit methods such as backward Euler, BDF schemes, or implicit Runge--Kutta methods are usually preferred.
 
-### Adaptive Step Sizes
+## Adaptive Step Sizes
 
 Modern ODE solvers rarely use a single fixed $h$ everywhere. Instead they estimate local error and adapt the step size:
 
@@ -251,9 +271,9 @@ Modern ODE solvers rarely use a single fixed $h$ everywhere. Instead they estima
 
 Embedded Runge--Kutta pairs, such as RK45, obtain two approximations of different orders from related stage evaluations and use their difference as an error estimate.
 
-### Important Model Examples
+## Important Model Examples
 
-#### Exponential Growth and Decay
+### Exponential Growth and Decay
 
 $$
 y' = ay.
@@ -261,7 +281,7 @@ $$
 
 The sign of $a$ determines growth or decay.
 
-#### Logistic Growth
+### Logistic Growth
 
 $$
 P' = rP\left(1 - \frac{P}{K}\right).
@@ -269,7 +289,7 @@ $$
 
 The parameter $K$ is the carrying capacity.
 
-#### Harmonic Oscillator
+### Harmonic Oscillator
 
 $$
 x'' + \omega^2x = 0.
@@ -282,7 +302,7 @@ x' = v,
 \qquad v' = -\omega^2x.
 $$
 
-#### Damped Oscillator
+### Damped Oscillator
 
 $$
 x'' + 2\zeta\omega x' + \omega^2x = 0.
@@ -290,7 +310,7 @@ $$
 
 The damping ratio $\zeta$ controls whether the motion is underdamped, critically damped, or overdamped.
 
-### A Practical Workflow
+## A Practical Workflow
 
 When solving an ODE numerically:
 

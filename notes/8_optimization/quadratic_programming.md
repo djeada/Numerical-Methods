@@ -1,4 +1,4 @@
-## Quadratic Programming
+# Quadratic Programming
 
 A quadratic program (QP) has a quadratic objective and linear constraints:
 
@@ -21,7 +21,7 @@ $$
 
 the problem is convex.
 
-### Unconstrained solution
+## Unconstrained solution
 
 If $Q$ is positive definite and there are no constraints, stationarity gives
 
@@ -37,7 +37,7 @@ $$
 
 Again, solve this system directly rather than forming $Q^{-1}$.
 
-### Projected gradient idea
+## Projected gradient idea
 
 For a convex feasible set $C$, projected gradient descent uses
 
@@ -57,7 +57,7 @@ where $\Pi_C$ denotes Euclidean projection.
 
 The repository implementation uses this idea in a simplified form: it takes a gradient step and then projects onto the feasible polyhedron with Dykstra's algorithm, which cycles through the individual half-spaces and the affine equality set and carries correction terms between sweeps.
 
-### Step size for a quadratic
+## Step size for a quadratic
 
 For
 
@@ -79,7 +79,33 @@ $$
 
 If $Q$ is numerically zero the problem is a linear program: the gradient is constant, there is no curvature from which to derive a step, and the routine raises an error instead of guessing a step. Use a linear programming solver in that case.
 
-### KKT system for equality-constrained QP
+### What Projection Must Compute
+
+Euclidean projection onto a nonempty closed convex set solves
+
+$$
+\Pi_C(y)=\underset{z\in C}{\operatorname{arg\,min}}\ \tfrac12\|z-y\|_2^2.
+$$
+
+For a half-space $a^\top z\leq b$ with $a\ne0$,
+
+$$
+\Pi(y)=y-\frac{\max(a^\top y-b,0)}{\|a\|_2^2}a.
+$$
+
+For full-row-rank equalities $Az=b$, it is $y-A^\top(AA^\top)^{-1}(Ay-b)$, evaluated through a linear solve. A single pass through several such sets can violate a set visited earlier. Dykstra's algorithm stores a correction for each set: add the stored correction before projecting, then replace it by the difference between that corrected input and its projection. Repeated sweeps converge to the projection onto the intersection under the standard nonempty closed convex assumptions.
+
+The projected-gradient stopping quantity is
+
+$$
+G_\alpha(x)=\frac{x-\Pi_C(x-\alpha\nabla f(x))}{\alpha}.
+$$
+
+For a feasible $x$ and convex differentiable $f$, $G_\alpha(x)=0$ is equivalent to the first-order constrained optimality condition. The ordinary gradient need not vanish. For example, minimizing $x^2/2$ over $x\geq1$ gives $x^*=1$: its gradient is $1$, while projection sends the trial point $0$ back to $1$ and the gradient mapping is zero.
+
+Positive semidefiniteness alone does not ensure a finite optimum. The unconstrained problem with $Q=\operatorname{diag}(1,0)$ and $c=(0,-1)^\top$ is convex but unbounded below in its second coordinate. Feasibility and attainment remain separate requirements.
+
+## KKT system for equality-constrained QP
 
 For
 
@@ -116,6 +142,6 @@ $$
 
 This linear-algebra viewpoint is central to active-set and interior-point methods.
 
-### Numerical caveats
+## Numerical caveats
 
-Simply projecting onto the constraints one after another yields a feasible point but not the nearest one, which can make projected gradient stall at a non-optimal point; the correction terms of Dykstra's algorithm are what restore the exact projection. Dykstra converges only linearly, so for large or difficult constraint sets a dedicated QP solver is preferable.
+A single cyclic projection sweep need not even leave a feasible point. Repeated uncorrected projections can reach a feasible point that is not the nearest one, which changes the projected-gradient algorithm. Dykstra's correction terms recover the true projection in the limit; a finite inner solve must monitor feasibility and projection accuracy. Convergence can be slow when constraint sets meet at unfavorable angles, so large or difficult QPs often benefit from a dedicated solver. The equality KKT system is nonsingular, for example, when $A$ has full row rank and $Q$ is positive definite on $\ker A$; full positive definiteness of $Q$ is sufficient but stronger than necessary.

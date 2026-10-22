@@ -1,8 +1,8 @@
-## Backward Difference Method
+# Backward Difference Method
 
 The backward difference method is a finite difference technique employed to approximate the derivatives of functions. Unlike the forward difference method, which uses information from points ahead of the target point, the backward difference method relies on function values from points preceding the target point. This approach makes it particularly useful in scenarios where future data points are unavailable or when working with discrete datasets. By leveraging the difference between function values at consecutive points, the backward difference method provides a straightforward means of estimating derivatives, which is essential in various applications such as numerical analysis, engineering simulations, and computational modeling.
 
-### Mathematical Formulation
+## Mathematical Formulation
 
 The backward difference approximation of the first derivative of a function $f$ at a point $x$ with a step size $h$ is mathematically expressed as:
 
@@ -20,7 +20,27 @@ $$
 
 so the error is $\mathcal{O}(h)$, the same order as the forward difference but with the opposite sign of the leading term. As with the forward difference, round-off error grows like $\varepsilon/h$, and the best step size is of order $\sqrt{\varepsilon}\approx 10^{-8}$ in double precision.
 
-### Example
+## Derivation and a More Accurate Boundary Formula
+
+For $f\in C^2([x-h,x])$, Taylor's theorem gives
+
+$$
+f(x-h)=f(x)-hf'(x)+\frac{h^2}{2}f''(\xi),\qquad \xi\in(x-h,x).
+$$
+
+Move $f(x-h)$ to the other side and divide by $h$. This produces the formula and signed remainder above. In particular, for $f(x)=x^2$ the approximation is $2x-h$ exactly, so the error in the example is $-0.01$, rather than an unexplained discrepancy.
+
+If an additional past value is available, the second-order backward stencil is
+
+$$
+f'(x)\approx\frac{3f(x)-4f(x-h)+f(x-2h)}{2h}.
+$$
+
+To see the cancellation, expand $f(x-h)$ and $f(x-2h)$ about $x$: the constant coefficients sum to zero, the coefficient of $hf'(x)$ is $2$, and the coefficient of $h^2f''(x)$ is zero. After division by $2h$, the leading error is $-h^2f^{(3)}(x)/3$ under sufficient smoothness. This gains an order of accuracy while still using only current and past samples.
+
+The step-size rule $h\sim\sqrt{\varepsilon}$ assumes function values and derivatives of comparable scale. More generally, balancing an error model $C_1h+C_2\varepsilon/h$ gives $h_{\mathrm{opt}}=\sqrt{C_2\varepsilon/C_1}$. Data noise replaces or adds to the rounding term, and the available sample spacing may prevent choosing this ideal value.
+
+## Example
 
 Consider the function $f(x) = x^2$. We aim to approximate the derivative of this function at the point $x = 2$ using the backward difference method with a step size $h = 0.01$. Applying the backward difference formula, we perform the following calculation:
 
@@ -30,13 +50,13 @@ $$
 
 In this example, the exact derivative of $f(x) = x^2$ at $x = 2$ is $f'(2) = 2 \times 2 = 4$. The approximation obtained using the backward difference method is $3.99$, which is remarkably close to the exact value. This demonstrates the method's effectiveness in providing accurate derivative estimates, especially when the function is smooth and the step size $h$ is appropriately chosen. However, it's important to recognize that the approximation's accuracy depends on the function's behavior and the selected step size.
 
-### Advantages of the Backward Difference Method
+## Advantages of the Backward Difference Method
 
 - The **ease of implementation and understanding** makes the backward difference method straightforward to apply, requiring only simple arithmetic and basic knowledge of numerical methods.
 - **Minimal data requirements** ensure that the method only needs function values at $x$ and $x - h$, making it suitable for scenarios with limited or discrete data where future function values are unavailable.
 - The method’s **applicability in real-time systems** allows for derivative estimation using only past and present data, which is useful in streaming data applications or real-time monitoring scenarios.
 
-### Limitations of the Backward Difference Method
+## Limitations of the Backward Difference Method
 
 - **Approximation error** is inherent in the method. While reducing the step size $h$ improves accuracy, excessively small $h$ can lead to numerical instability and increased round-off errors due to floating-point precision limits.
 - The method has **lower accuracy compared to the central difference method**, with an error of order $O(h)$. This means it is generally less precise for the same step size compared to the central difference method’s $O(h^2)$ accuracy.

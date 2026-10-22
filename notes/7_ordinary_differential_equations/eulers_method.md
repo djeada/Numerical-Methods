@@ -1,4 +1,4 @@
-## Euler's Method
+# Euler's Method
 
 Euler's method is the simplest explicit time-stepping method for an initial value problem (IVP). It is useful both as a practical first approximation and as a way to understand how numerical ODE solvers work.
 
@@ -13,7 +13,7 @@ The differential equation gives the slope of the solution curve. Euler's method 
 
 ![Euler method follows the tangent at the current point](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/euler_tangent_steps.svg)
 
-### Update Formula
+## Update Formula
 
 If $t_n=t_0+nh$ and $u_n$ approximates $u(t_n)$, then
 
@@ -29,7 +29,7 @@ Geometrically:
 2. follow the tangent line for a horizontal distance $h$,
 3. use the endpoint as the next numerical value.
 
-### Derivation from Taylor Expansion
+## Derivation from Taylor Expansion
 
 Expand the exact solution about $t_n$:
 
@@ -54,7 +54,25 @@ So halving the step size should roughly halve the total error once the asymptoti
 
 ![Euler error decreases linearly with step size](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/euler_error_vs_step.svg)
 
-### Worked Example
+### How Local Error Accumulates
+
+The $O(h^2)$ local error refers to one step **starting from the exact value**. In a computed trajectory, each new step also propagates earlier errors. If $f$ is Lipschitz in $u$ with constant $L$ and $|u''|\leq M$, the global error $e_n=|u(t_n)-u_n|$ satisfies
+
+$$
+e_{n+1}\leq(1+hL)e_n+\frac{M}{2}h^2.
+$$
+
+Starting with $e_0=0$ and summing the geometric series gives, for $L>0$,
+
+$$
+e_n\leq\frac{M}{2L}h\bigl((1+hL)^n-1\bigr)\leq\frac{M}{2L}h(e^{L(t_n-t_0)}-1).
+$$
+
+On a fixed time interval the factor multiplying $h$ is bounded, giving first-order global accuracy. If $L=0$, the corresponding bound is $M(t_n-t_0)h/2$. This argument also explains why smoothness and controlled error propagation are needed; simply counting steps does not establish convergence for every differential equation.
+
+For $u'=u$, the recurrence is $u_n=(1+h)^n u_0$ on a uniform grid. At fixed $T=nh$, $n\log(1+h)=T-Th/2+O(h^2)$, so the numerical growth differs from $e^T$ by a first-order term. When comparing vector ODEs, compute every component of $f(t_n,\mathbf u_n)$ from the same old state before updating the state.
+
+## Worked Example
 
 Solve approximately
 
@@ -88,12 +106,12 @@ $$
 The exact value is
 
 $$
-e^{0.1}\approx 1.105170.
+e^{0.1}\approx 1.105170918.
 $$
 
 The error is about $2.67\times 10^{-3}$.
 
-### Algorithm
+## Algorithm
 
 For a scalar ODE:
 
@@ -119,11 +137,11 @@ $$
 \mathbf{u}_{n+1} = \mathbf{u}_n + h\mathbf{f}(t_n,\mathbf{u}_n).
 $$
 
-### Repository Implementation
+## Repository Implementation
 
 `euler_method` takes a final time `t_end` and a nominal step `h`. When `(t_end - t0)/h` is not an integer, the last step is shortened so that the returned grid ends exactly at `t_end`; all earlier steps have length `h`. The returned array has shape `(n + 1,)` for a scalar ODE (one component) and `(n + 1, d)` for a system with `d` components.
 
-### Step Size and Stability
+## Step Size and Stability
 
 Accuracy is not the only reason to choose $h$ carefully. A step can be small enough to look reasonable but still be unstable.
 
@@ -153,7 +171,7 @@ $$
 
 This restriction is severe for **stiff** problems, where some modes decay much faster than others. Explicit Euler may then require extremely small steps even when the solution itself changes slowly.
 
-### When Euler's Method Is Useful
+## When Euler's Method Is Useful
 
 Euler's method is valuable when:
 
@@ -164,14 +182,14 @@ Euler's method is valuable when:
 
 It is usually not the best production method when high accuracy or stiffness matters.
 
-### Advantages
+## Advantages
 
 - Very simple to derive and implement.
 - Requires only one evaluation of $f$ per step.
 - Extends directly to systems of ODEs.
 - Makes error, stability, and time-stepping ideas easy to visualize.
 
-### Limitations
+## Limitations
 
 - Only first-order accurate globally.
 - Can accumulate substantial error over many steps.

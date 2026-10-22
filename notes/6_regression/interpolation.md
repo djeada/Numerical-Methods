@@ -1,4 +1,4 @@
-## Interpolation
+# Interpolation
 
 Interpolation constructs a function that passes **exactly** through a set of known data points. If the data are
 
@@ -19,7 +19,7 @@ This is different from regression or approximation. A regression model is usuall
 
 The distinction matters. If the measurements are noisy, exact interpolation may reproduce noise that should have been smoothed away. If the values come from a trusted table, simulation, or expensive deterministic function, exact interpolation can be exactly what is needed.
 
-### What problem does interpolation solve?
+## What problem does interpolation solve?
 
 Suppose a function is known only at selected locations. We want to estimate its value at a query point $x_*$ between those locations.
 
@@ -39,7 +39,7 @@ $$
 
 Interpolation is primarily an **in-domain** operation. Evaluating outside the range $[x_0,x_n]$ is extrapolation, which is usually less reliable because the data no longer constrain the model on both sides of the query.
 
-### Local and global interpolants
+## Local and global interpolants
 
 Interpolation methods differ mainly in how much of the data they use to answer one query.
 
@@ -51,7 +51,7 @@ A **global** method uses all data points in one formula. Lagrange interpolation,
 
 This local-versus-global distinction affects cost, smoothness, sensitivity, and how much the interpolant changes when one observation is modified.
 
-### A simple example
+## A simple example
 
 Consider
 
@@ -75,7 +75,7 @@ $$
 
 A quadratic polynomial through all three points gives a different curve between the nodes even though it reproduces the same three data values exactly. Both are valid interpolants; they encode different assumptions about the shape between observations.
 
-### Polynomial interpolation
+## Polynomial interpolation
 
 For $n+1$ distinct one-dimensional nodes, there is exactly one polynomial of degree at most $n$ that passes through all points.
 
@@ -93,7 +93,13 @@ which is conceptually simple but often a poor numerical representation for solvi
 
 The representation matters numerically even when the underlying polynomial is the same.
 
-### Piecewise interpolation
+### Existence and Uniqueness of the Polynomial
+
+The Lagrange basis constructs an interpolating polynomial explicitly, so existence follows for distinct nodes. For uniqueness, suppose $p$ and $q$ both have degree at most $n$ and match the same $n+1$ data values. Their difference has $n+1$ distinct zeros but degree at most $n$, so it must be the zero polynomial. Thus Lagrange, Newton, and monomial representations describe the same polynomial in exact arithmetic.
+
+For the earlier points $(0,1),(1,2),(2,0)$, this polynomial is $p(x)=1+\tfrac52x-\tfrac32x^2$, so $p(1.5)=1.375$, compared with the piecewise-linear value $1$. The difference comes from the model between observations, not failure to match a node.
+
+## Piecewise interpolation
 
 High-degree global polynomials can oscillate strongly, especially near the ends of an interval when nodes are equally spaced. Piecewise methods avoid fitting one large polynomial across the whole domain.
 
@@ -104,7 +110,7 @@ Two important examples are:
 
 Piecewise methods are often preferable when the dataset has many nodes.
 
-### Radial basis interpolation
+## Radial basis interpolation
 
 Interpolation can also be built from distance-based basis functions. In one dimension, Gaussian radial basis function interpolation has the form
 
@@ -122,7 +128,7 @@ with the value at $r=0$ defined by continuity as $0$.
 
 RBF methods generalize naturally to scattered multidimensional data, where there may be no convenient one-dimensional ordering of the nodes.
 
-### Interpolation error
+## Interpolation error
 
 An interpolant reproduces the data exactly, but that does **not** imply that it reproduces the unknown function exactly between the nodes.
 
@@ -141,7 +147,17 @@ This expression shows two sources of error:
 
 Adding more equally spaced nodes does not automatically improve a global polynomial interpolant. Node placement and numerical stability matter.
 
-### Numerical questions to ask
+### Approximation Error and Data Sensitivity Are Different
+
+The remainder formula assumes exact values $y_i=f(x_i)$. If the values are perturbed by $\delta y_i$, the polynomial changes by $\delta p(x)=\sum_i\delta y_iL_i(x)$. Therefore,
+
+$$
+|\delta p(x)|\leq\left(\sum_i|L_i(x)|\right)\max_i|\delta y_i|.
+$$
+
+The factor $\sum_i|L_i(x)|$ measures amplification of data errors. A stable evaluation formula can reduce arithmetic error, but it cannot eliminate sensitivity inherent in the node placement. This distinction explains why barycentric evaluation and better nodes address different parts of the interpolation problem.
+
+## Numerical questions to ask
 
 Before choosing an interpolation method, ask:
 
@@ -160,7 +176,7 @@ Newton interpolation has an incremental form. A global solve may be less conveni
 **How many queries will be evaluated?**\
 Some methods have a relatively expensive setup followed by cheap evaluations. For repeated queries, that setup can be worthwhile.
 
-### Complexity overview
+## Complexity overview
 
 For $n+1$ nodes:
 
@@ -174,7 +190,7 @@ For $n+1$ nodes:
 
 The exact costs depend on implementation and whether many queries are evaluated in a batch.
 
-### Interpolation versus extrapolation
+## Interpolation versus extrapolation
 
 Within the data range, nearby samples constrain the interpolant on both sides. Outside that range, the interpolant follows the assumptions of the chosen model rather than direct information from the data.
 
@@ -187,7 +203,7 @@ For example:
 
 An implementation should make the extrapolation policy explicit rather than silently assuming that interpolation and extrapolation have the same reliability.
 
-### Practical workflow
+## Practical workflow
 
 A robust interpolation workflow is:
 

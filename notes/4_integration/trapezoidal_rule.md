@@ -1,8 +1,8 @@
-## Trapezoidal Rule
+# Trapezoidal Rule
 
 The Trapezoidal Rule is a fundamental numerical integration technique employed to approximate definite integrals, especially when an exact antiderivative of the function is difficult or impossible to determine analytically. This method is widely used in various fields such as engineering, physics, and economics due to its simplicity and effectiveness. The core idea behind the Trapezoidal Rule is to estimate the area under a curve by dividing it into a series of trapezoids, rather than relying solely on simpler geometric shapes like rectangles. By approximating the region under the graph of a function with trapezoids, this method provides a better fit to the actual curve, thereby enhancing the accuracy of the integral approximation compared to basic methods like the left or right Rectangle Rule.
 
-### Mathematical Formulation
+## Mathematical Formulation
 
 The mathematical foundation of the Trapezoidal Rule is based on the assumption that the region under the graph of a function $f(x)$ over a given interval $[a, b]$ can be approximated by a trapezoid. A trapezoid is a quadrilateral with at least one pair of parallel sides, which in this context are the vertical segments at $x = a$ and $x = b$ of lengths $f(a)$ and $f(b)$, while the top side is the line connecting the points $(a, f(a))$ and $(b, f(b))$. The area of this trapezoid provides an estimate of the definite integral of the function over the interval $[a, b]$.
 
@@ -29,7 +29,7 @@ $$
 The integral $I$ over the entire interval $[a, b]$ is then approximated by summing the areas of all the trapezoids:
 
 $$
-I = \sum_{i=0}^{n-1} \frac{f(x_{i+1}) + f(x_i)}{2} h
+T_n = \sum_{i=0}^{n-1} \frac{f(x_{i+1}) + f(x_i)}{2} h
 $$
 
 This summation effectively aggregates the contributions of each trapezoid to estimate the total area under the curve $f(x)$ across the interval. The graphical representation below illustrates how the Trapezoidal Rule approximates the area under a curve by stacking trapezoids side by side:
@@ -38,7 +38,7 @@ This summation effectively aggregates the contributions of each trapezoid to est
 
 In this diagram, each trapezoid corresponds to a subinterval $[x_i, x_{i+1}]$, with the parallel sides representing the function values $f(x_i)$ and $f(x_{i+1})$. The height of each trapezoid is the width $h$ of the subinterval, and the area of each trapezoid contributes to the overall approximation of the integral.
 
-### Error Term
+## Error Term
 
 For a twice continuously differentiable $f$, the composite Trapezoidal Rule with $n$ subintervals of width $h = \frac{b-a}{n}$ satisfies
 
@@ -48,7 +48,33 @@ $$
 
 The rule is exact for polynomials of degree one or lower and is second-order accurate, $O(h^2)$. For convex functions ($f'' > 0$) it overestimates the integral.
 
-### Algorithm Steps
+### Integrating the Linear Interpolant
+
+On one panel $[u,v]$ of width $h=v-u$, the line through the endpoint samples is
+
+$$
+p(x)=f(u)\frac{v-x}{h}+f(v)\frac{x-u}{h}.
+$$
+
+Both basis functions integrate to $h/2$, producing $h[f(u)+f(v)]/2$. For $f\in C^2$, the interpolation remainder is $f(x)-p(x)=f''(\xi_x)(x-u)(x-v)/2$. Since the polynomial weight has one sign on the panel, integration and the weighted mean value theorem give
+
+$$
+\int_u^v(f(x)-p(x))\,dx=-\frac{h^3}{12}f''(\xi).
+$$
+
+Summing panels proves the composite error formula. For $x^2$ on $[0,2]$ with $h=1$, it predicts $I-T_2=-(2/12)\cdot2=-1/3$, agreeing with $8/3-3$.
+
+Combining repeated endpoints also gives the convenient form
+
+$$
+T_n=h\left[\frac{f(a)}2+\sum_{i=1}^{n-1}f(x_i)+\frac{f(b)}2\right].
+$$
+
+It needs $n+1$ evaluations. For unequally spaced data, use $\sum_i(x_{i+1}-x_i)[f(x_i)+f(x_{i+1})]/2$ instead of a common $h$. Negative sampled values contribute signed area, just as in the exact integral.
+
+If a smooth uniform-grid error expansion applies, $(4T_{2n}-T_n)/3$ cancels the leading $h^2$ error. This is Simpson's rule on the refined grid and is the first extrapolation step behind Romberg integration. Smooth periodic functions can exhibit much faster trapezoidal convergence than the generic second-order bound suggests.
+
+## Algorithm Steps
 
 Implementing the Trapezoidal Rule involves a systematic process to ensure an accurate approximation of the definite integral. The following steps outline the procedure:
 
@@ -85,7 +111,7 @@ IV. **Aggregate the Results:**
 Sum the areas of all the trapezoids computed in the previous step to obtain the total integral approximation:
 
 $$
-I = \sum_{i=0}^{n-1} \frac{f(x_{i+1}) + f(x_i)}{2} h
+T_n = \sum_{i=0}^{n-1} \frac{f(x_{i+1}) + f(x_i)}{2} h
 $$
 
 - This aggregation provides the final estimate of the definite integral over the interval $[a, b]$.
@@ -93,7 +119,7 @@ $$
 
 By meticulously following these steps, the Trapezoidal Rule systematically approximates the integral by leveraging the linear behavior of the function within each subinterval. This method balances simplicity and accuracy, making it a practical choice for a wide range of numerical integration problems.
 
-### Example
+## Example
 
 To illustrate the application of the Trapezoidal Rule, consider the function $f(x) = x^2$. This example demonstrates how the method approximates the integral over a specific interval using a manageable number of subintervals.
 
@@ -147,7 +173,7 @@ IV. **Sum the Areas:**
 Add the areas of the individual trapezoids to obtain the total integral approximation:
 
 $$
-I = 0.5 + 2.5 = 3
+T_2 = 0.5 + 2.5 = 3
 $$
 
 This sum represents the estimated value of the definite integral of $f(x) = x^2$ over the interval $[0, 2]$ using the Trapezoidal Rule.
@@ -164,19 +190,19 @@ The Trapezoidal Rule approximation of 3 is reasonably close to the exact value o
 
 This example highlights the practical application of the Trapezoidal Rule and illustrates how it provides a balance between computational simplicity and accuracy. While the approximation is not exact in this case, it is sufficiently close for many practical purposes, especially when dealing with functions that do not exhibit extreme behavior within the interval of integration.
 
-### Advantages
+## Advantages
 
 - The Trapezoidal Rule is straightforward to **understand** and implement, making it accessible to students and practitioners alike. The method relies on basic arithmetic operations and function evaluations at specific points, without requiring complex algorithms or iterative procedures.
-- Compared to the Rectangle Rule, which approximates the area under a curve using rectangles based on function values at the left or right endpoints, the Trapezoidal Rule often provides a more **accurate** approximation (the Midpoint Rule, however, is typically about twice as accurate as the Trapezoidal Rule for the same number of subintervals). This increased accuracy stems from the method's ability to account for the linear trend between two consecutive points, effectively averaging the function's behavior over each subinterval.
+- Compared to the Rectangle Rule, which approximates the area under a curve using rectangles based on function values at the left or right endpoints, the Trapezoidal Rule often provides a more **accurate** approximation (the Midpoint Rule has half the standard second-derivative error-bound constant on the same partition, although actual errors need not have this ratio). This increased accuracy stems from the method's ability to account for the linear trend between two consecutive points, effectively averaging the function's behavior over each subinterval.
 - The Trapezoidal Rule is versatile and can be applied to a broad spectrum of **functions**, including those that are linear, polynomial, or exhibit smooth curvature. It is particularly effective for functions that do not have extreme fluctuations or sharp bends within the interval of integration.
 - The method is computationally **efficient**, especially for functions that are computationally inexpensive to evaluate. Since the composite Trapezoidal Rule requires only one new function evaluation per subinterval (adjacent subintervals share endpoints), it scales well with increasing numbers of subintervals, maintaining reasonable computational demands even for large-scale problems.
 - The Trapezoidal Rule serves as a foundational **technique** in numerical integration, providing a basis for more advanced methods such as Simpson's Rule and Gaussian Quadrature. Understanding the principles of the Trapezoidal Rule facilitates the comprehension and implementation of these more sophisticated techniques.
 
-### Limitations
+## Limitations
 
 - The Trapezoidal Rule assumes that the function behaves **linearly** within each subinterval, which can lead to significant approximation errors for functions that exhibit high curvature or rapid changes within the interval of integration. In such cases, the linear approximation may not capture the function's true behavior, resulting in overestimation or underestimation of the area under the curve.
 - Achieving a high level of **precision** with the Trapezoidal Rule often requires dividing the interval $[a, b]$ into a large number of subintervals. While increasing the number of subintervals can enhance the accuracy of the approximation, it also increases the computational effort, as more function evaluations and calculations are necessary.
 - The accuracy of the Trapezoidal Rule is highly dependent on the behavior of the **function** being integrated. For functions that are not smooth or that have irregular behavior within the interval, the linear approximations used by the Trapezoidal Rule may not adequately capture the true nature of the function.
 - When dealing with a large number of subintervals, especially in computational implementations, the Trapezoidal Rule can be susceptible to the accumulation of numerical **errors**. These errors may arise from factors such as round-off errors in floating-point arithmetic or from inaccuracies in function evaluations.
 - The Trapezoidal Rule is primarily designed for definite integrals over **finite** intervals. It is not inherently suited for improper integrals, where the interval of integration is infinite or where the integrand has singularities within the interval.
-- The method assumes that the function $f(x)$ is **continuous** over the interval $[a, b]$. For functions with discontinuities or points of non-differentiability within the interval, the Trapezoidal Rule may fail to provide a meaningful approximation.
+- The standard **second-order error bound** assumes a continuous second derivative. For bounded piecewise continuous functions, the rule can still converge, but jumps or corners may reduce the convergence rate and invalidate that bound. Splitting the integral at known nonsmooth points makes the approximation easier to control; singularities require separate treatment.

@@ -1,10 +1,10 @@
-## Central Difference Method
+# Central Difference Method
 
 The central‐difference method is a finite‐difference scheme for estimating derivatives that combines forward and backward differences via Taylor‐series expansions. By evaluating the function at points symmetrically placed around the target, it cancels out many of the lower‐order error terms, yielding a more accurate approximation than one‐sided methods. This balanced approach is especially useful in numerical analysis and computational applications where closed‐form derivatives are unavailable or costly to compute.
 
 ![Central Difference Method Illustration](https://github.com/user-attachments/assets/367d9eb0-a68b-47d4-bace-f0279fd8b1f8)
 
-### Mathematical Formulation and Derivation
+## Mathematical Formulation and Derivation
 
 The central difference approximation of the first derivative of a function $f$ at a point $x$ with step size $h$ is given by:
 
@@ -28,7 +28,7 @@ $$
 f(x - h) = f(x) - hf'(x) + \frac{h^2}{2}f''(x) - \frac{h^3}{6}f^{(3)}(\xi_2)
 $$
 
-#### Forward and Backward Differences
+### Forward and Backward Differences
 
 The forward difference approximation is:
 
@@ -54,7 +54,7 @@ $$
 \frac{f(x)-f(x-h)}{h} = f'(x) + \mathcal{O}(h)
 $$
 
-#### Central Difference (Second-Order)
+### Central Difference (Second-Order)
 
 Average the two approximations:
 
@@ -63,7 +63,7 @@ $$
 \frac12\left[\frac{f(x+h)-f(x)}{h} + \frac{f(x)-f(x-h)}{h}\right]
 &= \frac12\left[
 \left(f'(x) + \frac{h}{2}f''(x) + \frac{h^2}{6}f^{(3)}(\xi_1)\right)
-+ \left(f'(x) - \frac{h}{2}f''(x) + \frac{h^2}{6}f^{(3)}(\xi_2)\right)
+{}+ \left(f'(x) - \frac{h}{2}f''(x) + \frac{h^2}{6}f^{(3)}(\xi_2)\right)
 \right] \\
 &= f'(x) + \frac{h^2}{12}\left(f^{(3)}(\xi_1) + f^{(3)}(\xi_2)\right)
 \end{aligned}
@@ -74,8 +74,8 @@ The $\pm\tfrac{h}{2}f''(x)$ terms cancel exactly, leaving only an $\mathcal{O}(h
 Rewriting the left-hand side:
 
 $$
-\frac{1}{2}\Bigl(\tfrac{f(x+h)-f(x)}{h} +
-\tfrac{f(x)-f(x-h)}{h}\Bigr) = \frac{f(x+h)-f(x-h)}{2h}
+\frac{1}{2}\left(\tfrac{f(x+h)-f(x)}{h} +
+\tfrac{f(x)-f(x-h)}{h}\right) = \frac{f(x+h)-f(x-h)}{2h}
 $$
 
 Hence
@@ -111,7 +111,7 @@ $$
 
 which is **second‐order accurate** (error $\propto h^2$) because the leading $h^1$ terms have cancelled.
 
-### Error in Central Difference Method
+## Error in Central Difference Method
 
 The error in the central difference method is of the order $\mathcal{O}(h^2)$, which implies that the truncation error decreases quadratically as the step size $h$ approaches zero. This quadratic rate of convergence makes the central difference method significantly more accurate than the forward or backward difference methods, which typically have an error of order $\mathcal{O}(h)$.
 
@@ -119,7 +119,33 @@ However, while reducing $h$ improves truncation error, it must be balanced again
 
 Quantitatively, the round-off error is roughly $\varepsilon\,|f(x)|/h$ (with $\varepsilon\approx 2.2\times10^{-16}$ in double precision), while the truncation error is $\frac{h^2}{6}|f^{(3)}|$. Balancing the two gives an optimal step of order $h\sim\varepsilon^{1/3}\approx 10^{-5}$ (scaled by $(|f|/|f^{(3)}|)^{1/3}$), with a best attainable error of about $\varepsilon^{2/3}\approx 10^{-11}$. This is both a larger step and a smaller error than the $\sqrt{\varepsilon}$ step and $\sqrt{\varepsilon}$ error of the one-sided differences.
 
-### Example
+## Checking the Order and Reusing Symmetry
+
+For $f(x)=x^2$, the third derivative vanishes, so the central difference is **exact in exact arithmetic for every nonzero $h$**. The example below illustrates cancellation, but does not by itself demonstrate a nonzero second-order error. For $f(x)=x^3$,
+
+$$
+\frac{(x+h)^3-(x-h)^3}{2h}=3x^2+h^2,
+$$
+
+so halving $h$ reduces the error by exactly a factor of four before floating point effects become important.
+
+The same symmetric Taylor expansions can be **added**, rather than subtracted, to estimate a second derivative:
+
+$$
+f''(x)\approx\frac{f(x+h)-2f(x)+f(x-h)}{h^2}.
+$$
+
+With a bounded fourth derivative this has error $O(h^2)$. Its rounding and data errors are amplified by $1/h^2$, so its useful step size differs from the first-derivative formula.
+
+For a sufficiently smooth first derivative, write $D_h=f'(x)+ch^2+O(h^4)$ and $D_{h/2}=f'(x)+ch^2/4+O(h^4)$. Eliminating $c$ gives Richardson extrapolation:
+
+$$
+f'(x)\approx\frac{4D_{h/2}-D_h}{3},
+$$
+
+with fourth-order truncation accuracy. The improvement assumes smoothness and accurate function samples; extrapolation does not remove measurement noise or rounding error.
+
+## Example
 
 Suppose we have a function $f(x) = x^2$, and we want to approximate the derivative at the point $x = 2$ with a step size $h = 0.01$. Using the central difference method, we get:
 
@@ -130,13 +156,13 @@ $$
 
 The exact derivative of $f(x) = x^2$ at the point $x = 2$ is $f'(2) = 2 \times 2 = 4$, so the approximation is accurate. This example demonstrates how the central difference method can effectively approximate derivatives with high precision for smooth functions, while also highlighting the importance of an appropriate step size $h$.
 
-### Advantages
+## Advantages
 
 - The method offers **higher accuracy** compared to forward or backward difference methods by using function values on both sides of the point, reducing the leading error term in derivative approximations.
 - **Simplicity in implementation** makes it easy to apply, with straightforward formulas that are accessible for numerical analysis and computational tasks.
 - The central difference method is **applicable to discrete data**, allowing for its use when analytical derivatives are difficult or impossible, such as in data fitting, signal processing, and numerical simulations.
 
-### Limitations
+## Limitations
 
 - There is always an **approximation error**. Decreasing the step size $h$ reduces truncation error, but excessively small $h$ can cause numerical issues due to floating-point round-off.
 - The method requires **function values on both sides** of the point, so it cannot be applied directly at domain boundaries unless the function is defined beyond those boundaries (or one uses one-sided/ghost-point techniques).

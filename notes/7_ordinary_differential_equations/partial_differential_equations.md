@@ -1,4 +1,4 @@
-## Partial Differential Equations
+# Partial Differential Equations
 
 A **partial differential equation (PDE)** relates an unknown function of several independent variables to its partial derivatives. PDEs describe fields rather than single trajectories: temperature in space and time, pressure in a fluid, displacement in an elastic body, or the amplitude of a wave.
 
@@ -10,7 +10,7 @@ $$
 
 Here $\mathbf{x}$ denotes one or more spatial coordinates and $t$ may represent time.
 
-### Why PDEs Differ from ODEs
+## Why PDEs Differ from ODEs
 
 For an ODE, specifying enough initial data often determines a trajectory. A PDE also needs information about the spatial domain and its boundary.
 
@@ -43,7 +43,15 @@ $$
 u(\mathbf{x},0) = u_0(\mathbf{x}).
 $$
 
-### Three Classical Types
+### Boundary Data and Compatibility
+
+The normal derivative is $\partial u/\partial n=\nabla u\cdot\mathbf n$, where $\mathbf n$ is the outward unit normal. The number and location of boundary conditions depend on the equation. Transport generally needs data only on inflow boundaries, whereas a second-order elliptic problem needs an appropriate condition around the boundary.
+
+Boundary and initial data should agree at their intersections if a smooth solution is expected. For the fixed-end heat problem below, this means $u_0(0)=u_0(L)=0$. Incompatible data can introduce an initial layer or reduce the regularity needed by standard error estimates.
+
+A pure Neumann problem also illustrates that boundary data need not determine a unique solution: for $-\nabla^2u=f$ and $\partial u/\partial n=g$ on a connected bounded domain, integration gives the compatibility condition $\int_\Omega f=-\int_{\partial\Omega}g$. If a solution exists, adding a constant gives another one; a normalization such as zero mean is needed for uniqueness.
+
+## Three Classical Types
 
 For a second-order linear PDE in two variables,
 
@@ -59,7 +67,9 @@ $$
 
 provides the classical classification.
 
-#### Elliptic
+This classification concerns the nondegenerate second-order principal part and is pointwise when the coefficients vary. It does not classify every nonlinear or higher-order PDE, and the case $A=B=C=0$ is not a parabolic second-order equation simply because the discriminant vanishes.
+
+### Elliptic
 
 If
 
@@ -77,7 +87,7 @@ $$
 
 Elliptic problems often describe equilibrium states, such as steady temperature or electrostatic potential.
 
-#### Parabolic
+### Parabolic
 
 If
 
@@ -97,7 +107,7 @@ This is the heat equation. It smooths spatial variation as time passes.
 
 ![Diffusion smooths a localized temperature profile](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/pde_heat_diffusion.svg)
 
-#### Hyperbolic
+### Hyperbolic
 
 If
 
@@ -117,7 +127,7 @@ This is the wave equation. It propagates disturbances at finite speed.
 
 ![Wave equation transports oscillatory structure rather than simply smoothing it](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/pde_wave_propagation.svg)
 
-### The Heat Equation
+## The Heat Equation
 
 Consider a rod $0\le x\le L$:
 
@@ -151,7 +161,7 @@ $$
 
 Higher-frequency modes decay faster because their second derivatives are larger. This is the mathematical reason diffusion smooths sharp spatial variation.
 
-### The Wave Equation
+## The Wave Equation
 
 For a vibrating string,
 
@@ -179,7 +189,7 @@ $$
 
 The solution can be decomposed into normal modes. Unlike the heat equation, the ideal wave equation does not damp those modes; energy oscillates between kinetic and potential forms.
 
-### Laplace and Poisson Equations
+## Laplace and Poisson Equations
 
 Laplace's equation is
 
@@ -197,7 +207,7 @@ These equations occur in electrostatics, steady heat conduction, gravity, and po
 
 For elliptic equations, boundary values influence the solution throughout the domain. There is no preferred time direction because time is absent from the model.
 
-### First-Order Transport
+## First-Order Transport
 
 A simple transport equation is
 
@@ -215,7 +225,7 @@ so the initial profile moves with speed $c$ without changing shape.
 
 This equation highlights the importance of numerical conservation and numerical diffusion: a poor discretization may artificially smear or oscillate around a transported profile.
 
-### Method of Lines
+## Method of Lines
 
 A common way to solve time-dependent PDEs numerically is to discretize space first.
 
@@ -233,7 +243,7 @@ $$
 
 An ODE solver can then integrate this system in time. This is the **method of lines**.
 
-### Stability of a Simple Heat Solver
+## Stability of a Simple Heat Solver
 
 If forward Euler is used in time together with centered differences in space,
 
@@ -277,32 +287,46 @@ $$
 
 holds: the numerical domain of dependence must contain the physical one, so a wave may not travel more than one grid cell per time step.
 
-### Time Grid and the Final Step
+### Spatial Accuracy, Stiffness, and the First Wave Step
+
+The centered approximation of $u_{xx}$ has error $O(\Delta x^2)$ for a smooth solution with bounded fourth spatial derivative. Combining it with forward Euler gives global error $O(\Delta t+\Delta x^2)$ under a stable refinement and compatible smooth data. The heat operator's largest eigenvalue magnitudes grow like $1/\Delta x^2$, explaining why spatial refinement creates a progressively stiffer ODE system in the method of lines.
+
+Backward Euler removes the explicit heat stability restriction, but a large $\Delta t$ can still overdamp a physically important mode. Stability establishes bounded propagation, not accurate time resolution.
+
+The wave recurrence needs two time levels. Taylor expansion supplies the first one from the given displacement and velocity:
+
+$$
+u_j^1=u_j^0+\Delta t\,v_j^0+\frac{\Delta t^2}{2}u_{tt}(x_j,0)+O(\Delta t^3).
+$$
+
+Substituting $u_{tt}=c^2u_{xx}$ and the centered spatial difference gives the initialization below. Boundary values must be imposed at every time level. An accurate recurrence with an inconsistent first step can still lose its expected second-order convergence.
+
+## Time Grid and the Final Step
 
 The solvers cover $[0,T]$ and always return $t_{\text{last}}=T$ exactly, even when $T/\Delta t$ is not an integer.
 
 - **Heat equation (explicit and implicit).** Steps have length $\Delta t$ except the last one, which is shortened to land on $T$. The explicit stability condition $r\le 1/2$ is checked for the nominal $\Delta t$ only; a shorter final step has a smaller $r$ and is therefore stable too.
-- **Wave equation (leapfrog).** Leapfrog needs a uniform step, so the solver uses $n=\lceil T/\Delta t\rceil$ steps of size $\Delta t_{\text{eff}}=T/n\le\Delta t$. The CFL condition checked for the nominal $\Delta t$ then holds for $\Delta t_{\text{eff}}$ as well. The first step is taken from the initial velocity, $u^1_j=u^0_j+\Delta t\,v_j+\tfrac12 r^2(u^0_{j+1}-2u^0_j+u^0_{j-1})$, and the scheme is second order in time and space.
+- **Wave equation (leapfrog).** Leapfrog needs a uniform step, so the solver uses $n=\lceil T/\Delta t\rceil$ steps of size $\Delta t_{\text{eff}}=T/n\le\Delta t$. The CFL condition checked for the nominal $\Delta t$ then holds for $\Delta t_{\text{eff}}$ as well. With $\nu=c\Delta t_{\text{eff}}/\Delta x$, the first step is taken from the initial velocity as $u^1_j=u^0_j+\Delta t_{\text{eff}}v_j+\tfrac12\nu^2(u^0_{j+1}-2u^0_j+u^0_{j-1})$. Here $\nu$ is the wave Courant number, distinct from the heat ratio $r$. With smooth compatible data and a stable grid, the scheme is second order in time and space.
 
-### Main Numerical Approaches
+## Main Numerical Approaches
 
-#### Finite Differences
+### Finite Differences
 
 Replace derivatives with differences on a grid. Finite differences are simple and effective on regular geometries.
 
-#### Finite Volumes
+### Finite Volumes
 
 Integrate conservation laws over small control volumes and update fluxes across their boundaries. This is particularly natural for fluid dynamics and conservation laws.
 
-#### Finite Elements
+### Finite Elements
 
 Approximate the solution by basis functions on a mesh and enforce a weak form of the PDE. Finite elements handle irregular geometries and variable material properties well.
 
-#### Spectral Methods
+### Spectral Methods
 
 Approximate the solution using global basis functions such as Fourier or Chebyshev modes. For smooth problems, spectral methods can converge extremely rapidly.
 
-### Nonlinear PDEs
+## Nonlinear PDEs
 
 Many important PDEs are nonlinear. Examples include:
 
@@ -332,7 +356,7 @@ $$
 
 Nonlinearity can introduce shocks, bifurcations, turbulence, and pattern formation.
 
-### A Practical PDE Workflow
+## A Practical PDE Workflow
 
 1. identify the PDE type and physical domain,
 2. state initial and boundary conditions clearly,

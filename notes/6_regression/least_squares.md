@@ -1,4 +1,4 @@
-## Least Squares
+# Least Squares
 
 Least squares fits a model to data by minimizing the sum of squared residuals.
 
@@ -32,7 +32,7 @@ Unlike interpolation, least squares does not generally require the fitted model 
 
 ![Least-squares line and its residuals](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/least_squares_residuals.svg)
 
-### Design matrix formulation
+## Design matrix formulation
 
 Suppose a straight line is modeled as
 
@@ -76,7 +76,7 @@ $$
 
 The same framework handles polynomial regression and any model that is linear in its unknown coefficients.
 
-### Deriving the normal equations
+## Deriving the normal equations
 
 Expand the objective:
 
@@ -107,7 +107,7 @@ $$
 
 If the columns of $X$ are linearly independent, $X^\top X$ is positive definite and the solution is unique.
 
-### Geometric interpretation
+## Geometric interpretation
 
 The fitted vector
 
@@ -133,7 +133,19 @@ The residual vector is orthogonal to every column of $X$. Geometrically, the lea
 
 This interpretation is more general than the familiar picture of a best-fit line.
 
-### Worked example
+### Why the Stationary Point Is a Minimum
+
+Let $\widehat{\boldsymbol\beta}$ satisfy the normal equations and write any other coefficient vector as $\widehat{\boldsymbol\beta}+d$. The residual is orthogonal to the columns of $X$, so the cross term vanishes:
+
+$$
+\|\mathbf y-X(\widehat{\boldsymbol\beta}+d)\|_2^2=\|\mathbf r\|_2^2+\|Xd\|_2^2.
+$$
+
+The second term is nonnegative, proving global optimality. If $X$ has full column rank, it is zero only for $d=0$, proving uniqueness. If $X$ is rank deficient, nonzero null-space vectors give other coefficient minimizers with exactly the same fitted values. The prediction vector is therefore unique even when the coefficient vector is not.
+
+For independent zero-mean errors with common variance $\sigma^2$ and fixed full-rank $X$, $\operatorname{Cov}(\widehat{\boldsymbol\beta})=\sigma^2(X^\top X)^{-1}$. This statistical uncertainty is separate from numerical rounding. With $p$ fitted coefficients and $N>p$, $\mathrm{RSS}/(N-p)$ estimates $\sigma^2$ under these assumptions; the training MSE $\mathrm{RSS}/N$ serves a different purpose.
+
+## Worked example
 
 Fit a line to
 
@@ -210,7 +222,7 @@ $$
 
 Their sum is zero because the model includes an intercept, and they are orthogonal to the predictor column as required by the normal equations.
 
-### The objective is convex
+## The objective is convex
 
 For a linear least-squares problem,
 
@@ -224,7 +236,7 @@ is a quadratic function of the coefficients.
 
 When $X$ has full column rank, the quadratic bowl has one unique minimum. If the columns of $X$ are linearly dependent, there are multiple coefficient vectors that produce the same fitted values unless an additional criterion is imposed.
 
-### Why solving the normal equations directly can be risky
+## Why solving the normal equations directly can be risky
 
 The normal equations are important theoretically, but explicitly forming
 
@@ -251,7 +263,7 @@ For numerical work, prefer:
 
 Normal equations can still be acceptable for small, well-conditioned educational examples.
 
-### QR factorization
+## QR factorization
 
 If
 
@@ -275,7 +287,7 @@ $$
 
 This avoids explicitly forming $X^\top X$.
 
-### Rank deficiency
+## Rank deficiency
 
 If the columns of $X$ are linearly dependent, the coefficient vector is not uniquely determined.
 
@@ -290,12 +302,12 @@ makes the numerical rank explicit through the singular values in $\Sigma$.
 A common choice is the minimum-norm least-squares solution computed with the pseudoinverse:
 
 $$
-\hat{\boldsymbol{\beta}} = X^ + \mathbf y.
+\hat{\boldsymbol{\beta}} = X^+\mathbf y.
 $$
 
 In practice, library routines use a tolerance to decide which singular values are treated as effectively zero.
 
-### Scaling and centering
+## Scaling and centering
 
 Polynomial and multivariable design matrices can be poorly scaled.
 
@@ -307,7 +319,7 @@ Useful preprocessing includes:
 
 Scaling changes the numerical representation, not the underlying fitted relationship, provided coefficients are interpreted or transformed appropriately afterward.
 
-### Weighted least squares
+## Weighted least squares
 
 If observations have different known reliabilities, use weights
 
@@ -339,13 +351,15 @@ $$
 X^\top W X\hat{\boldsymbol{\beta}} = X^\top W\mathbf y.
 $$
 
-### Least squares is sensitive to outliers
+To solve without forming weighted normal equations, set $\widetilde X=W^{1/2}X$ and $\widetilde{\mathbf y}=W^{1/2}\mathbf y$, then apply QR or SVD to $\|\widetilde{\mathbf y}-\widetilde X\boldsymbol\beta\|_2^2$. If independent observations have known variances $\sigma_i^2$, inverse-variance weights $w_i=1/\sigma_i^2$ give the usual weighted least-squares model. Larger weights represent greater precision, not larger error bars.
+
+## Least squares is sensitive to outliers
 
 Squaring residuals gives large errors disproportionately high influence. A single extreme outlier can move an ordinary least-squares fit substantially.
 
 Robust regression methods replace the squared loss or iteratively reweight observations so that extreme residuals have less influence.
 
-### Practical checks
+## Practical checks
 
 For an important least-squares model:
 
@@ -356,6 +370,6 @@ For an important least-squares model:
 5. check for outliers and leverage points;
 6. separate numerical fit quality from predictive validity.
 
-### Notes on the repository implementation
+## Notes on the repository implementation
 
 `src/6_regression/least_squares` solves the normal equations through a pseudo-inverse of $X^\top X$ for teaching purposes; QR or SVD of $X$ itself is preferable in practice. The function requires $m\ge n$ and full column rank, and raises `ValueError` otherwise. A row of $X$ that is entirely zero is accepted: it contributes nothing to $X^\top X$ or $X^\top\mathbf y$ and only adds the constant $y_i^2$ to the residual.

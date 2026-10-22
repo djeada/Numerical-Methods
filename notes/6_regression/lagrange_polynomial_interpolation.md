@@ -1,4 +1,4 @@
-## Lagrange Polynomial Interpolation
+# Lagrange Polynomial Interpolation
 
 Lagrange interpolation constructs the unique polynomial of degree at most $n$ that passes through $n+1$ distinct data points.
 
@@ -30,7 +30,7 @@ That property makes the interpolation condition automatic.
 
 ![Lagrange basis polynomials](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/lagrange_basis_functions.svg)
 
-### Constructing the basis
+## Constructing the basis
 
 For distinct nodes, define
 
@@ -73,7 +73,7 @@ $$
 
 This proves that the polynomial interpolates every supplied value.
 
-### Weighted-basis interpretation
+## Weighted-basis interpretation
 
 Each term
 
@@ -87,7 +87,7 @@ contributes a polynomial that has the correct value $y_j$ at one node and vanish
 
 Although the basis functions are tied to individual nodes, the final polynomial is global. Changing one node or data value generally changes the polynomial everywhere.
 
-### Worked example
+## Worked example
 
 Interpolate the three points
 
@@ -145,13 +145,13 @@ p(0) = 1,
 \qquad p(2) = 2.
 $$
 
-### Direct evaluation cost
+## Direct evaluation cost
 
 The formula for one $L_j$ contains $n$ factors, and there are $n+1$ basis polynomials. A literal implementation therefore requires $O(n^2)$ work for one query.
 
 That direct formula is excellent for derivation but is not usually the best way to evaluate a large interpolant numerically.
 
-### Barycentric Lagrange interpolation
+## Barycentric Lagrange interpolation
 
 A more efficient and numerically useful representation uses **barycentric weights**
 
@@ -177,7 +177,21 @@ $$
 
 An implementation should detect this case rather than evaluate a formula containing division by zero.
 
-### Why not solve a Vandermonde system?
+### Deriving the Barycentric Formula
+
+Let $\omega(x)=\prod_{m=0}^n(x-x_m)$. Away from the nodes, the product definition gives $L_j(x)=\omega(x)w_j/(x-x_j)$. Also $\sum_jL_j(x)=1$: this sum is a degree-at-most-$n$ polynomial that equals one at all $n+1$ nodes, so uniqueness makes it identically one.
+
+Consequently,
+
+$$
+\sum_j\frac{w_j}{x-x_j}=\frac1{\omega(x)},\qquad p_n(x)=\omega(x)\sum_j\frac{w_jy_j}{x-x_j}.
+$$
+
+Dividing the second expression by the first identity eliminates the potentially large product $\omega(x)$ and gives the barycentric quotient. Multiplying all weights by the same nonzero constant leaves the quotient unchanged, which is useful for scaling the weights. The apparent singularities at the nodes are removable, and returning the stored node value handles them exactly.
+
+Efficient evaluation does not change the polynomial's sensitivity to its nodes. Barycentric form improves the representation, while Chebyshev-like nodes reduce the amplification and oscillation associated with unfavorable node placement.
+
+## Why not solve a Vandermonde system?
 
 The same polynomial can be written in monomial form:
 
@@ -189,7 +203,7 @@ Matching the data gives a Vandermonde system. In exact arithmetic this is valid,
 
 Lagrange or Newton forms expose the interpolation structure directly and usually lead to better algorithms.
 
-### Error formula
+## Error formula
 
 If the unknown function $f$ has $n+1$ continuous derivatives, then
 
@@ -201,7 +215,7 @@ for some $\xi_x$ in the relevant interval.
 
 The product shows that the error is zero at every interpolation node. It also shows why node placement matters between the nodes.
 
-### Runge phenomenon
+## Runge phenomenon
 
 Increasing the polynomial degree does not always improve interpolation on equally spaced points.
 
@@ -214,7 +228,7 @@ Possible remedies include:
 - reducing the polynomial degree;
 - using rational or other specialized interpolants.
 
-### Numerical checks
+## Numerical checks
 
 A practical implementation should verify:
 
@@ -224,7 +238,7 @@ A practical implementation should verify:
 4. the polynomial does not develop unexpected oscillations between nodes;
 5. extrapolation outside the data interval is treated cautiously.
 
-### When Lagrange form is useful
+## When Lagrange form is useful
 
 Lagrange interpolation is especially useful for:
 

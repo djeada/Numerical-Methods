@@ -1,14 +1,16 @@
-## Singular Value Decomposition (SVD)
+# Singular Value Decomposition (SVD)
 
 Singular Value Decomposition (SVD) is a fundamental matrix decomposition technique widely used in numerous areas of science, engineering, and data analysis. Unlike the Eigenvalue Decomposition (EVD), which is restricted to square and diagonalizable matrices, SVD applies to any rectangular matrix. It provides a way of expressing a given $m \times n$ matrix as the product of three simpler matrices, revealing critical insights into the structure and properties of the original matrix. These properties are useful in tasks such as dimensionality reduction, noise filtering, image compression, and solving ill-conditioned systems of linear equations.
 
-![output(21)](https://github.com/user-attachments/assets/1479f467-1d30-4f80-84e2-4c996d4b09fc)
+![Orthogonal factors and singular values of a matrix](https://github.com/user-attachments/assets/1479f467-1d30-4f80-84e2-4c996d4b09fc)
 
-### Mathematical Formulation
+## Mathematical Formulation
 
 Given any $m \times n$ matrix $A$, the SVD factorizes $A$ into:
 
-$$A = U \Sigma V^{T}$$
+$$
+A = U \Sigma V^{T}
+$$
 
 where:
 
@@ -31,9 +33,9 @@ A = U \begin{bmatrix}
 \end{bmatrix} V^{T}
 $$
 
-Here, $\Sigma$ is "diagonal" in the sense that all non-zero elements are on the main diagonal. The rank of $A$ is equal to the number of non-zero singular values.
+Here, $\Sigma$ is rectangular diagonal: $\Sigma_{ii}=\sigma_i$ for $i\leq p$, with all other entries zero. The displayed zero-row padding is schematic for a tall matrix; a wide matrix instead has zero columns beyond its $p\times p$ diagonal block. Its complete shape is always $m\times n$. The rank of $A$ is the number of positive singular values.
 
-### Derivation
+## Derivation
 
 The SVD is closely related to the eigenvalue decompositions of the matrices $A^{T}A$ and $AA^{T}$. Both $A^{T}A$ and $AA^{T}$ are symmetric, positive semi-definite matrices, and thus have non-negative real eigenvalues.
 
@@ -45,7 +47,27 @@ III. The eigenvectors of $A^{T}A$ form the columns of $V$, and the eigenvectors 
 
 Since every real matrix $A$ gives rise to a non-negative, symmetric matrix $A^{T}A$, and since such matrices are always diagonalizable, SVD is guaranteed to exist for any matrix $A$.
 
-### Algorithm Steps
+### Completing the Derivation and Handling Rank Deficiency
+
+Choose orthonormal eigenvectors $v_i$ of $A^\top A$. For each $\sigma_i>0$, define $u_i=Av_i/\sigma_i$. Then
+
+$$
+u_i^\top u_j=\frac{v_i^\top A^\top Av_j}{\sigma_i\sigma_j}=\frac{\sigma_j^2v_i^\top v_j}{\sigma_i\sigma_j}=\delta_{ij}.
+$$
+
+Thus the constructed left singular vectors are orthonormal. If $\sigma_i=0$, then $\|Av_i\|_2^2=v_i^\top A^\top Av_i=0$, so $Av_i=0$; division by $\sigma_i$ is unnecessary and invalid. Complete the available orthonormal columns to form the full factors. For rank $r$, the same decomposition can be written without unused columns as
+
+$$
+A=U_r\Sigma_rV_r^\top=\sum_{i=1}^r\sigma_i u_iv_i^\top,
+$$
+
+where $U_r$ is $m\times r$, $\Sigma_r$ is $r\times r$, and $V_r$ is $n\times r$. For complex matrices, replace transposes by conjugate transposes.
+
+The Gram-matrix construction below explains existence and is suitable for hand calculations, but is not the preferred general numerical algorithm: forming $A^\top A$ squares the nonzero singular-value condition ratio and can lose information about small singular values. Production SVD methods work with $A$ through orthogonal transformations, typically reducing it to bidiagonal form.
+
+The pseudoinverse is $A^+=V_r\Sigma_r^{-1}U_r^\top$ and gives the minimum-norm least-squares solution $A^+b$. Keeping only the largest $k$ singular values yields $A_k=\sum_{i=1}^k\sigma_i u_iv_i^\top$, with $\|A-A_k\|_2=\sigma_{k+1}$ when $k<r$. This quantifies the compression error rather than assuming that every small singular value is noise.
+
+## Algorithm Steps
 
 I. **Form $A^{T}A$**:
 
@@ -65,59 +87,79 @@ The eigenvectors $v_i$ of $A^{T}A$ are arranged as columns to form the matrix $V
 
 V. **Form $U$**:
 
-Similarly, find the eigenvectors of $AA^{T}$ or directly use the relation $U = A V \Sigma^{-1}$ (for non-zero singular values) to obtain $U$.
+Similarly, find the eigenvectors of $AA^{T}$ use $u_i=Av_i/\sigma_i$ for each positive singular value. Complete these columns to an orthonormal basis to obtain the full $U$. A rectangular or rank-deficient $\Sigma$ has no ordinary matrix inverse.
 
 VI. **Assemble the SVD**:
 
 With $U, \Sigma, V$ computed, $A = U \Sigma V^{T}$.
 
-### Example
+## Example
 
 Consider the $2 \times 2$ matrix:
 
-$$A = \begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix}.$$
+$$
+A = \begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix}.
+$$
 
 I. Compute $A^{T}A$:
 
-$$A^{T}A = \begin{bmatrix} 3 & 2 \\ 4 & 1 \end{bmatrix}\begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix} = \begin{bmatrix}13 & 14 \\ 14 & 17\end{bmatrix}.$$
+$$
+A^{T}A = \begin{bmatrix} 3 & 2 \\ 4 & 1 \end{bmatrix}\begin{bmatrix}3 & 4 \\ 2 & 1\end{bmatrix} = \begin{bmatrix}13 & 14 \\ 14 & 17\end{bmatrix}.
+$$
 
 II. Find the eigenvalues of $A^{T}A$:
 
 Solve $\det(A^{T}A - \lambda I) = 0$:
 
-$$(13 - \lambda)(17 - \lambda) - 14^2 = \lambda^2 - 30\lambda + 25 = 0.$$
+$$
+(13 - \lambda)(17 - \lambda) - 14^2 = \lambda^2 - 30\lambda + 25 = 0.
+$$
 
 Solving yields $\lambda_1 = 15 + 10\sqrt{2} \approx 29.1421$ and $\lambda_2 = 15 - 10\sqrt{2} \approx 0.8579$.
 
 III. Singular values:
 
-$$\sigma_1 = \sqrt{\lambda_1} \approx 5.3983, \quad \sigma_2 = \sqrt{\lambda_2} \approx 0.9262.$$
+$$
+\sigma_1 = \sqrt{\lambda_1} \approx 5.3983, \quad \sigma_2 = \sqrt{\lambda_2} \approx 0.9262.
+$$
 
 (Check: $\sigma_1 \sigma_2 = |\det A| = 5$.)
 
 IV. Eigenvectors of $A^{T}A$ (normalized):
 
-$$v_1 \approx \begin{bmatrix}0.6552 \\ 0.7555\end{bmatrix}, \quad v_2 \approx \begin{bmatrix}-0.7555 \\ 0.6552\end{bmatrix}.$$
+$$
+v_1 \approx \begin{bmatrix}0.6552 \\ 0.7555\end{bmatrix}, \quad v_2 \approx \begin{bmatrix}-0.7555 \\ 0.6552\end{bmatrix}.
+$$
 
 Hence:
 
-$$V \approx \begin{bmatrix}0.6552 & -0.7555 \\ 0.7555 & 0.6552\end{bmatrix}.$$
+$$
+V \approx \begin{bmatrix}0.6552 & -0.7555 \\ 0.7555 & 0.6552\end{bmatrix}.
+$$
 
 V. To find $U$, use $u_i = \frac{1}{\sigma_i} A v_i$ for the non-zero singular values:
 
-$$u_1 \approx \begin{bmatrix}0.9239 \\ 0.3827\end{bmatrix}, \quad u_2 \approx \begin{bmatrix}0.3827 \\ -0.9239\end{bmatrix},$$
+$$
+u_1 \approx \begin{bmatrix}0.9239 \\ 0.3827\end{bmatrix}, \quad u_2 \approx \begin{bmatrix}0.3827 \\ -0.9239\end{bmatrix},
+$$
 
 so
 
-$$U \approx \begin{bmatrix}0.9239 & 0.3827 \\ 0.3827 & -0.9239\end{bmatrix}.$$
+$$
+U \approx \begin{bmatrix}0.9239 & 0.3827 \\ 0.3827 & -0.9239\end{bmatrix}.
+$$
 
 VI. Assemble SVD:
 
-$$\Sigma \approx \begin{bmatrix}5.3983 & 0 \\ 0 & 0.9262\end{bmatrix}$$
+$$
+\Sigma \approx \begin{bmatrix}5.3983 & 0 \\ 0 & 0.9262\end{bmatrix}
+$$
 
-$$A = U \Sigma V^{T}.$$
+$$
+A = U \Sigma V^{T}.
+$$
 
-### Advantages
+## Advantages
 
 I. **Universality**:
 
@@ -131,7 +173,7 @@ III. **Numerical Stability**:
 
 SVD is numerically stable and widely used in robust numerical methods, e.g., pseudo-inverse computations and solving least-squares problems.
 
-### Limitations
+## Limitations
 
 I. **Computational Complexity**:
 

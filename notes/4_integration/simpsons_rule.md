@@ -1,10 +1,10 @@
-## Simpson's Rule
+# Simpson's Rule
 
 Simpson's Rule is a powerful technique in numerical integration, utilized for approximating definite integrals when an exact antiderivative of the function is difficult or impossible to determine analytically. This method enhances the accuracy of integral approximations by modeling the region under the function's graph as a series of parabolic segments, rather than relying solely on simpler geometric shapes like rectangles or trapezoids. By fitting quadratic polynomials to segments of the function, Simpson's Rule captures the curvature and more intricate behavior of the function, often resulting in a more precise approximation compared to other numerical methods such as the Midpoint Rule or the Trapezoidal Rule.
 
 The fundamental advantage of Simpson's Rule lies in its ability to approximate the integral by considering not just the function's values at the endpoints of each subinterval but also at the midpoint. This approach allows the method to account for the function's curvature, providing a better fit to the actual shape of the graph. Consequently, Simpson's Rule typically delivers higher accuracy with fewer subintervals, making it an efficient choice for many practical applications in engineering, physics, and other scientific disciplines where numerical integration is essential.
 
-### Mathematical Formulation
+## Mathematical Formulation
 
 The foundation of Simpson's Rule is based on estimating the integral of a function $f(x)$ over a specified interval $[a, b]$ by approximating the region under the curve with a quadratic polynomial. This polynomial is constructed to pass through three key points: the two endpoints of the interval, $(a, f(a))$ and $(b, f(b))$, and the midpoint $\left(\frac{a+b}{2}, f\left(\frac{a+b}{2}\right)\right)$. By fitting a parabola through these points, Simpson's Rule effectively captures the curvature of the function within the interval, leading to a more accurate approximation of the integral.
 
@@ -31,7 +31,25 @@ The diagram below visualizes the concept of Simpson's Rule, illustrating how par
 
 This visual representation helps in understanding how the quadratic polynomials approximate the area under the curve, providing a more accurate estimation compared to linear approximations used in other numerical integration methods.
 
-### Error Term
+## Deriving the Weights
+
+Map one pair of subintervals onto $t\in[-1,1]$ with $x=m+ht$. The quadratic interpolant through $t=-1,0,1$ is
+
+$$
+p(t)=f(m-h)\frac{t(t-1)}2+f(m)(1-t^2)+f(m+h)\frac{t(t+1)}2.
+$$
+
+Integrating the three basis polynomials gives $1/3$, $4/3$, and $1/3$. Since $dx=h\,dt$,
+
+$$
+\int_{m-h}^{m+h}f(x)\,dx\approx\frac h3\bigl[f(m-h)+4f(m)+f(m+h)\bigr].
+$$
+
+At the shared endpoint of two adjacent pairs, the endpoint contributions add to $2$; the midpoint of each pair receives weight $4$. This explains the composite sequence $1,4,2,4,\ldots,2,4,1$ and why the number of equal subintervals must be even.
+
+Odd powers about the midpoint integrate to zero, and the rule reproduces degrees zero through two by interpolation. It therefore also integrates every cubic exactly. For a check on the first nonzero error, apply the rule to $(x-m)^4$ over $[m-h,m+h]$: the integral is $2h^5/5$, while the rule gives $2h^5/3$. Their difference is $-4h^5/15=-h^5\cdot24/90$, consistent with the fourth-derivative error below. The general intermediate-point error formula assumes $f\in C^4([a,b])$.
+
+## Error Term
 
 For a single application over $[a, b]$ (with $h = \frac{b-a}{2}$), the error is
 
@@ -47,7 +65,7 @@ $$
 
 Although the rule is built from a quadratic (degree-2) interpolant, the error depends on the fourth derivative, not the third. By symmetry the cubic term of the integrand integrates to the same value as its parabolic fit, so the rule is exact for all polynomials of degree three or lower and fails first for $x^4$. The composite rule is therefore fourth-order accurate: halving $h$ reduces the error by about a factor of 16.
 
-### Algorithm Steps
+## Algorithm Steps
 
 Implementing Simpson's Rule involves a systematic series of steps to ensure an accurate approximation of the definite integral. The algorithm is straightforward yet effective, leveraging the method's ability to model the function's behavior more precisely. The following are the detailed steps involved in applying Simpson's Rule:
 
@@ -58,7 +76,7 @@ I. **Partition the Interval:**
 
 II. **Evaluate Function at Required Points:**
 
-- For each subinterval, determine the function values at the endpoints and the midpoints. Specifically, calculate $f(x_i)$ for $i = 0$ to $N$, where $x_i = a + ih$.
+- Evaluate $f(x_i)$ for $i=0$ to $N$, where $x_i=a+ih$. Each odd-indexed grid point is the midpoint of a pair of subintervals; no additional midpoint samples inside the individual width-$h$ subintervals are needed.
 - These evaluations are essential for constructing the quadratic polynomials that approximate the function over each pair of subintervals.
 
 III. **Apply Simpson's Rule Formula:**
@@ -78,7 +96,7 @@ IV. **Aggregate the Results:**
 
 Simpson's Rule systematically constructs a reliable approximation of the definite integral, balancing computational efficiency with high accuracy.
 
-### Example
+## Example
 
 To illustrate the application of Simpson's Rule, consider the function $f(x) = x^2$. This example demonstrates how the method approximates the integral over a specific interval using a manageable number of subintervals.
 
@@ -112,15 +130,15 @@ $$
 \int_{0}^{2} x^2 dx = \left[\frac{x^3}{3} \right]_0^2 = \frac{8}{3} - 0 = \frac{8}{3}
 $$
 
-In this case, Simpson's Rule provides an exact result. This is expected for any quadratic, and in fact the rule is exact for every polynomial of degree three or lower (see the error term below).
+In this case, Simpson's Rule provides an exact result. This is expected for any quadratic, and in fact the rule is exact for every polynomial of degree three or lower (see the error term above).
 
-### Advantages
+## Advantages
 
-- When compared to the Rectangle (Midpoint) Rule and the Trapezoidal Rule, the method often yields a more *accurate approximation* of definite integrals. This increased accuracy comes from using quadratic polynomials to model the function’s behavior, allowing it to capture curvature and more complex features. For smooth functions that can be closely approximated by parabolas over each pair of subintervals, the method can achieve exact results with *fewer subintervals* than other approaches. This efficiency is especially useful in computational applications where reducing the number of function evaluations saves significant processing time.
+- When compared to the Rectangle (Midpoint) Rule and the Trapezoidal Rule, the method often yields a more *accurate approximation* of definite integrals. This increased accuracy comes from using quadratic polynomials to model the function’s behavior, allowing it to capture curvature and more complex features. For smooth functions that can be closely approximated by parabolas over each pair of subintervals, the method can often reach a given accuracy with *fewer subintervals* than lower-order approaches; exactness is guaranteed for polynomials through degree three, rather than for arbitrary smooth functions. This efficiency is especially useful in computational applications where reducing the number of function evaluations saves significant processing time.
 - The method is straightforward to understand and implement, making it accessible to students. It requires only *basic arithmetic operations* and function evaluations at specific points, without the need for complex algorithms or iterative procedures. Its simplicity allows for quick coding and seamless integration into larger numerical computation frameworks, facilitating its use across a wide range of scientific and engineering problems.
 - It is particularly effective for functions that are well-approximated by *parabolas* over small intervals. This makes the method ideal for integrating *polynomials of degree three or lower* (integrated exactly), as well as other smooth functions where a quadratic approximation is sufficiently accurate. By capturing the essential curvature of such functions, it minimizes the error associated with linear approximations, yielding more reliable results.
 
-### Limitations
+## Limitations
 
 - The method requires that the interval $[a, b]$ be divided into an *even number of subintervals*. This can be inconvenient when the available data points do not naturally align with an even partitioning. If an odd number of subintervals is initially chosen, users must adjust by either adding an extra subinterval or applying a different technique for the final piece, which complicates the implementation.
 - Its reliance on *quadratic polynomials* means it performs best for functions that closely resemble parabolas within each pair of subintervals. For functions with significant higher-order curvature or behaviors not well captured by parabolic fits, it may produce large errors. In such cases, the approximation can be misleading unless the suitability of the method is carefully assessed relative to the function’s characteristics.

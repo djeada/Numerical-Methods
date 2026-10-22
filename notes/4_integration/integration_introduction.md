@@ -1,7 +1,7 @@
-## Integration in Calculus
+# Integration in Calculus
 
 - Integration is another fundamental concept in calculus. It is used to calculate the area under a curve, the total change given a rate of change, or to solve differential equations.
-- The integral of a function can be interpreted as the area under the graph of the function.
+- A definite integral is a signed accumulation: portions below the horizontal axis contribute negatively. It equals ordinary geometric area under the graph when the function is nonnegative; integrating $|f(x)|$ gives the total unsigned area.
 - Like differentiation, the exact mathematical function may not be known, or it may be too complex to integrate analytically.
 
 ## Numerical Integration (or Quadrature)
@@ -9,13 +9,21 @@
 - Numerical integration, often referred to as quadrature, is a method used to approximate the integral of a function using finite sums.
 - It is often used when it may be impossible to integrate some functions analytically, or when the formula for the function is unknown, for instance, when data from an experiment is available.
 - The function is evaluated at a set of points and these values are used to estimate the integral's value.
-- The numerical approaches for integration divide the large interval into smaller intervals and add the results from each smaller piece, according to the equation: $$\int_{a}^{b} f(x) dx = \int_{a}^{c} f(x) dx + \int_{c}^{b} f(x)dx$$ where $c$ is a point between $a$ and $b$.
+- Composite quadrature divides the interval into smaller pieces and adds an approximation from each piece. This follows the additivity of the exact integral:
+
+$$
+\int_a^b f(x)\,dx=\int_a^c f(x)\,dx+\int_c^b f(x)\,dx,
+$$
+
+where $c$ lies between $a$ and $b$.
 
 ## Numerical Methods for Integration
 
 1. **Rectangle Rule (or Midpoint Rule):** This method approximates the area under the curve as a series of rectangles. For example, if we have a function $f(x) = x^2$, and we want to approximate the integral over the interval $[1, 2]$ with a step size $h = 0.1$, using the rectangle rule, we get:
 
-$$\int_{1}^{2} x^2 dx \approx \sum_{i=1}^{10} h \cdot f(1 + 0.1(i - 0.5))$$
+$$
+\int_{1}^{2} x^2 dx \approx \sum_{i=1}^{10} h \cdot f(1 + 0.1(i - 0.5))
+$$
 
 2. **Trapezoidal Rule:** This method approximates the area under the curve as a series of trapezoids, which typically provides a better approximation compared to the left or right rectangle rule. An example application would be the same function $f(x) = x^2$, the integral can be approximated as:
 
@@ -36,6 +44,29 @@ $$
 ## Error Estimation and Convergence of Numerical Integration Methods
 
 - Each of the methods for numerical integration has its own rate of convergence, which determines how quickly the numerical approximation approaches the exact value. For instance, the trapezoidal rule converges as $O(h^2)$, Simpson's rule converges as $O(h^4)$, etc., where $h$ is the step size.
+
+## A Common Grid and a Concrete Comparison
+
+Let $x_i=a+ih$, $h=(b-a)/n$, and let $I=\int_a^b f(x)\,dx$ denote the exact integral. A quadrature approximation $Q_n$ is a weighted sum of sampled values. The number of subintervals is $n$; endpoint-based rules usually sample $n+1$ grid points, while the midpoint rule samples $n$ interior points.
+
+| Rule | Samples for the composite rule | Smoothness for the usual error bound | Global error order |
+| --- | --- | --- | --- |
+| Midpoint | $n$ midpoints | Bounded continuous second derivative | $O(h^2)$ |
+| Trapezoidal | $n+1$ endpoints | Bounded continuous second derivative | $O(h^2)$ |
+| Simpson | $n+1$ endpoints, with even $n$ | Bounded continuous fourth derivative | $O(h^4)$ |
+| Monte Carlo | $N$ independent random points | Integrability for a law of large numbers; finite variance for a standard error | Root mean square error $O(N^{-1/2})$ |
+
+For the examples above, $I=\int_1^2x^2\,dx=7/3$. With $n=10$ and $h=0.1$, the midpoint rule gives $2.3325$, the trapezoidal rule gives $2.335$, and Simpson's rule gives $7/3$ exactly in exact arithmetic. The signed errors $I-Q_n$ are respectively $1/1200$, $-1/600$, and zero. This makes the shared example a direct comparison rather than three unrelated formulas.
+
+## Estimating Error by Refinement
+
+Suppose $Q_h=I+ch^p+o(h^p)$ on a sequence of uniform grids and that the leading asymptotic term dominates. Then
+
+$$
+I-Q_{h/2}\approx\frac{Q_{h/2}-Q_h}{2^p-1}.
+$$
+
+Use $p=2$ for midpoint or trapezoidal quadrature and $p=4$ for Simpson's rule. This estimate requires the stated smoothness and does not certify accuracy when the grid misses a narrow peak, singularity, or oscillation. Split known discontinuities or singular points into separate intervals and use a method suited to each piece. If only fixed data are available, refinement may require a new measurement rather than another function call.
 
 ## Advantages of Numerical Integration
 

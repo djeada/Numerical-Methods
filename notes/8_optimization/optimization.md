@@ -1,4 +1,4 @@
-## Optimization
+# Optimization
 
 Optimization asks a simple question with many numerical subtleties:
 
@@ -16,7 +16,7 @@ The difficulty of an optimization problem depends less on its dimension alone th
 
 ![Local and global minima on a non-convex landscape](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/8_optimization/resources/plots/optimization_landscape.svg)
 
-### A useful classification
+## A useful classification
 
 | Property | Typical consequence | Common methods |
 | --- | --- | --- |
@@ -45,7 +45,7 @@ Detailed notes cover the algorithms inside those families:
 
 For basic steepest descent, see the earlier [gradient descent note](../1_root_and_extrema_finding/gradient_descent.md).
 
-### First-order optimality
+## First-order optimality
 
 For an unconstrained differentiable objective, a local minimizer $x^*$ in the interior must satisfy
 
@@ -63,7 +63,13 @@ $$
 
 helps classify a stationary point. If $H(x^*)$ is positive definite, $x^*$ is a strict local minimum. If it is negative definite, $x^*$ is a strict local maximum. An indefinite Hessian indicates a saddle.
 
-### Why conditioning matters
+### What a Singular Hessian Does and Does Not Tell Us
+
+At an interior local minimum, a twice-differentiable objective has zero gradient and positive-semidefinite Hessian. Positive definiteness is a sufficient condition for a strict local minimum, but it is not necessary. In one dimension, $x^4$, $-x^4$, and $x^3$ all have zero first and second derivatives at zero, yet zero is respectively a minimum, a maximum, and neither. A semidefinite or zero Hessian therefore requires higher-order or direct analysis.
+
+Existence is a separate question. A continuous objective on a nonempty compact feasible set attains a minimum. Without such a condition, the infimum may not be attained, as with $f(x)=e^x$ on $\mathbb R$, or the objective may be unbounded below. An algorithm cannot return an attained optimum when the mathematical problem has none.
+
+## Why conditioning matters
 
 Consider the quadratic
 
@@ -97,7 +103,15 @@ $$
 
 With the best fixed step for the spectrum, the contraction factor depends on $\kappa$; poor conditioning directly slows convergence.
 
-### Local versus global guarantees
+To derive the factor, subtract $Ax^*=b$ from the gradient update: $e_{k+1}=(I-\alpha A)e_k$. In an orthonormal eigenbasis each error component is multiplied by $1-\alpha\lambda_i$. Balancing the extreme factors gives
+
+$$
+\alpha_* = \frac{2}{\lambda_{\min}+\lambda_{\max}},\qquad q_* = \frac{\lambda_{\max}-\lambda_{\min}}{\lambda_{\max}+\lambda_{\min}}=\frac{\kappa-1}{\kappa+1}.
+$$
+
+For large $\kappa$, this factor is close to one, so many small error reductions are needed. Variable scaling and preconditioning aim to improve that spectrum.
+
+## Local versus global guarantees
 
 A **local minimum** $x^*$ satisfies
 
@@ -109,7 +123,7 @@ for all $x$ in some neighborhood of $x^*$. A **global minimum** satisfies the in
 
 Convexity bridges the two notions: if $f$ is convex and $\Omega$ is convex, every local minimum is global. Without convexity, a local solver can only guarantee convergence to a nearby stationary point under suitable assumptions.
 
-### Constraints change optimality conditions
+## Constraints change optimality conditions
 
 For
 
@@ -126,7 +140,7 @@ $$
 
 we cannot generally set $\nabla f=0$. The gradient may point outside the feasible region. Instead, active constraint gradients enter through the Lagrangian and KKT conditions.
 
-### Choosing a method
+## Choosing a method
 
 A practical decision sequence is:
 
@@ -137,7 +151,7 @@ A practical decision sequence is:
 5. **Reserve global methods for genuinely multimodal problems.** They are usually much more expensive.
 6. **Verify the result.** Inspect gradients, KKT residuals, feasibility, and sensitivity rather than relying only on a solver's success flag.
 
-### Stopping criteria
+## Stopping criteria
 
 Common termination tests include
 

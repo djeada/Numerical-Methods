@@ -1,4 +1,4 @@
-## Runge--Kutta Methods
+# Runge--Kutta Methods
 
 Runge--Kutta methods advance an ODE solution using several carefully chosen slope evaluations inside each step. They achieve higher-order accuracy without requiring derivatives of $f$; only evaluations of $f$ itself are needed.
 
@@ -11,7 +11,7 @@ $$
 
 The best-known member of the family is the classical fourth-order Runge--Kutta method, usually called **RK4**.
 
-### Classical RK4
+## Classical RK4
 
 Given $(t_n,u_n)$ and step size $h$,
 
@@ -41,7 +41,7 @@ The four stages sample the vector field at the beginning, twice near the middle,
 
 ![The four RK4 stages sample slopes within one step](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/rk4_stages.svg)
 
-### Why RK4 Is Fourth Order
+## Why RK4 Is Fourth Order
 
 The exact solution has a Taylor expansion containing derivatives such as $u''$, $u'''$, and $u^{(4)}$. Those derivatives can be expressed using derivatives of $f$, but computing them explicitly is inconvenient.
 
@@ -56,7 +56,28 @@ Therefore, halving $h$ reduces the global error by roughly a factor of $16$ in t
 
 ![RK4 shows fourth-order convergence on a smooth test problem](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/rk4_error_vs_step.svg)
 
-### Worked Example
+### Checking the Order Conditions
+
+Let $A=(a_{ij})$ denote the strictly lower-triangular stage matrix, let $b$ be the weight vector, and let $c=A\mathbf1$ be the stage-time vector. Expanding each stage in Taylor series and matching the independent derivative terms gives the following conditions through order four. Powers of $c$ in this table are componentwise.
+
+| Order | Conditions |
+| --- | --- |
+| 1 | $b^\top\mathbf1=1$ |
+| 2 | $b^\top c=1/2$ |
+| 3 | $b^\top c^2=1/3$, $b^\top Ac=1/6$ |
+| 4 | $b^\top c^3=1/4$, $b^\top\operatorname{diag}(c)Ac=1/8$, $b^\top Ac^2=1/12$, $b^\top A^2c=1/24$ |
+
+For example, the first two follow from $k_i=f+hc_i(f_t+f_uf)+O(h^2)$, giving $u_{n+1}=u+h(b^\top\mathbf1)f+h^2(b^\top c)(f_t+f_uf)+O(h^3)$. Matching the exact solution requires coefficients $1$ and $1/2$. The higher conditions account for the additional derivative combinations that appear at orders three and four.
+
+Inserting the RK4 tableau satisfies all eight conditions, establishing fourth order under the required smoothness. On the simpler test equation $u'=\lambda u$, the stages reduce to polynomials in $z=h\lambda$ and the update is
+
+$$
+u_{n+1}=\left(1+z+\frac{z^2}{2}+\frac{z^3}{6}+\frac{z^4}{24}\right)u_n.
+$$
+
+This matches $e^z$ through degree four and independently checks the stability polynomial. Matching this one test equation alone would not establish order four for every nonlinear ODE; the full conditions explain the additional requirement.
+
+## Worked Example
 
 For
 
@@ -98,23 +119,25 @@ $$
 The exact solution is
 
 $$
-e^{0.1}\approx1.105170186.
+e^{0.1}\approx1.105170918.
 $$
 
 The error after a single step is already below $10^{-6}$.
 
-### Butcher Tableau
+Keeping full precision, the one-step error is about $8.47\times10^{-8}$. The displayed stages are slopes, so the update multiplies their weighted average by $h$ once; some references instead define $k_i$ as increments already containing $h$. Mixing those two conventions changes the method.
+
+## Butcher Tableau
 
 A Runge--Kutta method can be summarized by a **Butcher tableau**. For RK4:
 
 $$
 \begin{array}{c|cccc}
-0 \\
-\frac12 & \frac12 \\
-\frac12 & 0 & \frac12 \\
-1 & 0 & 0 & 1 \\
+0 & 0 & 0 & 0 & 0 \\
+\frac12 & \frac12 & 0 & 0 & 0 \\
+\frac12 & 0 & \frac12 & 0 & 0 \\
+1 & 0 & 0 & 1 & 0 \\
 \hline
-& \frac16 & \frac13 & \frac13 & \frac16
+{} & \frac16 & \frac13 & \frac13 & \frac16
 \end{array}
 $$
 
@@ -124,7 +147,7 @@ The entries specify:
 - how previous stages construct the stage state,
 - how the final stages are combined.
 
-### General Explicit Runge--Kutta Form
+## General Explicit Runge--Kutta Form
 
 For an $s$-stage explicit method,
 
@@ -140,7 +163,7 @@ $$
 
 Different choices of the coefficients produce different methods and orders.
 
-### Adaptive Runge--Kutta Methods
+## Adaptive Runge--Kutta Methods
 
 Fixed-step RK4 is simple, but modern solvers often use **embedded pairs**, such as RK45.
 
@@ -153,7 +176,7 @@ A controller then changes $h$:
 
 This can reduce work dramatically when a problem alternates between easy and difficult regions.
 
-### Stability
+## Stability
 
 For
 
@@ -176,7 +199,7 @@ $$
 
 On the negative real axis this is roughly $-2.78\le z\le 0$. RK4 has a useful explicit stability region but is not A-stable. Strongly stiff systems may still demand impractically small steps.
 
-### RK4 Versus Euler and Heun
+## RK4 Versus Euler and Heun
 
 | Method | Evaluations of $f$ per step | Global order |
 | --- | --: | --: |
@@ -192,7 +215,7 @@ Higher order does not automatically mean lower total cost. The best method depen
 - stiffness,
 - whether adaptive time stepping is available.
 
-### Systems of ODEs
+## Systems of ODEs
 
 RK4 applies directly to
 
@@ -202,18 +225,18 @@ $$
 
 Each $k_i$ becomes a vector. This makes RK methods convenient for mechanics, circuits, chemical kinetics, population models, and other coupled systems.
 
-### Repository Implementation
+## Repository Implementation
 
 `runge_kutta_4` takes a final time `t_end` and a nominal step `h`. When `(t_end - t0)/h` is not an integer, the last step is shortened so that the returned grid ends exactly at `t_end`; all earlier steps have length `h`. The returned array has shape `(n + 1,)` for a scalar ODE (one component) and `(n + 1, d)` for a system with `d` components.
 
-### Advantages
+## Advantages
 
 - High accuracy for smooth non-stiff IVPs.
 - No need to compute higher derivatives.
 - Straightforward extension to systems.
 - Well understood and easy to verify on benchmark problems.
 
-### Limitations
+## Limitations
 
 - Four function evaluations per RK4 step.
 - Fixed-step RK4 has no built-in error estimator.
