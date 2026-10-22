@@ -1,6 +1,6 @@
-# Runge--Kutta Methods
+# Runge–Kutta Methods
 
-Runge--Kutta methods advance an ODE solution using several carefully chosen slope evaluations inside each step. They achieve higher-order accuracy without requiring derivatives of $f$; only evaluations of $f$ itself are needed.
+Runge–Kutta methods advance an ODE solution using several carefully chosen slope evaluations inside each step. They achieve higher-order accuracy without requiring derivatives of $f$; only evaluations of $f$ itself are needed.
 
 Consider
 
@@ -9,7 +9,7 @@ u'(t) = f(t,u),
 \qquad u(t_0) = u_0.
 $$
 
-The best-known member of the family is the classical fourth-order Runge--Kutta method, usually called **RK4**.
+The best-known member of the family is the classical fourth-order Runge–Kutta method, usually called **RK4**.
 
 ## Classical RK4
 
@@ -41,11 +41,11 @@ The four stages sample the vector field at the beginning, twice near the middle,
 
 ![The four RK4 stages sample slopes within one step](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/rk4_stages.svg)
 
-## Why RK4 Is Fourth Order
+## Why RK4 is fourth order
 
 The exact solution has a Taylor expansion containing derivatives such as $u''$, $u'''$, and $u^{(4)}$. Those derivatives can be expressed using derivatives of $f$, but computing them explicitly is inconvenient.
 
-Runge--Kutta methods instead choose stage locations and weights so that the expansion of the numerical update matches the Taylor expansion through a desired order.
+Runge–Kutta methods instead choose stage locations and weights so that the expansion of the numerical update matches the Taylor expansion through a desired order.
 
 For RK4:
 
@@ -56,7 +56,7 @@ Therefore, halving $h$ reduces the global error by roughly a factor of $16$ in t
 
 ![RK4 shows fourth-order convergence on a smooth test problem](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/rk4_error_vs_step.svg)
 
-### Checking the Order Conditions
+### Checking the order conditions
 
 Let $A=(a_{ij})$ denote the strictly lower-triangular stage matrix, let $b$ be the weight vector, and let $c=A\mathbf1$ be the stage-time vector. Expanding each stage in Taylor series and matching the independent derivative terms gives the following conditions through order four. Powers of $c$ in this table are componentwise.
 
@@ -77,7 +77,7 @@ $$
 
 This matches $e^z$ through degree four and independently checks the stability polynomial. Matching this one test equation alone would not establish order four for every nonlinear ODE; the full conditions explain the additional requirement.
 
-## Worked Example
+## Worked example
 
 For
 
@@ -126,9 +126,9 @@ The error after a single step is already below $10^{-6}$.
 
 Keeping full precision, the one-step error is about $8.47\times10^{-8}$. The displayed stages are slopes, so the update multiplies their weighted average by $h$ once; some references instead define $k_i$ as increments already containing $h$. Mixing those two conventions changes the method.
 
-## Butcher Tableau
+## Butcher tableau
 
-A Runge--Kutta method can be summarized by a **Butcher tableau**. For RK4:
+A Runge–Kutta method can be summarized by a **Butcher tableau**. For RK4:
 
 $$
 \begin{array}{c|cccc}
@@ -147,7 +147,7 @@ The entries specify:
 - how previous stages construct the stage state,
 - how the final stages are combined.
 
-## General Explicit Runge--Kutta Form
+## General explicit Runge–Kutta form
 
 For an $s$-stage explicit method,
 
@@ -163,7 +163,7 @@ $$
 
 Different choices of the coefficients produce different methods and orders.
 
-## Adaptive Runge--Kutta Methods
+## Adaptive Runge–Kutta methods
 
 Fixed-step RK4 is simple, but modern solvers often use **embedded pairs**, such as RK45.
 
@@ -175,6 +175,16 @@ A controller then changes $h$:
 - increase $h$ when the solution is smooth.
 
 This can reduce work dramatically when a problem alternates between easy and difficult regions.
+
+### Estimating RK4 error by step doubling
+
+A fixed RK4 step has no built-in error estimate, but it can be compared with two half steps over the same time interval. Let $u_h$ be the one-step result and $u_{h/2,h/2}$ the two-half-step result, both starting from the same state. For a smooth problem, the accumulated leading error of the half steps is approximately $1/16$ of that of the full step, so
+
+$$
+u(t_n+h)-u_{h/2,h/2}\approx\frac{u_{h/2,h/2}-u_h}{15}.
+$$
+
+This provides an error estimate and an extrapolated value, at the cost of additional stage evaluations. The difference scales like $h^5$ over this one trial interval, so its basic step-size-controller exponent is $1/5$. Embedded pairs reuse their stages more efficiently, which is one reason they are common in adaptive solvers. Neither estimate is a certified bound when the required smoothness or asymptotic behavior is absent.
 
 ## Stability
 
@@ -199,7 +209,7 @@ $$
 
 On the negative real axis this is roughly $-2.78\le z\le 0$. RK4 has a useful explicit stability region but is not A-stable. Strongly stiff systems may still demand impractically small steps.
 
-## RK4 Versus Euler and Heun
+## RK4 versus Euler and Heun
 
 | Method | Evaluations of $f$ per step | Global order |
 | --- | --: | --: |
@@ -225,7 +235,7 @@ $$
 
 Each $k_i$ becomes a vector. This makes RK methods convenient for mechanics, circuits, chemical kinetics, population models, and other coupled systems.
 
-## Repository Implementation
+## Repository implementation
 
 `runge_kutta_4` takes a final time `t_end` and a nominal step `h`. When `(t_end - t0)/h` is not an integer, the last step is shortened so that the returned grid ends exactly at `t_end`; all earlier steps have length `h`. The returned array has shape `(n + 1,)` for a scalar ODE (one component) and `(n + 1, d)` for a system with `d` components.
 
@@ -240,5 +250,5 @@ Each $k_i$ becomes a vector. This makes RK methods convenient for mechanics, cir
 
 - Four function evaluations per RK4 step.
 - Fixed-step RK4 has no built-in error estimator.
-- Explicit Runge--Kutta methods can be inefficient on stiff equations.
+- Explicit Runge–Kutta methods can be inefficient on stiff equations.
 - Very long integrations may require methods that better preserve invariants or geometric structure.

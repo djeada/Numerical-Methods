@@ -2,7 +2,7 @@
 
 Lagrange evaluation is a technique from polynomial interpolation that finds a direct cryptographic application in **Shamir's Secret Sharing**. It allows a secret to be divided into multiple shares such that only a sufficient number of shares can reconstruct the original secret, while any smaller number of shares reveals no information about it.
 
-## Mathematical Formulation
+## Mathematical formulation
 
 Given $n$ data points $(x_0, y_0), (x_1, y_1), \ldots, (x_{n-1}, y_{n-1})$, the Lagrange interpolating polynomial is:
 
@@ -22,7 +22,7 @@ $$
 L_i(x) = \prod_{\substack{j=0 \\ j \neq i}}^{n-1} (x - x_j) \cdot (x_i - x_j)^{-1} \mod p
 $$
 
-## Shamir's Secret Sharing
+## Shamir's secret sharing
 
 Shamir's Secret Sharing uses Lagrange interpolation over a finite field to split a secret $s$ into $n$ shares with a threshold $t$:
 
@@ -51,7 +51,7 @@ $$
 s = P(0) = \sum_{i=0}^{t-1} y_i \cdot L_i(0) \mod p
 $$
 
-### Why Reconstruction and Privacy Both Hold
+### Why reconstruction and privacy both hold
 
 Any $t$ shares at distinct coordinates determine a unique polynomial of degree at most $t-1$ over the field. The same Lagrange argument used over the real numbers applies because each difference $x_i-x_j$ is nonzero modulo the prime and therefore has an inverse. Evaluating that polynomial at zero returns its constant term $s$; share coordinates themselves must be nonzero, since the share at zero would reveal the secret directly.
 
@@ -59,7 +59,7 @@ For privacy, fix $k<t$ observed shares and consider any candidate secret $s'\in\
 
 This is information-theoretic privacy under independent uniform coefficient sampling; it is separate from whether the shares are authentic or the dealer is honest. More than $t$ consistent shares can be checked against the reconstructed polynomial, but unauthenticated corrupted shares are not automatically identified by basic interpolation. See [Shamir, How to Share a Secret](https://dspace.mit.edu/entities/publication/91c51bfc-5678-409c-80c5-44ce8fcdbadf) for the original construction.
 
-## Algorithm Steps
+## Algorithm steps
 
 **Generating Shares:**
 
@@ -119,6 +119,12 @@ s\equiv80(14)+3(23)+13(61)=1982\equiv42\pmod{97}.
 $$
 
 The subscripts in this calculation label the selected share coordinates rather than consecutive array indices. All divisions use field inverses, and all three shares must come from the same polynomial and field.
+
+## Exact arithmetic and reconstruction cost
+
+Only $P(0)$ is needed to recover the secret, so there is no need to expand the interpolant into monomial coefficients. With $t$ selected shares, the direct formula forms $t$ basis weights with $t-1$ factors each, giving $O(t^2)$ field operations in a straightforward evaluation. The weights depend on the chosen coordinates and modulus, rather than the share values.
+
+Unlike interpolation in floating point arithmetic, interpolation over $\mathbb F_p$ uses exact field operations. A nonzero denominator has an exact modular inverse; being close to another coordinate in the ordinary real-number sense is not a floating point conditioning issue here. Distinctness is checked modulo $p$, so two different integer labels that represent the same field element cannot be used as distinct nodes.
 
 ## Advantages
 

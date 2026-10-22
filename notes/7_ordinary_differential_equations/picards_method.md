@@ -1,6 +1,6 @@
 # Picard's Iteration Method
 
-Picard iteration turns an initial value problem into a sequence of integral approximations. It is important less as a production ODE solver than as the constructive idea behind a fundamental existence-and-uniqueness theorem.
+Picard iteration turns an initial value problem into a sequence of integral approximations. Each iterate is a function obtained by substituting the previous function into the ODE's integral form. This construction is central to the Picard–Lindelof existence-and-uniqueness theorem and explains how fixed-point arguments enter the analysis of ODE solvers.
 
 Consider
 
@@ -17,7 +17,7 @@ $$
 
 Picard's method replaces the unknown function inside the integral with the previous approximation.
 
-## Picard Iteration
+## Picard iteration
 
 Choose an initial function, often
 
@@ -33,9 +33,11 @@ $$
 
 Each iteration produces a new function, not merely a single number.
 
+Here the subscript $n$ counts improvements to the entire function $y_n(t)$; it is not a time-grid index. The starting object $y_0(t)$ is a constant function equal to the prescribed initial value $y_0$. If the integral is discretized, all values of the next function should be formed from the previous function unless a different iteration has deliberately been chosen.
+
 ![Successive Picard iterates approaching the exact solution](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/picard_iterates.svg)
 
-## Fixed-Point Interpretation
+## Fixed-point interpretation
 
 Define an operator
 
@@ -57,7 +59,7 @@ $$
 
 If $T$ is a contraction on a suitable function space, the contraction mapping theorem guarantees convergence to a unique fixed point.
 
-## Why the Lipschitz Condition Appears
+## Why the Lipschitz condition appears
 
 Suppose
 
@@ -85,7 +87,7 @@ $$
 
 then $T$ is a contraction. This is the core idea behind the local Picard--Lindelof theorem.
 
-### Keeping the Iterates Inside the Theorem's Domain
+### Keeping the iterates inside the theorem's domain
 
 The contraction estimate is only part of the argument: $T$ must also map the chosen function space into itself. Suppose $f$ is continuous and bounded by $M$ on the rectangle $|t-t_0|\leq a$, $|y-y_0|\leq b$. Restrict attention to continuous functions in the state band and choose $a$ so that $aM\leq b$. Then
 
@@ -103,7 +105,7 @@ $$
 
 It follows by applying $|y_{n+1}(x)-y(x)|\leq\int_0^x|y_n(t)-y(t)|\,dt$ repeatedly. Since $1/n!\to0$, the table at $x=1$ is justified even though the simpler contraction test is inconclusive there.
 
-## Worked Example
+## Worked example
 
 Consider
 
@@ -175,18 +177,18 @@ The iterate $y_n$ agrees with the Taylor series of the exact solution through th
 
 ![Picard iteration error decreases with iteration count](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/picard_convergence.svg)
 
-## An Important Distinction
+## An important distinction
 
 Picard iteration is sometimes described as a numerical method, but a direct implementation can be expensive because every iteration requires a new integral over an entire function.
 
-In practical numerical integration, methods such as Runge--Kutta usually provide better efficiency. Picard iteration remains especially valuable for:
+In practical numerical integration, methods such as Runge–Kutta usually provide better efficiency. Picard iteration remains especially valuable for:
 
 - proving local existence and uniqueness,
 - deriving series approximations,
 - understanding fixed-point methods,
 - motivating iterative schemes for integral and differential equations.
 
-## Numerical Implementation
+## Numerical implementation
 
 If the integral cannot be evaluated analytically, choose grid points
 
@@ -221,7 +223,7 @@ For an inner iterate $v^{(m)}$, the map is $v\mapsto y_n+hf(t_n+h/2,(y_n+v)/2)$,
 
 When $(t_\text{end}-t_0)/h$ is not an integer, the last step is shortened so that the returned grid ends exactly at $t_\text{end}$. The returned array has shape `(n + 1,)` for a scalar ODE and `(n + 1, d)` for a system with `d` components.
 
-## Convergence Caveats
+## Convergence caveats
 
 Picard iteration may fail or become inconvenient when:
 

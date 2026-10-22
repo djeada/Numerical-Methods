@@ -32,6 +32,8 @@ Unlike interpolation, least squares does not generally require the fitted model 
 
 ![Least-squares line and its residuals](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/6_regression/resources/plots/least_squares_residuals.svg)
 
+Use $N$ for the number of observations and $p$ for the number of fitted coefficients, so $X\in\mathbb R^{N\times p}$, $\boldsymbol\beta\in\mathbb R^p$, and $\mathbf y,\mathbf r\in\mathbb R^N$. Rows correspond to observations; columns correspond to model features, including an intercept if one is used. The normal equations below contain $p$ equations in coefficient space, even when the residual is measured over many more observations.
+
 ## Design matrix formulation
 
 Suppose a straight line is modeled as
@@ -133,7 +135,7 @@ The residual vector is orthogonal to every column of $X$. Geometrically, the lea
 
 This interpretation is more general than the familiar picture of a best-fit line.
 
-### Why the Stationary Point Is a Minimum
+### Why the stationary point is a minimum
 
 Let $\widehat{\boldsymbol\beta}$ satisfy the normal equations and write any other coefficient vector as $\widehat{\boldsymbol\beta}+d$. The residual is orthogonal to the columns of $X$, so the cross term vanishes:
 

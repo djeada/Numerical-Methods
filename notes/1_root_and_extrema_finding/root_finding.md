@@ -8,7 +8,7 @@ $$
 
 for a scalar (or vector) variable $x$. Although linear problems $\,ax + b = 0\,$ admit the straightforward solution $x = -b/a$, many practical applications involve **nonlinear** equations—polynomial or transcendental—where closed-form solutions may be unavailable or difficult to find. Consequently, numerical methods are indispensable for approximating roots.
 
-## Relevance and Applications
+## Relevance and applications
 
 - **Root-finding** is used in engineering to determine operating points and equilibrium solutions in mechanical, electrical, or chemical systems.
 - In **physics**, root-finding helps solve boundary value problems, locate energy eigenstates, or find intersection points in scattering problems.
@@ -16,7 +16,7 @@ for a scalar (or vector) variable $x$. Although linear problems $\,ax + b = 0\,$
 - **Financial applications** include calculating implied volatilities or internal rates of return, often involving transcendental equations that require root-finding.
 - Solving **nonlinear systems** in higher dimensions, such as $\mathbf{f}(\mathbf{x}) = \mathbf{0}$, extends 1D root-finding methods (e.g., Newton’s method generalizes to Newton–Raphson for multiple dimensions).
 
-## Basic Concepts
+## Basic concepts
 
 ### Root
 
@@ -32,7 +32,7 @@ Depending on $f$:
 2. **Transcendental functions** (e.g., $\sin x$, $\exp x$, $\log x$) may have infinitely many roots or require special methods.
 3. **Generalized exponents** or radicals ($x^\pi, x^{3/5}, \sqrt{x}, \ldots$) introduce domain constraints or branch cuts.
 
-### Brackets and the Intermediate Value Theorem
+### Brackets and the intermediate value theorem
 
 A **bracket** $[a,b]$ is an interval such that
 
@@ -51,7 +51,7 @@ An iterative method generates a sequence of approximations $\{x_k\}$. If $x_k \t
 - **Linear convergence**: $\lvert x_{k+1} - r\rvert \approx C \,\lvert x_k - r\rvert$ for some $C < 1$.
 - **Quadratic convergence**: $\lvert x_{k+1} - r\rvert \approx K \,\lvert x_k - r\rvert^2$.
 
-For example, Bisection typically has **linear convergence**, while Newton’s Method can exhibit **quadratic convergence** (under favorable conditions).
+For example, Bisection typically has **linear convergence**, while Newton’s method can exhibit **quadratic convergence** (under favorable conditions).
 
 ### Tolerance
 
@@ -63,7 +63,7 @@ $$
 $$
 we consider the root sufficiently approximated and stop. The choice of $\varepsilon$ and $\delta$ depends on the application’s precision needs.
 
-### Residual, Position Error, and Conditioning
+### Residual, position error, and conditioning
 
 The **residual** $|f(\widehat r)|$ tells us how well an approximation satisfies the equation; the **position error** $|\widehat r-r|$ tells us how close it is to a particular root. Near a simple root, Taylor expansion gives
 
@@ -83,13 +83,13 @@ and is interpreted alongside a suitably scaled residual or a certified bracket w
 
 A **simple root** satisfies $f'(r)\ne0$. A root of multiplicity $m>1$ has the form $f(x)=(x-r)^m h(x)$ with $h(r)\ne0$. Even multiplicities need not produce a sign change, so scanning for sign changes can miss them. The scalar methods in this chapter should also be distinguished from optimization: solving $f'(x)=0$ finds stationary points, whose classification requires further analysis.
 
-## Common Root-Finding Methods
+## Common root-finding methods
 
 Root-finding methods can be broadly classified into **bracketing** (guaranteed convergence under certain assumptions) and **open** methods (faster convergence but risk of divergence). Some methods combine both aspects.
 
-### Bracketing Methods
+### Bracketing methods
 
-#### Bisection Method
+#### Bisection method
 
 - Start with an interval $[a_0, b_0]$ where $f(a_0)f(b_0) < 0$ to ensure the presence of a root.
 - Calculate the midpoint $m = \frac{a_k + b_k}{2}$ of the current interval.
@@ -98,7 +98,7 @@ Root-finding methods can be broadly classified into **bracketing** (guaranteed c
 - The method halves the interval length in each iteration, leading to linear convergence with a ratio of 0.5.
 - After $n$ steps, the bracket size reduces to $\frac{b_0 - a_0}{2^n}$.
 
-#### False Position (Regula Falsi)
+#### False position (regula falsi)
 
 - Select an interval $[a, b]$ such that $f(a)f(b) < 0$, ensuring the presence of a root in the interval.
 - Compute the interpolated point $x_{\text{interp}} = \frac{a f(b) - b f(a)}{f(b) - f(a)}$ using linear interpolation between $(a, f(a))$ and $(b, f(b))$.
@@ -111,11 +111,11 @@ Root-finding methods can be broadly classified into **bracketing** (guaranteed c
 
 An exact zero at the interpolation point is returned immediately. In classical false position, one endpoint can remain fixed for many steps, so the bracket width may not approach zero even while the interpolated points converge. A residual test, interpreted with conditioning information, or a modified false-position method is useful in this case.
 
-### Open Methods
+### Open methods
 
 Open methods rely on derivative information or estimates, and do not require an initial bracket. However, they can fail to converge if poorly chosen initial guesses or pathological function behavior occurs.
 
-#### Newton’s Method
+#### Newton’s method
 
 - Start with an initial guess $x_0$ for the root of $f(x) = 0$.
 - Compute the next approximation using the formula $x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}$.
@@ -126,14 +126,14 @@ Open methods rely on derivative information or estimates, and do not require an 
 - If $f'(x_k) \approx 0$, the method can diverge or produce large, inaccurate jumps.
 - Without a guaranteed bracket, the method may fail if the initial guess $x_0$ is too far from the actual root.
 
-#### Secant Method
+#### Secant method
 
 - The **idea** is to approximate $f'(x_k)$ using a finite difference, resulting in the formula $f'(x_k) \approx \frac{f(x_k) - f(x_{k-1})}{x_k - x_{k-1}}$.
 - The iterative formula is derived as $x_{k+1} = x_k - f(x_k) \frac{x_k - x_{k-1}}{f(x_k) - f(x_{k-1})}$, replacing the derivative in Newton's method.
 - The method typically exhibits **superlinear convergence** with a rate close to $1.618$, which is the golden ratio.
 - This approach is **useful** because it avoids the need for an explicit derivative function, relying instead on previous function evaluations.
 
-### Combination Methods
+### Combination methods
 
 - Start with a bracket $[a_0, b_0]$ such that $f(a_0)f(b_0) < 0$, ensuring a root exists within the interval.
 - Evaluate $f(a)$ and $f(b)$, and initialize $c = b$ as the last valid root approximation.
@@ -145,7 +145,11 @@ Open methods rely on derivative information or estimates, and do not require an 
 - Repeat the process until the stopping condition is met, typically when the interval size or $f(c)$ is below a predefined tolerance.
 - The final result is the approximation $c$, which satisfies the convergence criteria.
 
-## Choosing a Root-Finding Method
+## Checking the domain before iterating
+
+The numerical problem includes the domain of $f$, not just its formula. For $f(x)=\log x-c$, every iterate must satisfy $x>0$. A secant or Newton step may leave that domain even when its starting points are valid; a bracket wholly inside the domain provides a useful safeguard. Likewise, a sign change across a pole is not a root certificate: $f(x)=1/x$ changes sign across zero, but is discontinuous there and never vanishes. Locate singularities and excluded points before scanning for brackets or interpreting a small step as convergence.
+
+## Choosing a root-finding method
 
 - **Continuity** ensures that a bracketing method can reliably locate a root, as the existence of a sign change guarantees a solution within the interval.
 - **Differentiability** allows for use of methods like Newton's, which rely on first derivatives to predict the root. If the derivative is unavailable, alternative methods such as secant or bisection are better options.
@@ -156,7 +160,7 @@ Open methods rely on derivative information or estimates, and do not require an 
 - **Hybrid approaches** combine reliability and speed by starting with a bracketing method like bisection to secure the root interval, then transitioning to faster methods like Newton's or secant once near the solution.
 - **Combination methods** like Brent’s dynamically adapt between bracketing and open techniques, providing both robustness of convergence and faster refinement when conditions are favorable.
 
-### Example Flow of Decision
+### Example flow of decision
 
 - Determine if $f(x)$ has an easily detectable sign change.
 - If a sign change is present, use bracketing methods like bisection or false position to isolate the root.

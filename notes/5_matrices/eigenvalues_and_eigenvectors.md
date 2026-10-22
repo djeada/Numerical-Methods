@@ -1,6 +1,6 @@
 # Eigenvalues and Eigenvectors
 
-Eigenvalues and eigenvectors are foundational concepts in linear algebra, with extensive applications across various domains such as physics, computer graphics, and machine learning. These concepts are instrumental in decomposing complex matrix transformations, thereby simplifying numerical computations.
+An eigenvector identifies a direction that a square matrix preserves under multiplication, while its eigenvalue records the scaling along that direction. The scaling may include a sign change or, over the complex numbers, a phase change. These concepts connect matrix transformations to vibration modes, geometric transformations in computer graphics, and directions of variation in machine learning. They also form the starting point for eigendecomposition and iterative eigenvalue algorithms.
 
 ## Definitions
 
@@ -16,13 +16,13 @@ where:
 - $v$ is an eigenvector of $A$,
 - $\lambda$ is the corresponding eigenvalue.
 
-## Procedure for Finding Eigenvalues and Eigenvectors
+## Procedure for finding eigenvalues and eigenvectors
 
 1. **Eigenvalues**: Eigenvalues are calculated by solving the characteristic equation, formulated as $\det(A - \lambda I) = 0$. Here, $I$ is the identity matrix of the same dimension as $A$, and $\det(\cdot)$ denotes the determinant. The roots of this equation yield the eigenvalues.
 
 2. **Eigenvectors**: Upon finding each eigenvalue, its corresponding eigenvectors are obtained by substituting the eigenvalue into the equation $(A - \lambda I)v = 0$, followed by computing the null space.
 
-## Why the Characteristic Equation Appears
+## Why the characteristic equation appears
 
 Rearranging $Av=\lambda v$ gives $(A-\lambda I)v=0$. A homogeneous square system has a nonzero solution exactly when its matrix is singular, hence the condition $\det(A-\lambda I)=0$. The zero vector is excluded because it satisfies this equation for every scalar and therefore identifies no particular eigenvalue.
 

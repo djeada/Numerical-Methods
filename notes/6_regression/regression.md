@@ -212,7 +212,7 @@ A highly flexible model tends to have:
 
 Regularization and model selection control this tradeoff.
 
-### Deriving the Bias–Variance Decomposition
+### Deriving the bias–variance decomposition
 
 At a fixed predictor $\mathbf x$, suppose a new response is $Y=f_*(\mathbf x)+\varepsilon$, with zero-mean noise of variance $\sigma^2$ independent of the training data. The fitted prediction $\widehat f(\mathbf x)$ varies with the training sample. Add and subtract its mean inside the squared prediction error; the cross terms have zero expectation. This gives
 
@@ -248,6 +248,16 @@ $$
 $$
 
 which can drive some coefficients exactly to zero.
+
+### How the loss normalization changes the penalty
+
+With the intercept handled separately and the remaining coefficients collected in $\beta$, differentiating $\|\mathbf y-X\beta\|_2^2+\lambda\|\beta\|_2^2$ gives
+
+$$
+(X^\top X+\lambda I)\widehat\beta=X^\top\mathbf y.
+$$
+
+For $\lambda>0$, the added diagonal term makes this matrix positive definite even when the feature columns are dependent. If the data-fit term is instead divided by $N$, the equivalent normal equations contain $N\lambda I$. The numerical value called “lambda” therefore depends on the objective's normalization. When comparing implementations, compare the full objective and the treatment of the intercept, rather than assuming equal penalty parameters mean equal fits.
 
 ## Scaling predictors
 

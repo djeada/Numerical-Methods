@@ -79,7 +79,7 @@ $$
 
 If $Q$ is numerically zero the problem is a linear program: the gradient is constant, there is no curvature from which to derive a step, and the routine raises an error instead of guessing a step. Use a linear programming solver in that case.
 
-### What Projection Must Compute
+### What projection must compute
 
 Euclidean projection onto a nonempty closed convex set solves
 
@@ -104,6 +104,16 @@ $$
 For a feasible $x$ and convex differentiable $f$, $G_\alpha(x)=0$ is equivalent to the first-order constrained optimality condition. The ordinary gradient need not vanish. For example, minimizing $x^2/2$ over $x\geq1$ gives $x^*=1$: its gradient is $1$, while projection sends the trial point $0$ back to $1$ and the gradient mapping is zero.
 
 Positive semidefiniteness alone does not ensure a finite optimum. The unconstrained problem with $Q=\operatorname{diag}(1,0)$ and $c=(0,-1)^\top$ is convex but unbounded below in its second coordinate. Feasibility and attainment remain separate requirements.
+
+### Why the projected step can decrease the objective
+
+Let the current point $x$ be feasible, put $z=\Pi_C(x-\alpha g)$, and write $d=z-x$. The projection's first-order condition, tested against the feasible point $x$, gives $g^\top d\leq-\|d\|_2^2/\alpha$. Combining this with the $L$-smooth upper bound yields
+
+$$
+f(z)\leq f(x)-\left(\frac1\alpha-\frac L2\right)\|d\|_2^2.
+$$
+
+Thus an exact projected step decreases a nonstationary objective for $0<\alpha<2/L$. The common choice $\alpha=1/L$ leaves a convenient margin. This argument explains why the projection must be the nearest feasible point, rather than an arbitrary feasible repair, and why an inaccurate inner projection can affect the outer convergence. It does not require the ordinary gradient to vanish at a boundary solution.
 
 ## KKT system for equality-constrained QP
 

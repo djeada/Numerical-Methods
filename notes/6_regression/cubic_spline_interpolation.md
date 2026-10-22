@@ -117,7 +117,7 @@ $$
 
 The right-hand side measures the change in neighboring secant slopes. If the data are locally close to a straight line, that difference is small; if the slope changes strongly, the spline needs more curvature.
 
-### Deriving the Tridiagonal System
+### Deriving the tridiagonal system
 
 A cubic has a linear second derivative. Interpolating that derivative between its endpoint values gives
 
@@ -266,21 +266,21 @@ The second piece is $S_1(x)=0.5-0.75(x-1)^2+0.25(x-1)^3$. At the shared knot $x=
 
 For a natural cubic spline:
 
-I. sort the points by increasing $x_i$;
+**Step 1.** Sort the points by increasing $x_i$;
 
-II. compute interval widths
+**Step 2.** Compute interval widths
 
 $$
 h_i = x_{i+1} - x_i;
 $$
 
-III. assemble the tridiagonal system for $M_1,\ldots,M_{n-1}$;
+**Step 3.** Assemble the tridiagonal system for $M_1,\ldots,M_{n-1}$;
 
-IV. solve that system;
+**Step 4.** Solve that system;
 
-V. set $M_0=M_n=0$;
+**Step 5.** Set $M_0=M_n=0$;
 
-VI. compute $(a_i,b_i,c_i,d_i)$ for each interval;
+**Step 6.** Compute $(a_i,b_i,c_i,d_i)$ for each interval;
 
 VII. for each query, locate its interval and evaluate the corresponding cubic.
 
@@ -316,6 +316,12 @@ $$
 - **not-a-knot**: the first two and last two cubic pieces are constrained to behave as if the first and last interior knots were not true breaks.
 
 When comparing with a library, make sure the boundary condition matches. A library default may not be natural.
+
+### Polynomial degree does not override the boundary conditions
+
+A cubic piece can represent a quadratic, but a natural spline does not necessarily reproduce a quadratic exactly: the imposed endpoint second derivatives may disagree with those of the quadratic. For $f(x)=x^2$ sampled at $0,1,2$, the natural conditions set $M_0=M_2=0$, while the interior equation gives $M_1=3$. The first segment is then $S_0(x)=x/2+x^3/2$, so $S(0.5)=0.3125$, compared with $f(0.5)=0.25$.
+
+The discrepancy comes from the boundary model, not a failure to interpolate the supplied values. Clamping the endpoint slopes to the true values $0$ and $4$ instead reproduces this quadratic. Boundary conditions should therefore reflect available endpoint information, especially when endpoint derivatives or near-boundary accuracy matter.
 
 ## Numerical behavior and limitations
 

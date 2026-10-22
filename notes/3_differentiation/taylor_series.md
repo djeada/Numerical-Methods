@@ -1,10 +1,10 @@
 # Taylor Series
 
-The Taylor series is a fundamental tool in calculus and mathematical analysis, offering a powerful way to represent and approximate functions. By expanding a function around a specific point, known as the "center" or "point of expansion," we can express it as an infinite sum of polynomial terms derived from the function’s derivatives. This concept is especially useful for approximating functions that are difficult or impossible to compute directly, as well as for understanding the local behavior of functions.
+Taylor expansion describes a function near a chosen center $a$ using its value and derivatives at that point. The constant term records the function value, the linear term records its slope, and higher powers describe curvature and further local variation. A finite expansion includes a remainder, which quantifies the part discarded by a polynomial approximation. An infinite Taylor series represents the function only when the corresponding convergence requirements are satisfied. This distinction matters in numerical methods: most error derivations need a finite expansion with a controlled remainder, not a claim that an arbitrary smooth function equals an infinite series. Taylor expansions therefore provide both practical approximations and a systematic way to explain why numerical formulas have a particular order of accuracy.
 
 ![Taylor polynomial approximations near their expansion point](https://github.com/user-attachments/assets/cba25294-b445-42c2-9a3e-15dfc80813cf)
 
-## Mathematical Formulation
+## Mathematical formulation
 
 Suppose $f$ has derivatives of all orders in a neighborhood of $a$. These derivatives define its Taylor series. If $f$ is analytic there, the series converges to the function in a neighborhood of $a$, and we may write:
 
@@ -36,7 +36,7 @@ $$
 
 Here, derivatives in the polynomial part are evaluated at $a$, while the remainder is evaluated at some intermediate point $\xi$. This is the Lagrange form of the remainder and explains why many derivations use $\xi$ instead of reusing $a$ or $x$ in the last term.
 
-## Finite Expansions, Remainders, and Analyticity
+## Finite expansions, remainders, and analyticity
 
 A finite Taylor expansion is valid under much weaker assumptions than an infinite series representation. If $f\in C^{n+1}$ on the interval between $a$ and $x$, Taylor's theorem gives the finite formula above. When $|f^{(n+1)}(t)|\leq M$ on that interval, its remainder obeys
 
@@ -56,7 +56,7 @@ has all derivatives zero at $0$, so its Taylor series is zero, while $f(x)>0$ aw
 
 For the exponential example, truncating after the quadratic term at $x=0.1$ gives $1+0.1+0.1^2/2=1.105$. The remainder is at most $e^{0.1}(0.1)^3/6<1.85\times10^{-4}$. This turns an approximation into a quantitative accuracy statement.
 
-## Practical Use
+## Practical use
 
 The Taylor series is not only a theoretical construct. It has numerous practical applications:
 

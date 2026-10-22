@@ -13,7 +13,7 @@ The differential equation gives the slope of the solution curve. Euler's method 
 
 ![Euler method follows the tangent at the current point](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/euler_tangent_steps.svg)
 
-## Update Formula
+## Update formula
 
 If $t_n=t_0+nh$ and $u_n$ approximates $u(t_n)$, then
 
@@ -29,7 +29,7 @@ Geometrically:
 2. follow the tangent line for a horizontal distance $h$,
 3. use the endpoint as the next numerical value.
 
-## Derivation from Taylor Expansion
+## Derivation from Taylor expansion
 
 Expand the exact solution about $t_n$:
 
@@ -54,7 +54,7 @@ So halving the step size should roughly halve the total error once the asymptoti
 
 ![Euler error decreases linearly with step size](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/euler_error_vs_step.svg)
 
-### How Local Error Accumulates
+### How local error accumulates
 
 The $O(h^2)$ local error refers to one step **starting from the exact value**. In a computed trajectory, each new step also propagates earlier errors. If $f$ is Lipschitz in $u$ with constant $L$ and $|u''|\leq M$, the global error $e_n=|u(t_n)-u_n|$ satisfies
 
@@ -72,7 +72,7 @@ On a fixed time interval the factor multiplying $h$ is bounded, giving first-ord
 
 For $u'=u$, the recurrence is $u_n=(1+h)^n u_0$ on a uniform grid. At fixed $T=nh$, $n\log(1+h)=T-Th/2+O(h^2)$, so the numerical growth differs from $e^T$ by a first-order term. When comparing vector ODEs, compute every component of $f(t_n,\mathbf u_n)$ from the same old state before updating the state.
 
-## Worked Example
+## Worked example
 
 Solve approximately
 
@@ -137,11 +137,11 @@ $$
 \mathbf{u}_{n+1} = \mathbf{u}_n + h\mathbf{f}(t_n,\mathbf{u}_n).
 $$
 
-## Repository Implementation
+## Repository implementation
 
 `euler_method` takes a final time `t_end` and a nominal step `h`. When `(t_end - t0)/h` is not an integer, the last step is shortened so that the returned grid ends exactly at `t_end`; all earlier steps have length `h`. The returned array has shape `(n + 1,)` for a scalar ODE (one component) and `(n + 1, d)` for a system with `d` components.
 
-## Step Size and Stability
+## Step size and stability
 
 Accuracy is not the only reason to choose $h$ carefully. A step can be small enough to look reasonable but still be unstable.
 
@@ -169,9 +169,11 @@ $$
 0<h< \frac{2}{|\lambda|}.
 $$
 
+Stability does not imply that the numerical decay has the same shape as the exact decay. For $\lambda<0$ and $1<h|\lambda|<2$, the factor $1+h\lambda$ is negative with magnitude below one: the numerical values alternate in sign while decreasing in magnitude. For example, $\lambda=-1$ and $h=1.5$ give factor $-0.5$, while the exact positive initial solution remains positive. Preserving nonnegative decay requires the stricter condition $0<h\leq1/|\lambda|$ in this scalar example.
+
 This restriction is severe for **stiff** problems, where some modes decay much faster than others. Explicit Euler may then require extremely small steps even when the solution itself changes slowly.
 
-## When Euler's Method Is Useful
+## When Euler's method is useful
 
 Euler's method is valuable when:
 

@@ -2,7 +2,7 @@
 
 Elliptic curve cryptography (ECC) is a public-key cryptographic approach based on the algebraic structure of elliptic curves over finite fields. The security of ECC relies on the difficulty of the **Elliptic Curve Discrete Logarithm Problem (ECDLP)**, which makes it possible to achieve strong security with smaller key sizes compared to RSA.
 
-## Mathematical Formulation
+## Mathematical formulation
 
 An elliptic curve over a prime finite field $\mathbb{F}_p$ (where $p > 3$) is defined by the short Weierstrass equation:
 
@@ -20,7 +20,19 @@ The assumption $p>3$ lets a general nonsingular Weierstrass equation be transfor
 
 The set of points on the curve, together with a special **point at infinity** $\mathcal{O}$, forms an abelian group under point addition.
 
-## Point Addition
+### Keeping the two moduli distinct
+
+| Symbol | Meaning | Arithmetic role |
+| --- | --- | --- |
+| $p$ | Prime defining the coordinate field $\mathbb F_p$ | Reduce point coordinates and slope calculations modulo $p$ |
+| $G$ | Chosen base point | Generates the subgroup used in the example or protocol |
+| $n$ | Order of $G$, so $nG=\mathcal O$ | Scalars acting on $G$ repeat modulo $n$ |
+| $\mathcal O$ | Point at infinity | Identity of the point-addition group |
+| $\lambda$ | Slope used by the addition or doubling formula | A field element, computed using inverses modulo $p$ |
+
+The field modulus and subgroup order need not be equal. In particular, reducing a point coordinate modulo $n$ would not be the same operation as reducing a scalar multiple of $G$ modulo its order. The small worked example later makes both moduli visible.
+
+## Point addition
 
 Given two distinct points $P = (x_P, y_P)$ and $Q = (x_Q, y_Q)$ on the curve with $P \neq -Q$, their sum $R = P + Q = (x_R, y_R)$ is computed as:
 
@@ -41,7 +53,7 @@ Special cases:
 - $P + \mathcal{O} = P$ (identity element).
 - $P + (-P) = \mathcal{O}$, where $-P = (x_P, -y_P \mod p)$.
 
-### Division Means a Modular Inverse
+### Division means a modular inverse
 
 All coordinates and slope calculations take place in $\mathbb F_p$, not in floating point arithmetic. For a nonzero denominator $d$, division means multiplication by $d^{-1}\bmod p$, where $dd^{-1}\equiv1\pmod p$. The inverse exists because $p$ is prime. Extended Euclid computes it; Fermat's identity $d^{p-2}\equiv d^{-1}\pmod p$ is another mathematical formula.
 
@@ -49,7 +61,7 @@ To derive the addition coordinates, write the line through $P$ and $Q$ as $y=\la
 
 If $x_P=x_Q$, do not attempt to invert a zero denominator: use doubling when $P=Q$ and $y_P\ne0$, or return $\mathcal O$ for opposite points. These cases make the group law complete as a mathematical definition.
 
-## Point Doubling
+## Point doubling
 
 When $P = Q$ (and $y_P \neq 0$), the tangent line formula gives:
 
@@ -67,7 +79,7 @@ $$
 
 If $y_P = 0$, then $2P = \mathcal{O}$.
 
-### A Doubling Calculation
+### A doubling calculation
 
 For the later example curve and $P=(3,6)$, the numerator is $3(3)^2+2=29$ and the denominator is $12$. Since $12^{-1}\equiv89\pmod{97}$,
 
@@ -81,7 +93,7 @@ $$
 
 Therefore $2P=(80,10)$. Every reduction is performed modulo $97$; ordinary division would give unrelated coordinates.
 
-## Scalar Multiplication
+## Scalar multiplication
 
 Scalar multiplication computes $kP = P + P + \cdots + P$ ($k$ times) efficiently using the **double-and-add** algorithm:
 
@@ -101,7 +113,7 @@ For this operation count, take $k>0$; $0P=\mathcal O$, and negative scalars can 
 
 The group-law functions only need the coefficient $a$, so they cannot check the curve or the points by default. Passing the optional keyword `b` to `point_add`, `point_double`, `scalar_multiply` or `ecdh_shared_secret` makes them verify that the curve is non-singular and that every supplied point satisfies the curve equation, raising `ValueError` otherwise. Checking the curve equation rejects off-curve inputs, but it is only part of public-key validation. For a subgroup of known order $n$, full validation also checks the field encoding, rejects the identity, and verifies the required subgroup membership, for example $nQ=\mathcal O$ in a prime-order subgroup. The optional `b` check alone does not establish all of these properties. All of these functions always reject $p \le 3$.
 
-## Elliptic Curve Diffie–Hellman (ECDH)
+## Elliptic curve diffie–hellman (ECDH)
 
 ECDH is a key-agreement protocol that allows two parties to establish a shared secret over an insecure channel:
 

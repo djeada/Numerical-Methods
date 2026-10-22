@@ -20,7 +20,7 @@ where $T>0$ is the temperature.
 
 At high temperature, uphill moves are common. At low temperature, the method becomes increasingly greedy.
 
-### Why the Exponential Acceptance Rule Appears
+### Why the exponential acceptance rule appears
 
 At a fixed temperature, the Boltzmann target has weights $\pi_T(x)\propto e^{-f(x)/T}$. With a symmetric proposal $q(y\mid x)=q(x\mid y)$, the Metropolis probability is
 
@@ -29,6 +29,8 @@ $$
 $$
 
 which satisfies detailed balance. For an asymmetric proposal, the corresponding Metropolis–Hastings ratio also contains $q(x\mid y)/q(y\mid x)$. Cooling changes the target over time, so fixed-temperature sampling arguments alone do not prove annealing convergence.
+
+The normalization constant of the Boltzmann distribution cancels in the acceptance ratio, so it need not be computed. Adding a constant to every objective value also leaves $\Delta f$ unchanged; multiplying the objective by a positive constant instead changes the temperature scale needed for the same acceptance probabilities.
 
 For a representative uphill cost $\Delta f=1$, the acceptance probabilities are about $0.905$ at $T=10$, $0.368$ at $T=1$, and $4.54\times10^{-5}$ at $T=0.1$. Temperature has the same scale as the objective: multiplying $f$ by $a>0$ requires multiplying $T$ by $a$ to retain the same acceptance probabilities.
 

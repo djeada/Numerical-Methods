@@ -182,7 +182,7 @@ The second derivatives measure curvature. Minimizing their squared magnitude fav
 
 This variational interpretation explains why thin-plate splines tend to look smooth without specifying a rectangular grid.
 
-### Why the Affine Part and Side Constraints Are Needed
+### Why the affine part and side constraints are needed
 
 In the classical whole-plane formulation, the bending energy is integrated over $\mathbb R^2$. Every affine function $a_0+a_1x+a_2y$ has zero second derivatives and hence zero bending energy. The energy therefore cannot distinguish an affine addition; this three-dimensional null space is why the representation includes $P\mathbf a$.
 
@@ -190,7 +190,7 @@ The upper block equation is simply $K\mathbf w+P\mathbf a=\mathbf z$, obtained b
 
 The entire block matrix is symmetric **indefinite**, even though the constrained kernel has the positivity property just used. Use a solver that supports this structure or a general pivoted solver; ordinary Cholesky on the full block matrix is inappropriate. The [SciPy RBF reference](https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.RBFInterpolator.html) describes the polynomial rank and distinct-site conditions for these systems.
 
-## Worked Example: Reproducing a Plane
+## Worked example: reproducing a plane
 
 Use the three noncollinear sites $(0,0),(1,0),(0,1)$ with values $1,3,4$. The affine matrix is
 
@@ -230,27 +230,27 @@ at $r=0$ by the limiting definition.
 
 ## Algorithm
 
-I. collect distinct scattered data sites $(x_i,y_i,z_i)$;
+**Step 1.** Collect distinct scattered data sites $(x_i,y_i,z_i)$;
 
-II. compute every pairwise distance
+**Step 2.** Compute every pairwise distance
 
 $$
 r_{ij} = \|\mathbf x_i - \mathbf x_j\|_2;
 $$
 
-III. build
+**Step 3.** Build
 
 $$
 K_{ij} = \phi(r_{ij});
 $$
 
-IV. build the affine matrix $P$;
+**Step 4.** Build the affine matrix $P$;
 
-V. assemble the block system;
+**Step 5.** Assemble the block system;
 
-VI. solve for $\mathbf w$ and $\mathbf a$;
+**Step 6.** Solve for $\mathbf w$ and $\mathbf a$;
 
-VII. evaluate queries with the radial sum plus affine term.
+**Step 7.** Evaluate queries with the radial sum plus affine term.
 
 ## Computational cost
 

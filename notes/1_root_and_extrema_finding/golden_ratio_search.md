@@ -1,8 +1,8 @@
 # Golden Ratio Search
 
-The Golden Ratio Search is a technique employed for locating the extremum (minimum or maximum) of a unimodal function over a given interval. Unlike gradient-based or derivative-requiring methods, this approach uses only function evaluations, making it broadly applicable even when derivatives are difficult or impossible to compute. The method takes its name from the special constant known as the golden ratio $\phi$, which uniquely balances intervals to reduce the problem domain efficiently.
+Golden-section search, also called golden-ratio search, locates a minimum or maximum of a unimodal function on a specified interval. It compares function values at two interior points and discards a part of the interval while preserving a minimizer under the assumptions stated below. No derivatives are required, so the method is useful when gradients are unavailable or expensive. The golden ratio $\phi$ determines the interior-point spacing: after a reduction, one sampled point can be reused in the smaller interval, leaving only one new function value to compute.
 
-For a unimodal function $f(x)$ defined on an interval $[a,b]$, the Golden Ratio Search progressively narrows down the search interval by evaluating the function at two strategically chosen internal points. By leveraging the intrinsic ratio $\phi$, each iteration reduces the size of the interval while ensuring that no potential minima are prematurely excluded. This process continues until the interval is sufficiently small, providing an approximation to the function’s minimum (or maximum, if desired by adjusting the comparison conditions).
+For a unimodal function $f(x)$ defined on an interval $[a,b]$, the golden-section search progressively narrows down the search interval by evaluating the function at two strategically chosen internal points. The spacing defined by $\phi$ gives the same retained fraction at every ordinary reduction. Under strict unimodality, comparing the two interior values identifies an outer region that can be discarded without excluding the minimizer. This process continues until the interval is sufficiently small, providing an approximation to the function’s minimum (or maximum, if desired by adjusting the comparison conditions).
 
 **Conceptual Illustration**:
 
@@ -12,7 +12,7 @@ Imagine the graph of a unimodal function $f(x)$. The goal is to isolate the mini
 
 We pick two points $x_1$ and $x_2$ inside $[a,b]$ using the golden ratio partitioning. Based on the function values at these points, we eliminate a portion of the interval that cannot contain the minimum. This procedure repeats, each time reducing the interval size while maintaining the guarantee of containing the minimum.
 
-## Mathematical Formulation
+## Mathematical formulation
 
 The golden ratio is defined as:
 
@@ -26,7 +26,7 @@ $$
 \frac{1}{\phi} = \phi - 1 \approx 0.618.
 $$
 
-To apply the Golden Ratio Search for minimization, we start with an interval $[a,b]$ and choose two internal points $x_1$ and $x_2$ such that:
+To apply the golden-section search for minimization, we start with an interval $[a,b]$ and choose two internal points $x_1$ and $x_2$ such that:
 
 $$
 x_1 = b - \frac{b-a}{\phi}, \quad x_2 = a + \frac{b-a}{\phi}.
@@ -42,11 +42,11 @@ Because of how $\phi$ partitions the interval, the ratio of the smaller subinter
 
 ## Derivation
 
-I. **Unimodality Assumption:**
+**Step 1: Unimodality assumption.**
 
 Assume $f(x)$ is unimodal on $[a,b]$, meaning it has a single minimum within that interval. Without loss of generality, we focus on minimizing $f(x)$.
 
-II. **Golden Ratio Partition:**
+**Step 2: Golden ratio partition.**
 
 Given the interval $[a,b]$, we introduce points $x_1$ and $x_2$ as described:
 
@@ -60,7 +60,7 @@ $$
 x_1 < x_2, \quad a < x_1 < x_2 < b.
 $$
 
-III. **Decision Criterion:**
+**Step 3: Decision criterion.**
 
 We evaluate $f(x_1)$ and $f(x_2)$:
 
@@ -69,7 +69,7 @@ We evaluate $f(x_1)$ and $f(x_2)$:
 
 In either case, the length of the interval is reduced by a factor approximately $\frac{1}{\phi}$ each iteration, ensuring rapid convergence.
 
-IV. **Convergence:**
+**Step 4: Convergence.**
 
 After $n$ iterations, the length of the interval is:
 
@@ -79,7 +79,7 @@ $$
 
 Once this length is less than a prescribed tolerance $\epsilon$, we accept that the minimum is approximated by any point within the current interval.
 
-### Where the Golden Ratio Comes From
+### Where the golden ratio comes from
 
 Write the retained fraction as $\rho=1/\phi$, so the two points lie at $a+(1-\rho)(b-a)$ and $a+\rho(b-a)$. If the left interval $[a,x_2]$ is retained, its length is $\rho(b-a)$. Reusing the old $x_1$ as the new right interior point requires
 
@@ -93,7 +93,7 @@ For the standard minimizer-preservation argument, assume $f$ decreases strictly 
 
 With no early exit, after $n$ reductions the width is $L_n=\rho^n L_0$. The final midpoint has position error at most $L_n/2$, so a target $\epsilon_x$ is met when $\rho^n L_0\leq2\epsilon_x$. For maximization, apply the same procedure to $-f$.
 
-## Algorithm Steps
+## Algorithm steps
 
 **Input:**
 
@@ -108,7 +108,7 @@ With no early exit, after $n$ reductions the width is $L_n=\rho^n L_0$. The fina
 
 **Iteration:**
 
-I. Compute (only before the first iteration; later iterations reuse a point, see step III):
+**Step 1.** Compute (only before the first iteration; later iterations reuse a point, see step III):
 
 $$
 x_1 = b - \frac{b-a}{\phi}, \quad x_2 = a + \frac{b-a}{\phi},
@@ -225,8 +225,8 @@ At each iteration, you would similarly compute new $x_1, x_2$, evaluate $f(x_1)$
 
 ## Advantages
 
-1. **No derivatives required** makes the Golden Ratio Search ideal for problems where derivative information is unavailable or too expensive to compute.
-2. **Guaranteed reduction** of the search interval by approximately $\frac{1}{\phi}$ (the Golden Ratio) in each iteration ensures steady progress toward locating the minimum.
+1. **No derivatives required** makes the golden-section search ideal for problems where derivative information is unavailable or too expensive to compute.
+2. **Guaranteed reduction** of the search interval by the retained fraction $\rho=1/\phi\approx0.618$, the reciprocal of the golden ratio in each iteration ensures steady progress toward locating the minimum.
 3. The method's **robustness** guarantees convergence to a minimum within the provided interval, assuming the function is unimodal.
 4. **Simplicity of implementation** makes the algorithm accessible, as it involves straightforward iterative calculations without the need for complex procedures.
 5. **One function evaluation per iteration**, since one interior point is reused after each reduction, which matters when $f$ is expensive.

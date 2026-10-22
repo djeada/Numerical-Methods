@@ -2,11 +2,22 @@
 
 Checksum algorithms are methods for computing a small, fixed-size value from a block of data. They serve as a simple mechanism to detect accidental changes or corruption in data during transmission or storage. While not cryptographically secure, checksums are fundamental to error detection in digital systems.
 
-## Luhn Algorithm
+## Comparing the checksum conventions
+
+| Algorithm | Input representation | Initial state | Main arithmetic |
+| --- | --- | --- | --- |
+| Luhn | Decimal digits, including a check-digit position | Sum starts at zero | Alternating digit transform and a sum modulo $10$ |
+| CRC-32, reflected convention below | Bytes processed bit by bit | Register `0xFFFFFFFF` | Shifts and XOR, followed by a final XOR |
+| Fletcher-16 | Bytes | $S_1=S_2=0$ | Two running sums modulo $255$ |
+| Adler-32 | Bytes | $A=1$, $B=0$ | Two running sums modulo $65521$ |
+
+The input representation and initialization are part of the algorithm. The same visible text can produce a different result if it is encoded into different bytes, and a different CRC convention can produce a different checksum even when it uses the same generator polynomial.
+
+## Luhn algorithm
 
 The Luhn algorithm (also known as the "modulus 10" algorithm) is a checksum formula used to validate identification numbers such as credit card numbers, IMEI numbers, and national identification numbers.
 
-### Mathematical Formulation
+### Mathematical formulation
 
 Given a number string $d_1 d_2 \ldots d_n$:
 
@@ -23,7 +34,7 @@ $$
 
 where $S$ is the Luhn sum of the payload digits.
 
-### Check-Digit Parity and Detection Limits
+### Check-digit parity and detection limits
 
 For validation, the rightmost check digit is kept unchanged, and doubling starts at the next digit to its left. For generation, reserve that final position first: equivalently, append a zero placeholder and compute the transformed payload sum $S$. Applying the validation parity directly to the unextended payload would double the wrong positions.
 
@@ -57,7 +68,7 @@ Since $70 \mod 10 = 0$, the number is valid.
 
 The Cyclic Redundancy Check (CRC-32) is a widely used error-detection algorithm based on polynomial division over $\text{GF}(2)$ (the Galois field with two elements).
 
-### Mathematical Formulation
+### Mathematical formulation
 
 A message bit string is treated as a polynomial $M(x)$ over $\operatorname{GF}(2)$. In the basic zero-initialized polynomial construction, the raw remainder is:
 
@@ -74,14 +85,14 @@ $$
 
 In the reflected (LSB-first) implementation, the polynomial constant is $\texttt{0xEDB88320}$.
 
-### Algorithm Steps
+### Algorithm steps
 
 1. Initialize a 32-bit CRC register to $\texttt{0xFFFFFFFF}$.
 2. For each byte of input, XOR it with the low byte of the CRC register.
 3. For each of the 8 bits, if the LSB is 1, shift right and XOR with the polynomial; otherwise, just shift right.
 4. After processing all bytes, XOR the CRC register with $\texttt{0xFFFFFFFF}$.
 
-### Connecting the Polynomial and Register Views
+### Connecting the polynomial and register views
 
 Over $\operatorname{GF}(2)$, coefficients are bits and subtraction is XOR. Multiplication by $x$ shifts a bit pattern; polynomial long division removes a leading term by XORing a shifted copy of the generator. In the basic construction, appending the remainder produces $C(x)=M(x)x^{32}+R(x)$, which is divisible by $G(x)$ because addition and subtraction coincide.
 
@@ -93,7 +104,7 @@ A useful check vector for these conventions is the ASCII byte string `123456789`
 
 The Fletcher checksum is a position-dependent checksum that uses two running sums to detect both value and positional errors.
 
-### Mathematical Formulation
+### Mathematical formulation
 
 Given a byte sequence $b_1, b_2, \ldots, b_n$:
 
@@ -125,7 +136,7 @@ Earlier bytes contribute to more running sums, which makes the result position-s
 
 Adler-32 is a checksum algorithm similar to Fletcher but uses modulus 65521 (the largest prime less than $2^{16}$) for better distribution properties.
 
-### Mathematical Formulation
+### Mathematical formulation
 
 Given a byte sequence $b_1, b_2, \ldots, b_n$:
 

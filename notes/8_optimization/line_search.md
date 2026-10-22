@@ -45,7 +45,7 @@ A simple backtracking line search is:
 
 For a descent direction and a differentiable objective on the trial segment, this supplies an inexpensive step-selection procedure for steepest descent and damped Newton methods. Its small-step acceptance argument is derived next.
 
-### Why Armijo Backtracking Eventually Accepts a Step
+### Why Armijo backtracking eventually accepts a step
 
 For $\phi'(0)=g_k^\top p_k<0$, differentiability gives $\phi(\alpha)=\phi(0)+\alpha\phi'(0)+o(\alpha)$. Since $0<c_1<1$, sufficiently small positive $\alpha$ satisfies Armijo: the difference $(1-c_1)\alpha\phi'(0)$ is strictly negative and dominates the remainder.
 

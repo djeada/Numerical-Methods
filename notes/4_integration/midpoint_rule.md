@@ -1,12 +1,12 @@
 # Midpoint Rule
 
-The Midpoint Rule is a robust numerical method for approximating definite integrals. It seeks to estimate the area under a curve by partitioning it into a collection of rectangles and then summing the areas of these rectangles. This method is particularly useful when an antiderivative of the function is difficult or impossible to find analytically. By breaking the interval of integration into smaller segments, the Midpoint Rule allows for a piecewise approximation that can closely match the behavior of the actual function.
+The midpoint rule approximates a definite integral by dividing its interval into smaller pieces and representing each piece by a rectangle. The rectangle's width is the subinterval width, and its height is the function value at that subinterval's midpoint. Adding the signed rectangle areas estimates the total integral. This is useful when an antiderivative is unavailable or difficult to compute, but the function can be sampled inside the interval. Subdivision lets the rectangles follow changes in the function more closely. The symmetry of each midpoint panel also gives a specific accuracy benefit: the leading linear variation about the midpoint cancels when integrated.
 
-Unique to this method, the height of each rectangle is determined by the function's value at the midpoint of the corresponding subinterval. This approach often leads to a more accurate estimate of the area than other methods like the Trapezoidal Rule. The midpoint value represents the entire subinterval with a single sample. Symmetry makes the linear variation about that midpoint integrate to zero, leaving curvature as the leading error source. This explains its improvement over left- or right-endpoint rectangles and the standard error-constant comparison with trapezoidal quadrature; it does not guarantee that one midpoint captures unresolved variation.
+Unique to this method, the height of each rectangle is determined by the function's value at the midpoint of the corresponding subinterval. This approach often leads to a more accurate estimate of the area than other methods like the trapezoidal rule. The midpoint value represents the entire subinterval with a single sample. Symmetry makes the linear variation about that midpoint integrate to zero, leaving curvature as the leading error source. This explains its improvement over left- or right-endpoint rectangles and the standard error-constant comparison with trapezoidal quadrature; it does not guarantee that one midpoint captures unresolved variation.
 
-## Mathematical Formulation
+## Mathematical formulation
 
-For a function $f(x)$ defined over an interval $[a, b]$, the Midpoint Rule provides an approximation for the integral by evaluating the function at specific points within each subinterval. The basic formula for a single subinterval is:
+For a function $f(x)$ defined over an interval $[a, b]$, the midpoint rule provides an approximation for the integral by evaluating the function at specific points within each subinterval. The basic formula for a single subinterval is:
 
 $$
 (b - a) f\left(\frac{a+b}{2}\right)
@@ -31,21 +31,21 @@ $$
 M_n = \sum_{i=0}^{n-1} f\left(\frac{x_{i} + x_{i+1}}{2}\right) h
 $$
 
-This summation provides an estimate of the total area under the curve $f(x)$ over the interval $[a, b]$. The graphical representation of this method helps visualize how the Midpoint Rule approximates the integral by stacking these rectangles side by side.
+This summation provides an estimate of the total area under the curve $f(x)$ over the interval $[a, b]$. The graphical representation of this method helps visualize how the midpoint rule approximates the integral by stacking these rectangles side by side.
 
-![Midpoint Rule Visualization](https://user-images.githubusercontent.com/37275728/190011101-dcc77f54-d47d-4f62-b699-9d1eec9ef109.png)
+![midpoint rule Visualization](https://user-images.githubusercontent.com/37275728/190011101-dcc77f54-d47d-4f62-b699-9d1eec9ef109.png)
 
-## Error Term
+## Error term
 
-For a twice continuously differentiable $f$, the composite Midpoint Rule with $n$ subintervals of width $h = \frac{b-a}{n}$ has error
+For a twice continuously differentiable $f$, the composite midpoint rule with $n$ subintervals of width $h = \frac{b-a}{n}$ has error
 
 $$
 \int_a^b f(x)\,dx - M_n = \frac{b-a}{24} h^2 f''(\xi), \qquad \xi \in (a, b).
 $$
 
-The rule is exact for polynomials of degree one or lower and is second-order accurate, $O(h^2)$. Its error constant is half that of the Trapezoidal Rule (which is $\frac{b-a}{12}h^2 f''(\xi)$ with the opposite sign).
+The rule is exact for polynomials of degree one or lower and is second-order accurate, $O(h^2)$. Its error constant is half that of the trapezoidal rule (which is $\frac{b-a}{12}h^2 f''(\xi)$ with the opposite sign).
 
-### Deriving the Error Constant
+### Deriving the error constant
 
 On a single panel with midpoint $m$ and width $h$, set $x=m+t$, where $-h/2\leq t\leq h/2$. Taylor expansion separates the constant, odd, and curvature terms:
 
@@ -69,7 +69,7 @@ For a convex function the rule underestimates the integral; for a concave functi
 
 The midpoint error-bound constant is half the trapezoidal constant on the same uniform partition. This comparison is a bound, not a guarantee that every integrand is approximated twice as accurately: cancellation, periodicity, and the sampled locations can change the actual errors substantially.
 
-## Algorithm Steps
+## Algorithm steps
 
 1. Begin by dividing the interval $[a, b]$ into $n$ equal subintervals. The choice of $n$ determines the number of rectangles used in the approximation and affects the accuracy of the result.
 2. For each subinterval, calculate the midpoint $\frac{x_{i} + x_{i+1}}{2}$. Evaluate the function $f(x)$ at this midpoint to determine the height of the corresponding rectangle.
@@ -80,34 +80,34 @@ The midpoint error-bound constant is half the trapezoidal constant on the same u
 
 Consider the function $f(x) = x^2$.
 
-I. **Choose Interval and Subdivisions:**
+**Step 1: Choose interval and subdivisions.**
 
 Let $a = 0$ and $b = 2$, and partition this interval into $n = 2$ equal subintervals. This results in subintervals $[0, 1]$ and $[1, 2]$, each with a width $h = 1$.
 
-II. **Evaluate at Midpoints:**
+**Step 2: Evaluate at midpoints.**
 
 - For the first subinterval $[0, 1]$, the midpoint is $x = 0.5$. Evaluating the function gives $f(0.5) = (0.5)^2 = 0.25$.
 - For the second subinterval $[1, 2]$, the midpoint is $x = 1.5$. Evaluating the function gives $f(1.5) = (1.5)^2 = 2.25$.
 
-III. **Apply the Midpoint Rule Formula:**
+**Step 3: Apply the midpoint rule formula.**
 
 - $(1 - 0) \times f(0.5) = 1 \times 0.25 = 0.25$.
 - $(2 - 1) \times f(1.5) = 1 \times 2.25 = 2.25$.
 
-IV. **Sum the Areas:**
+**Step 4: Sum the areas.**
 
 The total integral approximation is $0.25 + 2.25 = 2.5$.
 
-The exact value of the integral $\int_{0}^{2} x^2 \, dx = \frac{8}{3} \approx 2.6667$. The Midpoint Rule provides an approximation of $2.5$, which is reasonably close to the exact value, especially considering the simplicity of the method and the small number of subintervals used.
+The exact value of the integral $\int_{0}^{2} x^2 \, dx = \frac{8}{3} \approx 2.6667$. The midpoint rule provides an approximation of $2.5$, which is reasonably close to the exact value, especially considering the simplicity of the method and the small number of subintervals used.
 
 ## Advantages
 
-- The Midpoint Rule is straightforward and **efficient** to implement, making it a popular choice for numerical integration, especially in educational settings and for simple applications.
-- For functions that are reasonably smooth, the Midpoint Rule often provides a more **accurate** approximation than the Trapezoidal Rule when using the same number of subintervals.
-- The Midpoint Rule can better handle certain function **behaviors**, such as oscillations or variations within subintervals, when the grid resolves those variations. A midpoint value is a sample, not an average over the panel, so unresolved oscillations can still be missed entirely.
+- The midpoint rule is straightforward and **efficient** to implement, making it a popular choice for numerical integration, especially in educational settings and for simple applications.
+- For functions that are reasonably smooth, the midpoint rule often provides a more **accurate** approximation than the trapezoidal rule when using the same number of subintervals.
+- The midpoint rule can better handle certain function **behaviors**, such as oscillations or variations within subintervals, when the grid resolves those variations. A midpoint value is a sample, not an average over the panel, so unresolved oscillations can still be missed entirely.
 
 ## Limitations
 
-- The Midpoint Rule can introduce **errors** when dealing with functions that exhibit high curvature or rapid changes within subintervals, as a single midpoint evaluation may not capture the function's behavior adequately.
-- Achieving high accuracy with the Midpoint Rule often requires a large number of **subintervals**, increasing computational effort due to the necessity of more function evaluations and calculations.
-- The Midpoint Rule is less effective for **discontinuous** functions, as the method assumes continuity over the interval of integration and may fail to provide meaningful approximations for functions with discontinuities or sharp corners.
+- The midpoint rule can introduce **errors** when dealing with functions that exhibit high curvature or rapid changes within subintervals, as a single midpoint evaluation may not capture the function's behavior adequately.
+- Achieving high accuracy with the midpoint rule often requires a large number of **subintervals**, increasing computational effort due to the necessity of more function evaluations and calculations.
+- The midpoint rule is less effective for **discontinuous** functions, as the method assumes continuity over the interval of integration and may fail to provide meaningful approximations for functions with discontinuities or sharp corners.

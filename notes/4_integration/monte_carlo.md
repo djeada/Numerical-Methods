@@ -1,6 +1,6 @@
 # Monte Carlo Integration
 
-Monte Carlo integration is a numerical technique for approximating integrals using randomness. Rather than systematically sampling a function at predetermined points, as done in methods like the trapezoidal rule or Simpson’s rule, Monte Carlo methods rely on random samples drawn from a prescribed domain.
+Monte Carlo integration approximates an integral by averaging function values at randomly selected points and applying the appropriate volume or probability weights. The sampling distribution is part of the method: uniform samples use the domain volume, while nonuniform samples require weights that account for their density. Unlike a deterministic trapezoidal or Simpson grid, a run produces a random estimate. Its uncertainty is assessed statistically across possible samples, rather than by assuming that each additional sample must improve that particular run.
 
 The key strength of Monte Carlo integration lies in its applicability to high-dimensional problems, where conventional deterministic methods suffer from the “curse of dimensionality” and become prohibitively complex or computationally expensive. In such high-dimensional spaces, Monte Carlo methods often provide a practical solution by producing an estimate whose accuracy improves as more random samples are drawn.
 
@@ -12,7 +12,7 @@ Consider integrating a function $f(x)$ over an interval or a multidimensional re
 
 As you increase the number of random points (samples), your approximation generally improves.
 
-## Mathematical Formulation
+## Mathematical formulation
 
 Suppose we want to approximate the integral:
 
@@ -42,7 +42,7 @@ $$
 
 As $N \to \infty$, the Law of Large Numbers ensures that $\overline{f}$ converges to the true mean of $f$ over the domain, and thus the estimator $\widehat I_N=V\overline f$ converges to the true integral $I$, provided $f$ is integrable and $0<V<\infty$.
 
-## Derivation and Statistical Basis
+## Derivation and statistical basis
 
 Monte Carlo integration’s foundation lies in probability theory. If $X$ is a random variable uniformly distributed over $D$, then:
 
@@ -70,7 +70,7 @@ $$
 
 The standard error of the estimate is $V\sigma/\sqrt{N}$, where $\sigma^2$ is the variance of $f(X)$; the error therefore decreases proportionally to $1/\sqrt{N}$.
 
-### Unbiasedness, Variance, and Confidence Intervals
+### Unbiasedness, variance, and confidence intervals
 
 For independent uniform samples, linearity of expectation gives $\mathbb E[\widehat I_N]=I$. If $\sigma^2=\operatorname{Var}(f(X))<\infty$, independence also gives
 
@@ -96,28 +96,28 @@ $$
 
 The weighting is essential. A useful density reduces variance; a poorly chosen one can increase it or make it infinite. The $N^{-1/2}$ exponent does not explicitly depend on dimension, but the variance and the cost of obtaining each sample still can.
 
-## Algorithm Steps
+## Algorithm steps
 
-I. **Identify the Domain and Volume**:
+**Step 1: Identify the domain and volume.**
 
 - Determine the region $D$ over which you need to integrate.
 - Compute or know the volume $V$ of $D$. For example, if $D=[a,b]$ in one dimension, then $V=b-a$. In higher dimensions, compute the product of side lengths for a hyper-rectangle, or use known formulas or methods for more complex domains.
 
-II. **Generate Random Points**:
+**Step 2: Generate random points.**
 
 - Generate $N$ random points $x_i$ uniformly distributed in $D$.
 - In one dimension, sample $x_i \in [a,b]$ uniformly.
 - For a rectangular domain, sample coordinates independently and uniformly from their respective ranges. For a general domain, use a sampler that is uniform on that domain, or use an enclosing box with rejection or an indicator function; independent coordinate ranges alone do not describe an arbitrary shape.
 
-III. **Evaluate the Function**:
+**Step 3: Evaluate the function.**
 
 Compute $f(x_i)$ for each random point $x_i$.
 
-IV. **Compute the Average**:
+**Step 4: Compute the average.**
 
 Calculate $\overline{f} = \frac{1}{N}\sum_{i=1}^N f(x_i)$.
 
-V. **Estimate the Integral**:
+**Step 5: Estimate the integral.**
 
 Multiply by the volume $V$:
 
@@ -125,7 +125,7 @@ $$
 I \approx V \overline{f}.
 $$
 
-VI. **Assess Accuracy**:
+**Step 6: Assess accuracy.**
 
 - If necessary, increase $N$ and repeat to improve accuracy.
 - The standard deviation of the estimator decreases as $1/\sqrt{N}$.
@@ -142,7 +142,7 @@ I. Domain $D=[0,1]$, volume $V=1$.
 
 II. Let $N=1000$. Generate 1000 random points $x_i$ in $[0,1]$.
 
-III. Compute $f(x_i)= (x_i)^2$ for each $i$.
+**Step 3.** Compute $f(x_i)= (x_i)^2$ for each $i$.
 
 IV. Suppose after computation, $\frac{1}{1000}\sum_{i=1}^{1000} (x_i)^2 =0.3365.$ (This is just an example value.)
 
@@ -178,7 +178,7 @@ III. **Randomness**:
 
 The result is a random variable. Different random draws give slightly different answers. The reference implementation uses a fixed default seed (`seed=0`), so repeated runs are reproducible; pass a different `seed`, or `seed=None`, to get independent estimates. Confidence intervals and variance reduction techniques (e.g., importance sampling, stratified sampling) are often employed.
 
-## Variants and Enhancements
+## Variants and enhancements
 
 - **Importance Sampling**: Can reduce the variance constant by sampling more frequently in regions that contribute substantially, with the reciprocal-density weights shown above. The ordinary finite-variance sampling rate remains $O(N^{-1/2})$.
 - **Stratified and Latin Hypercube Sampling**: Distribute random samples across the domain more evenly to reduce variance for suitable integrands.

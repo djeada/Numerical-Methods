@@ -10,7 +10,7 @@ $$
 
 The word *ordinary* means that derivatives are taken with respect to a single independent variable. If several independent variables appear, the corresponding equation is a partial differential equation.
 
-## From a Model to a Trajectory
+## From a model to a trajectory
 
 A common first-order form is
 
@@ -39,7 +39,7 @@ $$
 
 with $r>0$ and $K>0$ has equilibria at $y=0$ and $y=K$. When $0<y<K$, the derivative is positive; when $y>K$, it is negative. This qualitative information already reveals the long-term behavior without solving the equation explicitly.
 
-## Initial Value Problems and Boundary Value Problems
+## Initial value problems and boundary value problems
 
 An **initial value problem (IVP)** specifies all required conditions at one point. For a second-order ODE,
 
@@ -74,7 +74,7 @@ The order is the highest derivative present.
 - $y''+3y'+2y=0$ is second order.
 - $y^{(4)}+y=0$ is fourth order.
 
-### Linear and Nonlinear ODEs
+### Linear and nonlinear ODEs
 
 A linear $n$th-order ODE has the form
 
@@ -104,11 +104,11 @@ $$
 
 are nonlinear.
 
-### Homogeneous and Nonhomogeneous Linear Equations
+### Homogeneous and nonhomogeneous linear equations
 
 A linear equation is homogeneous when $g(t)=0$. Otherwise it is nonhomogeneous.
 
-## Converting Higher-Order Equations to First-Order Systems
+## Converting higher-order equations to first-order systems
 
 Numerical solvers are usually written for first-order systems. A higher-order ODE can be rewritten in that form when it can be solved locally for its highest derivative. An implicit or singular equation may instead require a differential-algebraic formulation.
 
@@ -143,7 +143,7 @@ $$
 
 For order $n$, define $u_1=y,u_2=y',\ldots,u_n=y^{(n-1)}$. Then $u_j'=u_{j+1}$ for $j<n$, and the final equation comes from the isolated highest derivative. The initial values of all $n$ components must also be supplied.
 
-## Existence and Uniqueness
+## Existence and uniqueness
 
 For
 
@@ -167,13 +167,13 @@ $$
 
 This condition prevents nearby solution curves from splitting unpredictably.
 
-### Local Does Not Mean Global
+### Local does not mean global
 
 Continuity and a local Lipschitz condition establish existence and uniqueness only on some neighborhood of the initial point. A solution can leave the domain or become unbounded in finite time. For example, $y'=y^2$, $y(0)=1$ has the unique solution $y(t)=1/(1-t)$, which cannot be extended as a finite-valued solution through $t=1$.
 
 Continuity alone does not guarantee uniqueness. The problem $y'=2\sqrt{|y|}$, $y(0)=0$ admits the zero solution and solutions that remain zero until a chosen time $a\geq0$ and then follow $(t-a)^2$. The right-hand side is continuous but not locally Lipschitz at zero. These examples show why a numerical trajectory must be interpreted within the mathematical domain of the IVP.
 
-## Analytical Versus Numerical Solutions
+## Analytical versus numerical solutions
 
 Some ODEs have closed-form solutions. Many important nonlinear systems do not.
 
@@ -195,13 +195,13 @@ Common explicit methods include:
 
 - Euler's method,
 - Heun's method,
-- Runge--Kutta methods.
+- Runge–Kutta methods.
 
 Their accuracy can differ dramatically at the same step size.
 
 ![Accuracy comparison for several time-stepping methods](https://github.com/djeada/Numerical-Methods/raw/refs/heads/master/notes/7_ordinary_differential_equations/resources/plots/ode_method_accuracy.svg)
 
-## Local and Global Error
+## Local and global error
 
 A one-step method advances by
 
@@ -224,7 +224,7 @@ on a fixed interval as $h\to0$.
 
 Euler has order $1$, Heun order $2$, and classical RK4 order $4$.
 
-### Error Conventions and Convergence Conditions
+### Error conventions and convergence conditions
 
 These notes call the **unscaled one-step defect** the local truncation error: starting from the exact value, a method of order $p$ has defect $O(h^{p+1})$. Some texts divide that defect by $h$ and call the resulting $O(h^p)$ quantity the local truncation error. The conventions describe the same method but attach different exponents to the term “local.”
 
@@ -238,7 +238,7 @@ Over a fixed interval, summing this recurrence gives $e_n=O(h^p)$ when the initi
 
 For a scaled local-error estimate $E=\max_i |e_i|/(\mathrm{atol}_i+\mathrm{rtol}|u_i|)$, a controller typically accepts a trial step when $E\leq1$. The absolute tolerance controls components near zero, while relative tolerance controls components with appreciable magnitude. A rejected trial step is recomputed with a smaller step rather than included in the trajectory.
 
-## Stability and Stiffness
+## Stability and stiffness
 
 Accuracy alone does not guarantee a good numerical solution.
 
@@ -260,20 +260,30 @@ For example, forward Euler has $R(z)=1+z$, which restricts $h$ to $|1+h\lambda|\
 
 A problem is called **stiff** when rapidly decaying modes force explicit methods to use very small steps for stability even though the physically interesting solution evolves on a much slower time scale.
 
-In stiff regimes, implicit methods such as backward Euler, BDF schemes, or implicit Runge--Kutta methods are usually preferred.
+In stiff regimes, implicit methods such as backward Euler, BDF schemes, or implicit Runge–Kutta methods are usually preferred.
 
-## Adaptive Step Sizes
+## Adaptive step sizes
 
 Modern ODE solvers rarely use a single fixed $h$ everywhere. Instead they estimate local error and adapt the step size:
 
 - reduce $h$ when the solution changes rapidly,
 - increase $h$ when the solution is smooth.
 
-Embedded Runge--Kutta pairs, such as RK45, obtain two approximations of different orders from related stage evaluations and use their difference as an error estimate.
+Embedded Runge–Kutta pairs, such as RK45, obtain two approximations of different orders from related stage evaluations and use their difference as an error estimate.
 
-## Important Model Examples
+### Deriving a step-size controller
 
-### Exponential Growth and Decay
+Suppose the scaled error estimate behaves like $E(h)\approx Ch^q$ over nearby trial steps. To make the next estimate near one, solve $1\approx E(h)(h_{\mathrm{new}}/h)^q$, giving
+
+$$
+h_{\mathrm{new}}=\eta h\,E(h)^{-1/q},\qquad 0<\eta<1.
+$$
+
+The factor $\eta$ leaves a margin because $C$ is only estimated. Practical controllers also limit how quickly the step can grow or shrink. The exponent comes from the error **estimate**, not just the order of the solution that is retained. For a fourth/fifth-order embedded pair, their difference is typically $O(h^5)$, so a basic controller uses $q=5$. An estimate of zero requires a capped growth rule rather than division by zero.
+
+## Important model examples
+
+### Exponential growth and decay
 
 $$
 y' = ay.
@@ -281,7 +291,7 @@ $$
 
 The sign of $a$ determines growth or decay.
 
-### Logistic Growth
+### Logistic growth
 
 $$
 P' = rP\left(1 - \frac{P}{K}\right).
@@ -289,7 +299,7 @@ $$
 
 The parameter $K$ is the carrying capacity.
 
-### Harmonic Oscillator
+### Harmonic oscillator
 
 $$
 x'' + \omega^2x = 0.
@@ -302,7 +312,7 @@ x' = v,
 \qquad v' = -\omega^2x.
 $$
 
-### Damped Oscillator
+### Damped oscillator
 
 $$
 x'' + 2\zeta\omega x' + \omega^2x = 0.
@@ -310,7 +320,7 @@ $$
 
 The damping ratio $\zeta$ controls whether the motion is underdamped, critically damped, or overdamped.
 
-## A Practical Workflow
+## A practical workflow
 
 When solving an ODE numerically:
 

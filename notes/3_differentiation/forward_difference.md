@@ -1,10 +1,12 @@
 # Forward Difference Method
 
-The forward difference method is a fundamental finite difference technique utilized for approximating the derivatives of functions. Unlike the central and backward difference methods, which use information from both sides or preceding points, respectively, the forward difference method relies solely on the function values at the target point and a subsequent point. This approach makes it particularly suitable for scenarios where future data points are accessible or when working with datasets that are naturally ordered in a forward sequence. By leveraging the difference between consecutive function values, the forward difference method provides a straightforward and efficient means of estimating derivatives, which is essential in various applications such as numerical analysis, engineering simulations, and computational modeling.
+The forward difference method estimates a derivative from the function value at the target point $x$ and a later point $x+h$, with $h>0$. Dividing the change in the two values by their separation gives a secant slope that approximates the tangent slope at $x$. The method is useful at the left boundary of a dataset or whenever the later sample can be evaluated or obtained.
 
-![Forward Difference Method Illustration](https://github.com/user-attachments/assets/6643da65-3308-4cac-b597-a1da3608a6e2)
+It uses a forward neighbor, whereas a backward difference uses a preceding neighbor and a central difference uses samples on both sides. If $x$ represents time, the later observation must be available before the estimate can be reported. In numerical analysis, engineering simulations, and computational modeling, this simple stencil is often a starting point for understanding derivative accuracy and the effect of sampling resolution.
 
-## Mathematical Formulation
+![forward difference method Illustration](https://github.com/user-attachments/assets/6643da65-3308-4cac-b597-a1da3608a6e2)
+
+## Mathematical formulation
 
 The forward difference approximation of the first derivative of a function $f$ at a point $x$ with a step size $h$ is mathematically expressed as:
 
@@ -12,7 +14,9 @@ $$
 f'(x) \approx \frac{f(x + h) - f(x)}{h}
 $$
 
-This formula is derived from the fundamental definition of the derivative, which represents the instantaneous rate of change of a function at a specific point. In the context of finite differences, the forward difference method estimates this rate by calculating the difference in function values between the point $x + h$ and the point $x$, then dividing by the step size $h$. Geometrically, this approximation corresponds to the slope of the secant line that connects the points $(x, f(x))$ and $(x + h, f(x + h))$. By focusing on the interval leading forward from $x$, the forward difference method provides an estimate of the derivative using the current sample and one later sample. It is suitable when that later value is already available, can be evaluated, or can be awaited before reporting the derivative estimate.
+This formula is derived from the fundamental definition of the derivative, which represents the instantaneous rate of change of a function at a specific point. In the context of finite differences, the forward difference method estimates this rate by calculating the difference in function values between the point $x + h$ and the point $x$, then dividing by the step size $h$. Geometrically, this approximation corresponds to the slope of the secant line that connects the points $(x, f(x))$ and $(x + h, f(x + h))$.
+
+By focusing on the interval leading forward from $x$, the forward difference method provides an estimate of the derivative using the current sample and one later sample. It is suitable when that later value is already available, can be evaluated, or can be awaited before reporting the derivative estimate.
 
 The simplicity of the forward difference formula allows for easy implementation in computational algorithms. However, this method introduces an approximation error, which is influenced by the choice of the step size $h$. Selecting an appropriate $h$ is crucial to balancing accuracy and numerical stability in derivative approximations.
 
@@ -24,9 +28,9 @@ $$
 
 so the error is $\mathcal{O}(h)$: halving $h$ roughly halves the error. The method is exact for affine functions $f(x)=ax+b$ at every point and step size. For nonlinear functions the truncation error is generally nonzero, although special points or step sizes can give accidental equality.
 
-In floating-point arithmetic the subtraction $f(x+h)-f(x)$ also contributes a round-off error of size roughly $\varepsilon\,|f(x)|/h$, where $\varepsilon\approx 2.2\times10^{-16}$ is the machine epsilon in double precision. Balancing it against the truncation error $\frac{h}{2}|f''|$ gives an optimal step of order $h\sim\sqrt{\varepsilon}\approx 10^{-8}$ (scaled by $\sqrt{|f|/|f''|}$), with a best attainable error of about $\sqrt{\varepsilon}\approx 10^{-8}$. Choosing a much smaller $h$ makes the result worse, not better.
+In floating-point arithmetic the subtraction $f(x+h)-f(x)$ also contributes a roundoff error of size roughly $\varepsilon\,|f(x)|/h$, where $\varepsilon\approx 2.2\times10^{-16}$ is the machine epsilon in double precision. Balancing it against the truncation error $\frac{h}{2}|f''|$ gives an optimal step of order $h\sim\sqrt{\varepsilon}\approx 10^{-8}$ (scaled by $\sqrt{|f|/|f''|}$), with a best attainable error of about $\sqrt{\varepsilon}\approx 10^{-8}$. Choosing a much smaller $h$ makes the result worse, not better.
 
-## Derivation and Step-Size Selection
+## Derivation and step-size selection
 
 For $f\in C^2([x,x+h])$ and $h>0$, write
 
@@ -70,7 +74,7 @@ In this example, the exact derivative of $f(x) = x^2$ at $x = 2$ is $f'(2) = 2 \
 
 ## Limitations
 
-- **Approximation error** is inherent in the method. Although reducing the step size $h$ improves accuracy, making $h$ too small can cause numerical instability and amplify round-off errors, requiring a balance to maintain stability and minimize error.
+- **Approximation error** is inherent in the method. Although reducing the step size $h$ improves accuracy, making $h$ too small can cause numerical instability and amplify roundoff errors, requiring a balance to maintain stability and minimize error.
 - **Lower accuracy compared to the central difference method** results from its error being of order $O(h)$, whereas the central difference method achieves $O(h^2)$ accuracy. This makes the forward difference method less precise for the same step size.
 - The **inapplicability at domain endpoints** arises from its need for function values at $x + h$, which may fall outside the defined interval at the domain's end. This requires alternative methods, such as one-sided differences, for boundary point computations.
 - **Sensitivity to function behavior** limits its reliability when the function is not smooth over the interval $[x, x + h]$, as rapid changes, discontinuities, or non-differentiable points can compromise the approximation's validity.
