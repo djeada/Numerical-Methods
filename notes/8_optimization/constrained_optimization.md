@@ -84,13 +84,13 @@ $$
 
 For a differentiable convex problem with convex inequalities and affine equalities, these conditions are sufficient for global optimality. A standard qualification is needed to ensure that an optimum has suitable multipliers, rather than to verify a supplied KKT certificate.
 
-See [Lagrange multipliers and KKT conditions](lagrange_multipliers_and_kkt.md) for a detailed derivation.
+See [Lagrange multipliers and KKT conditions](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/lagrange_multipliers_and_kkt.md) for a detailed derivation.
 
 ## Linear programming
 
 When both the objective and constraints are linear, the problem becomes a linear program. The feasible set is a polyhedron, and in standard form with nonnegative variables, an attained finite optimum can be represented by an optimal extreme point. A general polyhedron with lineality need not have any extreme points.
 
-The repository includes a compact two-phase simplex implementation that handles negative right-hand sides, equality constraints, and reports infeasible and unbounded problems. See [linear programming](linear_programming.md).
+The repository includes a compact two-phase simplex implementation that handles negative right-hand sides, equality constraints, and reports infeasible and unbounded problems. See [linear programming](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/linear_programming.md).
 
 ## Numerical KKT systems
 

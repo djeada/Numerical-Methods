@@ -48,8 +48,8 @@ The implementation includes:
 
 Detailed notes:
 
-- [Simulated annealing](simulated_annealing.md)
-- [Genetic algorithms](genetic_algorithms.md)
+- [Simulated annealing](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/simulated_annealing.md)
+- [Genetic algorithms](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/genetic_algorithms.md)
 
 ## Grid search and the curse of dimensionality
 

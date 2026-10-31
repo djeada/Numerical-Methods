@@ -30,7 +30,7 @@ Eigenvectors are directions: if $v$ is an eigenvector, so is every nonzero multi
 
 For any computed eigenpair $(\widehat\lambda,\widehat v)$, inspect the residual $r=A\widehat v-\widehat\lambda\widehat v$. In the example, $A[1,-2]^\top=[2,-4]^\top=2[1,-2]^\top$ and $A[1,1]^\top=[5,5]^\top=5[1,1]^\top$. Trace and determinant give additional checks: $2+5=\operatorname{tr}(A)=7$ and $2\cdot5=\det(A)=10$.
 
-A real symmetric matrix always has real eigenvalues and an orthonormal eigenvector basis. General real matrices can have complex conjugate pairs, as the rotation matrix $\begin{bmatrix}0&-1\\1&0\end{bmatrix}$ demonstrates with eigenvalues $\pm i$. See [eigendecomposition](eigen_value_decomposition.md) for the additional condition needed to build a complete eigenvector basis.
+A real symmetric matrix always has real eigenvalues and an orthonormal eigenvector basis. General real matrices can have complex conjugate pairs, as the rotation matrix $\begin{bmatrix}0&-1\\1&0\end{bmatrix}$ demonstrates with eigenvalues $\pm i$. See [eigendecomposition](https://github.com/djeada/Numerical-Methods/blob/master/notes/5_matrices/eigen_value_decomposition.md) for the additional condition needed to build a complete eigenvector basis.
 
 ## Example
 

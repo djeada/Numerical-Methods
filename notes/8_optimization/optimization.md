@@ -28,22 +28,22 @@ The difficulty of an optimization problem depends less on its dimension alone th
 
 The existing implementation chapter is organized around four broad families:
 
-- [Local optimization](local_optimization.md)
-- [Convex optimization](convex_optimization.md)
-- [Constrained optimization](constrained_optimization.md)
-- [Global optimization](global_optimization.md)
+- [Local optimization](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/local_optimization.md)
+- [Convex optimization](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/convex_optimization.md)
+- [Constrained optimization](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/constrained_optimization.md)
+- [Global optimization](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/global_optimization.md)
 
 Detailed notes cover the algorithms inside those families:
 
-- [Line search](line_search.md)
-- [Newton and quasi-Newton methods](newton_and_quasi_newton.md)
-- [Linear programming](linear_programming.md)
-- [Lagrange multipliers and KKT conditions](lagrange_multipliers_and_kkt.md)
-- [Quadratic programming](quadratic_programming.md)
-- [Simulated annealing](simulated_annealing.md)
-- [Genetic algorithms](genetic_algorithms.md)
+- [Line search](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/line_search.md)
+- [Newton and quasi-Newton methods](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/newton_and_quasi_newton.md)
+- [Linear programming](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/linear_programming.md)
+- [Lagrange multipliers and KKT conditions](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/lagrange_multipliers_and_kkt.md)
+- [Quadratic programming](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/quadratic_programming.md)
+- [Simulated annealing](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/simulated_annealing.md)
+- [Genetic algorithms](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/genetic_algorithms.md)
 
-For basic steepest descent, see the earlier [gradient descent note](../1_root_and_extrema_finding/gradient_descent.md).
+For basic steepest descent, see the earlier [gradient descent note](https://github.com/djeada/Numerical-Methods/blob/master/notes/1_root_and_extrema_finding/gradient_descent.md).
 
 ## First-order optimality
 

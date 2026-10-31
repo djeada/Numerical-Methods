@@ -119,7 +119,7 @@ $$
 =\begin{bmatrix}2.5\\0\end{bmatrix},
 $$
 
-so $p_x=p_y=0.625$ and the new point is $(2.125,1.125)$. Further steps approach the root $(2,1)$. The repository's `newton_raphson_system` uses this Jacobian-based update. Singular or poorly conditioned Jacobians require the same care as small derivatives in the scalar method; see [linear systems](../2_systems_of_equations/systems_of_equations.md) for the solve and residual concepts.
+so $p_x=p_y=0.625$ and the new point is $(2.125,1.125)$. Further steps approach the root $(2,1)$. The repository's `newton_raphson_system` uses this Jacobian-based update. Singular or poorly conditioned Jacobians require the same care as small derivatives in the scalar method; see [linear systems](https://github.com/djeada/Numerical-Methods/blob/master/notes/2_systems_of_equations/systems_of_equations.md) for the solve and residual concepts.
 
 ## Algorithm steps
 

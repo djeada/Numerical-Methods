@@ -96,12 +96,12 @@ The Newton direction is not guaranteed to be a descent direction when the Hessia
 
 Practical Newton-type solvers therefore use one or more safeguards:
 
-- [line search](line_search.md);
+- [line search](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/line_search.md);
 - Hessian modification or damping;
 - trust regions;
 - quasi-Newton positive-definite approximations.
 
-The repository implementation intentionally keeps the algorithms compact: fixed-step gradient descent, plain Newton using `numpy.linalg.solve`, and BFGS with a strong Wolfe line search (bracketing followed by bisection zoom, see [line search](line_search.md)).
+The repository implementation intentionally keeps the algorithms compact: fixed-step gradient descent, plain Newton using `numpy.linalg.solve`, and BFGS with a strong Wolfe line search (bracketing followed by bisection zoom, see [line search](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/line_search.md)).
 
 ## BFGS update
 
@@ -126,7 +126,7 @@ $$
 
 If $H_k$ is positive definite and $y_k^\top s_k>0$, the update preserves positive definiteness.
 
-See [Newton and quasi-Newton methods](newton_and_quasi_newton.md) for the derivation and numerical interpretation.
+See [Newton and quasi-Newton methods](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/newton_and_quasi_newton.md) for the derivation and numerical interpretation.
 
 ## Worked quadratic example
 

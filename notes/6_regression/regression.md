@@ -75,7 +75,7 @@ $$
 \mathrm{RSS}(\boldsymbol{\beta}) = \|\mathbf y - X\boldsymbol{\beta}\|_2^2.
 $$
 
-See [Least Squares](least_squares.md) for the linear-algebra derivation and numerical solution methods.
+See [Least Squares](https://github.com/djeada/Numerical-Methods/blob/master/notes/6_regression/least_squares.md) for the linear-algebra derivation and numerical solution methods.
 
 ## Polynomial regression is still linear regression
 

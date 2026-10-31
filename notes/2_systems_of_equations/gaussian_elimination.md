@@ -86,7 +86,7 @@ Partial pivoting selects the largest available magnitude in the current column *
 
 In exact arithmetic, a reduced row $[0\ \cdots\ 0\mid c]$ with $c\ne0$ proves inconsistency. A zero coefficient row with zero right-hand side introduces a redundant equation; if fewer than $n$ independent pivots remain in a consistent square system, free variables produce infinitely many solutions. Numerical singularity uses a scale-dependent threshold rather than an exact determinant test, so a software rejection can also indicate a nearly singular problem.
 
-For dense matrices, factorization costs about $2n^3/3$ floating point operations, while a triangular solve costs $O(n^2)$. This distinction leads directly to storing and reusing an [LU factorization](lu_decomposition.md).
+For dense matrices, factorization costs about $2n^3/3$ floating point operations, while a triangular solve costs $O(n^2)$. This distinction leads directly to storing and reusing an [LU factorization](https://github.com/djeada/Numerical-Methods/blob/master/notes/2_systems_of_equations/lu_decomposition.md).
 
 ## Algorithm steps
 

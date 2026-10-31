@@ -72,7 +72,7 @@ The final central expansion assumes enough smoothness for the $O(h^4)$ remainder
 
 If each sampled value has an absolute error at most $\delta$, the error contributed by those samples is bounded by $2\delta/h$ for a one-sided difference and $\delta/h$ for the central difference. Thus differentiation amplifies measurement noise as well as rounding errors. Reducing the spacing does not necessarily improve a derivative estimated from noisy observations; a local polynomial fit or smoothing step may be more useful.
 
-In a refinement study, halving $h$ should reduce the truncation-dominated error by about $2$ for a first-order method and $4$ for a second-order method. When errors stop decreasing at these rates, rounding, noise, insufficient smoothness, or boundaries may be controlling the result. See the [Taylor expansion](taylor_series.md) for the source of the error terms.
+In a refinement study, halving $h$ should reduce the truncation-dominated error by about $2$ for a first-order method and $4$ for a second-order method. When errors stop decreasing at these rates, rounding, noise, insufficient smoothness, or boundaries may be controlling the result. See the [Taylor expansion](https://github.com/djeada/Numerical-Methods/blob/master/notes/3_differentiation/taylor_series.md) for the source of the error terms.
 
 ## Advantages
 

@@ -96,7 +96,7 @@ $$
 \rho = \frac{1}{y^\top s}.
 $$
 
-When $y^\top s>0$, positive definiteness is preserved. A line search satisfying the Wolfe curvature condition guarantees $y^\top s>0$ at every step, which is why BFGS is paired with a [Wolfe line search](line_search.md) rather than plain backtracking.
+When $y^\top s>0$, positive definiteness is preserved. A line search satisfying the Wolfe curvature condition guarantees $y^\top s>0$ at every step, which is why BFGS is paired with a [Wolfe line search](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/line_search.md) rather than plain backtracking.
 
 ### Verifying the BFGS secant equation
 

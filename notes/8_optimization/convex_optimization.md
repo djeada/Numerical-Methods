@@ -125,7 +125,7 @@ $$
 Q\succeq0.
 $$
 
-The repository implementation checks the eigenvalues of $Q$ and then uses a projected-gradient style iteration. See [quadratic programming](quadratic_programming.md) for details.
+The repository implementation checks the eigenvalues of $Q$ and then uses a projected-gradient style iteration. See [quadratic programming](https://github.com/djeada/Numerical-Methods/blob/master/notes/8_optimization/quadratic_programming.md) for details.
 
 ## Convexity checks in computation
 

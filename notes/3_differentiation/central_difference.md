@@ -18,7 +18,7 @@ Assume $f$ is three times differentiable on $[x-h,x+h]$. By Taylor’s theorem, 
 
 > **Note on $\xi_1,\xi_2$**
 > Here we use the **Lagrange remainder** form of Taylor’s theorem. The derivatives in the polynomial part are evaluated at $x$, but the remainder term is evaluated at an intermediate point $\xi$ between the expansion point and the evaluation point. In general, replacing $\xi$ by $x$ is not valid (it would only be exact in special cases, e.g., when higher derivatives are constant).
-> For a quick refresher on this notation, see [Taylor Series](taylor_series.md).
+> For a quick refresher on this notation, see [Taylor Series](https://github.com/djeada/Numerical-Methods/blob/master/notes/3_differentiation/taylor_series.md).
 
 $$
 f(x + h) = f(x) + hf'(x) + \frac{h^2}{2}f''(x) + \frac{h^3}{6}f^{(3)}(\xi_1)

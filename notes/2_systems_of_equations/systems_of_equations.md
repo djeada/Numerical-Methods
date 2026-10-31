@@ -88,7 +88,7 @@ If any of these criteria fail (e.g., $\det(\mathbf{A}) = 0$), the system does no
 
 ## Rank, residuals, and sensitivity
 
-For a general $m\times n$ system, consistency requires $\operatorname{rank}(A)=\operatorname{rank}([A\mid\mathbf{b}])$. A consistent system has a unique solution exactly when this rank is $n$; otherwise it has free variables. If the ranks differ, there is no exact solution, and a [least-squares approximation](../6_regression/least_squares.md) may be appropriate.
+For a general $m\times n$ system, consistency requires $\operatorname{rank}(A)=\operatorname{rank}([A\mid\mathbf{b}])$. A consistent system has a unique solution exactly when this rank is $n$; otherwise it has free variables. If the ranks differ, there is no exact solution, and a [least-squares approximation](https://github.com/djeada/Numerical-Methods/blob/master/notes/6_regression/least_squares.md) may be appropriate.
 
 For a nonsingular square matrix, define the residual of an approximation $\widehat{\mathbf{x}}$ as $\mathbf{r}=\mathbf{b}-A\widehat{\mathbf{x}}$. Since $A\mathbf{x}=\mathbf{b}$,
 
